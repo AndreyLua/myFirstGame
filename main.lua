@@ -4,7 +4,19 @@ Timer = require 'libs/hump.timer'
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
 setMet = love.graphics.newImage("assets/meteors/setMet.png")
+playerSet = love.graphics.newImage("assets/playerSet.png")
+playerBatch = love.graphics.newSpriteBatch(playerSet)
+
 playerIm = love.graphics.newImage("assets/player/player.png")
+
+playerQuads = {
+  player = love.graphics.newQuad(0,  0,  464, 456, playerSet:getDimensions()),
+  clow1 = love.graphics.newQuad(465,  0,  200, 152, playerSet:getDimensions()),
+  clow2 = love.graphics.newQuad(665,  0,  200, 152, playerSet:getDimensions()),
+  tail = love.graphics.newQuad(867,  0,  96, 120,playerSet:getDimensions()),
+  cristal = love.graphics.newQuad(898,  121,  80, 136,playerSet:getDimensions()),
+  wings = love.graphics.newQuad(465,  153,  448, 256,playerSet:getDimensions()),
+}
 setMetW,setMetH =  setMet:getDimensions()
 tableMeteorsPar ={
   {

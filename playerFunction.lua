@@ -1,19 +1,11 @@
 local playerFunction = {} 
 
 function lvlplayer()
-    if ( lvl == 0) then
         if ( player.a == 0 )then
             player.body = HC.circle(player.x+40*k/2,player.y+40*k2/2,20*k)
         else
             player.body =HC.circle(player.x+40*k/2,player.y+40*k2/2,35*k)
         end
-    end
-    if ( lvl == 1) then
-        player.body = HC.circle(player.x+40*k/2,player.y+40*k/2,26*k)
-    end
-    if ( lvl == 2) then 
-        player.body = HC.rectangle(player.x,player.y,45*k,45*k2)
-    end
 end
 
 function playerControl()

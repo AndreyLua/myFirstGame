@@ -36,7 +36,6 @@ flagtouch3 = false
 preyi= -1
 klacK = 0 
 dt2 = 0
-lline = {}
 removeEn = {}
 colll = {}
 slediEn ={}
@@ -84,53 +83,28 @@ boost = {
   long2 =screenHeight,
   long3 =screenHeight
 }
-igrok = {
-  slicer = {
-    invis = 10,
-    length1 =15,
-    length2  = 20,
-    boost =  screenHeight,
-    hp =  screenHeight,
-    x = screenWidth/2, 
-    y = screenHeight/2, 
-    scale  = 1,  
-    ax = 0,
-    a = 0 , 
-    ay = 0,
-    color = 0,
-  }
-} 
 player = {
   body = HC.polygon(1,3,2,2,5,5),
-  length1 =igrok[flagclass].length1,
-  hp =  igrok[flagclass].screenHeight,
-  x = igrok[flagclass].x , 
-  length2  =igrok[flagclass].length2 ,
-  boost =  igrok[flagclass].screenWidth,
-  invis =  igrok[flagclass].invis,
-  y = igrok[flagclass].y, 
-  scale  = igrok[flagclass].scale,  
-  ax = igrok[flagclass].ax,
-  a = igrok[flagclass].a , 
-  ay =igrok[flagclass].ay,
-  color = igrok[flagclass].color,
+  invis = 10,
+  length1 =15,
+  length2  = 20,
+  boost =  screenHeight,
+  hp =  screenHeight,
+  x = screenWidth/2, 
+  y = screenHeight/2, 
+  scale  = 1,  
+  ax = 0,
+  a = 0 , 
+  ay = 0,
+  color = 0,
 } 
 
-table.insert(lline,player.x*sx+player.scale*20*k*sx) 
-table.insert(lline,player.y*sy+player.scale*20*k2*sy)   
-
-drel = {}
-sledi2 = {}
-line = {} 
 
 en = {}
 obj = {}
 res = {}
-
 enemyBullets = {} 
-sledi = {} 
-lii = {}
-masli = {}
+playerSledi = {} 
 
 end
 
@@ -240,123 +214,6 @@ if ( colWave>0 and #obj < 20) then
     Timer.update(dt)
 end
 
-slicerSled()
-
-
-if ( flagclass =='slicer' ) then 
-    Sccale:every(0.012, function() 
-    for i=1,#sledi do
-        if ( flagclass =='slicer') then
-            if ( lvl == 5 ) then 
-                if ( player.a ~= 0 ) then
-                    player.length1 = 20
-                    sledi[i].size = sledi[i].size/1.5
-                    sledi[i].angle = sledi[i].angle+0.1
-                    sledi[i].color = sledi[i].color+0.0784
-                else
-                    player.length2 = 15
-                    sledi[i].size = sledi[i].size/1.5
-                    sledi[i].angle = sledi[i].angle+0.1
-                    sledi[i].color = sledi[i].color+0.0784
-                end
-            end  
-            if ( lvl == 0 ) then 
-                if ( player.a ~= 0 ) then
-                    sledi[i].size = sledi[i].size/1.3
-                    sledi[i].angle = sledi[i].angle+0.1
-                    sledi[i].color = sledi[i].color+0.0784
-                else
-                    sledi[i].size = sledi[i].size/1.2
-                    sledi[i].angle = sledi[i].angle+0.1
-                    sledi[i].color = sledi[i].color+0.117
-                end
-            end 
-            if ( lvl == 1 ) then 
-                if ( player.a ~= 0 ) then
-                    player.length1 = 10
-                    if ( sledi[i].size)  then
-                        sledi[i].size = sledi[i].size/1.2
-                        sledi[i].color = sledi[i].color+0.0588
-                    end   
-                else
-                    player.length2 = 15
-                    if ( sledi[i].size)  then
-                        sledi[i].size = sledi[i].size/1.1
-                        sledi[i].color = sledi[i].color+0.0392
-                    end 
-                end
-            end 
-            if ( lvl == 2 ) then 
-                if ( player.a ~= 0 ) then
-                    player.length1 = 12
-                    sledi[i].x =sledi[i].x + math.cos(sledi[i].y)*5*k
-                    sledi[i].y =sledi[i].y + math.sin(sledi[i].x)*5*k2
-                    sledi[i].size = sledi[i].size/1.2
-                    sledi[i].angle = sledi[i].angle+0.1
-                    sledi[i].color = sledi[i].color+0.0784
-                else
-                    player.length2 = 17
-                    sledi[i].x =sledi[i].x + math.cos(sledi[i].y)*3*k
-                    sledi[i].y =sledi[i].y + math.sin(sledi[i].x)*3*k2
-                    sledi[i].size = sledi[i].size/1.1
-                    sledi[i].angle = sledi[i].angle+0.1
-                    sledi[i].color = sledi[i].color+0.0588
-                end
-            end 
-            if ( lvl == 3 ) then 
-                if ( player.a ~= 0 ) then
-                    player.length1 =13
-                    local x1 = sledi[i].x- player.x
-                    local y1 = sledi[i].y- player.y
-                    local ugol = math.atan2(x1,y1)
-                    sledi[i].x=sledi[i].x+3*k*math.sin(ugol+1.3*i)
-                    sledi[i].y=sledi[i].y+3*k2*math.cos(ugol+1.3*i)
-                    if ( sledi[i].size > 0.06) then
-                        sledi[i].size = sledi[i].size/1.3
-                    end
-                    sledi[i].angle = sledi[i].angle+0.1
-                    sledi[i].color = sledi[i].color+0.0588
-                else
-                    player.length2 = 23
-                    local x1 = sledi[i].x- player.x
-                    local y1 = sledi[i].y- player.y
-                    local ugol = math.atan2(x1,y1)
-                    sledi[i].x=sledi[i].x+3*k*math.sin(ugol+1.1*i)
-                    sledi[i].y=sledi[i].y+3*k2*math.cos(ugol+1.1*i)
-                    if ( sledi[i].size > 0.1) then
-                        sledi[i].size = sledi[i].size/1.15
-                    end
-                    sledi[i].angle = sledi[i].angle+0.1
-                    sledi[i].color = sledi[i].color+0.0588
-                end
-            end 
-        end
-        if ( flagclass =='eater') then
-            sledi[i].size = sledi[i].size/1.1
-            sledi[i].angle = sledi[i].angle+0.1
-            sledi[i].color = sledi[i].color+0.0117
-        end
-    end
-    Sccale:clear() 
-    end)
-    if ( player.a ~= 0 ) then
-        if ( flagclass == "slicer") then
-            if ( #sledi>player.length1) then
-                table.remove(sledi,1)
-            end
-        end
-        if ( flagclass == "eater") then
-            if ( #sledi>player.length1) then
-                table.remove(sledi,1)
-            end
-        end
-    else
-        if ( #sledi>player.length2) then
-          table.remove(sledi,1)
-        end
-    end
-end
-
 if not(love.mouse.isDown(1)) then
     player.a = 0 
     if ( player.ax> 0) then
@@ -428,7 +285,7 @@ end
 
 
 function  game:draw()
-  
+    playerBatch:clear()
     if ( flagclass =='slicer') then
         if ( boost.long >70*k2  ) then
             boost.flag = true
@@ -446,13 +303,15 @@ function  game:draw()
    -- love.graphics.draw(fon3,-player.x/25,-player.y/25,0,k,k2)
     if (flaginv == false ) then
       love.graphics.translate( 0  ,random(0,shake) )   end
-    sledF()
+    playerSledDraw()
     love.graphics.setLineWidth(1.5)
     love.graphics.setColor(1,1,1,1)
     --    love.graphics.setShader(myShader)
       --  love.graphics.draw(meteors.m1,200*k,200*k2,0,1,1,meteors.m1:getWidth()/2,meteors.m1:getHeight()/2
       --  love.graphics.setShader()
     meteorDraw()
+    love.graphics.setColor(1,1,1)
+    love.graphics.draw(playerBatch)
     love.graphics.setLineWidth(1)
     bulletsDraw()
     Health_Boost()
@@ -469,7 +328,7 @@ function  game:draw()
             end
         end
         meshMeteors:setDrawRange( 1,  #vect )
-          love.graphics.setColor(1,1,1,1)
+        love.graphics.setColor(1,1,1,1)
        
         love.graphics.draw(meshMeteors, 0,0)
    
@@ -484,22 +343,13 @@ function  game:draw()
         end
     end
     if ( player.a == 0 ) then
-        if ( flagclass=="slicer") then
-           --  love.graphics.draw(playerIm,player.x,player.y, player.scale*40*k, player.scale*40*k2,controler.angle)
-
-     --       rot1("line",player.x,player.y, player.scale*40*k, player.scale*40*k2,controler.angle)
-        --    rot2("line",player.x,player.y, player.scale*40*k, player.scale*40*k2,controler.angle)
-        end
+       
     else
-        if ( flagclass=="slicer") then
-            rot1("line",player.x,player.y, player.scale*40*k, player.scale*40*k2,controler.angle)
-            rot2("line",player.x,player.y, player.scale*40*k, player.scale*40*k2,controler.angle)
-        end
+      
     end
     love.graphics.setColor( 1 , 1 , 1 ) 
-    love.graphics.draw(images.i7,-15*k,0,-1.57,k/6.4,k2/6.4,images.i7:getWidth()/2,images.i7:getHeight()/2)
-
-    love.graphics.draw(playerIm,player.x,player.y,-controler.angle+math.pi,k/7,k2/7,playerIm:getWidth()/2,playerIm:getHeight()/2)
+ 
+    love.graphics.draw(playerIm,player.x+player.scale/2*40*k,player.y+player.scale/2*40*k2,-controler.angle+math.pi,k/7,k2/7,playerIm:getWidth()/2,playerIm:getHeight()/2)
 
     self:worldBorders(dt)
     love.graphics.setColor(1,0,0.02)
@@ -526,15 +376,6 @@ function  game:draw()
    -- end)
 
    -- love.graphics.setBlendMode('alpha')
-    if ( #sledi2>15) then
-        table.remove(sledi2,1)
-    end
-    if ( #line) then 
-        if ( #lline>2) then
-            love.graphics.setColor(1,1,1)
-            love.graphics.line(lline)
-        end
-    end 
 
     love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10,0,k,k2)
     love.graphics.print("EN: "..tostring(#en), 10, 40)
@@ -1119,19 +960,7 @@ function rot1(mode,x,y,w,h,rx,ry,segments,r,ox,oy)
     yy = ((-oy+player.scale/2*40*k2) +20*k*math.sin(-0.3))
     xx2 = ((-ox +player.scale/2*40*k)+20*k*math.cos(-0.7*4.1)) 
     yy2 = ((-oy+player.scale/2*40*k2) +20*k*math.sin(-0.7*4.1))
-    if  ( flagclass =='slicer') then 
-        if (player.a==0) then
-            SlicerIm(lvl)
-        end
-        if (player.a==1) then
-            SlicerIm(lvl)
-            if ( lvl == 0 ) then 
-                love.graphics.line(xx2,yy2,-ox-player.scale*40/8*k,-oy+player.scale*40*k2/1.3,-ox-player.scale*40/8*k,-oy+player.scale*40*k2/1.1,-ox,-oy+player.scale*40*k2+player.scale*40*k2/8,-ox+player.scale*40*k/2,-oy+player.scale*40*k2+player.scale*40*k2/1.5)
-            end
-        end
-    else
-        love.graphics.line(5.9174107142857*k,-2.7301587301587*k2,13.031994047619*k,-2.7301587301587*k2,21.671130952381*k,1.8412698412698*k2,29.802083333333*k,10.984126984127*k2,33.359375*k,22.666666666667*k2,31.326636904762*k,33.84126984127*k2,26.244791666667*k,42.47619047619*k2,16.589285714286*k,45.015873015873*k2,7.9501488095238*k,44*k2,10.999255952381*k,41.968253968254*k2,17.097470238095*k,37.396825396825*k2,21.162946428571*k,35.365079365079*k2,24.212053571429*k,28.761904761905*k2,23.703869047619*k,22.15873015873*k2,21.162946428571*k,18.095238095238*k2,16.589285714286*k,11.492063492064*k2,9.9828869047619*k,7.4285714285714*k2,3.3764880952381*k,7.9365079365079*k2,-0.18080357142862*k,8.952380952381*k2) 
-    end
+---
     love.graphics.pop()
     love.graphics.pop()
 end
@@ -1336,25 +1165,13 @@ function rot2(mode,x,y,w,h,rx,ry,segments,r,ox,oy)
     yy = ((-oy+player.scale/2*40*k2) +20*k2*math.sin(-0.3))
     xx2 = ((-ox +player.scale/2*40*k)+20*k*math.cos(-0.7*4.1)) 
     yy2 = ((-oy+player.scale/2*40*k2) +20*k2*math.sin(-0.7*4.1))
-    if  ( flagclass =='slicer') then 
-        if (player.a==0) then
-          
-        end
-        if (player.a==1) then
-            if ( lvl == 0 ) then 
-                love.graphics.line(xx,yy,-ox+player.scale*40*k+player.scale*40/8*k,-oy+player.scale*40*k2/1.3,-ox+player.scale*40*k+player.scale*40/8*k,-oy+player.scale*40*k2/1.1,-ox+player.scale*40*k,-oy+player.scale*40*k2+player.scale*40*k2/8,-ox+player.scale*40*k/2,-oy+player.scale*40*k2+player.scale*40*k2/1.5)
-            end
-        end
-    else
-        love.graphics.line(0.18080357142862*k,8.952380952381*k2,-3.3764880952381*k,7.9365079365079*k2,-9.9828869047619*k,7.4285714285714*k2,-16.589285714286*k,11.492063492064*k2,-21.162946428571*k,18.095238095238*k2,-23.703869047619*k,22.15873015873*k2,-24.212053571429*k,28.761904761905*k2,-21.162946428571*k,35.365079365079*k2,-17.097470238095*k,37.396825396825*k2,-10.999255952381*k,41.968253968254*k2,-7.9501488095238*k,44*k2,-16.589285714286*k,45.015873015873*k2,-26.244791666667*k,42.47619047619*k2,-31.326636904762*k,33.84126984127*k2,-33.359375*k,22.666666666667*k2,-29.802083333333*k,10.984126984127*k2,-21.671130952381*k,1.8412698412698*k2,-13.031994047619*k,-2.7301587301587*k2,-5.9174107142857*k,-2.7301587301587*k2)
-    end
+   ---
     love.graphics.pop()
     love.graphics.pop()
 end
 
 function meteorDraw()
  --   player.body:draw('fill')
-   -- love.graphics.circle('line',player.x,player.y,2*k)
     sledEnemiesDraw()
     for i= 1,#res do
         if ( res[i].tip == 1) then
@@ -1386,22 +1203,20 @@ function meteorDraw()
                    love.graphics.setColor(0.7,0.2,0.2)
                     if ( obj[i] and obj[i].bodyDop) then
                         fragmVect(i)
-                        obj[i].body:draw('line')
+                 --       obj[i].body:draw('line')
                     else
                        meteorVect(i)  
-                        obj[i].body:draw('line')
+               --         obj[i].body:draw('line')
                   end
                    love.graphics.setColor(1,1,1)
                 else
-                   love.graphics.setColor(1,1,1,1)
-                   
+                   love.graphics.setColor(1,1,1)
                     if ( obj[i] and obj[i].pok>0) then
                       fragmVect(i)
-                  
-                     obj[i].body:draw('line')
+               --      obj[i].body:draw('line')
                     else
                       meteorVect(i)
-                      obj[i].body:draw('line')
+                --      obj[i].body:draw('line')
                     end
                 end
             end
@@ -1478,7 +1293,7 @@ end
 
 
 function sledEnemies(x,y,r,i,color1,color2,color3,angle,tip)
-    sledEn = {
+    local sledEn = {
         angle = angle,
         tip = tip,
         ax =-2*k*math.sin(angle) ,
@@ -1500,31 +1315,33 @@ function sledEnemies(x,y,r,i,color1,color2,color3,angle,tip)
 end
 
 
-function sledF()
-    player.body:rotate(-controler.angle)
-    --player.body:draw('fill')
+function playerSledDraw()
+   -- player.body:draw('fill')
     love.graphics.circle('fill',controler.x0,controler.y0,10*k)
     love.graphics.circle('line',controler.x0,controler.y0,13*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
-    if ( flagclass=="slicer") then
-        for  i=1,#sledi do
-            if ( sledi[i]) then
-                if ( player.a==0) then
-              
-                    love.graphics.setColor(0,sledi[i].color,1) 
-                else
-                 
-                    love.graphics.setColor(1, sledi[i].color ,0) 
-                end
-                
-                    love.graphics.rectangle("line",sledi[i].x+(40*k*player.scale-40*k*sledi[i].size)/2,sledi[i].y+(40*player.scale*k2-40*k2*sledi[i].size)/2,sledi[i].size*40*k,sledi[i].size*40*k2,30*k,30*k2)
-               
-            end
-        end 
-    end
-  
     
+    local playerSled = {
+        angle = -controler.angle+math.pi,
+        ax =-2*k*math.sin(controler.angle) ,
+        ay =-2*k2*math.cos(controler.angle),
+        x = player.x+player.scale*20*k,
+        y = player.y+player.scale*20*k2, 
+        r = 0.2 ,
+    }
+    table.insert(playerSledi,playerSled)
+    for i = 1,#playerSledi do
+        local sled = playerSledi[i]
+        local radius =sled.r*i
+        local tailW,tailH = playerQuads.tail:getTextureDimensions()
+        sled.x = sled.x+150*sled.ax*dt2
+        sled.y = sled.y+150*sled.ay*dt2
+        playerBatch:add(playerQuads.tail,sled.x,sled.y,sled.angle,k/7*radius,k2/7*radius,48,60)
+    end
+    if ( #playerSledi>10) then
+        table.remove(playerSledi,1)
+    end
 end
 
 function game:worldBorders()

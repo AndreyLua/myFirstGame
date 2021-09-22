@@ -72,8 +72,8 @@ function destroyMet(mas,i)
                     f = false,
                     x  = x1, 
                     y =  y1 ,  
-                    ax  =17*k*math.sin(angle)+ math.random(-6*k,6*k), 
-                    ay =17*k*math.cos(angle)+ math.random(-6*k,6*k), 
+                    ax  =27*k*math.sin(angle)+ math.random(-6*k,6*k), 
+                    ay =27*k*math.cos(angle)+ math.random(-6*k,6*k), 
                     met = mas[i].met,
                     ra =1,
                 
@@ -116,8 +116,8 @@ function destroyMet(mas,i)
                 y =  y1 ,  
                 xc  = xc, 
                 yc =  yc , 
-                ax  =17*k*math.sin(angle)+ math.random(-6*k,6*k), 
-                ay =17*k*math.cos(angle)+ math.random(-6*k,6*k), 
+                ax  =27*k*math.sin(angle)+ math.random(-6*k,6*k), 
+                ay =27*k*math.cos(angle)+ math.random(-6*k,6*k), 
                 met =mas[i].met,
                 ra =1,
             }
@@ -277,28 +277,18 @@ function anglePlus(mas)
      cosy = math.cos(angle)
      table.insert(masDop,mas[i-2]+sinx*leng/10)
      table.insert(masDop,mas[i-1]+cosy*leng/10)
-     
-    
      table.insert(masDop,mas[i]-sinx*leng/10)
      table.insert(masDop,mas[i+1]-cosy*leng/10)
     end 
-    
      angle = math.atan2(mas[#mas-1]-mas[1],mas[#mas]- mas[2]) 
      leng =  math.sqrt(math.pow(mas[#mas-1]-mas[1],2)+math.pow(mas[#mas]- mas[2],2))
      sinx = math.sin(angle)
      cosy = math.cos(angle)
-     
      table.insert(masDop,mas[#mas-1]-sinx*leng/10)
      table.insert(masDop,mas[#mas]-cosy*leng/10)
-     
      table.insert(masDop,mas[1]+sinx*leng/10)
      table.insert(masDop,mas[2]+cosy*leng/10)
-    
-
      table.insert(masDop,mas[2]+cosy*leng/10)
-     
-  
-   
    return masDop
 end
 
