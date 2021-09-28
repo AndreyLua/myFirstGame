@@ -126,6 +126,17 @@ function playerBoost()
   end
 end
 
+function Health_Boost()
+    love.graphics.setColor(0.64,0,0.02)
+    love.graphics.rectangle("line",screenWidth-40*k+10*k,screenHeight-(hp.long2-20*k2)/2-10*k2,25*k,(hp.long2-20*k2)/2,5)
+    love.graphics.setColor(1,0,0.02)
+    love.graphics.rectangle("line",screenWidth-40*k+10*k,screenHeight-(hp.long2-20*k2)/2-10*k2,25*k,(hp.long-20*k2)/2,5)
+    love.graphics.setColor(0,0.32,0.225)
+    love.graphics.rectangle("line",screenWidth-40*k+10*k,-(boost.long2-20*k2)/2+screenHeight/2-10*k2,25*k,(boost.long2-20*k2)/2,5)
+    love.graphics.setColor(0,0.643,0.502)
+    love.graphics.rectangle("line",screenWidth-40*k+10*k,-(boost.long-20*k2)/2+screenHeight/2-10*k2,25*k,(boost.long-20*k2)/2,5)
+end
+
 function exit(x,y)
   if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and ((flagtouch==true and flagtouch1== true) or flagtouch2 == true or flagtouch3 == true) )  then
       love.graphics.setLineWidth(2)

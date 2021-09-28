@@ -3,37 +3,36 @@ gamestate = require "libs/gamestate"
 Timer = require 'libs/hump.timer' 
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
-setMet = love.graphics.newImage("assets/meteors/setMet.png")
+meteorSet = love.graphics.newImage("assets/meteorSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
 playerBatch = love.graphics.newSpriteBatch(playerSet)
 
 playerIm = love.graphics.newImage("assets/player/player.png")
-
 playerQuads = {
-  player = love.graphics.newQuad(0,  0,  464, 456, playerSet:getDimensions()),
+  body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),
   clow1 = love.graphics.newQuad(465,  0,  200, 152, playerSet:getDimensions()),
   clow2 = love.graphics.newQuad(665,  0,  200, 152, playerSet:getDimensions()),
   tail = love.graphics.newQuad(867,  0,  96, 120,playerSet:getDimensions()),
-  cristal = love.graphics.newQuad(898,  121,  80, 136,playerSet:getDimensions()),
+  cristal = love.graphics.newQuad(942,  173,  80, 136,playerSet:getDimensions()),
   wings = love.graphics.newQuad(465,  153,  448, 256,playerSet:getDimensions()),
 }
-setMetW,setMetH =  setMet:getDimensions()
+meteorSetW,meteorSetH =  meteorSet:getDimensions()
 tableMeteorsPar ={
   {
     texX =0,
     texY =0,
-    texCX = 0.124,
-    texCY = 0.5,
+    texCX = (0+228/2)/meteorSetW,
+    texCY = (0+256/2)/meteorSetH,
     texW = 228,
     texH = 256,
     collW = 81.309,
     collH = 85.3325,
   },
     {
-    texX =259/setMetW,
+    texX =259/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
+    texCX = (259+248/2)/meteorSetW,
+    texCY =(0+256/2)/meteorSetH,
     texW = 248,
     texH = 256,
     collW = 74.1949,
@@ -41,31 +40,52 @@ tableMeteorsPar ={
   },
   ------------------------------------
    {
-    texX =259/setMetW,
+    texX =1044/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
-    texW = 248,
+    texCX = (1044+216/2)/meteorSetW,
+    texCY =(0+256/2)/meteorSetH,
+    texW = 216,
     texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
+    collW = 83.342,
+    collH = 100.571,
   },
-  
+  ----------------------------
    {
-    texX =259/setMetW,
+    texX =518/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
+    texCX = (518+248/2)/meteorSetW,
+    texCY =(0+216/2)/meteorSetH,
+    texW = 248,
+    texH = 216,
+    collW = 63.0148,
+    collH = 55.3650,
+  },
+     {
+    texX =777/meteorSetW,
+    texY =0,
+    texCX = (777+256/2)/meteorSetW,
+    texCY =(0+208/2)/meteorSetH,
+    texW = 256,
+    texH = 208,
+    collW = 40.14657,
+    collH = 32.50793,
+  },
+  -------------------
+   {
+    texX =259/meteorSetW,
+    texY =0,
+    texCX = (259+248/2)/meteorSetW,
+    texCY =(0+256/2)/meteorSetH,
     texW = 248,
     texH = 256,
     collW = 74.1949,
     collH = 76.6983,
   },
      {
-    texX =259/setMetW,
+    texX =259/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
+    texCX = (259+248/2)/meteorSetW,
+    texCY =(0+256/2)/meteorSetH,
     texW = 248,
     texH = 256,
     collW = 74.1949,
@@ -73,20 +93,20 @@ tableMeteorsPar ={
   },
   
    {
-    texX =259/setMetW,
+    texX =259/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
+    texCX = (259+248/2)/meteorSetW,
+    texCY =(0+256/2)/meteorSetH,
     texW = 248,
     texH = 256,
     collW = 74.1949,
     collH = 76.6983,
   },
      {
-    texX =259/setMetW,
+    texX =259/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
+    texCX = (259+248/2)/meteorSetW,
+    texCY =(0+256/2)/meteorSetH,
     texW = 248,
     texH = 256,
     collW = 74.1949,
@@ -94,20 +114,20 @@ tableMeteorsPar ={
   },
   
    {
-    texX =259/setMetW,
+    texX =259/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
+    texCX = (259+248/2)/meteorSetW,
+    texCY =(0+256/2)/meteorSetH,
     texW = 248,
     texH = 256,
     collW = 74.1949,
     collH = 76.6983,
   },
      {
-    texX =259/setMetW,
+    texX =259/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
+    texCX = (259+248/2)/meteorSetW,
+    texCY =(0+256/2)/meteorSetH,
     texW = 248,
     texH = 256,
     collW = 74.1949,
@@ -115,31 +135,10 @@ tableMeteorsPar ={
   },
   
    {
-    texX =259/setMetW,
+    texX =259/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
-    texW = 248,
-    texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
-  },
-     {
-    texX =259/setMetW,
-    texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
-    texW = 248,
-    texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
-  },
-  
-   {
-    texX =259/setMetW,
-    texY =0,
-    texCX = (259+248/2)/setMetW,
-    texCY =(0+256/2)/setMetH,
+    texCX = (259+248/2)/meteorSetW,
+    texCY =(0+256/2)/meteorSetH,
     texW = 248,
     texH = 256,
     collW = 74.1949,
@@ -166,11 +165,10 @@ for i= 1, lenVect do
 end
 kekKK= 0 
 meshMeteors = love.graphics.newMesh(vect, "triangles")
-meshMeteors:setTexture(setMet)
+meshMeteors:setTexture(meteorSet)
 
 fon1 =love.graphics.newImage("assets/fons/fon1.png") 
-fon2 =love.graphics.newImage("assets/fons/fon2.png") 
-fon3 =love.graphics.newImage("assets/fons/fon3.png") 
+
 ----------------------------------
  myShader = love.graphics.newShader[[
 vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords ){
@@ -184,7 +182,7 @@ vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords ){
     
  }
 ]]
- --  myShader = love.graphics.newShader[[
+--  myShader = love.graphics.newShader[[
 --vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
 --  vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
 --  return pixel;
@@ -199,33 +197,26 @@ vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords ){
 game = require "game"
 bulletFunction = require "bulletFunction"
 playerFunction = require "playerFunction"
-enemyFunction = require "enemyFunction" 
+enFunction = require "enFunction" 
+resFunction = require "resFunction" 
+objFunction = require "objFunction" 
 pause = require "pause" 
 skills = require "skills" 
 settings = require "settings" 
 effects = require "effects" 
 system = require "system" 
 UI= require "UI"
-owerseerF = require "owerseerF"
-slicerFunction = require "slicerFunction"
-eaterF = require "eaterF"
 ----------------------------------
 
 -----------TIMERS-----------------
-Sccale = Timer.new()
-klac = Timer.new()
 inv = Timer.new()
 hp1 = Timer.new()
 hp2 = Timer.new()
 hp3 = Timer.new()
 boost1 = Timer.new()
 boost2 = Timer.new()
-sledi3  =  Timer.new()
 textT  =  Timer.new()
-drell  =  Timer.new()
 wavetimer=  Timer.new()
-lightTimer=  Timer.new()
-stop = Timer.new()
 ----------------------------------
 
 -------------MASIIIIIIV-----------
@@ -237,7 +228,9 @@ mouse = {
 playerAbility = {
       radiusCollect = 100,
       damage = 1,
-      invTimer = 0.5
+      invTimer = 0.5,
+      maxSpeed = 27,
+      debaffStrenght =0.2,
   
   }
 ----------------------------------
@@ -247,6 +240,10 @@ lvl =0
 volume = 50
 sens = 50
 flagVibr = false
+gradientR = 1
+gradientG = 0 
+gradientB = 0 
+gradientI = 1
 ----------------------------------
 
 

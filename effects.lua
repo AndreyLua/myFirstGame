@@ -164,35 +164,67 @@ end
 end
 
 function expl(x,y,kol)
-  
-  for kek =0, kol do
-   
-local e = {
-  
-  flag  =false,
-  tip = 1,
-  r = 0 ,
-  color1 = math.random(200,255),
-  color2= math.random(90,255),
-  color3 = math.random(0,50),
-  f = false,
-  x  = x, 
-  y =  y,  
-  xx  = x, 
-  yy =  y,
-  ax  =math.random(-1.72*k*40,1.73*k*40), 
-  ay = math.random(-1.73*k*40,1.73*k*40), 
-  scale =0.15
-  
-}
-
-table.insert(exp,e)
-
+    for kek =0, kol do
+        local e = {
+        flag  =false,
+        tip = 1,
+        r = 0 ,
+        color1 = math.random(200,255),
+        color2= math.random(90,255),
+        color3 = math.random(0,50),
+        f = false,
+        x  = x, 
+        y =  y,  
+        xx  = x, 
+        yy =  y,
+        ax  =math.random(-1.72*k*40,1.73*k*40), 
+        ay = math.random(-1.73*k*40,1.73*k*40), 
+        scale =0.15
+        }
+    table.insert(exp,e)
+    end
 end
+function gradient()
+    if (gradientI == 1 ) then
+        gradientOp1(gradientR,gradientG,gradientB)
+    end
+    if (gradientI  == 2 ) then 
+        gradientOp2(gradientR,gradientG,gradientB)
+    end
+    if (gradientI  == 3 ) then 
+        gradientOp3(gradientR,gradientG,gradientB)
+    end
+    return gradientR+0.8,gradientG+0.8,gradientB+0.8
 end
-
-function effectGr()
-  love.graphics.setColor(0,colorx,colory)
+function gradientOp1()
+    if ( gradientR>0) then
+        gradientR = gradientR - 0.4*dt2
+        gradientG = gradientG + 0.4*dt2
+    else
+        gradientR = 0
+        gradientG = 1
+        gradientI = 2
+    end
+end
+function gradientOp2()
+    if ( gradientG>0) then
+        gradientG = gradientG - 0.4*dt2
+        gradientB = gradientB + 0.4*dt2
+    else
+        gradientG = 0
+        gradientB = 1
+        gradientI = 3
+    end
+end
+function gradientOp3()
+    if ( gradientB>0) then
+        gradientB = gradientB - 0.4*dt2
+        gradientR = gradientR + 0.4*dt2
+    else
+        gradientB = 0
+        gradientR = 1
+        gradientI = 1
+    end
 end
 
 

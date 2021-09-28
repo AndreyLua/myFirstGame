@@ -1,6 +1,5 @@
 local bulletFunction = {}
 
-
     function bulletsUpdate()
         for i = 1, #enemyBullets do
             if ( enemyBullets[i]) then
@@ -50,11 +49,4 @@ local bulletFunction = {}
         end
     end
   
-  
-
-
-
-
-
-
 return bulletFunction

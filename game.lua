@@ -41,8 +41,6 @@ colll = {}
 slediEn ={}
 flagclass = "slicer" 
 tap =  false
-colorx=0.2
-colory=0.2
 np = 0 
 flagfff3 = 0   
 
@@ -84,10 +82,11 @@ boost = {
   long3 =screenHeight
 }
 player = {
-  body = HC.polygon(1,3,2,2,5,5),
+  debaffStrenght =1,
+  body =HC.circle(-200*k,-200*k2,35*k),
   invis = 10,
-  length1 =15,
-  length2  = 20,
+  clowR = 0, 
+  clowRflag = 0, 
   boost =  screenHeight,
   hp =  screenHeight,
   x = screenWidth/2, 
@@ -112,6 +111,7 @@ end
 
 
 function game:update(dt)
+  
 boost.long = 1000
 hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
@@ -120,17 +120,15 @@ mouse.y = mouse.y/sy
 dt2 = dt 
 flagtouch2 = false -- для выхода в состояние пауза
 --------------------
-lvlplayer()
 playerControl()
+playerClowR()
 playerHP()
 explUpdate2()
 -------------------
-Sccale:update(dt)
 local Wave = waves[numberWave] 
- 
 for i = 1 , #obj do
     if (obj[i]) then  
-        enHpLength(i,obj)
+        allInvTimer(i,obj)
         objMove(i) 
         allBorder(i,obj) 
         if (obj[i] and obj[i].body and player.body:collidesWith(obj[i].body) and obj[i].invTimer==obj[i].timer)  then
@@ -138,13 +136,19 @@ for i = 1 , #obj do
         end
         if ( obj[i]) then
             if (obj[i].health<=0) then
-                destroyMet(obj,i) 
+                objDestroy(obj,i) 
                 table.remove(obj,i)
             end
         end  
     end
 end
- 
+
+if ( player.clowR> 0.2 ) then
+    player.clowRflag = 1 
+end
+if ( player.clowR< 0 ) then
+    player.clowRflag = 0 
+end
 for i = 1 , #res do
     if (res[i]) then 
         resColl(i)
@@ -158,15 +162,15 @@ end
  
 for i=1,#en do
     if (en[i]) then 
-        enHpLength(i,en)
+        allInvTimer(i,en)
         enMove(i)  
         enAtack(i)
-        if   (en[i] and en[i].body and player.body:collidesWith(en[i].body))  then
+        if (en[i] and en[i].body and player.body:collidesWith(en[i].body))  then
             enColl(i, en[i].tip, player.a)
         end
     
         if (en[i] and en[i].health and en[i].health<=0 ) then
-            kill(en,i)
+            allDecompose(en,i)
             if (slediEn[i]) then
                 table.remove(slediEn,i)
             end
@@ -198,7 +202,7 @@ if ( colWave>0 and #obj < 20) then
             else
                 Tip =1
             end
-            spawnAll(obj,Geo,Tip)
+            allSpawn(obj,Geo,Tip)
         end
   
         for i=1,math.random(0,1) do
@@ -206,38 +210,18 @@ if ( colWave>0 and #obj < 20) then
             local Geo  =math.random(1,4)
             local Tip =math.random(1,2)
             local Scale =math.random(2,2)
-            spawnAll(en,Geo,Tip)
+            allSpawn(en,Geo,Tip)
         end
         Timer.clear() 
     end)
   
     Timer.update(dt)
 end
-
-if not(love.mouse.isDown(1)) then
-    player.a = 0 
-    if ( player.ax> 0) then
-        player.ax = player.ax-13*dt*k
-    else
-        player.ax = player.ax+13*dt*k
-    end
-    if ( player.ay> 0) then
-        player.ay = player.ay-13*dt*k2
-    else
-        player.ay = player.ay+13*dt*k2
-    end
-end
-
-player.x = player.x + player.ax*dt*13*k
-player.y = player.y + player.ay*dt*13*k2
-if ( player.a==1 and flagclass=='slicer') then
-    player.x = player.x + player.ax*dt*6*k
-    player.y = player.y + player.ay*dt*6*k2
-end
-
+playerDebaff()
+playerMove()
 bulletsUpdate()
 self:movement(dt)
-
+playerBorder()
 end
 
 function game:keypressed(key1,key, code)
@@ -272,57 +256,49 @@ function game:movement(dt)
      if love.keyboard.isDown('w') then
        kekKK = kekKK +0.01
     end
+     if love.keyboard.isDown('s') then
+       kekKK = kekKK -0.01
+    end
     
     if love.keyboard.isDown('e') then
         local Geo  =math.random(1,4)
-        local Tip =1
-        local Scale =math.random(2,2)
-        spawnAll(obj,Geo,Tip)
+        local Tip =math.random(1,2)
+        allSpawn(obj,Geo,Tip)
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
+   --   allSpawn(en,Geo,Tip)
+    --    en[#en].x = mouse.x
+     --   en[#en].y = mouse.y
     end
 end
 
 
 function  game:draw()
     playerBatch:clear()
-    if ( flagclass =='slicer') then
-        if ( boost.long >70*k2  ) then
-            boost.flag = true
-        end
-        if ( boost.long <= 30*k2  ) then
-            player.a=0
-            boost.long =30*k2
-            boost.flag = false
-        end
-    end
     love.graphics.setCanvas(kek)
     love.graphics.clear()
     love.graphics.draw(fon1,0,0,0,k,k2)
-    love.graphics.draw(fon2,0,0,0,k,k2)
-   -- love.graphics.draw(fon3,-player.x/25,-player.y/25,0,k,k2)
+
     if (flaginv == false ) then
-      love.graphics.translate( 0  ,random(0,shake) )   end
-    playerSledDraw()
+    love.graphics.translate( 0  ,random(0,shake) )   end
     love.graphics.setLineWidth(1.5)
     love.graphics.setColor(1,1,1,1)
     --    love.graphics.setShader(myShader)
       --  love.graphics.draw(meteors.m1,200*k,200*k2,0,1,1,meteors.m1:getWidth()/2,meteors.m1:getHeight()/2
       --  love.graphics.setShader()
-    meteorDraw()
+    allDraw()
     love.graphics.setColor(1,1,1)
-    love.graphics.draw(playerBatch)
     love.graphics.setLineWidth(1)
     bulletsDraw()
     Health_Boost()
-    endr()
+    enRemoveTag()
     
        
     if ( #obj  >0 and #vect > 0) then
         for i = 1, #vect do
             if (i>= lenVect) then
                 lenVect = lenVect +100
-                recoveryVect()
+                objRecoveryVect()
             else
                 meshMeteors:setVertex( i, vect[i] )
             end
@@ -347,11 +323,9 @@ function  game:draw()
     else
       
     end
-    love.graphics.setColor( 1 , 1 , 1 ) 
- 
-    love.graphics.draw(playerIm,player.x+player.scale/2*40*k,player.y+player.scale/2*40*k2,-controler.angle+math.pi,k/7,k2/7,playerIm:getWidth()/2,playerIm:getHeight()/2)
-
-    self:worldBorders(dt)
+    love.graphics.setColor( 1 , 1 , 1,1 ) 
+         playerDraw()
+        love.graphics.draw(playerBatch)--love.graphics.draw(playerIm,player.x+player.scale/2*40*k,player.y+player.scale/2*40*k2,-controler.angle+math.pi,k/7,k2/7,playerIm:getWidth()/2,playerIm:getHeight()/2)
     love.graphics.setColor(1,0,0.02)
     love.graphics.print("HP "..math.floor(hp.long/screenHeight*100)..'/'..100, screenWidth-55*k,screenHeight/2+200*k2,-math.pi/2,0.3,0.3)
     love.graphics.setColor(0,0.643,0.502)
@@ -429,38 +403,120 @@ function Waves(n)
     end
     
 end
+function allGeo(Geo)
+      if (Geo==1) then
+        return -3*50*k,math.random(0,screenHeight),math.random(1*k,6*k),math.random(-6*k,6*k), math.random(0.5,1)
+      end
+      if (Geo==2) then
+        return  math.random(0,screenWidth),-3*40*k2,math.random(-6*k,6*k),math.random(1*k,6*k),math.random(-1,-0.5)
+      end
+      if (Geo==3) then
+        return  math.random(0,screenWidth),screenHeight+3*40*k2,math.random(-6*k,6*k),math.random(-6*k2,-1*k2),math.random(0.5,1) 
+      end
+      if (Geo==4) then
+        return  (screenWidth+3*40*k),math.random(0,screenHeight),math.random(-6*k,-1*k),math.random(-6*k,6*k), math.random(-1,-0.6)
+      end
+end
 
-function endr()
-    for i=1,#removeEn do
-        local h =  removeEn[i]
-        if ( removeEn[i]) then
-            if ( h.tip == 4 ) then
-                love.graphics.setColor(1,0.1,0.1)
-                love.graphics.print("+HP",removeEn[i].x,removeEn[i].y,-math.pi/2,0.4)  
-            else 
-                if ( h.tip == 1 ) then
-                    love.graphics.setColor(0.235,0.616,0.816,0.6)
-                    love.graphics.print("+1",removeEn[i].x,removeEn[i].y,-math.pi/2,0.2)    
-                end
-                if ( h.tip == 2 ) then
-                    love.graphics.setColor(0.514,0.941,0.235,0.6)
-                    love.graphics.print("+3",removeEn[i].x,removeEn[i].y,-math.pi/2,0.3)    
-                end
-                if ( h.tip == 3 ) then
-                    love.graphics.setColor(0.549,0.427,0.843,0.6)
-                    love.graphics.print("+5",removeEn[i].x,removeEn[i].y,-math.pi/2,0.4)    
-                end
-            end
-            h[#h] =  h[#h]+ 0.15*dt2
-            if (  h[#h]> 0.1) then
-                table.remove(removeEn,i)
-            end        
+function allSpawn(mas,Geo,Tip)
+    if ( mas == obj) then
+        local colorRGB = 0.2
+        local Body =math.random(3,5)
+        local colorDop1,colorDop2,colorDop3,scale= objColor(Body)
+        local x,y,ax,ay,ra = allGeo(Geo)
+        local health = 1
+        local e = {
+            body = objTip(Body),
+            timer = 0 ,
+            invTimer = 20,
+            ot = false,
+            tip = Tip, 
+            ugol =  0,
+            r =0,
+            rDop =0,
+            flagr = 0 ,
+            color1 =colorDop1,
+            color2=colorDop2,
+            color3 =colorDop3,
+            scale = scale,
+            f = false,
+            pok = 0,
+            met =Body,
+            x  = x, 
+            y = y,  
+            ax  =ax,
+            ay = ay,
+            ra =ra,
+            health = health
+            }
+        e.body:moveTo(e.x, e.y)
+       
+        table.insert(mas,e)
+    end
+------------------------------------------------------------------------  
+------------------------------------------------------------------------  
+    if ( mas == en) then
+        local x,y,ax,ay,ra = allGeo(Geo)
+        if ( Tip ==1) then
+            local health = 3
+            local damage = 1
+            local e = {
+                tip = Tip, 
+                body =HC.rectangle(-10*k,-10*k2,1*k,1*k2),
+                timer = 0 , 
+                invTimer = 20,
+                atack = 0,
+                atackTimer = 60,
+                dash = 0,
+                dashTimer = 20,
+                color1 =0.8,
+                color2=0.2,
+                color3 =0.2,
+                r = 0 ,
+                ugol =  0,
+                flagr = 0 ,
+                damage = damage , 
+                f = false,
+                x  = x, 
+                y = y ,  
+                ax  =ax, 
+                ay = ay, 
+                health = health,
+                healthM = health
+                }
+            table.insert(mas,e)
+        end
+        if ( Tip ==2) then 
+            local health = 2
+            local damage = 10
+            local e = {
+                body =HC.rectangle(-10*k,-10*k2,1*k,1*k2),
+                damage = damage, 
+                invTimer = 20,
+                timer = 0 , 
+                atack = 0,
+                atackTimer = 30,
+                tip = Tip, 
+                ugol =  0,
+                color1 =0.8,
+                color2=0.2,
+                color3 =0.2,
+                r = 0 ,
+                flagr = 0 ,
+                f = false,
+                x  = x, 
+                y = y ,  
+                ax  =ax, 
+                ay = ay, 
+                health = health,
+                healthM = health
+                }
+            table.insert(mas,e)
         end
     end
 end
 
-
-function enHpLength(i,mas)
+function allInvTimer(i,mas)
     if ( mas[i] and mas[i].timer) then
         if ( mas[i].invTimer) then
             if ( mas[i].timer < mas[i].invTimer) then
@@ -473,448 +529,29 @@ function enHpLength(i,mas)
     end
 end
 
-
-
-function enAtack(i)
-    if ( en[i] and en[i].atack) then
-        if ( en[i].atack <  en[i].atackTimer) then
-            en[i].atack  = en[i].atack  - 30*dt2
-        end
-        if ( en[i].atack < 0) then
-            en[i].atack  = en[i].atackTimer
-        end
-    end
-    if ( en[i] and en[i].dash) then
-        if ( en[i].dash <  en[i].dashTimer) then
-            en[i].dash  = en[i].dash  - 30*dt2
-        end
-        if ( en[i].dash < 0) then
-            en[i].dash  = en[i].dashTimer
-        end
-    end
-end
-  
-  
-function objMove(i) 
-    if (obj[i]) then
-        objBody(i,obj[i].tip,obj[i].met)
-        if ( obj[i].f == true ) then 
-        -----------------------------------------------      
-            if ( obj[i].tip == 1) then
-                obj[i].ot =false
-                obj[i].x= obj[i].x+obj[i].ax*dt2*5
-                obj[i].y= obj[i].y+obj[i].ay*dt2*5
-                if ( obj[i].ax >5) then
-                    obj[i].ax = obj[i].ax-20*dt2
-                end
-                if ( obj[i].ay >5) then
-                    obj[i].ay = obj[i].ay-20*dt2
-                end
-            end
-        -----------------------------------------------  
-        else
-        -----------------------------------------------   
-            if ( obj[i].tip == 1) then
-                obj[i].ot =false
-                obj[i].x= obj[i].x+obj[i].ax*dt2*10
-                obj[i].y= obj[i].y+obj[i].ay*dt2*10
-            end  
-        -----------------------------------------------  
-        end
-    end
-    
-end
-
-
-function enMove(i) 
-    enTip(i,en[i].tip)
-    
-    if (en[i].ugol) then 
-        en[i].body:rotate(-en[i].ugol,en[i].x,en[i].y) 
-    end
-    if ( en[i].tip == 1) then
-        if ( en[i].invTimer and  en[i].invTimer == en[i].timer) then
-        -----------------------------------------------  
-            rotAngle(i,en[i].tip)
-            local ugol = math.atan2(player.x-en[i].x+20*k,player.y-en[i].y+20*k)
-          if (en[i].dash and en[i].dash==en[i].dashTimer) then
-                enUgol(i,ugol)
-           end
-            if ((math.sqrt(math.pow((player.x+40*k/2-en[i].x),2)+math.pow((player.y+40*k2/2-en[i].y),2))) > 30*k) then
-                if (en[i].dash and en[i].dash==en[i].dashTimer) then
-                    if not((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
-                        en[i].ax=22*k*math.sin(ugol)
-                        en[i].ay=22*k2*math.cos(ugol)
-                    end
-                end
-            end
-            
-            if (en[i].dash and en[i].dash==en[i].dashTimer and en[i].atack and en[i].atack==en[i].atackTimer and en[i].invTimer ==en[i].timer and (math.sqrt(math.pow((player.x+40*k/2-en[i].x),2)+math.pow((player.y+40*k2/2-en[i].y),2))) <=100*k ) then
-                en[i].atack = en[i].atackTimer-0.001
-                en[i].dash = en[i].dashTimer-0.001
-            end
-            
-            if (en[i].dash and en[i].dash==en[i].dashTimer)  then
-                if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
-                   en[i].x= en[i].x+en[i].ax*dt2*0
-                   en[i].y= en[i].y+en[i].ay*dt2*0
-                   en[i].ax = 0
-                   en[i].ay = 0 
-                else
-                    en[i].x= en[i].x+en[i].ax*dt2*7
-                    en[i].y= en[i].y+en[i].ay*dt2*7
-                end
-                 if not((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
-                en[i].x= en[i].x+math.sin(en[i].y/10)*dt2*50
-                en[i].y= en[i].y+math.cos(en[i].x/10)*dt2*50
-                end
-            else
-                en[i].x= en[i].x+en[i].ax*dt2*17
-                en[i].y= en[i].y+en[i].ay*dt2*17
-           end
-        -----------------------------------------------  
-        else
-        -----------------------------------------------  
-            if (en[i].ax>0)then
-                en[i].ax =en[i].ax-50*dt2
-            else
-                en[i].ax =en[i].ax+50*dt2
-            end
-            if (en[i].ay>0)then
-                en[i].ay =en[i].ay-50*dt2
-            else
-                en[i].ay =en[i].ay+50*dt2
-            end
-            en[i].x= en[i].x-en[i].ax*dt2*3
-            en[i].y= en[i].y-en[i].ay*dt2*3
-        -----------------------------------------------  
-        end
-    end
-    if ( en[i].tip == 2) then
-        if ( en[i].invTimer and  en[i].invTimer ==en[i].timer) then
-        -----------------------------------------------------    
-            if (en[i].atack and en[i].atack==en[i].atackTimer and en[i].invTimer ==en[i].timer and (math.sqrt(math.pow((player.x+40*k/2-en[i].x),2)+math.pow((player.y+40*k2/2-en[i].y),2))) <= 300*k ) then
-                en[i].atack = en[i].atackTimer-0.001
-                Fire(player.x+40*k/2,player.y+40*k2/2,en[i].x,en[i].y,en[i].ugol,en[i].damage)
-            end
-            rotAngle(i,en[i].tip)
-            local ugol = math.atan2(player.x-en[i].x+20*k,player.y-en[i].y+20*k)
-            enUgol(i,ugol)
-            if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
-                en[i].x= en[i].x+en[i].ax*dt2*3
-                en[i].y= en[i].y+en[i].ay*dt2*3
-            else
-                en[i].x= en[i].x+en[i].ax*dt2*7
-                en[i].y= en[i].y+en[i].ay*dt2*7
-            end
-            en[i].x= en[i].x+math.sin(en[i].y/7)*dt2*50--!!!!!!!!!!!!
-            en[i].y= en[i].y+math.cos(en[i].x/7)*dt2*50--!!!!!!!!!!
-        -----------------------------------------------------      
-        else
-        -----------------------------------------------------  
-            if (en[i].ax>0)then
-                en[i].ax =en[i].ax-50*dt2
-            else
-                en[i].ax =en[i].ax+50*dt2
-            end
-            if (en[i].ay>0)then
-                en[i].ay =en[i].ay-50*dt2
-            else
-                en[i].ay =en[i].ay+50*dt2
-            end
-            en[i].x= en[i].x-en[i].ax*dt2*3
-            en[i].y= en[i].y-en[i].ay*dt2*3
-        -----------------------------------------------------  
-        end
-    end
-    if ( en[i].tip == 3) then
-      
-    end   
-    
-end
-function resMove(i)
-    if (res[i].tip == 1) then
-        res[i].x= res[i].x+res[i].ax*dt2*10
-        res[i].y= res[i].y+res[i].ay*dt2*10
-    end
-    if (res[i].tip == 2) then
-        res[i].x= res[i].x+res[i].ax*dt2*7
-        res[i].y= res[i].y+res[i].ay*dt2*7
-    end
-    if (res[i].tip == 3) then
-        res[i].x= res[i].x+res[i].ax*dt2*5
-        res[i].y= res[i].y+res[i].ay*dt2*5
-    end
-    if (res[i].tip == 4) then
-        res[i].x= res[i].x+res[i].ax*dt2*10
-        res[i].y= res[i].y+res[i].ay*dt2*10
-    end  
-    if ( res[i].ax > 0 ) then
-        res[i].ax  = res[i].ax - 6*dt2
-    else
-        res[i].ax  = res[i].ax + 6*dt2
-    end
-    if ( res[i].ay > 0 ) then
-        res[i].ay  = res[i].ay - 6*dt2
-    else
-        res[i].ay  = res[i].ay + 6*dt2
-    end
-      
-end
-function enUgol(i,ugol)
-    if ( en[i].ugol == 0) then
-        en[i].ugol=0.00000001
-    end
-    if ( en[i].ugol < -math.pi) then
-        en[i].ugol=math.pi
-    end
-    if ( en[i].ugol > math.pi) then
-        en[i].ugol=-math.pi
-    end
-    if ( ugol == 0) then
-        ugol=0.00000001
-    end
-    if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
-        if (ugol/math.abs(ugol)==en[i].ugol/math.abs(en[i].ugol))then
-            if ( ugol>en[i].ugol) then
-                en[i].ugol = en[i].ugol+4*dt2
-            else 
-                en[i].ugol = en[i].ugol-4*dt2
-            end
-        else
-            if (math.abs(ugol)+math.abs(en[i].ugol)> 2*math.pi - math.abs(ugol)-math.abs(en[i].ugol)) then
-                if (en[i].ugol>0) then 
-                    en[i].ugol = en[i].ugol+4*dt2
-                else
-                    en[i].ugol = en[i].ugol-4*dt2
-                end
-            else 
-                if (en[i].ugol>0) then 
-                    en[i].ugol = en[i].ugol-4*dt2
-                else
-                    en[i].ugol = en[i].ugol+4*dt2
-                end
-            end
-        end
-    end
-  
-end
-
-
-
-
-function allBorder(i,mas)
-    ----------если залетел на карту поднимаем флаг-------------------------------------  
-    if (mas[i].x>0 and  mas[i].x<screenWidth and  mas[i].y>0 and  mas[i].y<screenHeight and mas[i].body) then
-        if not(mas[i].body:collidesWith(left) or mas[i].body:collidesWith(right)or mas[i].body:collidesWith(up)or mas[i].body:collidesWith(down)) then
-            mas[i].f = true
-        end
-    end
-    --------------------------------------------------
-    if (mas[i].body and mas[i].body:collidesWith(left) and mas[i].f == true) then
-        mas[i].ax = math.random(1*k,6*k)
-    end
-    if (mas[i].body and mas[i].body:collidesWith(right) and mas[i].f == true)then
-       mas[i].ax = -1*math.random(1*k,6*k)
-    end
-    if (mas[i].body and mas[i].body:collidesWith(up) and mas[i].f == true)then
-       mas[i].ay = math.random(1*k,6*k)
-    end
-    if (mas[i].body and mas[i].body:collidesWith(down) and mas[i].f == true) then
-      mas[i].ay = -1*math.random(1*k,6*k)
-    end
-    --------------------------------------------------
-    if ( mas[i]) then
-        if (  mas[i].x>screenWidth+150*k or  mas[i].x<-150*k or  mas[i].y>screenHeight+150*k2 or  mas[i].y<-150*k2 ) then
-            table.remove(mas,i)
-        end
-    end
-    if ( mas[i]) then
-        if (  (mas[i].x>screenWidth or  mas[i].x<0 or  mas[i].y>screenHeight or  mas[i].y<0) and (mas[i].ay<1*k2 and mas[i].ay>-1*k2 and mas[i].ax<1*k and mas[i].ax>-1*k)) then
-            table.remove(mas,i)
-        end
-    end
-end
-
-
-function resColl(i)
-        if ( player.a==0  ) then 
-            if ( checkCollision(player.x+player.scale*40/2*k-playerAbility.radiusCollect*k,player.y+player.scale*40/2*k2-playerAbility.radiusCollect*k2, playerAbility.radiusCollect*k*2, playerAbility.radiusCollect*k2*2,res[i].x,res[i].y,1*k,1*k2)) then
-                local x1 = (player.x+player.scale*40/2*k)-res[i].x+1*k
-                local y1 = (player.y+player.scale*40/2*k2)-res[i].y+1*k2          
-                local ugol = math.atan2(x1,y1)
-                if ( res[i].ax> 17*k*math.sin(ugol)) then
-                    res[i].ax = res[i].ax - 1*k 
-                else
-                    res[i].ax = res[i].ax + 1*k 
-                end
-                if ( res[i].ay> 17*k2*math.cos(ugol)) then
-                    res[i].ay = res[i].ay - 1*k2
-                else
-                    res[i].ay = res[i].ay + 1*k2 
-                end
-            end
-        end
-  
-end
-
-function resСollect(i)
-    if ( checkCollision(player.x,player.y, player.scale*40*k, player.scale*40*k2,res[i].x,res[i].y,1*k,1*k2)) then
-        if ( res[i].tip == 4) then
-            hp.long3=hp.long3+50*k2
-            remove(i,res)
-        else
-            score = score +1
-            remove(i,res)
-        end
-    end
-end
-
-function enColl(i, tip, a)
-    if ( a == 1) then
-        if (tip == 1) then 
-            if ( en[i] and en[i].health and en[i].invTimer and  en[i].invTimer ==en[i].timer) then
-                en[i].timer =  en[i].invTimer-0.001
-                en[i].health  =  en[i].health - playerAbility.damage
-                en[i].ax =en[i].ax - player.ax
-                en[i].ay =en[i].ay -  player.ay
-                hit(en,i)
-                
-            end
-        end
-        if (tip == 2) then 
-            if ( en[i] and en[i].health and en[i].invTimer and  en[i].invTimer ==en[i].timer) then
-                en[i].timer =  en[i].invTimer-0.001
-                en[i].health  =  en[i].health - playerAbility.damage
-                en[i].ax =en[i].ax - player.ax
-                en[i].ay =en[i].ay -  player.ay
-                hit(en,i)
-            end
-        end
-    else
-        if ( en[i].tip == 1) then
-            if ( player.invis == 10 and  en[i] and en[i].health and en[i].atack  and en[i].invTimer ==en[i].timer ) then
-                flaginv = false 
-                shake = 2
-                hp.long = hp.long - en[i].damage
-                hp.long3  = hp.long
-            end 
-        end 
-        if ( en[i].tip == 2) then
-            if ( en[i] and en[i].health and en[i].invTimer and  en[i].invTimer ==en[i].timer) then
-                en[i].timer =  en[i].invTimer-0.001
-                en[i].health  =  en[i].health - playerAbility.damage/1.5
-                en[i].ax =en[i].ax - player.ax
-                en[i].ay =en[i].ay -  player.ay
-                hit(en,i)
-            end  
-        end
-    end
-end
-
-function objColl(i, tip, a)
-    local angleD = math.atan2(player.x-obj[i].x+20*k*player.scale,player.y-obj[i].y+20*k*player.scale)
-    if ( a == 1) then
-        if ( obj[i].tip == 1) then
-            if ( obj[i] and obj[i].health ) then
-                obj[i].health = obj[i].health -2*playerAbility.damage
-                player.ax = 0.2 * player.ax 
-                player.ay = 0.2 * player.ay
-                obj[i].ax =-40*k*math.sin(angleD)
-                obj[i].ay =-40*k2*math.cos(angleD)
-            end
-            obj[i].timer= obj[i].invTimer- 0.001
-            if (obj[i].health<0) then 
-                destroyMet(obj,i) 
-                table.remove(obj,i)
-            end
-           
-        else
-            if (obj[i].tip == 2) then
-              
-            end
-        end   
-    else
-        if ( obj[i].tip == 1) then
-            local angl = math.atan2(-player.ax,-player.ay)
-            if ( obj[i] and obj[i].health ) then
-                obj[i].health = obj[i].health -1*playerAbility.damage
-                player.ax = 0.2 * player.ax 
-                player.ay = 0.2 * player.ay
-                obj[i].ax =-40*k*math.sin(angleD)
-                obj[i].ay =-40*k2*math.cos(angleD)
-                
-            end
-            obj[i].timer= obj[i].invTimer- 0.001
-            if (obj[i].health<0) then 
-                destroyMet(obj,i) 
-                table.remove(obj,i)
-            end
-           
-        else
-            if ( obj[i].tip == 2) then 
-       
-            end
-        end 
-    end
-end
-
-
-function remove(i,mas)
-    local kek = 0
-    table.insert(mas[i],kek)
-    table.insert(removeEn,mas[i])
-    table.remove(mas,i)
-end 
-
-function hit(mas,i)
-    for kek =0, math.random(7,8) do
-        local colorRGB =0.1
-        local colorDop1 = math.random()/3
-        local colorDop2 = math.random()/3
-        local colorDop3 = math.random()/3
-        local eh = {
-            tip = 1,
-            r = math.random(0,3),
-            flag =true,
-            color1 =colorRGB + colorDop1,
-            color2= colorRGB + colorDop2,
-            color3 =colorRGB + colorDop3,
-            f = false,
-            x  = mas[i].x, 
-            y =  mas[i].y,  
-            ax  =math.random(-2*k*kek,3*k*kek), 
-            ay = math.random(-3*k*kek,3*k*kek), 
-        }
-        table.insert(res,eh)
-    end
-end
- 
-
-function kill(mas,i)
+function allDecompose(mas,i)
     local Wave = waves[numberWave]
     colWave = colWave-1
     expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2,10)
     expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2+colWave*300*k2/Wave[4],10)
     for kek =0, math.random(7,20) do
-        local colorRGB =0
         local kkek = math.random()
-        local colorDop1 = 0.4 + kkek *0.4
-        local colorDop2 =  0.30 +kkek *0.3
-        local colorDop3 =  0.27 + kkek *0.20
+        local colorDop1 = mas[i].color1+math.random()/7
+        local colorDop2 = mas[i].color2+math.random()/7
+        local colorDop3 = mas[i].color3+math.random()/7
         if ( math.random(1,30)==1) then
             local eh = {
                 tip = 4, --hp
                 r = 0,
                 flag =true,
-                color1 =colorRGB + colorDop1,
-                color2= colorRGB + colorDop2,
-                color3 =colorRGB + colorDop3,
+                color1 =colorDop1,
+                color2=colorDop2,
+                color3 =colorDop3,
                 f = false,
                 x  = mas[i].x, 
                 y =  mas[i].y,  
-                ax  =math.random(-2*k*kek,3*k*kek), 
-                ay = math.random(-3*k*kek,3*k*kek), 
+                ax  =math.random(-2*k*kek,2*k*kek), 
+                ay = math.random(-2*k*kek,2*k*kek), 
                
             }
             table.insert(res,eh)
@@ -933,36 +570,18 @@ function kill(mas,i)
                 tip = RandomTip,
                 r = math.random(1,3),
                 flag =true,
-                color1 =colorRGB + colorDop1,
-                color2= colorRGB + colorDop2,
-                color3 =colorRGB + colorDop3,
+                color1 =colorDop1,
+                color2= colorDop2,
+                color3 =colorDop3,
                 f = false,
                 x  = mas[i].x, 
                 y =  mas[i].y,  
-                ax  =math.random(-2*k*kek,3*k*kek)/RandomTip, 
-                ay = math.random(-3*k*kek,3*k*kek)/RandomTip, 
+                ax  =math.random(-1.5*k*kek,1.5*k*kek)/RandomTip, 
+                ay = math.random(-1.5*k*kek,1.5*k*kek)/RandomTip, 
             }
             table.insert(res,eh)
         end
     end
-end
-
-function rot1(mode,x,y,w,h,rx,ry,segments,r,ox,oy)
-    if not oy and rx then r,ox,oy = rx,ry, segments end
-    r = r or 0 
-    ox = ox or w/2
-    oy = oy or h/2
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    xx = ((-ox +player.scale/2*40*k)+20*k*math.cos(-0.3)) 
-    yy = ((-oy+player.scale/2*40*k2) +20*k*math.sin(-0.3))
-    xx2 = ((-ox +player.scale/2*40*k)+20*k*math.cos(-0.7*4.1)) 
-    yy2 = ((-oy+player.scale/2*40*k2) +20*k*math.sin(-0.7*4.1))
----
-    love.graphics.pop()
-    love.graphics.pop()
 end
 
 function enTip1(r2,mode,x,y,w,h,r,ox,oy,flag,hp,healthM )
@@ -1100,89 +719,17 @@ love.graphics.line(7.8035714285715*k,27.746031746032*k2,14.409970238095*k,34.857
     love.graphics.pop()
 end
 
-function rotAtack(i,tip)
- if (tip == 1 ) then
-        if ( en[i] and en[i].r) then
-            if ( en[i].r> 0.22 ) then
-                en[i].flagr = 1 
-            end
-            if ( en[i].r< 0 ) then
-                en[i].flagr = 0 
-            end
-            if ( en[i].flagr ==0) then
-                en[i].r = en[i].r+1.4*dt2*math.random(5,10)/7
-            else
-                en[i].r = en[i].r-1.4*dt2*math.random(5,10)/7
-            end
-        end
-    end  
-  
-end
-
-function rotAngle(i,tip)
-    if (tip == 1 ) then
-        if ( en[i] and en[i].r) then
-            if ( en[i].r> 0.1 ) then
-                en[i].flagr = 1 
-            end
-            if ( en[i].r< 0 ) then
-                en[i].flagr = 0 
-            end
-            if ( en[i].flagr ==0) then
-                en[i].r = en[i].r+1.1*dt2*math.random(5,10)/7
-            else
-                en[i].r = en[i].r-1.1*dt2*math.random(5,10)/7
-            end
-        end
-    end
-    if (tip == 2 ) then
-        if ( en[i] and en[i].r) then
-            if ( en[i].r> 0.22 ) then
-                en[i].flagr = 1 
-            end
-            if ( en[i].r< 0 ) then
-                en[i].flagr = 0 
-            end
-            if ( en[i].flagr ==0) then
-                en[i].r = en[i].r+1*dt2*math.random(5,10)/7
-            else
-                en[i].r = en[i].r-1*dt2*math.random(5,10)/7
-            end
-        end 
-    end
-end
-
-function rot2(mode,x,y,w,h,rx,ry,segments,r,ox,oy)
-    if not oy and rx then r,ox,oy = rx,ry, segments end
-    r = r or 0 
-    ox = ox or w/2
-    oy = oy or h/2
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    xx = ((-ox +player.scale/2*40*k)+20*k*math.cos(-0.3)) 
-    yy = ((-oy+player.scale/2*40*k2) +20*k2*math.sin(-0.3))
-    xx2 = ((-ox +player.scale/2*40*k)+20*k*math.cos(-0.7*4.1)) 
-    yy2 = ((-oy+player.scale/2*40*k2) +20*k2*math.sin(-0.7*4.1))
-   ---
-    love.graphics.pop()
-    love.graphics.pop()
-end
-
-function meteorDraw()
+function allDraw()
  --   player.body:draw('fill')
-    sledEnemiesDraw()
+    enemiesSledDraw()
     for i= 1,#res do
         if ( res[i].tip == 1) then
             love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
             rot('fill',res[i].x,res[i].y,4*k,4*k2,res[i].r,2*k,2*k2)
-   
         end
         if ( res[i].tip == 2) then
              love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
              rot('fill',res[i].x,res[i].y,7*k,7*k2,res[i].r,2*k,2*k2)
-          
         end
         if ( res[i].tip == 3) then
             love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
@@ -1200,22 +747,19 @@ function meteorDraw()
         if ( obj[i].tip==1) then
             if ( obj[i].timer) then
                 if not( obj[i].invTimer == obj[i].timer) then
-                   love.graphics.setColor(0.7,0.2,0.2)
                     if ( obj[i] and obj[i].bodyDop) then
-                        fragmVect(i)
-                 --       obj[i].body:draw('line')
+                        objFragmVect(i,1,0.6,0.6)
+               --       obj[i].body:draw('line')
                     else
-                       meteorVect(i)  
-               --         obj[i].body:draw('line')
+                       objVect(i,1,0.6,0.6)
+               --        obj[i].body:draw('line')
                   end
-                   love.graphics.setColor(1,1,1)
                 else
-                   love.graphics.setColor(1,1,1)
                     if ( obj[i] and obj[i].pok>0) then
-                      fragmVect(i)
-               --      obj[i].body:draw('line')
+                      objFragmVect(i,1,1,1)
+                 --    obj[i].body:draw('line')
                     else
-                      meteorVect(i)
+                      objVect(i,1,1,1)
                 --      obj[i].body:draw('line')
                     end
                 end
@@ -1234,22 +778,22 @@ function meteorDraw()
         
         if ( en[i].tip==1) then
             if ( en[i].invTimer and en[i].invTimer ~= en[i].timer) then
-                sledEnemies(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
+                enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
                 
                 enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
             else
-                sledEnemies(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
+                enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
             
                 enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
             end
         else
             if ( en[i].tip==2) then
                 if ( en[i].invTimer and en[i].invTimer ~= en[i].timer) then
-                    sledEnemies(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
+                    enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
                     
                     enTip2(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
                 else
-                    sledEnemies(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
+                    enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
                     
                     enTip2(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
                 end
@@ -1261,113 +805,36 @@ function meteorDraw()
         end
     end
 end
-
-function sledEnemiesDraw()
-    for i = 1, #slediEn do
-        for j = 1, #slediEn[i] do
-            local kkk = slediEn[i]
-            if (kkk[j].tip == 1 ) then
-                local radius =kkk[j].r/4*j
-                kkk[j].x = kkk[j].x+50*kkk[j].ax*dt2
-                kkk[j].y = kkk[j].y+50*kkk[j].ay*dt2
-                love.graphics.setColor(kkk[j].color1*j,kkk[j].color2*j,kkk[j].color3*j) 
-                love.graphics.circle("fill",kkk[j].x+radius,kkk[j].y+radius,radius)
-            else
-                if (kkk[j].tip == 2 ) then
-                    local radius =kkk[j].r/1.3
-                    kkk[j].x = kkk[j].x+40*kkk[j].ax*dt2
-                    kkk[j].y = kkk[j].y+40*kkk[j].ay*dt2
-                    love.graphics.setColor(kkk[j].color1*j,kkk[j].color2*j,kkk[j].color3*j) 
-                    love.graphics.circle("fill", kkk[j].x+math.cos(kkk[j].y)+radius+1*k*math.sin(kkk[j].angle-math.pi/2) ,kkk[j].y+math.sin(kkk[j].x)+radius +1*k2*math.cos(kkk[j].angle-math.pi/2),radius)
-                    love.graphics.circle("fill", kkk[j].x+math.sin(kkk[j].y)+radius+1*k*math.sin(kkk[j].angle+math.pi/2) ,kkk[j].y+math.cos(kkk[j].x)+radius +1*k2*math.cos(kkk[j].angle+math.pi/2),radius)
-                end
-            end
-        end
-        if ( #slediEn[i] >5) then
-           table.remove(slediEn[i],1)
+function allBorder(i,mas)
+    ----------если залетел на карту поднимаем флаг-------------------------------------  
+    if (mas[i].x>0 and  mas[i].x<screenWidth and  mas[i].y>0 and  mas[i].y<screenHeight and mas[i].body) then
+        if not(mas[i].body:collidesWith(left) or mas[i].body:collidesWith(right)or mas[i].body:collidesWith(up)or mas[i].body:collidesWith(down)) then
+            mas[i].f = true
         end
     end
-end
-
-
-
-
-function sledEnemies(x,y,r,i,color1,color2,color3,angle,tip)
-    local sledEn = {
-        angle = angle,
-        tip = tip,
-        ax =-2*k*math.sin(angle) ,
-        ay =-2*k2*math.cos(angle),
-        x = x ,
-        y = y , 
-        r = r ,
-        color1 = color1,
-        color2 = color2,
-        color3 = color3,
-    }
-    if ( slediEn[i]) then
-        table.insert(slediEn[i],sledEn)
-    else
-        local ii = {}
-        slediEn[i] = ii
-        table.insert(slediEn[i],sledEn)
+    --------------------------------------------------
+    if (mas[i].body and mas[i].body:collidesWith(left) and mas[i].f == true) then
+        mas[i].ax = math.random(1*k,6*k)
     end
-end
-
-
-function playerSledDraw()
-   -- player.body:draw('fill')
-    love.graphics.circle('fill',controler.x0,controler.y0,10*k)
-    love.graphics.circle('line',controler.x0,controler.y0,13*k)
-    love.graphics.circle('line',mouse.x,mouse.y,5*k)
-    love.graphics.circle('line',mouse.x,mouse.y,5*k)
-    
-    local playerSled = {
-        angle = -controler.angle+math.pi,
-        ax =-2*k*math.sin(controler.angle) ,
-        ay =-2*k2*math.cos(controler.angle),
-        x = player.x+player.scale*20*k,
-        y = player.y+player.scale*20*k2, 
-        r = 0.2 ,
-    }
-    table.insert(playerSledi,playerSled)
-    for i = 1,#playerSledi do
-        local sled = playerSledi[i]
-        local radius =sled.r*i
-        local tailW,tailH = playerQuads.tail:getTextureDimensions()
-        sled.x = sled.x+150*sled.ax*dt2
-        sled.y = sled.y+150*sled.ay*dt2
-        playerBatch:add(playerQuads.tail,sled.x,sled.y,sled.angle,k/7*radius,k2/7*radius,48,60)
+    if (mas[i].body and mas[i].body:collidesWith(right) and mas[i].f == true)then
+       mas[i].ax = -1*math.random(1*k,6*k)
     end
-    if ( #playerSledi>10) then
-        table.remove(playerSledi,1)
+    if (mas[i].body and mas[i].body:collidesWith(up) and mas[i].f == true)then
+       mas[i].ay = math.random(1*k,6*k)
     end
-end
-
-function game:worldBorders()
-    if ( flagclass =='slicer') then
-        if ( boost.long <= 30*k2 ) then
-            player.a=0
-            boost.long =30*k2
+    if (mas[i].body and mas[i].body:collidesWith(down) and mas[i].f == true) then
+      mas[i].ay = -1*math.random(1*k,6*k)
+    end
+    --------------------------------------------------
+    if ( mas[i]) then
+        if (  mas[i].x>screenWidth+150*k or  mas[i].x<-150*k or  mas[i].y>screenHeight+150*k2 or  mas[i].y<-150*k2 ) then
+            table.remove(mas,i)
         end
     end
-    if player.x < 0  then
-        player.x = 0
-        player.ax = math.abs(player.ax)/2
-        player.ay = player.ay/2
-    elseif player.x > screenWidth -  player.scale*40*k then
-        player.x = screenWidth -  player.scale*40*k
-        player.ax = -1*player.ax/2
-        player.ay = player.ay/2
-    end
-    if player.y < 0 then
-        player.y = 0 
-        player.ay = math.abs(   player.ay)/2
-        player.ax = player.ax/2
-    elseif player.y > screenHeight -  player.scale*40*k2 then
-        player.y = screenHeight -  player.scale*40*k2
-        player.ay = -1*player.ay/2
-        player.ax = player.ax/2
+    if ( mas[i]) then
+        if (  (mas[i].x>screenWidth or  mas[i].x<0 or  mas[i].y>screenHeight or  mas[i].y<0) and (mas[i].ay<1*k2 and mas[i].ay>-1*k2 and mas[i].ax<1*k and mas[i].ax>-1*k)) then
+            table.remove(mas,i)
+        end
     end
 end
 
