@@ -69,11 +69,11 @@ function playerMove()
             player.ay = player.ay+13*dt2*k2
         end
     end
-    player.x = player.x + player.ax*dt2*13*k
-    player.y = player.y + player.ay*dt2*13*k2
+    player.x = player.x + player.ax*dt2*playerAbility.speed*k
+    player.y = player.y + player.ay*dt2*playerAbility.speed*k2
     if ( player.a==1) then
-        player.x = player.x + player.ax*dt2*6*k
-        player.y = player.y + player.ay*dt2*6*k2
+        player.x = player.x + player.ax*dt2*playerAbility.speedA*k
+        player.y = player.y + player.ay*dt2*playerAbility.speedA*k2
     end
 end
 

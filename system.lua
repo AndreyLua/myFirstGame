@@ -9,9 +9,9 @@ end
 
 function round(number)
   if (number - (number % 0.1)) - (number - (number % 1)) < 0.5 then
-    number = number - (number % 1)
+      number = number - (number % 1)
   else
-    number = (number - (number % 1)) + 1
+      number = (number - (number % 1)) + 1
   end
   return number
 end
@@ -23,6 +23,7 @@ function tableСopy(t)
   end
   return t2
 end
+
 function random(min,max)
   local min,max = min or 0, max or 1
   return (min > max and (love.math.random()*(min -max)+max)) or (love.math.random()*(max-min)+min)

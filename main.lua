@@ -25,8 +25,8 @@ tableMeteorsPar ={
     texCY = (0+256/2)/meteorSetH,
     texW = 228,
     texH = 256,
-    collW = 81.309,
-    collH = 85.3325,
+    collW = 81.3095,
+    collH = 85.3333,
   },
     {
     texX =259/meteorSetW,
@@ -36,18 +36,18 @@ tableMeteorsPar ={
     texW = 248,
     texH = 256,
     collW = 74.1949,
-    collH = 76.6983,
+    collH = 76.6984,
   },
   ------------------------------------
    {
-    texX =1044/meteorSetW,
+    texX =1073/meteorSetW,
     texY =0,
-    texCX = (1044+216/2)/meteorSetW,
+    texCX = (1073+216/2)/meteorSetW,
     texCY =(0+256/2)/meteorSetH,
     texW = 216,
     texH = 256,
-    collW = 83.342,
-    collH = 100.571,
+    collW = 83.3422,
+    collH = 100.5714,
   },
   ----------------------------
    {
@@ -230,7 +230,10 @@ playerAbility = {
       damage = 1,
       invTimer = 0.5,
       maxSpeed = 27,
+      speed = 13,
+      speedA  = 6,
       debaffStrenght =0.2,
+      scaleBody = 35,
   
   }
 ----------------------------------

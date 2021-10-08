@@ -83,7 +83,7 @@ boost = {
 }
 player = {
   debaffStrenght =1,
-  body =HC.circle(-200*k,-200*k2,35*k),
+  body =HC.circle(-200*k,-200*k2,playerAbility.scaleBody*k),
   invis = 10,
   clowR = 0, 
   clowRflag = 0, 
@@ -111,7 +111,6 @@ end
 
 
 function game:update(dt)
-  
 boost.long = 1000
 hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
@@ -131,15 +130,43 @@ for i = 1 , #obj do
         allInvTimer(i,obj)
         objMove(i) 
         allBorder(i,obj) 
-        if (obj[i] and obj[i].body and player.body:collidesWith(obj[i].body) and obj[i].invTimer==obj[i].timer)  then
-            objColl(i, obj[i].tip, player.a)
+        if (obj[i] and obj[i].body and obj[i].invTimer==obj[i].timer and math.abs(obj[i].x - (player.x+40*k/2))<playerAbility.scaleBody*k+obj[i].collScale/2*k and math.abs(obj[i].y - (player.y+40*k2/2))<playerAbility.scaleBody*k2+obj[i].collScale/2*k2  and  (math.pow((obj[i].x - (player.x+40*k/2)),2) + math.pow((obj[i].y - (player.y+40*k2/2)),2))<=math.pow((playerAbility.scaleBody*k+obj[i].collScale/2*k),2) and player.body:collidesWith(obj[i].body))  then
+            objColl(i,player.a)
         end
-        if ( obj[i]) then
-            if (obj[i].health<=0) then
-                objDestroy(obj,i) 
-                table.remove(obj,i)
+        if (obj[i] and obj[i].body)  then
+            for j = 1 , #obj do
+                if ( i~=j and math.abs(obj[i].x - obj[j].x)<obj[i].collScale*k/2+obj[j].collScale*k/2 and math.abs(obj[i].y - obj[j].y)<obj[i].collScale*k2/2+obj[j].collScale*k2/2 and  (math.pow((obj[i].x - obj[j].x),2) + math.pow((obj[i].y - obj[j].y),2))<=math.pow((obj[i].collScale*k/2+obj[j].collScale*k/2),2)) then
+                 
+                    local collisFlag, intVectorX ,intVectorY = obj[j].body:collidesWith(obj[i].body)
+                    if (collisFlag) then
+                        local rvX, rvY = obj[j].x - obj[i].x, obj[j].y - obj[i].y
+                        local velAlNorm  = rvX*intVectorX + rvY*intVectorY
+                        if ( velAlNorm > 0) then
+                            local e = 1
+                            local scImp = -(1+e)*velAlNorm
+                            scImp = scImp/(1/obj[i].scale+1/obj[j].scale)
+                            local sumMas = obj[i].scale + obj[j].scale
+                            local impulsX, impulsY = scImp * intVectorX, scImp* intVectorY
+                            obj[i].ax= obj[i].ax + (1/obj[i].scale*impulsX)*obj[i].scale/sumMas/400
+                            obj[i].ay= obj[i].ay + (1/obj[i].scale*impulsY)*obj[i].scale/sumMas/400
+                            
+                            obj[j].ax=obj[j].ax - (1/obj[j].scale*impulsX)*obj[j].scale/sumMas/400
+                            obj[j].ay=obj[j].ay - (1/obj[j].scale*impulsY)*obj[j].scale/sumMas/400
+                            if ((math.abs(intVectorX)+math.abs(intVectorY))>0.07*obj[j].collScale*k) then
+                                obj[i].x  = obj[i].x - intVectorX*0.06
+                                obj[i].y = obj[i].y - intVectorY*0.06
+                                obj[j].x  = obj[j].x + intVectorX*0.06
+                                obj[j].y = obj[j].y + intVectorY*0.06
+                            end
+                        end
+                    end 
+                end
             end
-        end  
+        end
+    end
+    if (obj[i] and obj[i].health<0) then 
+        objDestroy(obj,i) 
+        table.remove(obj,i)
     end
 end
 
@@ -191,7 +218,7 @@ end
 playerBoost()
 
 if ( colWave>0 and #obj < 20) then
-    Timer.every(math.random(2,4), function()
+    Timer.every(0.5, function()
         for i=1,math.random(1,1) do
             local Wave = waves[numberWave]
             local Geo  =math.random(1,4)
@@ -210,7 +237,7 @@ if ( colWave>0 and #obj < 20) then
             local Geo  =math.random(1,4)
             local Tip =math.random(1,2)
             local Scale =math.random(2,2)
-            allSpawn(en,Geo,Tip)
+       --     allSpawn(en,Geo,Tip)
         end
         Timer.clear() 
     end)
@@ -264,20 +291,27 @@ function game:movement(dt)
         local Geo  =math.random(1,4)
         local Tip =math.random(1,2)
         allSpawn(obj,Geo,Tip)
+        obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
    --   allSpawn(en,Geo,Tip)
     --    en[#en].x = mouse.x
      --   en[#en].y = mouse.y
     end
+      if love.keyboard.isDown('y') then
+     table.remove(obj,#obj)
+     end
 end
 
 
 function  game:draw()
+
     playerBatch:clear()
     love.graphics.setCanvas(kek)
     love.graphics.clear()
+    love.graphics.setColor(1,1,1,0.9)
     love.graphics.draw(fon1,0,0,0,k,k2)
+    love.graphics.setColor(1,1,1,1)
 
     if (flaginv == false ) then
     love.graphics.translate( 0  ,random(0,shake) )   end
@@ -287,7 +321,7 @@ function  game:draw()
       --  love.graphics.draw(meteors.m1,200*k,200*k2,0,1,1,meteors.m1:getWidth()/2,meteors.m1:getHeight()/2
       --  love.graphics.setShader()
     allDraw()
-    love.graphics.setColor(1,1,1)
+    love.graphics.setColor(1,1,1,1)
     love.graphics.setLineWidth(1)
     bulletsDraw()
     Health_Boost()
@@ -308,24 +342,11 @@ function  game:draw()
        
         love.graphics.draw(meshMeteors, 0,0)
    
-    end
- --  meteorDraw()
-  
-    if ( player.a==0  ) then 
-        love.graphics.setColor( 0 , 0 ,1) 
-    else
-        if ( flagclass == 'slicer') then 
-            love.graphics.setColor( 1 , 0 , 0 ) 
-        end
-    end
-    if ( player.a == 0 ) then
-       
-    else
-      
-    end
-    love.graphics.setColor( 1 , 1 , 1,1 ) 
-         playerDraw()
-        love.graphics.draw(playerBatch)--love.graphics.draw(playerIm,player.x+player.scale/2*40*k,player.y+player.scale/2*40*k2,-controler.angle+math.pi,k/7,k2/7,playerIm:getWidth()/2,playerIm:getHeight()/2)
+  end
+  love.graphics.setColor(1,1,1,1)
+    playerDraw()
+    love.graphics.draw(playerBatch)
+    
     love.graphics.setColor(1,0,0.02)
     love.graphics.print("HP "..math.floor(hp.long/screenHeight*100)..'/'..100, screenWidth-55*k,screenHeight/2+200*k2,-math.pi/2,0.3,0.3)
     love.graphics.setColor(0,0.643,0.502)
@@ -405,24 +426,24 @@ function Waves(n)
 end
 function allGeo(Geo)
       if (Geo==1) then
-        return -3*50*k,math.random(0,screenHeight),math.random(1*k,6*k),math.random(-6*k,6*k), math.random(0.5,1)
+        return -3*50*k,math.random(0,screenHeight),math.random(6*k,10*k),math.random(-10*k,10*k), math.random(0.5,1)
       end
       if (Geo==2) then
-        return  math.random(0,screenWidth),-3*40*k2,math.random(-6*k,6*k),math.random(1*k,6*k),math.random(-1,-0.5)
+        return  math.random(0,screenWidth),-3*40*k2,math.random(-10*k,10*k),math.random(6*k,10*k),math.random(-1,-0.5)
       end
       if (Geo==3) then
-        return  math.random(0,screenWidth),screenHeight+3*40*k2,math.random(-6*k,6*k),math.random(-6*k2,-1*k2),math.random(0.5,1) 
+        return  math.random(0,screenWidth),screenHeight+3*40*k2,math.random(-10*k,10*k),math.random(-10*k2,-6*k2),math.random(0.5,1) 
       end
       if (Geo==4) then
-        return  (screenWidth+3*40*k),math.random(0,screenHeight),math.random(-6*k,-1*k),math.random(-6*k,6*k), math.random(-1,-0.6)
+        return  (screenWidth+3*40*k),math.random(0,screenHeight),math.random(-10*k,-6*k),math.random(-10*k,10*k), math.random(-1,-0.6)
       end
 end
 
 function allSpawn(mas,Geo,Tip)
     if ( mas == obj) then
         local colorRGB = 0.2
-        local Body =math.random(3,5)
-        local colorDop1,colorDop2,colorDop3,scale= objColor(Body)
+        local Body =math.random(1,5)
+        local colorDop1,colorDop2,colorDop3,scale,collScale= objColorAndScale(Body)
         local x,y,ax,ay,ra = allGeo(Geo)
         local health = 1
         local e = {
@@ -430,11 +451,11 @@ function allSpawn(mas,Geo,Tip)
             timer = 0 ,
             invTimer = 20,
             ot = false,
-            tip = Tip, 
             ugol =  0,
             r =0,
             rDop =0,
             flagr = 0 ,
+            collScale = collScale,
             color1 =colorDop1,
             color2=colorDop2,
             color3 =colorDop3,
@@ -446,7 +467,7 @@ function allSpawn(mas,Geo,Tip)
             y = y,  
             ax  =ax,
             ay = ay,
-            ra =ra,
+            ra =0,
             health = health
             }
         e.body:moveTo(e.x, e.y)
@@ -472,6 +493,7 @@ function allSpawn(mas,Geo,Tip)
                 color1 =0.8,
                 color2=0.2,
                 color3 =0.2,
+                scale = 'm',
                 r = 0 ,
                 ugol =  0,
                 flagr = 0 ,
@@ -501,6 +523,7 @@ function allSpawn(mas,Geo,Tip)
                 color1 =0.8,
                 color2=0.2,
                 color3 =0.2,
+                scale = 'm',
                 r = 0 ,
                 flagr = 0 ,
                 f = false,
@@ -531,14 +554,27 @@ end
 
 function allDecompose(mas,i)
     local Wave = waves[numberWave]
+    local numberRes = 0
+    if ( mas[i].scale == 'l') then
+        numberRes = math.random(8,14)  
+    end
+    if ( mas[i].scale == 'm') then
+        numberRes = math.random(5,10) 
+    end
+    if ( mas[i].scale == 's') then
+        numberRes = math.random(4,7) 
+    end
+    if ( mas[i].scale == 'xs') then
+        numberRes = math.random(2,4) 
+    end
     colWave = colWave-1
     expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2,10)
     expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2+colWave*300*k2/Wave[4],10)
-    for kek =0, math.random(7,20) do
+    for kek =0, numberRes do
         local kkek = math.random()
-        local colorDop1 = mas[i].color1+math.random()/7
-        local colorDop2 = mas[i].color2+math.random()/7
-        local colorDop3 = mas[i].color3+math.random()/7
+        local colorDop1 = mas[i].color1+ kkek/3
+        local colorDop2 = mas[i].color2+ kkek/3
+        local colorDop3 = mas[i].color3+ kkek/3
         if ( math.random(1,30)==1) then
             local eh = {
                 tip = 4, --hp
@@ -552,16 +588,15 @@ function allDecompose(mas,i)
                 y =  mas[i].y,  
                 ax  =math.random(-2*k*kek,2*k*kek), 
                 ay = math.random(-2*k*kek,2*k*kek), 
-               
             }
             table.insert(res,eh)
         else
             local RandomP =  math.random(100) 
             local RandomTip = 1
-            if ( RandomP > 60 and RandomP <90) then
+            if ( RandomP >80 and RandomP <90) then
                 RandomTip = 2
             else
-                  if ( RandomP > 60) then 
+                  if ( RandomP > 80) then 
                       RandomTip = 3
                   end
             end
@@ -738,34 +773,30 @@ function allDraw()
         ------------------------------------------------------------------
         if ( res[i].tip == 4) then
             love.graphics.setColor(0.7,0.2,0.2)
-            love.graphics.circle("line",res[i].x+8*k,res[i].y+8*k2,2*k)
-            rot('line',res[i].x,res[i].y,16*k,16*k2,2)
+            --love.graphics.circle("line",res[i].x+8*k,res[i].y+8*k2,2*k)
+            --rot('line',res[i].x,res[i].y,16*k,16*k2,2)
         end
     end 
    
     for i= 1,#obj do
-        if ( obj[i].tip==1) then
-            if ( obj[i].timer) then
-                if not( obj[i].invTimer == obj[i].timer) then
-                    if ( obj[i] and obj[i].bodyDop) then
-                        objFragmVect(i,1,0.6,0.6)
-               --       obj[i].body:draw('line')
-                    else
-                       objVect(i,1,0.6,0.6)
-               --        obj[i].body:draw('line')
-                  end
+        --love.graphics.circle("line",obj[i].x,obj[i].y,obj[i].collScale/2*k)
+        if ( obj[i].timer) then
+            if not( obj[i].invTimer == obj[i].timer) then
+                if ( obj[i] and obj[i].bodyDop) then
+                    objFragmVect(i,1,0.6,0.6)
+                --  obj[i].body:draw('line')
                 else
-                    if ( obj[i] and obj[i].pok>0) then
-                      objFragmVect(i,1,1,1)
-                 --    obj[i].body:draw('line')
-                    else
-                      objVect(i,1,1,1)
-                --      obj[i].body:draw('line')
-                    end
+                   objVect(i,1,0.6,0.6)
+               --   obj[i].body:draw('line')
+              end
+            else
+                if ( obj[i] and obj[i].pok>0) then
+                   objFragmVect(i,1,1,1)
+                ---  obj[i].body:draw('line')
+                else
+                 objVect(i,1,1,1)
+                --  obj[i].body:draw('line')
                 end
-            end
-            if ( obj[i].tip==2) then
-              
             end
         end
     end
@@ -808,34 +839,34 @@ end
 function allBorder(i,mas)
     ----------если залетел на карту поднимаем флаг-------------------------------------  
     if (mas[i].x>0 and  mas[i].x<screenWidth and  mas[i].y>0 and  mas[i].y<screenHeight and mas[i].body) then
-        if not(mas[i].body:collidesWith(left) or mas[i].body:collidesWith(right)or mas[i].body:collidesWith(up)or mas[i].body:collidesWith(down)) then
+     --   if not(mas[i].body:collidesWith(left) or mas[i].body:collidesWith(right)or mas[i].body:collidesWith(up)or mas[i].body:collidesWith(down)) then
             mas[i].f = true
-        end
     end
+ --   end
     --------------------------------------------------
-    if (mas[i].body and mas[i].body:collidesWith(left) and mas[i].f == true) then
-        mas[i].ax = math.random(1*k,6*k)
-    end
-    if (mas[i].body and mas[i].body:collidesWith(right) and mas[i].f == true)then
-       mas[i].ax = -1*math.random(1*k,6*k)
-    end
-    if (mas[i].body and mas[i].body:collidesWith(up) and mas[i].f == true)then
-       mas[i].ay = math.random(1*k,6*k)
-    end
-    if (mas[i].body and mas[i].body:collidesWith(down) and mas[i].f == true) then
-      mas[i].ay = -1*math.random(1*k,6*k)
-    end
+  --  if (mas[i].body and mas[i].body:collidesWith(left) and mas[i].f == true) then
+  --      mas[i].ax = math.random(3*k,4*k)
+  --  end
+  --  if (mas[i].body and mas[i].body:collidesWith(right) and mas[i].f == true)then
+  --     mas[i].ax = -1*math.random(3*k,4*k)
+   -- end
+ --   if (mas[i].body and mas[i].body:collidesWith(up) and mas[i].f == true)then
+ --      mas[i].ay = math.random(3*k,4*k)
+  --  end
+  --  if (mas[i].body and mas[i].body:collidesWith(down) and mas[i].f == true) then
+  --    mas[i].ay = -1*math.random(3*k,4*k)
+  --  end
     --------------------------------------------------
-    if ( mas[i]) then
-        if (  mas[i].x>screenWidth+150*k or  mas[i].x<-150*k or  mas[i].y>screenHeight+150*k2 or  mas[i].y<-150*k2 ) then
+    if ( mas[i] and mas[i].f == true) then
+        if (  mas[i].x<-120*k or  mas[i].x>screenWidth+120*k or  mas[i].y>screenHeight+120*k2 or  mas[i].y<-120*k2 ) then
             table.remove(mas,i)
         end
     end
-    if ( mas[i]) then
-        if (  (mas[i].x>screenWidth or  mas[i].x<0 or  mas[i].y>screenHeight or  mas[i].y<0) and (mas[i].ay<1*k2 and mas[i].ay>-1*k2 and mas[i].ax<1*k and mas[i].ax>-1*k)) then
-            table.remove(mas,i)
-        end
-    end
+   -- if ( mas[i]) then
+   --     if (  (mas[i].x>500 or  mas[i].x<100 or  mas[i].y>200 or  mas[i].y<100) or (mas[i].ay<1*k2 and mas[i].ay>-1*k2 and mas[i].ax<1*k and mas[i].ax>-1*k)) then
+     --       table.remove(mas,i)
+    --    end
+    --end
 end
 
 return game
