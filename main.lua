@@ -264,25 +264,14 @@ function love.load()
   
   screenWidth = love.graphics.getWidth()
   screenHeight = love.graphics.getHeight()
-  
-  d1 = screenWidth
-  d2 = screenHeight
-  
-  sx =  screenWidth/gw
-  sy = screenHeight/gh
-  
-  screenWidth = gw
-  screenHeight = gh
-  
-  k  = gw/1366*1.4
-  k2 = gh/768*1.4
+  k  = screenWidth/1920*2.5
+  k2 = screenHeight/1080*2.5
 
   font = love.graphics.newFont("fonts/kenvector_future.ttf",40)
-  love.graphics.setFont(font) 
-   -- love.window.setMode(sx*gw,sy*gh)  
-  kek= love.graphics.newCanvas(gw,gh)
-  kek2= love.graphics.newCanvas(gw,gh)
-  kek3= love.graphics.newCanvas(gw,gh)
+  love.graphics.setFont(font)  
+  kek= love.graphics.newCanvas(screenWidth ,screenHeight)
+  kek2= love.graphics.newCanvas(screenWidth ,screenHeight)
+  kek3= love.graphics.newCanvas(screenWidth ,screenHeight)
   gamestate.registerEvents()
   gamestate.switch(game)
 end

@@ -63,13 +63,13 @@ function objColorAndScale(t)
         return 0.412,0.463,0.537,110,95 -- big
     end
     if  t == 3 then 
-        return 0.247,0.286,0.424,200,120.5714 -- big
+        return 0.247,0.286,0.424,200,120 -- big
     end
     if  t == 4 then 
-        return 0.302,0.176,0.227,70,67.0148 -- small
+        return 0.302,0.176,0.227,70,67 -- small
     end
     if  t == 5 then 
-        return 0.498,0.361,0.525,20,50.14657 -- small
+        return 0.498,0.361,0.525,20,50 -- small
     end
 end
 
@@ -152,7 +152,7 @@ function objDestroy(mas,i)
                     ax = mas[i].ax+mas[i].ax*math.random(-5,5)/10, 
                     ay = mas[i].ay+mas[i].ay*math.random(-5,5)/10,  
                     met = mas[i].met,
-                    ra =0--math.random()*math.random(-1,1),
+                    ra =math.random()*math.random(-1,1),
                 
               }
                 start = finish
@@ -196,7 +196,7 @@ function objDestroy(mas,i)
                 ax = mas[i].ax+mas[i].ax*math.random(-5,5)/10, 
                 ay = mas[i].ay+mas[i].ay*math.random(-5,5)/10,   
                 met =mas[i].met,
-                ra =0--math.random()*math.random(-1,1),
+                ra =math.random()*math.random(-1,1),
             }
             start = finish
             table.insert(obj,ee)
@@ -240,26 +240,30 @@ function objMove(i)
         objBody(i)
         if ( obj[i].f == true ) then 
         -----------------------------------------------      
-          
-                obj[i].ot =false
-                obj[i].x= obj[i].x+obj[i].ax*dt2*5
-                obj[i].y= obj[i].y+obj[i].ay*dt2*5
-                --if ( obj[i].ax >5) then
-                  --  obj[i].ax = obj[i].ax-20*dt2
-                --end
-                --if ( obj[i].ay >5) then
-               --     obj[i].ay = obj[i].ay-20*dt2
-             --   end
-         
+            obj[i].ot =false
+        --    obj[i].x= obj[i].x+obj[i].ax*dt2*5
+        --    obj[i].y= obj[i].y+obj[i].ay*dt2*5
         -----------------------------------------------  
         else
         -----------------------------------------------   
-         
-                obj[i].ot =false
-                obj[i].x= obj[i].x+obj[i].ax*dt2*10
-                obj[i].y= obj[i].y+obj[i].ay*dt2*10
-         
+            obj[i].ot =false
+        --   obj[i].x= obj[i].x+obj[i].ax*dt2*10
+        --    obj[i].y= obj[i].y+obj[i].ay*dt2*10
         -----------------------------------------------  
+        end
+    end
+end
+
+function objIndexRegulS(index)
+    if ( objRegulS and objRegulS[index]) then 
+        for i =1, #objRegulS[index] do
+            local objCollModel =objRegulS[index]
+            local objI = objCollModel[i]
+       --     if (obj[objI] and obj[objI].body and obj[objI].invTimer==obj[objI].timer and math.abs(obj[objI].x - (player.x+40*k/2))<playerAbility.scaleBody*k+obj[objI].collScale/2*k and math.abs(obj[objI].y - (player.y+40*k2/2))<playerAbility.scaleBody*k2+obj[objI].collScale/2*k2  and  (math.pow((obj[objI].x - (player.x+40*k/2)),2) + math.pow((obj[objI].y - (player.y+40*k2/2)),2))<=math.pow((playerAbility.scaleBody*k+obj[objI].collScale/2*k),2) and player.body:collidesWith(obj[objI].body))  then
+   
+              table.remove(obj,objI)
+          --      objColl(i,player.a)
+         --   end  
         end
     end
 end
@@ -280,35 +284,39 @@ end
 
 function  objVect(i,color1,color2,color3)
     local parametrs = tableMeteorsPar[obj[i].met]
+    local kHalf  = k/2 
+    local k2Half  = k2/2 
+    local collWK =  parametrs.collW*kHalf
+    local collHK =  parametrs.collH*k2Half
     local texCord = {
         {
-            obj[i].x-parametrs.collW*k/2, obj[i].y-parametrs.collH*k2/2, 
+            obj[i].x-collWK, obj[i].y-collHK, 
             parametrs.texX, parametrs.texY, 
             color1,color2,color3, 
         },
         {
-            obj[i].x+parametrs.collW*k/2, obj[i].y-parametrs.collH*k2/2, 
+            obj[i].x+collWK, obj[i].y-collHK, 
             parametrs.texW/meteorSetW+parametrs.texX, parametrs.texY, 
             color1,color2,color3, 
         },
         {
-            obj[i].x+parametrs.collW*k/2, obj[i].y+parametrs.collH*k2/2,
+            obj[i].x+collWK, obj[i].y+collHK,
             parametrs.texW/meteorSetW+parametrs.texX, parametrs.texH/meteorSetH+parametrs.texY, 
             color1,color2,color3, 
         },
                               
         {
-            obj[i].x-parametrs.collW*k/2, obj[i].y-parametrs.collH*k2/2, 
+            obj[i].x-collWK, obj[i].y-collHK, 
             parametrs.texX, parametrs.texY, 
             color1,color2,color3, 
         },
         {
-            obj[i].x-parametrs.collW*k/2, obj[i].y+parametrs.collH*k2/2, 
+            obj[i].x-collWK, obj[i].y+collHK, 
             parametrs.texX, parametrs.texH/meteorSetH+parametrs.texY, 
             color1,color2,color3,
         },
         {
-            obj[i].x+parametrs.collW*k/2, obj[i].y+parametrs.collH*k2/2, 
+            obj[i].x+collWK, obj[i].y+collHK, 
             parametrs.texW/meteorSetW+parametrs.texX, parametrs.texH/meteorSetH+parametrs.texY, 
             color1,color2,color3,
         },
