@@ -241,35 +241,32 @@ function objMove(i)
         if ( obj[i].f == true ) then 
         -----------------------------------------------      
             obj[i].ot =false
-        --    obj[i].x= obj[i].x+obj[i].ax*dt2*5
-        --    obj[i].y= obj[i].y+obj[i].ay*dt2*5
+            obj[i].x= obj[i].x+obj[i].ax*dt2*5
+            obj[i].y= obj[i].y+obj[i].ay*dt2*5
         -----------------------------------------------  
         else
         -----------------------------------------------   
             obj[i].ot =false
-        --   obj[i].x= obj[i].x+obj[i].ax*dt2*10
-        --    obj[i].y= obj[i].y+obj[i].ay*dt2*10
+            obj[i].x= obj[i].x+obj[i].ax*dt2*10
+            obj[i].y= obj[i].y+obj[i].ay*dt2*10
         -----------------------------------------------  
         end
     end
 end
 
-function objIndexRegulS(index)
-    if ( objRegulS and objRegulS[index]) then 
-        for i =1, #objRegulS[index] do
-            local objCollModel =objRegulS[index]
-            local objI = objCollModel[i]
-       --     if (obj[objI] and obj[objI].body and obj[objI].invTimer==obj[objI].timer and math.abs(obj[objI].x - (player.x+40*k/2))<playerAbility.scaleBody*k+obj[objI].collScale/2*k and math.abs(obj[objI].y - (player.y+40*k2/2))<playerAbility.scaleBody*k2+obj[objI].collScale/2*k2  and  (math.pow((obj[objI].x - (player.x+40*k/2)),2) + math.pow((obj[objI].y - (player.y+40*k2/2)),2))<=math.pow((playerAbility.scaleBody*k+obj[objI].collScale/2*k),2) and player.body:collidesWith(obj[objI].body))  then
-   
-              table.remove(obj,objI)
-          --      objColl(i,player.a)
-         --   end  
+function objCollWithPlayerInRegularS(index)
+    if ( objRegulS[index]) then 
+        local kek = objRegulS[index]
+        for i =1, #kek do
+            if (obj[kek[i]] and obj[kek[i]].body and obj[kek[i]].invTimer==obj[kek[i]].timer and math.abs(obj[kek[i]].x - (player.x))<playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k and math.abs(obj[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+obj[kek[i]].collScale/2*k2  and  (math.pow((obj[kek[i]].x - (player.x)),2) + math.pow((obj[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k),2) and player.body:collidesWith(obj[kek[i]].body))  then
+                objCollWithPlayerResult(kek[i],player.a)
+            end
         end
     end
 end
 
-function objColl(i, a)
-    local angleD = math.atan2(player.x-obj[i].x+20*k*player.scale,player.y-obj[i].y+20*k*player.scale)
+function objCollWithPlayerResult(i, a)
+    local angleD = math.atan2(player.x-obj[i].x+20*k,player.y-obj[i].y+20*k)
     if ( obj[i] and obj[i].health ) then
         obj[i].health = obj[i].health -2*playerAbility.damage
         obj[i].ax =-15*k*math.sin(angleD)-- +(player.ax*playerAbility.speedA/6*k)
@@ -281,6 +278,96 @@ function objColl(i, a)
         table.remove(obj,i)
     end
 end
+
+
+
+function objCollWithObjInRegularS(index,j)
+    if ( objRegulS[index]) then 
+        local kek = objRegulS[index]
+        if (kek) then
+            for i =1, #kek do
+                if (kek[i] and obj[kek[i]] and obj[j]) then
+                    if ( kek[i]~=j and math.abs(obj[kek[i]].x - obj[j].x)<obj[kek[i]].collScale*k/2+obj[j].collScale*k/2 and math.abs(obj[kek[i]].y - obj[j].y)<obj[kek[i]].collScale*k2/2+obj[j].collScale*k2/2 and  (math.pow((obj[kek[i]].x - obj[j].x),2) + math.pow((obj[kek[i]].y - obj[j].y),2))<=math.pow((obj[kek[i]].collScale*k/2+obj[j].collScale*k/2),2)) then
+                        local collisFlag, intVectorX ,intVectorY = obj[j].body:collidesWith(obj[kek[i]].body)
+                        if (collisFlag) then
+                            local rvX, rvY = obj[j].x - obj[kek[i]].x, obj[j].y - obj[kek[i]].y
+                            local velAlNorm  = rvX*intVectorX + rvY*intVectorY
+                            if ( velAlNorm > 0) then
+                                local e = 1
+                                local scImp = -(1+e)*velAlNorm
+                                scImp = scImp/(1/obj[kek[i]].scale+1/obj[j].scale)
+                                local sumMas = obj[kek[i]].scale + obj[j].scale
+                                local impulsX, impulsY = scImp * intVectorX, scImp* intVectorY
+                                obj[kek[i]].ax= obj[kek[i]].ax + 0.001*(1/obj[kek[i]].scale*impulsX)*obj[kek[i]].scale/sumMas
+                                obj[kek[i]].ay= obj[kek[i]].ay + 0.001*(1/obj[kek[i]].scale*impulsY)*obj[kek[i]].scale/sumMas
+      
+                                obj[j].ax=obj[j].ax - 0.001*(1/obj[j].scale*impulsX)*obj[j].scale/sumMas
+                                obj[j].ay=obj[j].ay - 0.001*(1/obj[j].scale*impulsY)*obj[j].scale/sumMas
+                              
+                                if ((math.abs(intVectorX)+math.abs(intVectorY))>0.07*obj[j].collScale*k) then
+                                    obj[kek[i]].x  = obj[kek[i]].x - intVectorX*0.1
+                                    obj[kek[i]].y = obj[kek[i]].y - intVectorY*0.1
+                                    obj[j].x  = obj[j].x + intVectorX*0.1
+                                    obj[j].y = obj[j].y + intVectorY*0.1
+                                    
+                                    obj[kek[i]].ra = obj[kek[i]].ra *0.99
+                                    obj[j].ra = obj[j].ra *0.99
+                                end
+                            end
+                        end 
+                    end
+                end
+            end
+        end
+    end
+end
+  
+  
+  
+  
+  
+  
+  
+  
+  --[[
+  
+              
+                    local collisFlag, intVectorX ,intVectorY = obj[j].body:collidesWith(obj[i].body)
+                    if (collisFlag) then
+                        local rvX, rvY = obj[j].x - obj[i].x, obj[j].y - obj[i].y
+                        local velAlNorm  = rvX*intVectorX + rvY*intVectorY
+                        if ( velAlNorm > 0) then
+                            local e = 1
+                            local scImp = -(1+e)*velAlNorm
+                            scImp = scImp/(1/obj[i].scale+1/obj[j].scale)
+                            local sumMas = obj[i].scale + obj[j].scale
+                            local impulsX, impulsY = scImp * intVectorX, scImp* intVectorY
+                            obj[i].ax= obj[i].ax + 0.001*(1/obj[i].scale*impulsX)*obj[i].scale/sumMas
+                            obj[i].ay= obj[i].ay + 0.001*(1/obj[i].scale*impulsY)*obj[i].scale/sumMas
+                            
+                            obj[j].ax=obj[j].ax - 0.001*(1/obj[j].scale*impulsX)*obj[j].scale/sumMas
+                            obj[j].ay=obj[j].ay - 0.001*(1/obj[j].scale*impulsY)*obj[j].scale/sumMas
+                          
+                            if ((math.abs(intVectorX)+math.abs(intVectorY))>0.07*obj[j].collScale*k) then
+                                obj[i].x  = obj[i].x - intVectorX*0.1
+                                obj[i].y = obj[i].y - intVectorY*0.1
+                                obj[j].x  = obj[j].x + intVectorX*0.1
+                                obj[j].y = obj[j].y + intVectorY*0.1
+                                
+                                obj[i].ra = obj[i].ra *0.99
+                                obj[j].ra = obj[j].ra *0.99
+                            end
+                        end
+                    end 
+                end
+            end
+            ]]--
+
+
+
+
+
+
 
 function  objVect(i,color1,color2,color3)
     local parametrs = tableMeteorsPar[obj[i].met]

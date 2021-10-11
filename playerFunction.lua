@@ -59,14 +59,14 @@ end
 function playerMove()
     if not(love.mouse.isDown(1)) then
         if ( player.ax> 0) then
-            player.ax = player.ax-13*dt2*k
+            player.ax = player.ax-10*dt2*k
         else
-            player.ax = player.ax+13*dt2*k
+            player.ax = player.ax+10*dt2*k
         end
         if ( player.ay> 0) then
-            player.ay = player.ay-13*dt2*k2
+            player.ay = player.ay-10*dt2*k2
         else
-            player.ay = player.ay+13*dt2*k2
+            player.ay = player.ay+10*dt2*k2
         end
     end
     player.x = player.x + player.ax*dt2*playerAbility.speed*k
@@ -123,11 +123,20 @@ function playerSledDraw()
         table.remove(playerSledi,1)
     end
 end
-function playerColl()
-    local playerIndex =math.floor((player.x)/(120*k)) + math.floor((player.y)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
-    objIndexRegulS(playerIndex)
-    objIndexRegulS(playerIndex-1)
-    objIndexRegulS(playerIndex+1)
+function playerCollWithObj()
+    local playerIndex =math.floor((player.x-40*k)/(120*k)) + math.floor((player.y-40*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
+    objCollWithPlayerInRegularS(playerIndex)
+    objCollWithPlayerInRegularS(playerIndex-1)
+    objCollWithPlayerInRegularS(playerIndex+1)
+  
+    objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1))
+    objCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)) 
+    
+    objCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)+1)
+    objCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)-1)
+    
+    objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)+1)
+    objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1)
 end
 function playerClowR()
     if ( player.clowRflag == 0 or player.clowRflag ==1) then

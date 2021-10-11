@@ -133,54 +133,12 @@ for i = 1 , #obj do
         allBorder(i,obj)
      
         local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-   
-        if ( not objRegulS[IobjRegulS]) then 
-            local objInRegulS = {i}
-            table.insert(objRegulS,IobjRegulS,objInRegulS)
+        if (objRegulS[IobjRegulS]) then
+            table.insert(objRegulS[IobjRegulS],i)
         else
-            local objInRegulS = objRegulS[IobjRegulS]
-            table.insert(objInRegulS, i)
+            objRegulS[IobjRegulS] = {i}
         end
-        
-        if (obj[i] and obj[i].body)  then
-            for j = 1 , #obj do
-                if ( i~=j and math.abs(obj[i].x - obj[j].x)<obj[i].collScale*k/2+obj[j].collScale*k/2 and math.abs(obj[i].y - obj[j].y)<obj[i].collScale*k2/2+obj[j].collScale*k2/2 and  (math.pow((obj[i].x - obj[j].x),2) + math.pow((obj[i].y - obj[j].y),2))<=math.pow((obj[i].collScale*k/2+obj[j].collScale*k/2),2)) then
-                 
-                    local collisFlag, intVectorX ,intVectorY = obj[j].body:collidesWith(obj[i].body)
-                    if (collisFlag) then
-                        local rvX, rvY = obj[j].x - obj[i].x, obj[j].y - obj[i].y
-                        local velAlNorm  = rvX*intVectorX + rvY*intVectorY
-                        if ( velAlNorm > 0) then
-                            local e = 1
-                            local scImp = -(1+e)*velAlNorm
-                            scImp = scImp/(1/obj[i].scale+1/obj[j].scale)
-                            local sumMas = obj[i].scale + obj[j].scale
-                            local impulsX, impulsY = scImp * intVectorX, scImp* intVectorY
-                            obj[i].ax= obj[i].ax + 0.001*(1/obj[i].scale*impulsX)*obj[i].scale/sumMas
-                            obj[i].ay= obj[i].ay + 0.001*(1/obj[i].scale*impulsY)*obj[i].scale/sumMas
-                            
-                            obj[j].ax=obj[j].ax - 0.001*(1/obj[j].scale*impulsX)*obj[j].scale/sumMas
-                            obj[j].ay=obj[j].ay - 0.001*(1/obj[j].scale*impulsY)*obj[j].scale/sumMas
-                          
-                            if ((math.abs(intVectorX)+math.abs(intVectorY))>0.07*obj[j].collScale*k) then
-                                obj[i].x  = obj[i].x - intVectorX*0.1
-                                obj[i].y = obj[i].y - intVectorY*0.1
-                                obj[j].x  = obj[j].x + intVectorX*0.1
-                                obj[j].y = obj[j].y + intVectorY*0.1
-                                
-                                obj[i].ra = obj[i].ra *0.99
-                                obj[j].ra = obj[j].ra *0.99
-                            end
-                        end
-                    end 
-                end
-            end
-           
-        end
-       
-          
     end
-  
     if (obj[i] and obj[i].health<0) then 
         objDestroy(obj,i) 
         table.remove(obj,i)
@@ -193,7 +151,7 @@ end
 if ( player.clowR< 0 ) then
     player.clowRflag = 0 
 end
-playerColl()
+playerCollWithObj()
 for i = 1 , #res do
     if (res[i]) then 
         resColl(i)
@@ -814,6 +772,22 @@ function allDraw()
     end 
    
     for i= 1,#obj do
+        if (obj[i] and obj[i].body)  then
+            local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
+            objCollWithObjInRegularS(IobjRegulS,i)
+            objCollWithObjInRegularS(IobjRegulS-1,i)
+            objCollWithObjInRegularS(IobjRegulS+1,i)
+          
+            objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1),i)
+            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1),i)
+            
+            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)+1,i)
+            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)-1,i)
+            
+            objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)+1,i)
+            objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)-1,i)
+        end
+        if (obj[i] and obj[i].body)  then
         love.graphics.circle("line",obj[i].x,obj[i].y,obj[i].collScale/2*k)
         local  kekI = math.floor((obj[i].x/120) + (obj[i].y/120)*(screenWidth/(120*k)) +1)
         if (obj[i].x>player.x-screenWidth/2+40*k/2-obj[i].collScale and  obj[i].x<screenWidth+player.x-screenWidth/2+40*k/2+obj[i].collScale and  obj[i].y>player.y-screenHeight/2+40*k2/2-obj[i].collScale and obj[i].y<screenHeight+player.y-screenHeight/2+40*k2/2+obj[i].collScale) then
@@ -821,10 +795,10 @@ function allDraw()
             if not( obj[i].invTimer == obj[i].timer) then
                 if ( obj[i] and obj[i].bodyDop) then
                     objFragmVect(i,1,0.6,0.6)
-                 obj[i].body:draw('line')
+                -- obj[i].body:draw('line')
                 else
                   objVect(i,1,0.6,0.6)
-                  obj[i].body:draw('line')
+                --  obj[i].body:draw('line')
               end
             else
                 if ( obj[i] and obj[i].pok>0) then
@@ -832,10 +806,12 @@ function allDraw()
                   obj[i].body:draw('line')
                 else
                  objVect(i,1,1,1)
-                  obj[i].body:draw('line')
+                 -- obj[i].body:draw('line')
                 end
             end
         end
+        end
+--          love.graphics.print(IobjRegulS,obj[i].x,obj[i].y,0,2,2)
             --    love.graphics.print(kekI, obj[i].x,obj[i].y,0,1,1)
         end
     end

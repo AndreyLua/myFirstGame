@@ -33,7 +33,7 @@ end
 function resColl(i)
         if ( player.a==0  ) then 
             if ((math.sqrt(math.pow((player.x+40*k/2-res[i].x),2)+math.pow((player.y-res[i].y),2))) < playerAbility.radiusCollect*k) then
-                local x1 = (player.x+player.scale*40/2*k)-res[i].x+1*k
+                local x1 = (player.x+40/2*k)-res[i].x+1*k
                 local y1 = (player.y)-res[i].y+1*k2          
                 local ugol = math.atan2(x1,y1)
                 if (  math.abs(controler.angle - ugol)>math.pi) then
@@ -54,7 +54,7 @@ function resColl(i)
 end
 
 function resСollect(i)
-    if ( checkCollision(player.x,player.y, player.scale*40*k, player.scale*40*k2,res[i].x,res[i].y,1*k,1*k2)) then
+    if ( checkCollision(player.x,player.y, 40*k, 40*k2,res[i].x,res[i].y,1*k,1*k2)) then
         if ( res[i].tip == 4) then
             hp.long3=hp.long3+50*k2
             resRemove(i,res)
