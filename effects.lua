@@ -100,22 +100,22 @@ return m1
 
 end
 
- function explUpdate2()
+ function explUpdate2(dt)
   for i =1, #exp do
     if( exp[i]) then
-  exp[i].x= exp[i].x+exp[i].ax*dt2*k
-  exp[i].y= exp[i].y+exp[i].ay*dt2*k2
+  exp[i].x= exp[i].x+exp[i].ax*dt*k
+  exp[i].y= exp[i].y+exp[i].ay*dt*k2
   
   if (  exp[i].flag ==false) then 
      if ( exp[i].ax > 0 ) then
-      exp[i].ax  = exp[i].ax - 50*dt2*k
+      exp[i].ax  = exp[i].ax - 50*dt*k
      else
-       exp[i].ax  = exp[i].ax + 50*dt2*k
+       exp[i].ax  = exp[i].ax + 50*dt*k
       end
       if ( exp[i].ay > 0 ) then
-       exp[i].ay  = exp[i].ay - 50*dt2*k2
+       exp[i].ay  = exp[i].ay - 50*dt*k2
      else
-       exp[i].ay  = exp[i].ay + 50*dt2*k2
+       exp[i].ay  = exp[i].ay + 50*dt*k2
     end
   end
       if ( (exp[i].ay<3*k2 and  exp[i].ay>-3*k2) or (exp[i].ax<3*k and  exp[i].ax>-3*k)) then
@@ -130,18 +130,18 @@ function explUpdate()
 
   for i =1, #exp do
     if( exp[i]) then
-  exp[i].x= exp[i].x+exp[i].ax*dt2*2*k
-  exp[i].y= exp[i].y+exp[i].ay*dt2*2*k2
+  exp[i].x= exp[i].x+exp[i].ax*dt*2*k
+  exp[i].y= exp[i].y+exp[i].ay*dt*2*k2
   if (  exp[i].flag ==false) then 
      if ( exp[i].ax > 0 ) then
-      exp[i].ax  = exp[i].ax - 50*dt2*k
+      exp[i].ax  = exp[i].ax - 50*dt*k
      else
-       exp[i].ax  = exp[i].ax + 50*dt2*k
+       exp[i].ax  = exp[i].ax + 50*dt*k
       end
       if ( exp[i].ay > 0 ) then
-       exp[i].ay  = exp[i].ay - 50*dt2*k2
+       exp[i].ay  = exp[i].ay - 50*dt*k2
      else
-       exp[i].ay  = exp[i].ay + 50*dt2*k2
+       exp[i].ay  = exp[i].ay + 50*dt*k2
     end
   end
       if ( (exp[i].ay<10*k2 and  exp[i].ay>-10*k2) or (exp[i].ax<10*k and  exp[i].ax>-10*k)) then
@@ -155,7 +155,7 @@ local ugol = math.atan2(x1,y1)
 exp[i].ax=90*k*math.sin(ugol+2)
 exp[i].ay=90*k2*math.cos(ugol+2)
 end
- if ( ((exp[i].y<exp[i].yy+200*k2*dt2 and  exp[i].y>exp[i].yy-200*k2*dt2) and (exp[i].x<exp[i].xx+200*k*dt2 and  exp[i].x>exp[i].xx-200*k*dt2)) and exp[i].flag == true ) then
+ if ( ((exp[i].y<exp[i].yy+200*k2*dt and  exp[i].y>exp[i].yy-200*k2*dt) and (exp[i].x<exp[i].xx+200*k*dt and  exp[i].x>exp[i].xx-200*k*dt)) and exp[i].flag == true ) then
     table.remove(exp,i)
   end
   end
@@ -184,42 +184,42 @@ function expl(x,y,kol)
     table.insert(exp,e)
     end
 end
-function gradient()
+function gradient(dt)
     if (gradientI == 1 ) then
-        gradientOp1(gradientR,gradientG,gradientB)
+        gradientOp1(dt)
     end
     if (gradientI  == 2 ) then 
-        gradientOp2(gradientR,gradientG,gradientB)
+        gradientOp2(dt)
     end
     if (gradientI  == 3 ) then 
-        gradientOp3(gradientR,gradientG,gradientB)
+        gradientOp3(dt)
     end
     return gradientR+0.8,gradientG+0.8,gradientB+0.8
 end
-function gradientOp1()
+function gradientOp1(dt)
     if ( gradientR>0) then
-        gradientR = gradientR - 0.4*dt2
-        gradientG = gradientG + 0.4*dt2
+        gradientR = gradientR - 0.4*dt
+        gradientG = gradientG + 0.4*dt
     else
         gradientR = 0
         gradientG = 1
         gradientI = 2
     end
 end
-function gradientOp2()
+function gradientOp2(dt)
     if ( gradientG>0) then
-        gradientG = gradientG - 0.4*dt2
-        gradientB = gradientB + 0.4*dt2
+        gradientG = gradientG - 0.4*dt
+        gradientB = gradientB + 0.4*dt
     else
         gradientG = 0
         gradientB = 1
         gradientI = 3
     end
 end
-function gradientOp3()
+function gradientOp3(dt)
     if ( gradientB>0) then
-        gradientB = gradientB - 0.4*dt2
-        gradientR = gradientR + 0.4*dt2
+        gradientB = gradientB - 0.4*dt
+        gradientR = gradientR + 0.4*dt
     else
         gradientB = 0
         gradientR = 1

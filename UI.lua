@@ -32,7 +32,7 @@ function sc(x,y)
   love.graphics.rectangle('line',x,y-100*k2,35*k,200*k2)
 end
 
-function playerHP()
+function playerHP(dt)
   
   if ( hp.long/screenHeight*100> 100) then
     hp.long = screenHeight
@@ -41,7 +41,7 @@ function playerHP()
   end
   
   if ( hp.long3> hp.long2 and hp.long >= hp.long2) then
-    hp3:update(dt2)
+    hp3:update(dt)
    hp3:every(0.1, function()
       hp.long2= hp.long2+0.5
      hp.long= hp.long+0.5
@@ -54,7 +54,7 @@ function playerHP()
   end
 
   if (hp.long< hp.long2 ) then
-    hp1:update(dt2)
+    hp1:update(dt)
     hp1:every(0.01, function()
       hp.long2 = hp.long2-1
       hp1:clear()
@@ -62,14 +62,14 @@ function playerHP()
   end
   
   if ( flaginv == false) then
-   hp2:update(dt2)
+   hp2:update(dt)
     hp2:every(0.01, function()
       hp.long = hp.long- 1
     hp.long3  = hp.long
      hp2:clear()
   end)
 
-  inv:update(dt2)
+  inv:update(dt)
    inv:every(playerAbility.invTimer, function()
      inv:clear() 
      shake  = 0    
@@ -79,7 +79,7 @@ function playerHP()
   
 end
 
-function playerBoost()
+function playerBoost(dt)
  
   if ( boost.long/screenHeight*100> 100) then
     boost.long = screenHeight
@@ -87,7 +87,7 @@ function playerBoost()
   end
   
   if ( boost.long2>boost.long) then
-    boost2:update(dt2)
+    boost2:update(dt)
     boost2:every(0.01, function()
       boost.long2 = boost.long2-2
       boost2:clear()
@@ -95,7 +95,7 @@ function playerBoost()
   end
   
   if ( boost.long2<boost.long) then
-     boost2:update(dt2)
+     boost2:update(dt)
      boost2:every(0.01, function()
        boost.long2 = boost.long2+1
        boost2:clear()
@@ -108,13 +108,13 @@ function playerBoost()
   end
   
   if ( player.a==1) then
-    boost1:update(dt2)
+    boost1:update(dt)
     boost1:every(0.01, function()
       boost.long = boost.long -5
       boost1:clear()
     end)
   else
-    boost1:update(dt2)
+    boost1:update(dt)
     boost1:every(0.01, function()
       boost.long = boost.long +0.6
       boost1:clear()

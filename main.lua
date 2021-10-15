@@ -168,7 +168,8 @@ meshMeteors = love.graphics.newMesh(vect, "triangles")
 meshMeteors:setTexture(meteorSet)
 
 fon1 =love.graphics.newImage("assets/fons/fon1.png") 
-
+fon2 =love.graphics.newImage("assets/fons/fon2.png") 
+fon3 =love.graphics.newImage("assets/fons/fon3.png") 
 ----------------------------------
  myShader = love.graphics.newShader[[
 vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords ){
@@ -230,8 +231,8 @@ playerAbility = {
       damage = 1,
       invTimer = 0.5,
       maxSpeed = 27,
-      speed = 13,
-      speedA  = 6,
+      speed = 6,
+      speedA  = 10,
       debaffStrenght =0.2,
       scaleBody = 35,
   
@@ -251,9 +252,6 @@ gradientI = 1
 
 
 
-
-love.graphics.setDefaultFilter('nearest')
-love.graphics.setLineStyle('rough')
 
 
 function love.load()

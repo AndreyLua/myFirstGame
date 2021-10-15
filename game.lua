@@ -35,7 +35,6 @@ flagtouch2 = false
 flagtouch3 = false
 preyi= -1
 klacK = 0 
-dt2 = 0
 removeEn = {}
 colll = {}
 slediEn ={}
@@ -96,8 +95,10 @@ player = {
   ay = 0,
   color = 0,
 } 
-
-
+camera = {
+  x = screenWidth/2+40*k/2, 
+  y = screenHeight/2+40*k2/2
+  }
 en = {}
 obj = {}
 objRegulS  = {}
@@ -108,8 +109,6 @@ playerSledi = {}
 end
 
 
-
-
 function game:update(dt)
 objRegulS = {}
 boost.long = 1000
@@ -117,27 +116,37 @@ hp.long = 1000
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
-dt2 = dt 
 flagtouch2 = false -- для выхода в состояние пауза
+if ( player.x > screenWidth*1.5+20*k or  player.x < -screenWidth*0.5+20*k ) then
+  else
+camera.x = player.x
+end
+if ( player.y > screenHeight*1.5+20*k2 or  player.y < -screenHeight*0.5+20*k2 ) then
+  else
+camera.y = player.y
+end
 --------------------
 playerControl()
-playerClowR()
-playerHP()
-explUpdate2()
+playerClowR(dt)
+playerHP(dt)
+explUpdate2(dt)
 -------------------
 local Wave = waves[numberWave] 
 for i = 1 , #obj do
     if (obj[i]) then  
-        allInvTimer(i,obj)
-        objMove(i) 
+        allInvTimer(i,obj,dt)
+        objMove(i,dt) 
         allBorder(i,obj)
-     
+      if (obj[i]) then 
         local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-        if (objRegulS[IobjRegulS]) then
-            table.insert(objRegulS[IobjRegulS],i)
-        else
-            objRegulS[IobjRegulS] = {i}
+        if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
+            if (objRegulS[IobjRegulS]) then
+                table.insert(objRegulS[IobjRegulS],i)
+            else
+                objRegulS[IobjRegulS] = {i}
+            end
         end
+      end
     end
     if (obj[i] and obj[i].health<0) then 
         objDestroy(obj,i) 
@@ -155,8 +164,8 @@ playerCollWithObj()
 for i = 1 , #res do
     if (res[i]) then 
         resColl(i)
-        resMove(i)
-        allBorder(i,res)    
+        resMove(i,dt)
+        resBorder(i,res)    
         if (res[i]) then  
             resСollect(i)
         end
@@ -165,9 +174,9 @@ end
  
 for i=1,#en do
     if (en[i]) then 
-        allInvTimer(i,en)
-        enMove(i)  
-        enAtack(i)
+        allInvTimer(i,en,dt)
+        enMove(i,dt)  
+        enAtack(i,dt)
         if (en[i] and en[i].body and player.body:collidesWith(en[i].body))  then
             enColl(i, en[i].tip, player.a)
         end
@@ -191,7 +200,7 @@ if ( colWave<=0) then
     wavey = 0
 end
 
-playerBoost()
+playerBoost(dt)
 
 if ( colWave>0 and #obj < 20) then
     Timer.every(0.5, function()
@@ -221,8 +230,8 @@ if ( colWave>0 and #obj < 20) then
     Timer.update(dt)
 end
 playerDebaff()
-playerMove()
-bulletsUpdate()
+playerMove(dt)
+bulletsUpdate(dt)
 self:movement(dt)
 playerBorder()
 end
@@ -270,9 +279,9 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-   --   allSpawn(en,Geo,Tip)
-    --    en[#en].x = mouse.x
-     --   en[#en].y = mouse.y
+  --    allSpawn(en,Geo,Tip)
+   --     en[#en].x = mouse.x
+   --     en[#en].y = mouse.y
     end
       if love.keyboard.isDown('y') then
      table.remove(obj,#obj)
@@ -281,21 +290,22 @@ end
 
 
 function  game:draw()
-
+    local dt = love.timer.getDelta()
     playerBatch:clear()
     love.graphics.setCanvas(kek)
     love.graphics.clear()
-     for i = 0, 20 do
-      for j =0, 20 do 
-        love.graphics.rectangle('line', i*120*k,j*120*k2,120*k,120*k2)  
-       --  love.graphics.circle('line', i*120*k,j*120*k2,60*k)  
-        
-      end
-   end 
-    love.graphics.setColor(1,1,1,0.9)
-    love.graphics.draw(fon1,0,0,0,k,k2)
     love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(fon1,0,0,0,k,k2)
+    love.graphics.draw(fon2,(-player.x+40*k/2+screenWidth/2)/30,(-player.y+40*k2/2+screenHeight/2)/30,0,k,k2)
+    love.graphics.draw(fon3,(-player.x+40*k/2+screenWidth/2)/10,(-player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
+    love.graphics.setColor(1,1,1,1)
+    --for i = 0, 20 do
+    --  for j =0, 20 do 
+    --    love.graphics.rectangle('line', i*120*k,j*120*k2,120*k,120*k2)  
+       --  love.graphics.circle('line', i*120*k,j*120*k2,60*k)  
 
+    --  end
+   --end 
     if (flaginv == false ) then
     love.graphics.translate( 0  ,random(0,shake) )   
   end
@@ -304,15 +314,16 @@ function  game:draw()
     love.graphics.setColor(1,1,1,1)
   --   allDraw()
     love.graphics.push()
-    love.graphics.translate(-player.x+40*k/2+screenWidth/2,-player.y+40*k2/2+screenHeight/2)
+    love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
+    love.graphics.rectangle('line',-screenWidth,-screenHeight, screenWidth*3,screenHeight*3,k,k2)
     --    love.graphics.setShader(myShader)
       --  love.graphics.draw(meteors.m1,200*k,200*k2,0,1,1,meteors.m1:getWidth()/2,meteors.m1:getHeight()/2
       --  love.graphics.setShader()
-    allDraw()
+    allDraw(dt)
     love.graphics.setColor(1,1,1,1)
     love.graphics.setLineWidth(1)
     bulletsDraw()
-    enRemoveTag()
+    enRemoveTag(dt)
     if ( #obj  >0 and #vect > 0) then
         for i = 1, #vect do
             if (i>= lenVect) then
@@ -329,7 +340,7 @@ function  game:draw()
   love.graphics.pop()
   Health_Boost()
   love.graphics.setColor(1,1,1,1)
-    playerDraw()
+    playerDraw(dt)
     love.graphics.draw(playerBatch)
     
     love.graphics.setColor(1,0,0.02)
@@ -339,7 +350,7 @@ function  game:draw()
     love.graphics.setColor(1,1,1)
     local kkol = #(tostring (score))
     love.graphics.print(score,22*k-(70*k*0.5)/2, screenHeight/2+(kkol*45/2*k2*0.5),-math.pi/2,0.5,0.5)
-    Waves(numberWave)
+    Waves(numberWave,dt)
     sc(0,screenHeight/2)
     exit(-7*k,-7*k2)
     lineW()
@@ -367,18 +378,22 @@ function  game:draw()
    love.graphics.print("Stat  "..tostring(stat.drawcalls), 10, 70)
    love.graphics.print("OBJ: "..tostring(#obj), 10, 110)
    love.graphics.print("RES: "..tostring(#res), 10, 150)
-   local Imouse = math.floor(mouse.x/(120*k)) + math.floor((mouse.y)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-   love.graphics.print(Imouse, mouse.x , mouse.y)
-   local playerIndex =math.floor((player.x)/(120*k)) + math.floor((player.y)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-   love.graphics.print(playerIndex,player.x, player.y)
-  
+   
+   --local Imouse = math.floor(mouse.x/(120*k)) + math.floor((mouse.y)/(120*k2))*math.floor((screenWidth/(120*k))+1)
+   --love.graphics.print(Imouse, mouse.x , mouse.y)
+  -- local playerIndex =math.floor((player.x)/(120*k)) + math.floor((player.y)/(120*k2))*math.floor((screenWidth/(120*k))+1)
+  -- love.graphics.print(playerIndex,player.x, player.y)
+  --   local Imouse = math.floor(mouse.x/(120*k)) + math.floor((mouse.y)/(120*k2))*math.floor((screenWidth/(120*k))+1)
+  -- love.graphics.print(Imouse, mouse.x , mouse.y)
+  -- local playerIndex =math.floor((player.x)/(120*k)) + math.floor((player.y)/(120*k2))*math.floor((screenWidth/(120*k))+1)
+   --love.graphics.print(playerIndex,player.x, player.y)
    vect = {}
 end
                
 
-function Waves(n)
+function Waves(n,dt)
     if ( waveflag == 0   ) then
-        wavetimer:update(dt2)
+        wavetimer:update(dt)
         wavetimer:every(0.001, function()
             wavetimer:clear() 
             if (wavex*k<0) then
@@ -390,14 +405,14 @@ function Waves(n)
         end)
     end
     if ( waveflag == 1) then
-        wavetimer:update(dt2)
+        wavetimer:update(dt)
         wavetimer:every(3, function()
             wavetimer:clear() 
             waveflag = 2
         end)
     end
     if ( waveflag == 2 and wavex == 0) then
-        wavetimer:update(dt2)
+        wavetimer:update(dt)
         wavetimer:every(0.001, function()
             wavetimer:clear() 
             if (wavey*k<screenHeight/2+200*k2) then
@@ -419,23 +434,23 @@ function Waves(n)
 end
 function allGeo(Geo)
       if (Geo==1) then
-        return -3*50*k,math.random(0,screenHeight),math.random(6*k,10*k),math.random(-10*k,10*k), math.random(0.5,1)
+        return -screenWidth-200*k,math.random(-screenHeight,screenHeight*2),math.random(6*k,10*k),math.random(-10*k,10*k), math.random(0.5,1)
       end
       if (Geo==2) then
-        return  math.random(0,screenWidth),-3*40*k2,math.random(-10*k,10*k),math.random(6*k,10*k),math.random(-1,-0.5)
+        return  math.random(-screenWidth,screenWidth*2),-screenHeight-200*k2,math.random(-10*k,10*k),math.random(6*k,10*k),math.random(-1,-0.5)
       end
       if (Geo==3) then
-        return  math.random(0,screenWidth),screenHeight+3*40*k2,math.random(-10*k,10*k),math.random(-10*k2,-6*k2),math.random(0.5,1) 
+        return   math.random(-screenWidth,screenWidth*2),screenHeight*2+200*k2,math.random(-10*k,10*k),math.random(-10*k2,-6*k2),math.random(0.5,1) 
       end
       if (Geo==4) then
-        return  (screenWidth+3*40*k),math.random(0,screenHeight),math.random(-10*k,-6*k),math.random(-10*k,10*k), math.random(-1,-0.6)
+        return  screenWidth*2+200*k, math.random(-screenHeight,screenHeight*2),math.random(-10*k,-6*k),math.random(-10*k,10*k), math.random(-1,-0.6)
       end
 end
 
 function allSpawn(mas,Geo,Tip)
     if ( mas == obj) then
         local colorRGB = 0.2
-        local Body =3--math.random(1,5)
+        local Body =math.random(1,5)
         local colorDop1,colorDop2,colorDop3,scale,collScale= objColorAndScale(Body)
         local x,y,ax,ay,ra = allGeo(Geo)
         local health = 1
@@ -532,11 +547,11 @@ function allSpawn(mas,Geo,Tip)
     end
 end
 
-function allInvTimer(i,mas)
+function allInvTimer(i,mas,dt)
     if ( mas[i] and mas[i].timer) then
         if ( mas[i].invTimer) then
             if ( mas[i].timer < mas[i].invTimer) then
-                mas[i].timer  = mas[i].timer - dt2* 40
+                mas[i].timer  = mas[i].timer - dt* 40
             end
             if ( mas[i].timer < 0) then
                 mas[i].timer  = mas[i].invTimer
@@ -747,66 +762,70 @@ love.graphics.line(7.8035714285715*k,27.746031746032*k2,14.409970238095*k,34.857
     love.graphics.pop()
 end
 
-function allDraw()
- --   player.body:draw('fill')
-    enemiesSledDraw()
+function allDraw(dt)
+  --  player.body:draw('fill')
+    enemiesSledDraw(dt)
     for i= 1,#res do
-        if ( res[i].tip == 1) then
-            love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
-            rot('fill',res[i].x,res[i].y,4*k,4*k2,res[i].r,2*k,2*k2)
-        end
-        if ( res[i].tip == 2) then
-             love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
-             rot('fill',res[i].x,res[i].y,7*k,7*k2,res[i].r,2*k,2*k2)
-        end
-        if ( res[i].tip == 3) then
-            love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
-            rot('fill',res[i].x,res[i].y,10*k,10*k2,res[i].r,2*k,2*k2)
-        end
-        ------------------------------------------------------------------
-        if ( res[i].tip == 4) then
-            love.graphics.setColor(0.7,0.2,0.2)
-            --love.graphics.circle("line",res[i].x+8*k,res[i].y+8*k2,2*k)
-            --rot('line',res[i].x,res[i].y,16*k,16*k2,2)
+        if (res[i].x>camera.x-screenWidth/2-30*k and  res[i].x<camera.x+screenWidth/2+30*k and  res[i].y>camera.y-screenHeight/2-30*k2 and res[i].y<camera.y + screenHeight/2+30*k2) then
+            if ( res[i].tip == 1) then
+                love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
+                rot('fill',res[i].x,res[i].y,4*k,4*k2,res[i].r,2*k,2*k2)
+            end
+            if ( res[i].tip == 2) then
+                 love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
+                 rot('fill',res[i].x,res[i].y,7*k,7*k2,res[i].r,2*k,2*k2)
+            end
+            if ( res[i].tip == 3) then
+                love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
+                rot('fill',res[i].x,res[i].y,10*k,10*k2,res[i].r,2*k,2*k2)
+            end
+            ------------------------------------------------------------------
+            if ( res[i].tip == 4) then
+                love.graphics.setColor(0.7,0.2,0.2)
+                --love.graphics.circle("line",res[i].x+8*k,res[i].y+8*k2,2*k)
+                --rot('line',res[i].x,res[i].y,16*k,16*k2,2)
+            end
         end
     end 
    
     for i= 1,#obj do
         if (obj[i] and obj[i].body)  then
+          if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
             local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
             objCollWithObjInRegularS(IobjRegulS,i)
-            objCollWithObjInRegularS(IobjRegulS-1,i)
+          --  objCollWithObjInRegularS(IobjRegulS-1,i)
             objCollWithObjInRegularS(IobjRegulS+1,i)
           
-            objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1),i)
+           -- objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1),i)
             objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1),i)
             
             objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)+1,i)
-            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)-1,i)
+         --   objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)-1,i)
             
             objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)+1,i)
-            objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)-1,i)
+          --  objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)-1,i)
+          end
         end
         if (obj[i] and obj[i].body)  then
-        love.graphics.circle("line",obj[i].x,obj[i].y,obj[i].collScale/2*k)
+       -- love.graphics.circle("line",obj[i].x,obj[i].y,obj[i].collScale/2*k)
         local  kekI = math.floor((obj[i].x/120) + (obj[i].y/120)*(screenWidth/(120*k)) +1)
-        if (obj[i].x>player.x-screenWidth/2+40*k/2-obj[i].collScale and  obj[i].x<screenWidth+player.x-screenWidth/2+40*k/2+obj[i].collScale and  obj[i].y>player.y-screenHeight/2+40*k2/2-obj[i].collScale and obj[i].y<screenHeight+player.y-screenHeight/2+40*k2/2+obj[i].collScale) then
+        if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
         if ( obj[i].timer) then
             if not( obj[i].invTimer == obj[i].timer) then
                 if ( obj[i] and obj[i].bodyDop) then
                     objFragmVect(i,1,0.6,0.6)
-                -- obj[i].body:draw('line')
+             --    obj[i].body:draw('line')
                 else
                   objVect(i,1,0.6,0.6)
-                --  obj[i].body:draw('line')
+             --     obj[i].body:draw('line')
               end
             else
                 if ( obj[i] and obj[i].pok>0) then
                    objFragmVect(i,1,1,1)
-                  obj[i].body:draw('line')
+             --     obj[i].body:draw('line')
                 else
                  objVect(i,1,1,1)
-                 -- obj[i].body:draw('line')
+              ---    obj[i].body:draw('line')
                 end
             end
         end
@@ -853,24 +872,33 @@ function allDraw()
 end
 function allBorder(i,mas)
     ----------если залетел на карту поднимаем флаг-------------------------------------  
-    if (mas[i].x>0 and  mas[i].x<screenWidth and  mas[i].y>0 and  mas[i].y<screenHeight and mas[i].body) then
-     --   if not(mas[i].body:collidesWith(left) or mas[i].body:collidesWith(right)or mas[i].body:collidesWith(up)or mas[i].body:collidesWith(down)) then
-            mas[i].f = true
+    if (mas[i].x< screenWidth*2-mas[i].collScale*k/2 and  mas[i].x> -screenWidth +mas[i].collScale*k/2 and  mas[i].y> -screenHeight+mas[i].collScale*k2/2 and  mas[i].y<screenHeight*2-mas[i].collScale*k2/2) then
+        mas[i].f = true
     end
- --   end
     --------------------------------------------------
     
     --------------------------------------------------
     if ( mas[i] and mas[i].f == true) then
-        if (  mas[i].x<-120*k or  mas[i].x>screenWidth+120*k or  mas[i].y>screenHeight+120*k2 or  mas[i].y<-120*k2 ) then
-    --        table.remove(mas,i)
+        if ( mas[i].x > screenWidth*2-mas[i].collScale*k/2) then 
+            mas[i].ax = -mas[i].ax
+            mas[i].x =screenWidth*2 - 0.1*k-mas[i].collScale*k/2
+        end
+        if ( mas[i].x <  -screenWidth+mas[i].collScale*k/2) then 
+            mas[i].ax = -mas[i].ax
+            mas[i].x = -screenWidth + 0.1*k+mas[i].collScale*k/2
+        end
+        if ( mas[i].y < -screenHeight+mas[i].collScale*k2/2) then 
+            mas[i].ay = -mas[i].ay
+            mas[i].y = -screenHeight+0.1*k2+mas[i].collScale*k2/2
+        end
+        if ( mas[i].y > screenHeight*2-mas[i].collScale*k2/2) then 
+            mas[i].ay = -mas[i].ay
+            mas[i].y = screenHeight*2 - 0.1*k2-mas[i].collScale*k2/2
+        end
+        if ( mas[i].x > screenWidth*2 or mas[i].x < -screenWidth or mas[i].y < -screenHeight or  mas[i].y > screenHeight*2 ) then
+           table.remove(mas,i)
         end
     end
-   -- if ( mas[i]) then
-   --     if (  (mas[i].x>500 or  mas[i].x<100 or  mas[i].y>200 or  mas[i].y<100) or (mas[i].ay<1*k2 and mas[i].ay>-1*k2 and mas[i].ax<1*k and mas[i].ax>-1*k)) then
-     --       table.remove(mas,i)
-    --    end
-    --end
 end
 
 return game

@@ -1,9 +1,9 @@
 local bulletFunction = {}
 
-    function bulletsUpdate()
+    function bulletsUpdate(dt)
         for i = 1, #enemyBullets do
             if ( enemyBullets[i]) then
-                bulletsMove(i)
+                bulletsMove(i,dt)
                 bulletsColl(i)
                 bulletsBorder(i)
             end
@@ -36,10 +36,10 @@ local bulletFunction = {}
           end
     end
 
-    function bulletsMove(i)
+    function bulletsMove(i,dt)
         if ( enemyBullets[i]) then
-            enemyBullets[i].x = enemyBullets[i].x +  enemyBullets[i].ax*dt2*10
-            enemyBullets[i].y = enemyBullets[i].y +  enemyBullets[i].ay*dt2*10 
+            enemyBullets[i].x = enemyBullets[i].x +  enemyBullets[i].ax*dt*10
+            enemyBullets[i].y = enemyBullets[i].y +  enemyBullets[i].ay*dt*10 
         end
     end
     

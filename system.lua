@@ -29,17 +29,6 @@ function random(min,max)
   return (min > max and (love.math.random()*(min -max)+max)) or (love.math.random()*(max-min)+min)
 end
 
-
-function doobleclicker()
-  if ( doobleclickflag == 1 or doobleclickflag == 2  ) then 
-    doobleclicktimer = doobleclicktimer - 100 * dt2
-  end
-  if ( doobleclicktimer< 0) then
-     doobleclicktimer = 22 
-     doobleclickflag = 0 
-  end
-end
-
 function rot(mode,x,y,w,h,rx,ry,segments,r,ox,oy)
      if not oy and rx then r,ox,oy = rx,ry, segments end
   r = r or 0 

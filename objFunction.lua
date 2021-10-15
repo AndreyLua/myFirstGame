@@ -33,11 +33,11 @@ end
 return BODY
 end
 
-function objBody(i)
+function objBody(i,dt)
     local xF,yF = obj[i].body:center()
     obj[i].body:moveTo(obj[i].x, obj[i].y)
     local xF2,yF2 = obj[i].body:center()
-    local Glr = obj[i].ra*dt2
+    local Glr = obj[i].ra*dt
     obj[i].body:rotate(Glr,obj[i].x,obj[i].y) 
     obj[i].r = obj[i].r + Glr
     if ( obj[i].r> math.pi*2) then
@@ -146,7 +146,7 @@ function objDestroy(mas,i)
                     color1 =colorDop1,
                     color2=colorDop2,
                     color3 =colorDop3,
-                    f = false,
+                    f = true,
                     x  = x1, 
                     y =  y1 ,  
                     ax = mas[i].ax+mas[i].ax*math.random(-5,5)/10, 
@@ -188,7 +188,7 @@ function objDestroy(mas,i)
                 color3 =colorDop3,
                 scale = mas[i].scale/4,
                 collScale = mas[i].collScale/1.5,
-                f = false,
+                f = true,
                 x  = x1, 
                 y =  y1 ,  
                 xc  = xc, 
@@ -196,7 +196,7 @@ function objDestroy(mas,i)
                 ax = mas[i].ax+mas[i].ax*math.random(-5,5)/10, 
                 ay = mas[i].ay+mas[i].ay*math.random(-5,5)/10,   
                 met =mas[i].met,
-                ra =math.random()*math.random(-1,1),
+                ra =1--math.random()*math.random(-1,1),
             }
             start = finish
             table.insert(obj,ee)
@@ -235,22 +235,34 @@ function objDestroyAngle(mas)
    return masDop
 end
 
-function objMove(i) 
+function objMove(i,dt) 
     if (obj[i]) then
-        objBody(i)
+        objBody(i,dt)
         if ( obj[i].f == true ) then 
         -----------------------------------------------      
             obj[i].ot =false
-            obj[i].x= obj[i].x+obj[i].ax*dt2*5
-            obj[i].y= obj[i].y+obj[i].ay*dt2*5
+            obj[i].x= obj[i].x+obj[i].ax*dt*5
+            obj[i].y= obj[i].y+obj[i].ay*dt*5
         -----------------------------------------------  
         else
         -----------------------------------------------   
             obj[i].ot =false
-            obj[i].x= obj[i].x+obj[i].ax*dt2*10
-            obj[i].y= obj[i].y+obj[i].ay*dt2*10
+            obj[i].x= obj[i].x+obj[i].ax*dt*10
+            obj[i].y= obj[i].y+obj[i].ay*dt*10
         -----------------------------------------------  
-        end
+      end
+      if ( obj[i].ax > 3*k) then 
+          obj[i].ax =3 *k 
+      end 
+      if ( obj[i].ax < -3*k ) then 
+          obj[i].ax =-3*k  
+      end 
+      if ( obj[i].ay > 3*k2 ) then 
+          obj[i].ay =3 *k2 
+      end 
+      if ( obj[i].ay < -3*k2 ) then 
+          obj[i].ay =-3*k2 
+      end 
     end
 end
 
@@ -266,11 +278,12 @@ function objCollWithPlayerInRegularS(index)
 end
 
 function objCollWithPlayerResult(i, a)
+  --  player.debaffStrenght = 0.5
     local angleD = math.atan2(player.x-obj[i].x+20*k,player.y-obj[i].y+20*k)
     if ( obj[i] and obj[i].health ) then
         obj[i].health = obj[i].health -2*playerAbility.damage
-        obj[i].ax =-15*k*math.sin(angleD)-- +(player.ax*playerAbility.speedA/6*k)
-        obj[i].ay =-15*k2*math.cos(angleD)--+ (player.ay*playerAbility.speedA/6*k2)
+        obj[i].ax =-15*k*math.sin(angleD) +(player.ax*playerAbility.speedA/6*k)
+        obj[i].ay =-15*k2*math.cos(angleD)+ (player.ay*playerAbility.speedA/6*k2)
     end
     obj[i].timer= obj[i].invTimer - 0.001
     if (obj[i].health<0) then 

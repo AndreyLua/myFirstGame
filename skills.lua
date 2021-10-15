@@ -178,7 +178,6 @@ end
 if ( tip~= 0 ) then 
     textUpdate(textMas[tip],0.1,dt) 
 end
-dt2 = dt
 end
 
 function textUpdate(text,speed,dt) 

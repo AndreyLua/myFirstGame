@@ -12,7 +12,7 @@ end
 
 end
 
-function enMove(i) 
+function enMove(i,dt) 
     enTip(i,en[i].tip)
     
     if (en[i].ugol) then 
@@ -21,14 +21,14 @@ function enMove(i)
     if ( en[i].tip == 1) then
         if ( en[i].invTimer and  en[i].invTimer == en[i].timer) then
         -----------------------------------------------  
-            enRotAngle(i,en[i].tip)
+            enRotAngle(i,en[i].tip,dt)
             local ugol = math.atan2(player.x-en[i].x+20*k,player.y-en[i].y+20*k)
           if (en[i].dash and en[i].dash==en[i].dashTimer) then
-                enUgol(i,ugol)
+                enUgol(i,ugol,dt)
            end
             if ((math.sqrt(math.pow((player.x+40*k/2-en[i].x),2)+math.pow((player.y+40*k2/2-en[i].y),2))) > 30*k) then
                 if (en[i].dash and en[i].dash==en[i].dashTimer) then
-                    if not((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
+                    if not((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
                         en[i].ax=22*k*math.sin(ugol)
                         en[i].ay=22*k2*math.cos(ugol)
                     end
@@ -41,38 +41,38 @@ function enMove(i)
             end
             
             if (en[i].dash and en[i].dash==en[i].dashTimer)  then
-                if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
-                   en[i].x= en[i].x+en[i].ax*dt2*0
-                   en[i].y= en[i].y+en[i].ay*dt2*0
+                if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
+                   en[i].x= en[i].x+en[i].ax*dt*0
+                   en[i].y= en[i].y+en[i].ay*dt*0
                    en[i].ax = 0
                    en[i].ay = 0 
                 else
-                    en[i].x= en[i].x+en[i].ax*dt2*7
-                    en[i].y= en[i].y+en[i].ay*dt2*7
+                    en[i].x= en[i].x+en[i].ax*dt*7
+                    en[i].y= en[i].y+en[i].ay*dt*7
                 end
-                 if not((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
-                en[i].x= en[i].x+math.sin(en[i].y/10)*dt2*50
-                en[i].y= en[i].y+math.cos(en[i].x/10)*dt2*50
+                 if not((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
+                en[i].x= en[i].x+math.sin(en[i].y/10)*dt*50
+                en[i].y= en[i].y+math.cos(en[i].x/10)*dt*50
                 end
             else
-                en[i].x= en[i].x+en[i].ax*dt2*17
-                en[i].y= en[i].y+en[i].ay*dt2*17
+                en[i].x= en[i].x+en[i].ax*dt*17
+                en[i].y= en[i].y+en[i].ay*dt*17
            end
         -----------------------------------------------  
         else
         -----------------------------------------------  
             if (en[i].ax>0)then
-                en[i].ax =en[i].ax-50*dt2
+                en[i].ax =en[i].ax-50*dt
             else
-                en[i].ax =en[i].ax+50*dt2
+                en[i].ax =en[i].ax+50*dt
             end
             if (en[i].ay>0)then
-                en[i].ay =en[i].ay-50*dt2
+                en[i].ay =en[i].ay-50*dt
             else
-                en[i].ay =en[i].ay+50*dt2
+                en[i].ay =en[i].ay+50*dt
             end
-            en[i].x= en[i].x-en[i].ax*dt2*3
-            en[i].y= en[i].y-en[i].ay*dt2*3
+            en[i].x= en[i].x-en[i].ax*dt*3
+            en[i].y= en[i].y-en[i].ay*dt*3
         -----------------------------------------------  
         end
     end
@@ -83,33 +83,33 @@ function enMove(i)
                 en[i].atack = en[i].atackTimer-0.001
                 enFire(player.x+40*k/2,player.y+40*k2/2,en[i].x,en[i].y,en[i].ugol,en[i].damage)
             end
-            enRotAngle(i,en[i].tip)
+            enRotAngle(i,en[i].tip,dt)
             local ugol = math.atan2(player.x-en[i].x+20*k,player.y-en[i].y+20*k)
-            enUgol(i,ugol)
-            if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
-                en[i].x= en[i].x+en[i].ax*dt2*3
-                en[i].y= en[i].y+en[i].ay*dt2*3
+            enUgol(i,ugol,dt)
+            if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
+                en[i].x= en[i].x+en[i].ax*dt*3
+                en[i].y= en[i].y+en[i].ay*dt*3
             else
-                en[i].x= en[i].x+en[i].ax*dt2*7
-                en[i].y= en[i].y+en[i].ay*dt2*7
+                en[i].x= en[i].x+en[i].ax*dt*7
+                en[i].y= en[i].y+en[i].ay*dt*7
             end
-            en[i].x= en[i].x+math.sin(en[i].y/7)*dt2*50--!!!!!!!!!!!!
-            en[i].y= en[i].y+math.cos(en[i].x/7)*dt2*50--!!!!!!!!!!
+            en[i].x= en[i].x+math.sin(en[i].y/7)*dt*50--!!!!!!!!!!!!
+            en[i].y= en[i].y+math.cos(en[i].x/7)*dt*50--!!!!!!!!!!
         -----------------------------------------------------      
         else
         -----------------------------------------------------  
             if (en[i].ax>0)then
-                en[i].ax =en[i].ax-50*dt2
+                en[i].ax =en[i].ax-50*dt
             else
-                en[i].ax =en[i].ax+50*dt2
+                en[i].ax =en[i].ax+50*dt
             end
             if (en[i].ay>0)then
-                en[i].ay =en[i].ay-50*dt2
+                en[i].ay =en[i].ay-50*dt
             else
-                en[i].ay =en[i].ay+50*dt2
+                en[i].ay =en[i].ay+50*dt
             end
-            en[i].x= en[i].x-en[i].ax*dt2*3
-            en[i].y= en[i].y-en[i].ay*dt2*3
+            en[i].x= en[i].x-en[i].ax*dt*3
+            en[i].y= en[i].y-en[i].ay*dt*3
         -----------------------------------------------------  
         end
     end
@@ -180,10 +180,10 @@ function enHit(mas,i)
     end
 end
  
-function enAtack(i)
+function enAtack(i,dt)
     if ( en[i] and en[i].atack) then
         if ( en[i].atack <  en[i].atackTimer) then
-            en[i].atack  = en[i].atack  - 30*dt2
+            en[i].atack  = en[i].atack  - 30*dt
         end
         if ( en[i].atack < 0) then
             en[i].atack  = en[i].atackTimer
@@ -191,7 +191,7 @@ function enAtack(i)
     end
     if ( en[i] and en[i].dash) then
         if ( en[i].dash <  en[i].dashTimer) then
-            en[i].dash  = en[i].dash  - 30*dt2
+            en[i].dash  = en[i].dash  - 30*dt
         end
         if ( en[i].dash < 0) then
             en[i].dash  = en[i].dashTimer
@@ -199,7 +199,7 @@ function enAtack(i)
     end
 end
   
-function enUgol(i,ugol)
+function enUgol(i,ugol,dt)
     if ( en[i].ugol == 0) then
         en[i].ugol=0.00000001
     end
@@ -212,32 +212,32 @@ function enUgol(i,ugol)
     if ( ugol == 0) then
         ugol=0.00000001
     end
-    if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt2 or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt2 ) then
+    if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
         if (ugol/math.abs(ugol)==en[i].ugol/math.abs(en[i].ugol))then
             if ( ugol>en[i].ugol) then
-                en[i].ugol = en[i].ugol+4*dt2
+                en[i].ugol = en[i].ugol+4*dt
             else 
-                en[i].ugol = en[i].ugol-4*dt2
+                en[i].ugol = en[i].ugol-4*dt
             end
         else
             if (math.abs(ugol)+math.abs(en[i].ugol)> 2*math.pi - math.abs(ugol)-math.abs(en[i].ugol)) then
                 if (en[i].ugol>0) then 
-                    en[i].ugol = en[i].ugol+4*dt2
+                    en[i].ugol = en[i].ugol+4*dt
                 else
-                    en[i].ugol = en[i].ugol-4*dt2
+                    en[i].ugol = en[i].ugol-4*dt
                 end
             else 
                 if (en[i].ugol>0) then 
-                    en[i].ugol = en[i].ugol-4*dt2
+                    en[i].ugol = en[i].ugol-4*dt
                 else
-                    en[i].ugol = en[i].ugol+4*dt2
+                    en[i].ugol = en[i].ugol+4*dt
                 end
             end
         end
     end
 end
 
-function enRotAngle(i,tip)
+function enRotAngle(i,tip,dt)
     if (tip == 1 ) then
         if ( en[i] and en[i].r) then
             if ( en[i].r> 0.1 ) then
@@ -247,9 +247,9 @@ function enRotAngle(i,tip)
                 en[i].flagr = 0 
             end
             if ( en[i].flagr ==0) then
-                en[i].r = en[i].r+1.1*dt2*math.random(5,10)/7
+                en[i].r = en[i].r+1.1*dt*math.random(5,10)/7
             else
-                en[i].r = en[i].r-1.1*dt2*math.random(5,10)/7
+                en[i].r = en[i].r-1.1*dt*math.random(5,10)/7
             end
         end
     end
@@ -263,9 +263,9 @@ function enRotAngle(i,tip)
                 en[i].flagr = 0 
             end
             if ( en[i].flagr ==0) then
-                en[i].r = en[i].r+1*dt2*math.random(5,10)/7
+                en[i].r = en[i].r+1*dt*math.random(5,10)/7
             else
-                en[i].r = en[i].r-1*dt2*math.random(5,10)/7
+                en[i].r = en[i].r-1*dt*math.random(5,10)/7
             end
         end 
     end
@@ -282,21 +282,21 @@ function enFire(x,y,x2,y2,angleEn,damage)
     }
     table.insert(enemyBullets,bullet)
 end
-function enemiesSledDraw()
+function enemiesSledDraw(dt)
     for i = 1, #slediEn do
         for j = 1, #slediEn[i] do
             local kkk = slediEn[i]
             if (kkk[j].tip == 1 ) then
                 local radius =kkk[j].r/4*j
-                kkk[j].x = kkk[j].x+50*kkk[j].ax*dt2
-                kkk[j].y = kkk[j].y+50*kkk[j].ay*dt2
+                kkk[j].x = kkk[j].x+50*kkk[j].ax*dt
+                kkk[j].y = kkk[j].y+50*kkk[j].ay*dt
                 love.graphics.setColor(kkk[j].color1*j,kkk[j].color2*j,kkk[j].color3*j) 
                 love.graphics.circle("fill",kkk[j].x+radius,kkk[j].y+radius,radius)
             else
                 if (kkk[j].tip == 2 ) then
                     local radius =kkk[j].r/1.3
-                    kkk[j].x = kkk[j].x+40*kkk[j].ax*dt2
-                    kkk[j].y = kkk[j].y+40*kkk[j].ay*dt2
+                    kkk[j].x = kkk[j].x+40*kkk[j].ax*dt
+                    kkk[j].y = kkk[j].y+40*kkk[j].ay*dt
                     love.graphics.setColor(kkk[j].color1*j,kkk[j].color2*j,kkk[j].color3*j) 
                     love.graphics.circle("fill", kkk[j].x+math.cos(kkk[j].y)+radius+1*k*math.sin(kkk[j].angle-math.pi/2) ,kkk[j].y+math.sin(kkk[j].x)+radius +1*k2*math.cos(kkk[j].angle-math.pi/2),radius)
                     love.graphics.circle("fill", kkk[j].x+math.sin(kkk[j].y)+radius+1*k*math.sin(kkk[j].angle+math.pi/2) ,kkk[j].y+math.cos(kkk[j].x)+radius +1*k2*math.cos(kkk[j].angle+math.pi/2),radius)
@@ -331,7 +331,7 @@ function enemySled(x,y,r,i,color1,color2,color3,angle,tip)
     end
 end
 
-function enRemoveTag()
+function enRemoveTag(dt)
     for i=1,#removeEn do
         local h =  removeEn[i]
         if ( removeEn[i]) then
@@ -352,7 +352,7 @@ function enRemoveTag()
                     love.graphics.print("+5",removeEn[i].x,removeEn[i].y,-math.pi/2,0.4)    
                 end
             end
-            h[#h] =  h[#h]+ 0.15*dt2
+            h[#h] =  h[#h]+ 0.15*dt
             if (  h[#h]> 0.1) then
                 table.remove(removeEn,i)
             end        
