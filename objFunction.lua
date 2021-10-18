@@ -57,16 +57,16 @@ end
 
 function objColorAndScale(t)
     if  t == 1 then 
-        return 0.631,0.435,0.345,100,100 -- big
+        return 0.631,0.435,0.345,200,100 -- big
     end
     if  t == 2 then 
-        return 0.412,0.463,0.537,110,95 -- big
+        return 0.412,0.463,0.537,210,95 -- big
     end
     if  t == 3 then 
-        return 0.247,0.286,0.424,200,120 -- big
+        return 0.247,0.286,0.424,400,120 -- big
     end
     if  t == 4 then 
-        return 0.302,0.176,0.227,70,67 -- small
+        return 0.302,0.176,0.227,100,67 -- small
     end
     if  t == 5 then 
         return 0.498,0.361,0.525,20,50 -- small
@@ -241,50 +241,52 @@ function objMove(i,dt)
         if ( obj[i].f == true ) then 
         -----------------------------------------------      
             obj[i].ot =false
-            obj[i].x= obj[i].x+obj[i].ax*dt*5
-            obj[i].y= obj[i].y+obj[i].ay*dt*5
+            obj[i].x= obj[i].x+obj[i].ax*dt
+            obj[i].y= obj[i].y+obj[i].ay*dt
         -----------------------------------------------  
         else
         -----------------------------------------------   
             obj[i].ot =false
-            obj[i].x= obj[i].x+obj[i].ax*dt*10
-            obj[i].y= obj[i].y+obj[i].ay*dt*10
+            obj[i].x= obj[i].x+obj[i].ax*dt
+            obj[i].y= obj[i].y+obj[i].ay*dt
         -----------------------------------------------  
       end
-      if ( obj[i].ax > 3*k) then 
-          obj[i].ax =3 *k 
+      if ( obj[i].ax > 30*k) then 
+          obj[i].ax =obj[i].ax - 3 * k 
       end 
-      if ( obj[i].ax < -3*k ) then 
-          obj[i].ax =-3*k  
+      if ( obj[i].ax < -30*k ) then 
+          obj[i].ax =obj[i].ax + 3 * k 
       end 
-      if ( obj[i].ay > 3*k2 ) then 
-          obj[i].ay =3 *k2 
+      if ( obj[i].ay > 30*k2 ) then 
+           obj[i].ay =obj[i].ay - 3 * k2 
       end 
-      if ( obj[i].ay < -3*k2 ) then 
-          obj[i].ay =-3*k2 
+      if ( obj[i].ay < -30*k2 ) then 
+          obj[i].ay =obj[i].ay + 3 * k2 
       end 
     end
 end
 
-function objCollWithPlayerInRegularS(index)
+function objCollWithPlayerInRegularS(index,dt)
     if ( objRegulS[index]) then 
         local kek = objRegulS[index]
         for i =1, #kek do
-            if (obj[kek[i]] and obj[kek[i]].body and obj[kek[i]].invTimer==obj[kek[i]].timer and math.abs(obj[kek[i]].x - (player.x))<playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k and math.abs(obj[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+obj[kek[i]].collScale/2*k2  and  (math.pow((obj[kek[i]].x - (player.x)),2) + math.pow((obj[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k),2) and player.body:collidesWith(obj[kek[i]].body))  then
-                objCollWithPlayerResult(kek[i],player.a)
+            if (obj[kek[i]] and obj[kek[i]].body and obj[kek[i]].invTimer==obj[kek[i]].timer and math.abs(obj[kek[i]].x - (player.x))<playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k and math.abs(obj[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+obj[kek[i]].collScale/2*k2  and  (math.pow((obj[kek[i]].x - (player.x)),2) + math.pow((obj[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k),2))  then
+                local collisFlag, intVectorX ,intVectorY = player.body:collidesWith(obj[kek[i]].body)
+                if (collisFlag) then
+                    objCollWithPlayerResult(kek[i],dt,intVectorX,intVectorY)
+                end
             end
         end
     end
 end
 
-function objCollWithPlayerResult(i, a)
-  --  player.debaffStrenght = 0.5
+function objCollWithPlayerResult(i, dt)
     local angleD = math.atan2(player.x-obj[i].x+20*k,player.y-obj[i].y+20*k)
-    if ( obj[i] and obj[i].health ) then
-        obj[i].health = obj[i].health -2*playerAbility.damage
-        obj[i].ax =-15*k*math.sin(angleD) +(player.ax*playerAbility.speedA/6*k)
-        obj[i].ay =-15*k2*math.cos(angleD)+ (player.ay*playerAbility.speedA/6*k2)
-    end
+    local sumMas = obj[i].scale +playerAbility.mass 
+    player.debaffStrenght =1-(obj[i].scale/500) +0.2
+    obj[i].ax= obj[i].ax -dt*k*math.sin(angleD) *sumMas/obj[i].scale+(player.ax*playerAbility.speedA*k*dt)*20
+    obj[i].ay= obj[i].ay -dt*k*math.sin(angleD) *sumMas/obj[i].scale+ (player.ay*playerAbility.speedA*k2*dt)*20
+    obj[i].health = obj[i].health -2*playerAbility.damage
     obj[i].timer= obj[i].invTimer - 0.001
     if (obj[i].health<0) then 
         objDestroy(obj,i) 
@@ -294,7 +296,7 @@ end
 
 
 
-function objCollWithObjInRegularS(index,j)
+function objCollWithObjInRegularS(index,j,dt)
     if ( objRegulS[index]) then 
         local kek = objRegulS[index]
         if (kek) then
@@ -311,20 +313,19 @@ function objCollWithObjInRegularS(index,j)
                                 scImp = scImp/(1/obj[kek[i]].scale+1/obj[j].scale)
                                 local sumMas = obj[kek[i]].scale + obj[j].scale
                                 local impulsX, impulsY = scImp * intVectorX, scImp* intVectorY
-                                obj[kek[i]].ax= obj[kek[i]].ax + 0.001*(1/obj[kek[i]].scale*impulsX)*obj[kek[i]].scale/sumMas
-                                obj[kek[i]].ay= obj[kek[i]].ay + 0.001*(1/obj[kek[i]].scale*impulsY)*obj[kek[i]].scale/sumMas
-      
-                                obj[j].ax=obj[j].ax - 0.001*(1/obj[j].scale*impulsX)*obj[j].scale/sumMas
-                                obj[j].ay=obj[j].ay - 0.001*(1/obj[j].scale*impulsY)*obj[j].scale/sumMas
+                                obj[kek[i]].ax= obj[kek[i]].ax + 0.001*dt*(1/obj[kek[i]].scale*impulsX)*sumMas/obj[kek[i]].scale
+                                obj[kek[i]].ay= obj[kek[i]].ay + 0.001*dt*(1/obj[kek[i]].scale*impulsY)*sumMas/obj[kek[i]].scale
+                                obj[j].ax=obj[j].ax - 0.001*dt*(1/obj[j].scale*impulsX)*sumMas/obj[j].scale
+                                obj[j].ay=obj[j].ay - 0.001*dt*(1/obj[j].scale*impulsY)*sumMas/obj[j].scale
                               
-                                if ((math.abs(intVectorX)+math.abs(intVectorY))>0.07*obj[j].collScale*k) then
-                                    obj[kek[i]].x  = obj[kek[i]].x - intVectorX*0.1
-                                    obj[kek[i]].y = obj[kek[i]].y - intVectorY*0.1
-                                    obj[j].x  = obj[j].x + intVectorX*0.1
-                                    obj[j].y = obj[j].y + intVectorY*0.1
+                                if ((math.abs(intVectorX)+math.abs(intVectorY))>0.06*obj[j].collScale*k) then
+                                    obj[kek[i]].x  = obj[kek[i]].x - intVectorX*0.12
+                                    obj[kek[i]].y = obj[kek[i]].y - intVectorY*0.12
+                                    obj[j].x  = obj[j].x + intVectorX*0.12
+                                    obj[j].y = obj[j].y + intVectorY*0.12
                                     
-                                    obj[kek[i]].ra = obj[kek[i]].ra *0.99
-                                    obj[j].ra = obj[j].ra *0.99
+                                    obj[kek[i]].ra = obj[kek[i]].ra *0.89
+                                    obj[j].ra = obj[j].ra *0.89
                                 end
                             end
                         end 

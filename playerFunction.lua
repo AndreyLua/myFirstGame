@@ -127,20 +127,20 @@ function playerSledDraw(x,y,dt)
         table.remove(playerSledi,1)
     end
 end
-function playerCollWithObj()
+function playerCollWithObj(dt)
     local playerIndex =math.floor((player.x-40*k)/(120*k)) + math.floor((player.y-40*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
-    objCollWithPlayerInRegularS(playerIndex)
-    objCollWithPlayerInRegularS(playerIndex-1)
-    objCollWithPlayerInRegularS(playerIndex+1)
+    objCollWithPlayerInRegularS(playerIndex,dt)
+    objCollWithPlayerInRegularS(playerIndex-1,dt)
+    objCollWithPlayerInRegularS(playerIndex+1,dt)
   
-    objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1))
-    objCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)) 
+    objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1),dt)
+    objCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1),dt) 
     
-    objCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)+1)
-    objCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)-1)
+    objCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)+1,dt)
+    objCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)-1,dt)
     
-    objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)+1)
-    objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1)
+    objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)+1,dt)
+    objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1,dt)
 end
 function playerClowR(dt)
     if ( player.clowRflag == 0 or player.clowRflag ==1) then
@@ -198,20 +198,19 @@ function playerDebaff(dt)
 end
 
 function playerBorder()
-  if ( player.x > screenWidth*2-playerAbility.scaleBody*k) then
-   player.x = screenWidth*2 -playerAbility.scaleBody*k
+  if ( player.x > borderWidth*2-playerAbility.scaleBody*k) then
+   player.x = borderWidth*2 -playerAbility.scaleBody*k
   end 
-  if ( player.x < -screenWidth+playerAbility.scaleBody*k) then
-   player.x = -screenWidth +playerAbility.scaleBody*k
+  if ( player.x < -borderWidth+playerAbility.scaleBody*k) then
+   player.x = -borderWidth +playerAbility.scaleBody*k
   end 
-  if ( player.y < -screenHeight+playerAbility.scaleBody*k2) then
-   player.y = -screenHeight +playerAbility.scaleBody*k2
+  if ( player.y < -borderHeight+playerAbility.scaleBody*k2) then
+   player.y = -borderHeight +playerAbility.scaleBody*k2
   end 
-  if ( player.y > screenHeight*2- playerAbility.scaleBody*k2) then
-   player.y = screenHeight*2 -playerAbility.scaleBody*k2
+  if ( player.y > borderHeight*2- playerAbility.scaleBody*k2) then
+   player.y = borderHeight*2 -playerAbility.scaleBody*k2
   end 
-  
-  
+ 
 end
 
 return playerFunction

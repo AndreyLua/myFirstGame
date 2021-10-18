@@ -2,11 +2,9 @@ local game = {}
 
 function game:init()
 -------------BODY------
-up  = HC.polygon(0,0,0,-100*k,screenWidth,-100*k,screenWidth,0)
-down  = HC.polygon(0,screenHeight,0,screenHeight+100*k,screenWidth,screenHeight+100*k,screenWidth,screenHeight)
-left  =HC.polygon(0,0,-100*k,0,-100*k,screenHeight,0,screenHeight)
-right  = HC.polygon(screenWidth,0,screenWidth+100*k,0,screenWidth+100*k,screenHeight,screenWidth,screenHeight)
 ----------------------------------
+borderWidth =screenWidth
+borderHeight = screenHeight
 
 flaginv = true
 shake = 0
@@ -117,13 +115,11 @@ mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
 flagtouch2 = false -- для выхода в состояние пауза
-if ( player.x > screenWidth*1.5+20*k or  player.x < -screenWidth*0.5+20*k ) then
-  else
-camera.x = player.x
+if not( player.x > borderWidth*1.5+20*k or  player.x < -borderWidth*0.5+20*k ) then
+    camera.x = player.x
 end
-if ( player.y > screenHeight*1.5+20*k2 or  player.y < -screenHeight*0.5+20*k2 ) then
-  else
-camera.y = player.y
+if not( player.y >  borderHeight*1.5+20*k2 or  player.y < - borderHeight*0.5+20*k2 ) then
+    camera.y = player.y
 end
 --------------------
 playerControl()
@@ -160,7 +156,7 @@ end
 if ( player.clowR< 0 ) then
     player.clowRflag = 0 
 end
-playerCollWithObj()
+playerCollWithObj(dt)
 for i = 1 , #res do
     if (res[i]) then 
         resColl(i)
@@ -229,7 +225,7 @@ if ( colWave>0 and #obj < 20) then
   
     Timer.update(dt)
 end
-playerDebaff()
+playerDebaff(dt)
 playerMove(dt)
 bulletsUpdate(dt)
 self:movement(dt)
@@ -792,17 +788,17 @@ function allDraw(dt)
         if (obj[i] and obj[i].body)  then
           if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
             local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-            objCollWithObjInRegularS(IobjRegulS,i)
+            objCollWithObjInRegularS(IobjRegulS,i,dt)
           --  objCollWithObjInRegularS(IobjRegulS-1,i)
-            objCollWithObjInRegularS(IobjRegulS+1,i)
+            objCollWithObjInRegularS(IobjRegulS+1,i,dt)
           
            -- objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1),i)
-            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1),i)
+            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
             
-            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)+1,i)
+            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
          --   objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)-1,i)
             
-            objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)+1,i)
+            objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
           --  objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)-1,i)
           end
         end
@@ -872,33 +868,34 @@ function allDraw(dt)
 end
 function allBorder(i,mas)
     ----------если залетел на карту поднимаем флаг-------------------------------------  
-    if (mas[i].x< screenWidth*2-mas[i].collScale*k/2 and  mas[i].x> -screenWidth +mas[i].collScale*k/2 and  mas[i].y> -screenHeight+mas[i].collScale*k2/2 and  mas[i].y<screenHeight*2-mas[i].collScale*k2/2) then
+    if (mas[i].x< borderWidth*2-mas[i].collScale*k/2 and  mas[i].x> -borderWidth +mas[i].collScale*k/2 and  mas[i].y> -borderHeight+mas[i].collScale*k2/2 and  mas[i].y<borderHeight*2-mas[i].collScale*k2/2) then
         mas[i].f = true
     end
     --------------------------------------------------
     
     --------------------------------------------------
     if ( mas[i] and mas[i].f == true) then
-        if ( mas[i].x > screenWidth*2-mas[i].collScale*k/2) then 
+        if ( mas[i].x > borderWidth*2-mas[i].collScale*k/2) then 
             mas[i].ax = -mas[i].ax
-            mas[i].x =screenWidth*2 - 0.1*k-mas[i].collScale*k/2
+            mas[i].x =borderWidth*2 - 0.1*k-mas[i].collScale*k/2
         end
-        if ( mas[i].x <  -screenWidth+mas[i].collScale*k/2) then 
+        if ( mas[i].x <  -borderWidth+mas[i].collScale*k/2) then 
             mas[i].ax = -mas[i].ax
-            mas[i].x = -screenWidth + 0.1*k+mas[i].collScale*k/2
+            mas[i].x = -borderWidth + 0.1*k+mas[i].collScale*k/2
         end
-        if ( mas[i].y < -screenHeight+mas[i].collScale*k2/2) then 
+        if ( mas[i].y < -borderHeight+mas[i].collScale*k2/2) then 
             mas[i].ay = -mas[i].ay
-            mas[i].y = -screenHeight+0.1*k2+mas[i].collScale*k2/2
+            mas[i].y = -borderHeight+0.1*k2+mas[i].collScale*k2/2
         end
-        if ( mas[i].y > screenHeight*2-mas[i].collScale*k2/2) then 
+        if ( mas[i].y > borderHeight*2-mas[i].collScale*k2/2) then 
             mas[i].ay = -mas[i].ay
-            mas[i].y = screenHeight*2 - 0.1*k2-mas[i].collScale*k2/2
+            mas[i].y = borderHeight*2 - 0.1*k2-mas[i].collScale*k2/2
         end
-        if ( mas[i].x > screenWidth*2 or mas[i].x < -screenWidth or mas[i].y < -screenHeight or  mas[i].y > screenHeight*2 ) then
+        if ( mas[i].x > borderWidth*2 or mas[i].x < -borderWidth or mas[i].y < -borderHeight or  mas[i].y > borderHeight*2 ) then
            table.remove(mas,i)
         end
     end
 end
+
 
 return game
