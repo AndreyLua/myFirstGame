@@ -3,8 +3,8 @@ local game = {}
 function game:init()
 -------------BODY------
 ----------------------------------
-borderWidth =screenWidth
-borderHeight = screenHeight
+borderWidth =screenWidth/2
+borderHeight = screenHeight/2
 
 flaginv = true
 shake = 0
@@ -115,10 +115,10 @@ mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
 flagtouch2 = false -- для выхода в состояние пауза
-if not( player.x > borderWidth*1.5+20*k or  player.x < -borderWidth*0.5+20*k ) then
+if not( player.x > borderWidth*2-screenWidth/2+20*k or  player.x < -borderWidth+screenWidth/2+20*k) then
     camera.x = player.x
 end
-if not( player.y >  borderHeight*1.5+20*k2 or  player.y < - borderHeight*0.5+20*k2 ) then
+if not( player.y >  borderHeight*2-screenHeight/2+20*k2 or  player.y < - borderHeight+screenHeight/2+20*k2 ) then
     camera.y = player.y
 end
 --------------------
@@ -292,7 +292,7 @@ function  game:draw()
     love.graphics.clear()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon1,0,0,0,k,k2)
-    love.graphics.draw(fon2,(-player.x+40*k/2+screenWidth/2)/30,(-player.y+40*k2/2+screenHeight/2)/30,0,k,k2)
+    love.graphics.draw(fon2,(-player.x+40*k/2+screenWidth/2)/40,(-player.y+40*k2/2+screenHeight/2)/40,0,k,k2)
     love.graphics.draw(fon3,(-player.x+40*k/2+screenWidth/2)/10,(-player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
     love.graphics.setColor(1,1,1,1)
     --for i = 0, 20 do
@@ -311,7 +311,7 @@ function  game:draw()
   --   allDraw()
     love.graphics.push()
     love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
-    love.graphics.rectangle('line',-screenWidth,-screenHeight, screenWidth*3,screenHeight*3,k,k2)
+    love.graphics.rectangle('line',-borderWidth,-borderHeight,borderWidth*3,borderHeight*3,k,k2)
     --    love.graphics.setShader(myShader)
       --  love.graphics.draw(meteors.m1,200*k,200*k2,0,1,1,meteors.m1:getWidth()/2,meteors.m1:getHeight()/2
       --  love.graphics.setShader()
@@ -430,16 +430,16 @@ function Waves(n,dt)
 end
 function allGeo(Geo)
       if (Geo==1) then
-        return -screenWidth-200*k,math.random(-screenHeight,screenHeight*2),math.random(6*k,10*k),math.random(-10*k,10*k), math.random(0.5,1)
+        return -screenWidth-200*k,math.random(-screenHeight,screenHeight*2),math.random(6*k,10*k),math.random(-10*k,10*k), math.random()*math.random(-1,1)
       end
       if (Geo==2) then
-        return  math.random(-screenWidth,screenWidth*2),-screenHeight-200*k2,math.random(-10*k,10*k),math.random(6*k,10*k),math.random(-1,-0.5)
+        return  math.random(-screenWidth,screenWidth*2),-screenHeight-200*k2,math.random(-10*k,10*k),math.random(6*k,10*k),math.random()*math.random(-1,1)
       end
       if (Geo==3) then
-        return   math.random(-screenWidth,screenWidth*2),screenHeight*2+200*k2,math.random(-10*k,10*k),math.random(-10*k2,-6*k2),math.random(0.5,1) 
+        return   math.random(-screenWidth,screenWidth*2),screenHeight*2+200*k2,math.random(-10*k,10*k),math.random(-10*k2,-6*k2),math.random()*math.random(-1,1)
       end
       if (Geo==4) then
-        return  screenWidth*2+200*k, math.random(-screenHeight,screenHeight*2),math.random(-10*k,-6*k),math.random(-10*k,10*k), math.random(-1,-0.6)
+        return  screenWidth*2+200*k, math.random(-screenHeight,screenHeight*2),math.random(-10*k,-6*k),math.random(-10*k,10*k), math.random()*math.random(-1,1)
       end
 end
 

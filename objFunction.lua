@@ -196,7 +196,7 @@ function objDestroy(mas,i)
                 ax = mas[i].ax+mas[i].ax*math.random(-5,5)/10, 
                 ay = mas[i].ay+mas[i].ay*math.random(-5,5)/10,   
                 met =mas[i].met,
-                ra =1--math.random()*math.random(-1,1),
+                ra =math.random()*math.random(-1,1),
             }
             start = finish
             table.insert(obj,ee)
@@ -251,17 +251,17 @@ function objMove(i,dt)
             obj[i].y= obj[i].y+obj[i].ay*dt
         -----------------------------------------------  
       end
-      if ( obj[i].ax > 30*k) then 
-          obj[i].ax =obj[i].ax - 3 * k 
+      if ( obj[i].ax > 100*k) then 
+          obj[i].ax =100*k
       end 
-      if ( obj[i].ax < -30*k ) then 
-          obj[i].ax =obj[i].ax + 3 * k 
+      if ( obj[i].ax < -100*k ) then 
+          obj[i].ax =-100*k
       end 
-      if ( obj[i].ay > 30*k2 ) then 
-           obj[i].ay =obj[i].ay - 3 * k2 
+      if ( obj[i].ay > 100*k2 ) then 
+           obj[i].ay =100*k2
       end 
-      if ( obj[i].ay < -30*k2 ) then 
-          obj[i].ay =obj[i].ay + 3 * k2 
+      if ( obj[i].ay < -100*k2 ) then 
+          obj[i].ay =-100*k2
       end 
     end
 end
@@ -308,7 +308,7 @@ function objCollWithObjInRegularS(index,j,dt)
                             local rvX, rvY = obj[j].x - obj[kek[i]].x, obj[j].y - obj[kek[i]].y
                             local velAlNorm  = rvX*intVectorX + rvY*intVectorY
                             if ( velAlNorm > 0) then
-                                local e = 1
+                                local e = 0.1
                                 local scImp = -(1+e)*velAlNorm
                                 scImp = scImp/(1/obj[kek[i]].scale+1/obj[j].scale)
                                 local sumMas = obj[kek[i]].scale + obj[j].scale
@@ -318,14 +318,14 @@ function objCollWithObjInRegularS(index,j,dt)
                                 obj[j].ax=obj[j].ax - 0.001*dt*(1/obj[j].scale*impulsX)*sumMas/obj[j].scale
                                 obj[j].ay=obj[j].ay - 0.001*dt*(1/obj[j].scale*impulsY)*sumMas/obj[j].scale
                               
-                                if ((math.abs(intVectorX)+math.abs(intVectorY))>0.06*obj[j].collScale*k) then
-                                    obj[kek[i]].x  = obj[kek[i]].x - intVectorX*0.12
-                                    obj[kek[i]].y = obj[kek[i]].y - intVectorY*0.12
-                                    obj[j].x  = obj[j].x + intVectorX*0.12
-                                    obj[j].y = obj[j].y + intVectorY*0.12
+                                if ((math.abs(intVectorX)+math.abs(intVectorY))>0.1*obj[j].collScale*k) then
+                                    obj[kek[i]].x  = obj[kek[i]].x - intVectorX*0.11
+                                    obj[kek[i]].y = obj[kek[i]].y - intVectorY*0.11
+                                    obj[j].x  = obj[j].x + intVectorX*0.11
+                                    obj[j].y = obj[j].y + intVectorY*0.11
                                     
-                                    obj[kek[i]].ra = obj[kek[i]].ra *0.89
-                                    obj[j].ra = obj[j].ra *0.89
+                                    obj[kek[i]].ra = obj[kek[i]].ra *0.99
+                                    obj[j].ra = obj[j].ra *0.99
                                 end
                             end
                         end 

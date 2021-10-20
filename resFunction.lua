@@ -33,7 +33,7 @@ end
 function resColl(i)
         if ( player.a==0  ) then 
             if ((math.sqrt(math.pow((player.x-res[i].x),2)+math.pow((player.y-res[i].y),2))) < playerAbility.radiusCollect*k) then
-                local x1 = (player.x+40/2*k)-res[i].x+1*k
+                local x1 = (player.x)-res[i].x+1*k
                 local y1 = (player.y)-res[i].y+1*k2          
                 local ugol = math.atan2(x1,y1)
              
