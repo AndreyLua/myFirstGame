@@ -471,7 +471,7 @@ function allSpawn(mas,Geo,Tip)
             y = y,  
             ax  =ax,
             ay = ay,
-            ra =ra,
+            ra =0,
             health = health
             }
         e.body:moveTo(e.x, e.y)
@@ -813,15 +813,15 @@ function allDraw(dt)
              --    obj[i].body:draw('line')
                 else
                   objVect(i,1,0.6,0.6)
-             --     obj[i].body:draw('line')
+            --      obj[i].body:draw('line')
               end
             else
                 if ( obj[i] and obj[i].pok>0) then
                    objFragmVect(i,1,1,1)
-             --     obj[i].body:draw('line')
+            --      obj[i].body:draw('line')
                 else
                  objVect(i,1,1,1)
-              ---    obj[i].body:draw('line')
+           --       obj[i].body:draw('line')
                 end
             end
         end
