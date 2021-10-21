@@ -100,6 +100,7 @@ camera = {
 en = {}
 obj = {}
 objRegulS  = {}
+enRegulS  = {}
 res = {}
 enemyBullets = {} 
 playerSledi = {} 
@@ -270,14 +271,13 @@ function game:movement(dt)
     
     if love.keyboard.isDown('e') then
         local Geo  =math.random(1,4)
-        local Tip =math.random(1,2)
         allSpawn(obj,Geo,Tip)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-  --    allSpawn(en,Geo,Tip)
-   --     en[#en].x = mouse.x
-   --     en[#en].y = mouse.y
+      --  allSpawn(en,Geo,1)
+       -- en[#en].x = mouse.x
+      --  en[#en].y = mouse.y
     end
       if love.keyboard.isDown('y') then
      table.remove(obj,#obj)
@@ -292,8 +292,8 @@ function  game:draw()
     love.graphics.clear()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon1,0,0,0,k,k2)
-    love.graphics.draw(fon2,(-player.x+40*k/2+screenWidth/2)/40,(-player.y+40*k2/2+screenHeight/2)/40,0,k,k2)
-    love.graphics.draw(fon3,(-player.x+40*k/2+screenWidth/2)/10,(-player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
+    love.graphics.draw(fon2,(-player.x+40*k/2+screenWidth/2)/20,(-player.y+40*k2/2+screenHeight/2)/40,0,k,k2)
+    love.graphics.draw(fon3,(-player.x+40*k/2+screenWidth/2)/7,(-player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
     love.graphics.setColor(1,1,1,1)
     --for i = 0, 20 do
     --  for j =0, 20 do 
@@ -429,17 +429,17 @@ function Waves(n,dt)
     
 end
 function allGeo(Geo)
-      if (Geo==1) then
-        return -screenWidth-200*k,math.random(-screenHeight,screenHeight*2),math.random(6*k,10*k),math.random(-10*k,10*k), math.random()*math.random(-1,1)
+  if (Geo==1) then
+        return -borderWidth-200*k,math.random(-borderHeight,borderHeight*2),math.random(18*k,30*k),math.random(-30*k,30*k), math.random()*math.random(-1,1)
       end
       if (Geo==2) then
-        return  math.random(-screenWidth,screenWidth*2),-screenHeight-200*k2,math.random(-10*k,10*k),math.random(6*k,10*k),math.random()*math.random(-1,1)
+        return  math.random(-borderWidth,borderWidth*2),-borderHeight-200*k2,math.random(-30*k,30*k),math.random(18*k,30*k),math.random()*math.random(-1,1)
       end
       if (Geo==3) then
-        return   math.random(-screenWidth,screenWidth*2),screenHeight*2+200*k2,math.random(-10*k,10*k),math.random(-10*k2,-6*k2),math.random()*math.random(-1,1)
+        return   math.random(-borderWidth,borderWidth*2),borderHeight*2+200*k2,math.random(-30*k,30*k),math.random(-30*k2,-18*k2),math.random()*math.random(-1,1)
       end
       if (Geo==4) then
-        return  screenWidth*2+200*k, math.random(-screenHeight,screenHeight*2),math.random(-10*k,-6*k),math.random(-10*k,10*k), math.random()*math.random(-1,1)
+        return  borderWidth*2+200*k, math.random(-borderHeight,borderHeight*2),math.random(-30*k,-18*k),math.random(-30*k,30*k), math.random()*math.random(-1,1)
       end
 end
 
@@ -471,7 +471,7 @@ function allSpawn(mas,Geo,Tip)
             y = y,  
             ax  =ax,
             ay = ay,
-            ra =0,
+            ra =ra,
             health = health
             }
         e.body:moveTo(e.x, e.y)
@@ -691,73 +691,6 @@ function enTip3(r2,mode,x,y,w,h,r,ox,oy,flag,hp,healthM )
     love.graphics.pop()
 end
 
-
-
-function enRot1(r2,mode,x,y,w,h,r,ox,oy)
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    love.graphics.push()
-    love.graphics.rotate(r2)
-
-   love.graphics.line(5.7708333333333*k,22.15873015873*k2,14.918154761905*k,30.793650793651*k2,7.8035714285715*k,47.047619047619*k2,9.328125*k,33.333333333333*k2,1.7053571428572*k,22.15873015873*k2) 
-      
-
-
-    love.graphics.pop()
-    love.graphics.push()
-    love.graphics.rotate(-r2)
-    
-love.graphics.line(-1.7053571428572*k,22.15873015873*k2,-9.328125*k,33.333333333333*k2,-7.8035714285715*k,47.047619047619*k2,-14.918154761905*k,30.793650793651*k2,-5.7708333333333*k,22.15873015873*k2)
-
-  
-
-    love.graphics.pop()
-    love.graphics.pop()
-    love.graphics.pop()
-end
-
-function enRot2(r2,mode,x,y,w,h,r,ox,oy)
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    love.graphics.push()
-    love.graphics.rotate(r2-0.1)
-
-
- love.graphics.line(-2.7217261904762*k,25.714285714286*k2,-8.311755952381*k,22.666666666667*k2,-3.7380952380952*k,15.555555555556*k2)
-
-    
-    love.graphics.pop()
-    love.graphics.push()
-    love.graphics.rotate(-r2+0.1)
-   love.graphics.line(3.7380952380952*k,15.555555555556*k2,8.311755952381*k,22.666666666667*k2,2.7217261904762*k,25.714285714286*k2)
-    love.graphics.pop()
-    love.graphics.pop()
-    love.graphics.pop()
-end
-
-function enRot3(r2,mode,x,y,w,h,r,ox,oy,color1,color2,color3)
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    love.graphics.push()
-    love.graphics.rotate(r2-0.1)
- love.graphics.line(-11.360863095238*k,40.952380952381*k2,-14.918154761905*k,39.428571428571*k2,-14.409970238095*k,34.857142857143*k2,-7.8035714285715*k,27.746031746032*k2)
-
-
-    love.graphics.pop()
-    love.graphics.push()
-    love.graphics.rotate(-r2+0.1)
-love.graphics.line(7.8035714285715*k,27.746031746032*k2,14.409970238095*k,34.857142857143*k2,14.918154761905*k,39.428571428571*k2,11.360863095238*k,40.952380952381*k2)
-    love.graphics.pop()
-    love.graphics.pop()
-    love.graphics.pop()
-end
-
 function allDraw(dt)
   --  player.body:draw('fill')
     enemiesSledDraw(dt)
@@ -789,17 +722,10 @@ function allDraw(dt)
           if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
             local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
             objCollWithObjInRegularS(IobjRegulS,i,dt)
-          --  objCollWithObjInRegularS(IobjRegulS-1,i)
             objCollWithObjInRegularS(IobjRegulS+1,i,dt)
-          
-           -- objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1),i)
             objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
-            
             objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
-         --   objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)-1,i)
-            
             objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
-          --  objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)-1,i)
           end
         end
         if (obj[i] and obj[i].body)  then

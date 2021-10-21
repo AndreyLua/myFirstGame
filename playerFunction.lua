@@ -70,11 +70,11 @@ function playerMove(dt)
         end
     end
     if ( player.a==1) then
-        player.x = player.x + player.ax*dt*playerAbility.speedA*k
-        player.y = player.y + player.ay*dt*playerAbility.speedA*k2
+        player.x = player.x + player.ax*dt*playerAbility.speedA*k*player.debaffStrenght
+        player.y = player.y + player.ay*dt*playerAbility.speedA*k2*player.debaffStrenght
     else
-        player.x = player.x + player.ax*dt*playerAbility.speed*k
-        player.y = player.y + player.ay*dt*playerAbility.speed*k2
+        player.x = player.x + player.ax*dt*playerAbility.speed*k*player.debaffStrenght
+        player.y = player.y + player.ay*dt*playerAbility.speed*k2*player.debaffStrenght
     end
 end
 
@@ -179,18 +179,6 @@ end
 function playerDebaff(dt)
     if (player.debaffStrenght < 1) then
         local time = 1 
-        if (  player.ax >  player.debaffStrenght*playerAbility.maxSpeed*k ) then
-              player.ax = player.debaffStrenght*playerAbility.maxSpeed*k
-        end
-        if (  player.ay > player.debaffStrenght*playerAbility.maxSpeed*k2 ) then
-              player.ay = player.debaffStrenght*playerAbility.maxSpeed*k2
-        end
-        if (  player.ax < -player.debaffStrenght*playerAbility.maxSpeed*k ) then
-              player.ax = -player.debaffStrenght*playerAbility.maxSpeed*k
-        end
-        if (  player.ay < -player.debaffStrenght*playerAbility.maxSpeed*k2 ) then
-              player.ay = -player.debaffStrenght*playerAbility.maxSpeed*k2
-        end
         player.debaffStrenght = player.debaffStrenght  + 0.8*dt/time
     else
         player.debaffStrenght = 1 

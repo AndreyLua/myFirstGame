@@ -152,7 +152,7 @@ function objDestroy(mas,i)
                     ax = mas[i].ax+mas[i].ax*math.random(-5,5)/10, 
                     ay = mas[i].ay+mas[i].ay*math.random(-5,5)/10,  
                     met = mas[i].met,
-                    ra =0--math.random()*math.random(-1,1),
+                    ra =math.random()*math.random(-1,1),
                 
               }
                 start = finish
@@ -196,7 +196,7 @@ function objDestroy(mas,i)
                 ax = mas[i].ax+mas[i].ax*math.random(-5,5)/10, 
                 ay = mas[i].ay+mas[i].ay*math.random(-5,5)/10,   
                 met =mas[i].met,
-                ra =0--math.random()*math.random(-1,1),
+                ra =math.random()*math.random(-1,1),
             }
             start = finish
             table.insert(obj,ee)
@@ -251,17 +251,17 @@ function objMove(i,dt)
             obj[i].y= obj[i].y+obj[i].ay*dt
         -----------------------------------------------  
       end
-      if ( obj[i].ax > 100*k) then 
-          obj[i].ax =100*k
+      if ( obj[i].ax > 200*k) then 
+          obj[i].ax =200*k
       end 
-      if ( obj[i].ax < -100*k ) then 
-          obj[i].ax =-100*k
+      if ( obj[i].ax < -200*k ) then 
+        obj[i].ax =-200*k
       end 
-      if ( obj[i].ay > 100*k2 ) then 
-           obj[i].ay =100*k2
+      if ( obj[i].ay > 200*k2 ) then 
+           obj[i].ay =200*k2
       end 
-      if ( obj[i].ay < -100*k2 ) then 
-          obj[i].ay =-100*k2
+      if ( obj[i].ay < -200*k2 ) then 
+          obj[i].ay =-200*k2
       end 
     end
 end
@@ -280,10 +280,27 @@ function objCollWithPlayerInRegularS(index,dt)
     end
 end
 
-function objCollWithPlayerResult(i, dt)
+function objCollWithPlayerResult(i, dt,intVectorX,intVectorY)
+   local angleD = math.atan2(player.x-obj[i].x+20*k,player.y-obj[i].y+20*k)
+    local sumMas = obj[i].scale + playerAbility.mass
+    if ( player.a == 1 ) then 
+        obj[i].ax= obj[i].ax -dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speedA*k*dt*player.debaffStrenght)*10
+        obj[i].ay= obj[i].ay -dt*k*math.sin(angleD)*obj[i].scale/sumMas+ (player.ay*playerAbility.speedA*k2*dt*player.debaffStrenght)*10
+    else
+        obj[i].ax= obj[i].ax -dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speed*k*dt*player.debaffStrenght)*10
+        obj[i].ay= obj[i].ay -dt*k*math.sin(angleD)*obj[i].scale/sumMas+ (player.ay*playerAbility.speed*k2*dt*player.debaffStrenght)*10
+    end
+    player.debaffStrenght =(1-obj[i].scale/sumMas)
+    obj[i].health = obj[i].health -2*playerAbility.damage
+    obj[i].timer= obj[i].invTimer - 0.001
+    if (obj[i].health<0) then 
+        objDestroy(obj,i) 
+        table.remove(obj,i)
+    end
+  --[[
     local angleD = math.atan2(player.x-obj[i].x+20*k,player.y-obj[i].y+20*k)
     local sumMas = obj[i].scale +playerAbility.mass 
-    player.debaffStrenght =1-(obj[i].scale/500) +0.2
+    player.debaffStrenght =1-(obj[i].scale/500) +0.1
     obj[i].ax= obj[i].ax -dt*k*math.sin(angleD) *sumMas/obj[i].scale+(player.ax*playerAbility.speedA*k*dt)*20
     obj[i].ay= obj[i].ay -dt*k*math.sin(angleD) *sumMas/obj[i].scale+ (player.ay*playerAbility.speedA*k2*dt)*20
     obj[i].health = obj[i].health -2*playerAbility.damage
@@ -292,6 +309,7 @@ function objCollWithPlayerResult(i, dt)
         objDestroy(obj,i) 
         table.remove(obj,i)
     end
+    ]]--
 end
 
 
@@ -330,6 +348,8 @@ function objCollWithObjInRegularS(index,j,dt)
                                    obj[kek[i]].y = obj[kek[i]].y - deepY*dt*5
                                    obj[j].x  = obj[j].x + deepX*dt*5
                                    obj[j].y = obj[j].y +  deepY*dt*5
+                                   obj[j].ra = obj[j].ra * 0.98
+                                   obj[kek[i]].ra = obj[kek[i]].ra * 0.98
                                 end
                         end 
                     end

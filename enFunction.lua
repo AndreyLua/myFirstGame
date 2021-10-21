@@ -1,31 +1,26 @@
 local enFunction = {}
 
-
-
 function enTip(i,tip,t)
-if ( tip == 1 ) then
-   en[i].body =  HC.rectangle(en[i].x-8*k,en[i].y-1*k2,16*k,25*k2)
-end
-if ( tip == 2 ) then
-   en[i].body =  HC.rectangle(en[i].x-6*k,en[i].y,16*k,16*k2)
-end
-
+    if ( tip == 1 ) then
+       en[i].body =  HC.rectangle(en[i].x-8*k,en[i].y-1*k2,16*k,25*k2)
+    end
+    if ( tip == 2 ) then
+       en[i].body =  HC.rectangle(en[i].x-6*k,en[i].y,16*k,16*k2)
+    end
 end
 
 function enMove(i,dt) 
     enTip(i,en[i].tip)
-    
     if (en[i].ugol) then 
         en[i].body:rotate(-en[i].ugol,en[i].x,en[i].y) 
     end
     if ( en[i].tip == 1) then
         if ( en[i].invTimer and  en[i].invTimer == en[i].timer) then
-        -----------------------------------------------  
             enRotAngle(i,en[i].tip,dt)
             local ugol = math.atan2(player.x-en[i].x+20*k,player.y-en[i].y+20*k)
-          if (en[i].dash and en[i].dash==en[i].dashTimer) then
+            if (en[i].dash and en[i].dash==en[i].dashTimer) then
                 enUgol(i,ugol,dt)
-           end
+            end
             if ((math.sqrt(math.pow((player.x+40*k/2-en[i].x),2)+math.pow((player.y+40*k2/2-en[i].y),2))) > 30*k) then
                 if (en[i].dash and en[i].dash==en[i].dashTimer) then
                     if not((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
@@ -57,7 +52,7 @@ function enMove(i,dt)
             else
                 en[i].x= en[i].x+en[i].ax*dt*17
                 en[i].y= en[i].y+en[i].ay*dt*17
-           end
+            end
         -----------------------------------------------  
         else
         -----------------------------------------------  
@@ -359,5 +354,49 @@ function enRemoveTag(dt)
         end
     end
 end
+function enRot1(r2,mode,x,y,w,h,r,ox,oy)
+    love.graphics.push()
+    love.graphics.translate( x + ox,y + oy )
+    love.graphics.push()
+    love.graphics.rotate(-r)
+    love.graphics.push()
+    love.graphics.rotate(r2)
 
+   love.graphics.line(5.7708333333333*k,22.15873015873*k2,14.918154761905*k,30.793650793651*k2,7.8035714285715*k,47.047619047619*k2,9.328125*k,33.333333333333*k2,1.7053571428572*k,22.15873015873*k2) 
+      
+
+
+    love.graphics.pop()
+    love.graphics.push()
+    love.graphics.rotate(-r2)
+    
+love.graphics.line(-1.7053571428572*k,22.15873015873*k2,-9.328125*k,33.333333333333*k2,-7.8035714285715*k,47.047619047619*k2,-14.918154761905*k,30.793650793651*k2,-5.7708333333333*k,22.15873015873*k2)
+
+  
+
+    love.graphics.pop()
+    love.graphics.pop()
+    love.graphics.pop()
+end
+
+function enRot2(r2,mode,x,y,w,h,r,ox,oy)
+    love.graphics.push()
+    love.graphics.translate( x + ox,y + oy )
+    love.graphics.push()
+    love.graphics.rotate(-r)
+    love.graphics.push()
+    love.graphics.rotate(r2-0.1)
+
+
+ love.graphics.line(-2.7217261904762*k,25.714285714286*k2,-8.311755952381*k,22.666666666667*k2,-3.7380952380952*k,15.555555555556*k2)
+
+    
+    love.graphics.pop()
+    love.graphics.push()
+    love.graphics.rotate(-r2+0.1)
+   love.graphics.line(3.7380952380952*k,15.555555555556*k2,8.311755952381*k,22.666666666667*k2,2.7217261904762*k,25.714285714286*k2)
+    love.graphics.pop()
+    love.graphics.pop()
+    love.graphics.pop()
+end
 return enFunction
