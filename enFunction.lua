@@ -183,25 +183,17 @@ function enCollWithobjInRegularS(index,j,dt)
                     if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+objScale*k),2)) then
                         local collisFlag, intVectorX ,intVectorY = en[j].body:collidesWith(obj[kek[i]].body)
                         if ( collisFlag) then 
-                          
-                            local lenIntVector = math.sqrt(intVectorX*intVectorX+intVectorY*intVectorY)
-                            local rvX, rvY = obj[kek[i]].ax-en[j].ax,  obj[kek[i]].ay -en[j].ay
+                            local sumMas = obj[kek[i]].scale +en[j].scale
                             local deepX = intVectorX
                             local deepY = intVectorY
-                            
-                            intVectorX = (intVectorX/lenIntVector)
-                            intVectorY = (intVectorY/lenIntVector)
-                            local velAlNorm  = rvX*intVectorX + rvY*intVectorY
-                            if ( velAlNorm > 0) then
-                                local e =1
-                                local scImp = -(1+e)*velAlNorm
-                                scImp = scImp/(1/obj[kek[i]].scale+1/en[j].scale)
-                                local sumMas = obj[kek[i]].scale + en[j].scale
-                                local impulsX, impulsY = scImp * intVectorX, scImp* intVectorY
-                                obj[kek[i]].ax= obj[kek[i]].ax + dt*200*(1/obj[kek[i]].scale*impulsX)*obj[kek[i]].scale/sumMas
-                                obj[kek[i]].ay= obj[kek[i]].ay +dt*200*(1/obj[kek[i]].scale*impulsY)*obj[kek[i]].scale/sumMas
-                            
-                            end
+                            obj[kek[i]].ax= obj[kek[i]].ax +(en[j].ax*k*dt)*10*obj[kek[i]].scale/sumMas
+                            obj[kek[i]].ay= obj[kek[i]].ay  +(en[j].ay*k*dt)*10*obj[kek[i]].scale/sumMas
+                           
+                      
+                          
+                          --      obj[kek[i]].ax= obj[kek[i]].ax + dt*10000*(1/obj[kek[i]].scale*impulsX)*obj[kek[i]].scale/sumMas
+                             --   obj[kek[i]].ay= obj[kek[i]].ay +dt*10000*(1/obj[kek[i]].scale*impulsY)*obj[kek[i]].scale/sumMas
+                         
                           
                           
                           

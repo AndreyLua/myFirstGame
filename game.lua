@@ -816,18 +816,6 @@ function allDraw(dt)
 
       
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
         if ( en[i].tip==1) then
             if ( en[i].invTimer and en[i].invTimer ~= en[i].timer) then
            --     enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)

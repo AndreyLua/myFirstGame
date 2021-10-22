@@ -284,11 +284,11 @@ function objCollWithPlayerResult(i, dt,intVectorX ,intVectorY)
    local angleD = math.atan2(player.x-obj[i].x+20*k,player.y-obj[i].y+20*k)
     local sumMas = obj[i].scale + playerAbility.mass
     if ( player.a == 1 ) then 
-        obj[i].ax= obj[i].ax -dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speedA*k*dt*player.debaffStrenght)*10
-        obj[i].ay= obj[i].ay -dt*k*math.sin(angleD)*obj[i].scale/sumMas+ (player.ay*playerAbility.speedA*k2*dt*player.debaffStrenght)*10
+        obj[i].ax= obj[i].ax -10000*dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speedA*k*dt*player.debaffStrenght)*10
+        obj[i].ay= obj[i].ay -10000*dt*k*math.sin(angleD)*obj[i].scale/sumMas+ (player.ay*playerAbility.speedA*k2*dt*player.debaffStrenght)*10
     else
-        obj[i].ax= obj[i].ax -dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speed*k*dt*player.debaffStrenght)*10
-        obj[i].ay= obj[i].ay -dt*k*math.sin(angleD)*obj[i].scale/sumMas+ (player.ay*playerAbility.speed*k2*dt*player.debaffStrenght)*10
+        obj[i].ax= obj[i].ax -10000*dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speed*k*dt*player.debaffStrenght)*10*obj[i].scale/sumMas
+        obj[i].ay= obj[i].ay -10000*dt*k*math.sin(angleD)*obj[i].scale/sumMas+ (player.ay*playerAbility.speed*k2*dt*player.debaffStrenght)*10*obj[i].scale/sumMas
     end
     ---
     if ((intVectorX*intVectorX+intVectorY*intVectorY>=math.pow(0.05*obj[i].collScale*k,2))) then
