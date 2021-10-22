@@ -273,14 +273,14 @@ function objCollWithPlayerInRegularS(index,dt)
             if (obj[kek[i]] and obj[kek[i]].body and obj[kek[i]].invTimer==obj[kek[i]].timer and math.abs(obj[kek[i]].x - (player.x))<playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k and math.abs(obj[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+obj[kek[i]].collScale/2*k2  and  (math.pow((obj[kek[i]].x - (player.x)),2) + math.pow((obj[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k),2))  then
                 local collisFlag, intVectorX ,intVectorY = player.body:collidesWith(obj[kek[i]].body)
                 if (collisFlag) then
-                    objCollWithPlayerResult(kek[i],dt,intVectorX,intVectorY)
+                    objCollWithPlayerResult(kek[i],dt,intVectorX ,intVectorY)
                 end
             end
         end
     end
 end
 
-function objCollWithPlayerResult(i, dt,intVectorX,intVectorY)
+function objCollWithPlayerResult(i, dt,intVectorX ,intVectorY)
    local angleD = math.atan2(player.x-obj[i].x+20*k,player.y-obj[i].y+20*k)
     local sumMas = obj[i].scale + playerAbility.mass
     if ( player.a == 1 ) then 
@@ -290,6 +290,12 @@ function objCollWithPlayerResult(i, dt,intVectorX,intVectorY)
         obj[i].ax= obj[i].ax -dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speed*k*dt*player.debaffStrenght)*10
         obj[i].ay= obj[i].ay -dt*k*math.sin(angleD)*obj[i].scale/sumMas+ (player.ay*playerAbility.speed*k2*dt*player.debaffStrenght)*10
     end
+    ---
+    if ((intVectorX*intVectorX+intVectorY*intVectorY>=math.pow(0.05*obj[i].collScale*k,2))) then
+        obj[i].x  = obj[i].x - intVectorX*dt*5
+        obj[i].y = obj[i].y - intVectorY*dt*5
+    end
+    ----
     player.debaffStrenght =(1-obj[i].scale/sumMas)
     obj[i].health = obj[i].health -2*playerAbility.damage
     obj[i].timer= obj[i].invTimer - 0.001
@@ -343,14 +349,14 @@ function objCollWithObjInRegularS(index,j,dt)
                                 obj[j].ay=obj[j].ay - dt*100*(1/obj[j].scale*impulsY)*obj[j].scale/sumMas
                           
                             end
-                              if ((deepX*deepX+deepY*deepY>=math.pow(0.05*obj[j].collScale*k,2))) then
-                                   obj[kek[i]].x  = obj[kek[i]].x - deepX*dt*5
-                                   obj[kek[i]].y = obj[kek[i]].y - deepY*dt*5
-                                   obj[j].x  = obj[j].x + deepX*dt*5
-                                   obj[j].y = obj[j].y +  deepY*dt*5
-                                   obj[j].ra = obj[j].ra * 0.98
-                                   obj[kek[i]].ra = obj[kek[i]].ra * 0.98
-                                end
+                            if ((deepX*deepX+deepY*deepY>=math.pow(0.05*obj[j].collScale*k,2))) then
+                                obj[kek[i]].x  = obj[kek[i]].x - deepX*dt*5
+                                obj[kek[i]].y = obj[kek[i]].y - deepY*dt*5
+                                obj[j].x  = obj[j].x + deepX*dt*5
+                                obj[j].y = obj[j].y +  deepY*dt*5
+                                obj[j].ra = obj[j].ra * 0.98
+                                obj[kek[i]].ra = obj[kek[i]].ra * 0.98
+                            end
                         end 
                     end
                 end

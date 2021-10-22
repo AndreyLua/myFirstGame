@@ -142,6 +142,23 @@ function playerCollWithObj(dt)
     objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)+1,dt)
     objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1,dt)
 end
+
+function playerCollWithEn(dt)
+    local playerIndex =math.floor((player.x-40*k)/(120*k)) + math.floor((player.y-40*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
+    enCollWithPlayerInRegularS(playerIndex,dt)
+    enCollWithPlayerInRegularS(playerIndex-1,dt)
+    enCollWithPlayerInRegularS(playerIndex+1,dt)
+  
+    enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1),dt)
+    enCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1),dt) 
+    
+    enCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)+1,dt)
+    enCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)-1,dt)
+    
+    enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)+1,dt)
+    enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1,dt)
+end
+
 function playerClowR(dt)
     if ( player.clowRflag == 0 or player.clowRflag ==1) then
         if ( player.clowR> 0.2 ) then
@@ -178,7 +195,7 @@ end
 
 function playerDebaff(dt)
     if (player.debaffStrenght < 1) then
-        local time = 1 
+        local time = 3 
         player.debaffStrenght = player.debaffStrenght  + 0.8*dt/time
     else
         player.debaffStrenght = 1 

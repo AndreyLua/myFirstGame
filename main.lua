@@ -227,7 +227,7 @@ mouse = {
   y=0
 }
 playerAbility = {
-      mass =500,
+      mass =200,
       radiusCollect = 100,
       damage = 1,
       invTimer = 0.5,

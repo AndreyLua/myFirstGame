@@ -110,6 +110,7 @@ end
 
 function game:update(dt)
 objRegulS = {}
+enRegulS = {}
 boost.long = 1000
 hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
@@ -134,16 +135,16 @@ for i = 1 , #obj do
         allInvTimer(i,obj,dt)
         objMove(i,dt) 
         allBorder(i,obj)
-      if (obj[i]) then 
-        local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-        if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
-            if (objRegulS[IobjRegulS]) then
-                table.insert(objRegulS[IobjRegulS],i)
-            else
-                objRegulS[IobjRegulS] = {i}
+        if (obj[i]) then 
+            local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
+            if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
+                if (objRegulS[IobjRegulS]) then
+                    table.insert(objRegulS[IobjRegulS],i)
+                else
+                    objRegulS[IobjRegulS] = {i}
+                end
             end
         end
-      end
     end
     if (obj[i] and obj[i].health<0) then 
         objDestroy(obj,i) 
@@ -157,7 +158,6 @@ end
 if ( player.clowR< 0 ) then
     player.clowRflag = 0 
 end
-playerCollWithObj(dt)
 for i = 1 , #res do
     if (res[i]) then 
         resColl(i)
@@ -174,10 +174,19 @@ for i=1,#en do
         allInvTimer(i,en,dt)
         enMove(i,dt)  
         enAtack(i,dt)
-        if (en[i] and en[i].body and player.body:collidesWith(en[i].body))  then
-            enColl(i, en[i].tip, player.a)
+     --   if (en[i] and en[i].body and player.body:collidesWith(en[i].body))  then
+        --    enColl(i, en[i].tip, player.a)
+       -- end
+        if (en[i]) then 
+            local IenRegulS =math.floor((en[i].x-60*k)/(120*k)) + math.floor((en[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
+            if (en[i].x>camera.x-screenWidth/2-math.max(en[i].w,en[i].h)*k and  en[i].x<screenWidth+camera.x-screenWidth/2+20*k+math.max(en[i].w,en[i].h)*k and  en[i].y>camera.y-screenHeight/2-math.max(en[i].w,en[i].h)*k2 and en[i].y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(en[i].w,en[i].h)*k2) then
+                if (enRegulS[IenRegulS]) then
+                    table.insert(enRegulS[IenRegulS],i)
+                else
+                    enRegulS[IenRegulS] = {i}
+                end
+            end
         end
-    
         if (en[i] and en[i].health and en[i].health<=0 ) then
             allDecompose(en,i)
             if (slediEn[i]) then
@@ -226,6 +235,8 @@ if ( colWave>0 and #obj < 20) then
   
     Timer.update(dt)
 end
+playerCollWithObj(dt)
+playerCollWithEn(dt)
 playerDebaff(dt)
 playerMove(dt)
 bulletsUpdate(dt)
@@ -271,13 +282,13 @@ function game:movement(dt)
     
     if love.keyboard.isDown('e') then
         local Geo  =math.random(1,4)
-        allSpawn(obj,Geo,Tip)
-        obj[#obj].f = true
+      allSpawn(obj,Geo,Tip)
+      obj[#obj].f = true
         obj[#obj].x = mouse.x
-        obj[#obj].y = mouse.y
-      --  allSpawn(en,Geo,1)
-       -- en[#en].x = mouse.x
-      --  en[#en].y = mouse.y
+       obj[#obj].y = mouse.y
+        allSpawn(en,Geo,1)
+        en[#en].x = mouse.x
+        en[#en].y = mouse.y
     end
       if love.keyboard.isDown('y') then
      table.remove(obj,#obj)
@@ -428,7 +439,22 @@ function Waves(n,dt)
     end
     
 end
-function allGeo(Geo)
+
+function enGeo(Geo)
+    if (Geo==1) then
+        return -borderWidth-200*k,math.random(-borderHeight,borderHeight*2)
+    end
+    if (Geo==2) then
+        return math.random(-borderWidth,borderWidth*2),-borderHeight-200*k2
+    end
+    if (Geo==3) then
+        return math.random(-borderWidth,borderWidth*2),borderHeight*2+200*k2
+    end
+    if (Geo==4) then
+        return borderWidth*2+200*k, math.random(-borderHeight,borderHeight*2)
+    end
+end
+function objGeo(Geo)
   if (Geo==1) then
         return -borderWidth-200*k,math.random(-borderHeight,borderHeight*2),math.random(18*k,30*k),math.random(-30*k,30*k), math.random()*math.random(-1,1)
       end
@@ -448,7 +474,7 @@ function allSpawn(mas,Geo,Tip)
         local colorRGB = 0.2
         local Body =math.random(1,5)
         local colorDop1,colorDop2,colorDop3,scale,collScale= objColorAndScale(Body)
-        local x,y,ax,ay,ra = allGeo(Geo)
+        local x,y,ax,ay,ra = objGeo(Geo)
         local health = 1
         local e = {
             body = objTip(Body),
@@ -475,19 +501,22 @@ function allSpawn(mas,Geo,Tip)
             health = health
             }
         e.body:moveTo(e.x, e.y)
-       
         table.insert(mas,e)
     end
 ------------------------------------------------------------------------  
 ------------------------------------------------------------------------  
     if ( mas == en) then
-        local x,y,ax,ay,ra = allGeo(Geo)
+        local x,y = enGeo(Geo)
         if ( Tip ==1) then
+            local w = 16
+            local h =  25 
             local health = 3
             local damage = 1
             local e = {
+                w = w , 
+                h = h, 
                 tip = Tip, 
-                body =HC.rectangle(-10*k,-10*k2,1*k,1*k2),
+                body =HC.rectangle(x,y,w*k,h*k2),
                 timer = 0 , 
                 invTimer = 20,
                 atack = 0,
@@ -497,7 +526,7 @@ function allSpawn(mas,Geo,Tip)
                 color1 =0.8,
                 color2=0.2,
                 color3 =0.2,
-                scale = 'm',
+                scale = 100,
                 r = 0 ,
                 ugol =  0,
                 flagr = 0 ,
@@ -505,18 +534,22 @@ function allSpawn(mas,Geo,Tip)
                 f = false,
                 x  = x, 
                 y = y ,  
-                ax  =ax, 
-                ay = ay, 
+                ax  =0, 
+                ay =0, 
                 health = health,
                 healthM = health
                 }
             table.insert(mas,e)
         end
         if ( Tip ==2) then 
+            local w = 16
+            local h =  16 
             local health = 2
             local damage = 10
             local e = {
-                body =HC.rectangle(-10*k,-10*k2,1*k,1*k2),
+                body =HC.rectangle(x,y,w*k,h*k2),
+                w =  w , 
+                h == h ,
                 damage = damage, 
                 invTimer = 20,
                 timer = 0 , 
@@ -527,14 +560,14 @@ function allSpawn(mas,Geo,Tip)
                 color1 =0.8,
                 color2=0.2,
                 color3 =0.2,
-                scale = 'm',
+                scale = 100,
                 r = 0 ,
                 flagr = 0 ,
                 f = false,
                 x  = x, 
                 y = y ,  
-                ax  =ax, 
-                ay = ay, 
+                ax  =0, 
+                ay = 0, 
                 health = health,
                 healthM = health
                 }
@@ -759,30 +792,68 @@ function allDraw(dt)
     
     
     for  i=1,#en do
-        if ( en[i] and en[i].body) then
-       --     en[i].body:draw('fill')
+        if (en[i] and en[i].body)  then
+            if (en[i].x>camera.x-screenWidth/2-math.max(en[i].w,en[i].h)*k and  en[i].x<screenWidth+camera.x-screenWidth/2+20*k+math.max(en[i].w,en[i].h)*k and  en[i].y>camera.y-screenHeight/2-math.max(en[i].w,en[i].h)*k2 and en[i].y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(en[i].w,en[i].h)*k2) then
+                local IenRegulS =math.floor((en[i].x-60*k)/(120*k)) + math.floor((en[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
+                enCollWithenInRegularS(IenRegulS,i,dt)
+                enCollWithenInRegularS(IenRegulS+1,i,dt)
+                enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+                enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+                enCollWithenInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+                
+                enCollWithobjInRegularS(IenRegulS,i,dt)
+                enCollWithobjInRegularS(IenRegulS-1,i,dt)
+                enCollWithobjInRegularS(IenRegulS+1,i,dt)
+                enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
+                enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+                enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+                enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
+                enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+                enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
+                
+            end
         end
-        
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
         if ( en[i].tip==1) then
             if ( en[i].invTimer and en[i].invTimer ~= en[i].timer) then
-                enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
-                
-                enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
+           --     enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
+           love.graphics.setColor(1,0,0)
+                if ( en[i] and en[i].body) then
+            en[i].body:draw('fill')
+        end  
+            --    enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
             else
-                enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
-            
-                enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
+            --    enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
+              if ( en[i] and en[i].body) then
+                  love.graphics.setColor(1,1,1)
+            en[i].body:draw('fill')
+        end
+            --   enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
             end
         else
             if ( en[i].tip==2) then
                 if ( en[i].invTimer and en[i].invTimer ~= en[i].timer) then
-                    enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
+              --      enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
                     
-                    enTip2(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
+               --     enTip2(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
                 else
-                    enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
+               --     enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
                     
-                    enTip2(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
+               --     enTip2(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
                 end
             else
             
