@@ -299,6 +299,7 @@ end
 function  game:draw()
     local dt = love.timer.getDelta()
     playerBatch:clear()
+    enBatch:clear()
     love.graphics.setCanvas(kek)
     love.graphics.clear()
     love.graphics.setColor(1,1,1,1)
@@ -343,10 +344,11 @@ function  game:draw()
         meshMeteors:setDrawRange( 1,  #vect )
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(meshMeteors, 0,0)
-  end
-  love.graphics.pop()
-  Health_Boost()
-  love.graphics.setColor(1,1,1,1)
+    end
+    love.graphics.draw(enBatch)
+    love.graphics.pop()
+    Health_Boost()
+    love.graphics.setColor(1,1,1,1)
     playerDraw(dt)
     love.graphics.draw(playerBatch)
     
@@ -810,27 +812,25 @@ function allDraw(dt)
                 enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
                 enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
                 enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
-                
             end
         end
-
-      
-      
-        if ( en[i].tip==1) then
-            if ( en[i].invTimer and en[i].invTimer ~= en[i].timer) then
-           --     enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
-           love.graphics.setColor(1,0,0)
-                if ( en[i] and en[i].body) then
-            en[i].body:draw('fill')
-        end  
-            --    enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
+        if (en[i].x>camera.x-screenWidth/2-math.max(en[i].w,en[i].h)*k and  en[i].x<screenWidth+camera.x-screenWidth/2+20*k+math.max(en[i].w,en[i].h)*k and  en[i].y>camera.y-screenHeight/2-math.max(en[i].w,en[i].h)*k2 and en[i].y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(en[i].w,en[i].h)*k2) then
+            if ( en[i].tip==1) then
+                if ( en[i].invTimer and en[i].invTimer ~= en[i].timer) then
+                    --enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
+                    --love.graphics.setColor(1,0,0)
+                    enBatch:add(enQuads.body,en[i].x,en[i].y,-en[i].ugol+math.pi,k/10,k2/10,240/2, 352/2)
+                    if ( en[i] and en[i].body) then
+                        en[i].body:draw('fill')
+                    end  
+                    --enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
             else
-            --    enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
-              if ( en[i] and en[i].body) then
-                  love.graphics.setColor(1,1,1)
-            en[i].body:draw('fill')
-        end
-            --   enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
+                --enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
+                if ( en[i] and en[i].body) then
+                --love.graphics.setColor(1,1,1)
+                    en[i].body:draw('fill')
+                end
+                -- enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
             end
         else
             if ( en[i].tip==2) then
@@ -847,6 +847,7 @@ function allDraw(dt)
             
               
               
+            end
             end
         end
     end

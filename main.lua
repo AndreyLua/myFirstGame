@@ -3,11 +3,15 @@ gamestate = require "libs/gamestate"
 Timer = require 'libs/hump.timer' 
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
+------------------SETS-----------------------------
 meteorSet = love.graphics.newImage("assets/meteorSet.png")
+enSet = love.graphics.newImage("assets/enSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
-playerBatch = love.graphics.newSpriteBatch(playerSet)
 
-playerIm = love.graphics.newImage("assets/player/player.png")
+---------------------------------------------------
+playerBatch = love.graphics.newSpriteBatch(playerSet)
+enBatch = love.graphics.newSpriteBatch(enSet)
+
 playerQuads = {
   body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),
   clow1 = love.graphics.newQuad(465,  0,  200, 152, playerSet:getDimensions()),
@@ -16,6 +20,12 @@ playerQuads = {
   cristal = love.graphics.newQuad(942,  173,  80, 136,playerSet:getDimensions()),
   wings = love.graphics.newQuad(465,  153,  448, 256,playerSet:getDimensions()),
 }
+enQuads = {
+  body = love.graphics.newQuad(0,  0,  240, 352, enSet:getDimensions()),
+  clow1 = love.graphics.newQuad(241,  0,  144, 176, enSet:getDimensions()),
+  clow2 = love.graphics.newQuad(386,  0,  144, 176, enSet:getDimensions()),
+}
+
 meteorSetW,meteorSetH =  meteorSet:getDimensions()
 tableMeteorsPar ={
   {
@@ -69,84 +79,10 @@ tableMeteorsPar ={
     texH = 208,
     collW = 40.14657,
     collH = 32.50793,
-  },
+  }
   -------------------
-   {
-    texX =259/meteorSetW,
-    texY =0,
-    texCX = (259+248/2)/meteorSetW,
-    texCY =(0+256/2)/meteorSetH,
-    texW = 248,
-    texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
-  },
-     {
-    texX =259/meteorSetW,
-    texY =0,
-    texCX = (259+248/2)/meteorSetW,
-    texCY =(0+256/2)/meteorSetH,
-    texW = 248,
-    texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
-  },
-  
-   {
-    texX =259/meteorSetW,
-    texY =0,
-    texCX = (259+248/2)/meteorSetW,
-    texCY =(0+256/2)/meteorSetH,
-    texW = 248,
-    texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
-  },
-     {
-    texX =259/meteorSetW,
-    texY =0,
-    texCX = (259+248/2)/meteorSetW,
-    texCY =(0+256/2)/meteorSetH,
-    texW = 248,
-    texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
-  },
-  
-   {
-    texX =259/meteorSetW,
-    texY =0,
-    texCX = (259+248/2)/meteorSetW,
-    texCY =(0+256/2)/meteorSetH,
-    texW = 248,
-    texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
-  },
-     {
-    texX =259/meteorSetW,
-    texY =0,
-    texCX = (259+248/2)/meteorSetW,
-    texCY =(0+256/2)/meteorSetH,
-    texW = 248,
-    texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
-  },
-  
-   {
-    texX =259/meteorSetW,
-    texY =0,
-    texCX = (259+248/2)/meteorSetW,
-    texCY =(0+256/2)/meteorSetH,
-    texW = 248,
-    texH = 256,
-    collW = 74.1949,
-    collH = 76.6983,
-  },
-  
 }
-effect = moonshine(moonshine.effects.godsray)
+--effect = moonshine(moonshine.effects.godsray)
 --.chain(moonshine.effects.crt)
 --effect.godsray.samples = 2
 --effect.godsray.density = 0.04
@@ -171,18 +107,7 @@ fon1 =love.graphics.newImage("assets/fons/fon1.png")
 fon2 =love.graphics.newImage("assets/fons/fon2.png") 
 fon3 =love.graphics.newImage("assets/fons/fon3.png") 
 ----------------------------------
- myShader = love.graphics.newShader[[
-vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords ){
-    vec4 texturecolor = Texel(tex, texture_coords);
-    if (texture_coords.x < 0.1 || texture_coords.y < 0.1 || texture_coords.y > 0.9 || texture_coords.x > 0.9) { 
-        return texturecolor * color*vec4(1.0,0.5,0.5,1.0);
-    }else
-    {
-        return texturecolor * color*vec4(0.0,0.5,1.0,1.0);
-    }
-    
- }
-]]
+ 
 --  myShader = love.graphics.newShader[[
 --vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
 --  vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
@@ -208,7 +133,6 @@ effects = require "effects"
 system = require "system" 
 UI= require "UI"
 ----------------------------------
-
 -----------TIMERS-----------------
 inv = Timer.new()
 hp1 = Timer.new()
@@ -219,7 +143,6 @@ boost2 = Timer.new()
 textT  =  Timer.new()
 wavetimer=  Timer.new()
 ----------------------------------
-
 -------------MASIIIIIIV-----------
 exp =  {}
 mouse = {
@@ -250,10 +173,6 @@ gradientG = 0
 gradientB = 0 
 gradientI = 1
 ----------------------------------
-
-
-
-
 
 function love.load()
   if arg[#arg] == "-debug" then require("mobdebug").start() end
