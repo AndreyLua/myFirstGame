@@ -1,13 +1,13 @@
 ------------------LIBS -----------
 gamestate = require "libs/gamestate" 
 Timer = require 'libs/hump.timer' 
+Class = require "libs/hump.class"
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
 ------------------SETS-----------------------------
 meteorSet = love.graphics.newImage("assets/meteorSet.png")
 enSet = love.graphics.newImage("assets/enSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
-
 ---------------------------------------------------
 playerBatch = love.graphics.newSpriteBatch(playerSet)
 enBatch = love.graphics.newSpriteBatch(enSet)
@@ -82,12 +82,6 @@ tableMeteorsPar ={
   }
   -------------------
 }
---effect = moonshine(moonshine.effects.godsray)
---.chain(moonshine.effects.crt)
---effect.godsray.samples = 2
---effect.godsray.density = 0.04
---effect.godsray.decay = 0.8
-               --   .chain(moonshine.effects.filmgrain)
 
 vect = {}
 lenVect = 1000
@@ -107,7 +101,6 @@ fon1 =love.graphics.newImage("assets/fons/fon1.png")
 fon2 =love.graphics.newImage("assets/fons/fon2.png") 
 fon3 =love.graphics.newImage("assets/fons/fon3.png") 
 ----------------------------------
- 
 --  myShader = love.graphics.newShader[[
 --vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
 --  vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
@@ -124,6 +117,7 @@ game = require "game"
 bulletFunction = require "bulletFunction"
 playerFunction = require "playerFunction"
 enFunction = require "enFunction" 
+enClass = require "enClass" 
 resFunction = require "resFunction" 
 objFunction = require "objFunction" 
 pause = require "pause" 
@@ -159,10 +153,7 @@ playerAbility = {
       speedA  = 10,
       debaffStrenght =0.2,
       scaleBody = 35,
-  
-  }
-----------------------------------
-
+}
 -------------CONST AND FLAGS------
 lvl =0
 volume = 50
@@ -179,12 +170,10 @@ function love.load()
   io.stdout:setvbuf("no") 
   math.randomseed(os.time()) 
   love.window.setFullscreen(true,"desktop")
-  
   screenWidth = love.graphics.getWidth()
   screenHeight = love.graphics.getHeight()
   k  = screenWidth/1920*2.5
   k2 = screenHeight/1080*2.5
-
   font = love.graphics.newFont("fonts/kenvector_future.ttf",40)
   love.graphics.setFont(font)  
   kek= love.graphics.newCanvas(screenWidth ,screenHeight)
