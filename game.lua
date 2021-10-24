@@ -80,14 +80,14 @@ boost = {
 }
 player = {
   debaffStrenght =1,
-  body =HC.circle(screenWidth/2+40*k/2,screenHeight/2+40*k2/2,playerAbility.scaleBody*k),
+  body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,playerAbility.scaleBody*k),
   invis = 10,
   clowR = 0, 
   clowRflag = 0, 
   boost =  screenHeight,
   hp =  screenHeight,
-  x = screenWidth/2+40*k/2, 
-  y = screenHeight/2+40*k2/2,  
+  x = borderWidth/2+40*k/2, 
+  y = borderHeight/2+40*k2/2,  
   ax = 0,
   a = 0 , 
   ay = 0,
@@ -172,11 +172,8 @@ end
 for i=1,#en do
     if (en[i]) then 
         allInvTimer(i,en,dt)
-        enMove(i,dt)  
+        en[i]:move(dt) 
         enAtack(i,dt)
-     --   if (en[i] and en[i].body and player.body:collidesWith(en[i].body))  then
-        --    enColl(i, en[i].tip, player.a)
-       -- end
         if (en[i]) then 
             local IenRegulS =math.floor((en[i].x-60*k)/(120*k)) + math.floor((en[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
             if (en[i].x>camera.x-screenWidth/2-math.max(en[i].w,en[i].h)*k and  en[i].x<screenWidth+camera.x-screenWidth/2+20*k+math.max(en[i].w,en[i].h)*k and  en[i].y>camera.y-screenHeight/2-math.max(en[i].w,en[i].h)*k2 and en[i].y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(en[i].w,en[i].h)*k2) then
@@ -226,9 +223,9 @@ if ( colWave>0 and #obj < 20) then
         for i=1,math.random(0,1) do
             local Wave = waves[numberWave]
             local Geo  =math.random(1,4)
-            local Tip =math.random(1,2)
+            local Tip =math.random(1)
             local Scale =math.random(2,2)
-       --     allSpawn(en,Geo,Tip)
+            allSpawn(en,Geo,Tip)
         end
         Timer.clear() 
     end)
@@ -510,37 +507,11 @@ function allSpawn(mas,Geo,Tip)
     if ( mas == en) then
         local x,y = enGeo(Geo)
         if ( Tip ==1) then
-            local w = 16
-            local h =  25 
-            local health = 3
-            local damage = 1
-            local e = {
-                w = w , 
-                h = h, 
-                tip = Tip, 
-                body =HC.rectangle(x,y,w*k,h*k2),
-                timer = 0 , 
-                invTimer = 20,
-                atack = 0,
-                atackTimer = 60,
-                dash = 0,
-                dashTimer = 20,
-                color1 =0.8,
-                color2=0.2,
-                color3 =0.2,
-                scale = 100,
-                r = 0 ,
-                ugol =  0,
-                flagr = 0 ,
-                damage = damage , 
-                f = false,
-                x  = x, 
-                y = y ,  
-                ax  =0, 
-                ay =0, 
-                health = health,
-                healthM = health
-                }
+            local e = enemyMelee:clone()
+            e.x = x 
+            e.y = y 
+            e:newBody(e.x, e.y)
+            print(e.angleBody)
             table.insert(mas,e)
         end
         if ( Tip ==2) then 
@@ -728,7 +699,7 @@ end
 
 function allDraw(dt)
   --  player.body:draw('fill')
-    enemiesSledDraw(dt)
+    --enemiesSledDraw(dt)
     for i= 1,#res do
         if (res[i].x>camera.x-screenWidth/2-30*k and  res[i].x<camera.x+screenWidth/2+30*k and  res[i].y>camera.y-screenHeight/2-30*k2 and res[i].y<camera.y + screenHeight/2+30*k2) then
             if ( res[i].tip == 1) then
@@ -765,7 +736,7 @@ function allDraw(dt)
         end
         if (obj[i] and obj[i].body)  then
        -- love.graphics.circle("line",obj[i].x,obj[i].y,obj[i].collScale/2*k)
-        local  kekI = math.floor((obj[i].x/120) + (obj[i].y/120)*(screenWidth/(120*k)) +1)
+    --    local  kekI = math.floor((obj[i].x/120) + (obj[i].y/120)*(screenWidth/(120*k)) +1)
         if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
         if ( obj[i].timer) then
             if not( obj[i].invTimer == obj[i].timer) then
@@ -815,40 +786,7 @@ function allDraw(dt)
             end
         end
         if (en[i].x>camera.x-screenWidth/2-math.max(en[i].w,en[i].h)*k and  en[i].x<screenWidth+camera.x-screenWidth/2+20*k+math.max(en[i].w,en[i].h)*k and  en[i].y>camera.y-screenHeight/2-math.max(en[i].w,en[i].h)*k2 and en[i].y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(en[i].w,en[i].h)*k2) then
-            if ( en[i].tip==1) then
-                if ( en[i].invTimer and en[i].invTimer ~= en[i].timer) then
-                    --enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
-                    --love.graphics.setColor(1,0,0)
-                    enBatch:add(enQuads.body,en[i].x,en[i].y,-en[i].ugol+math.pi,k/10,k2/10,240/2, 352/2)
-                    if ( en[i] and en[i].body) then
-                        en[i].body:draw('fill')
-                    end  
-                    --enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
-            else
-                --enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
-                if ( en[i] and en[i].body) then
-                --love.graphics.setColor(1,1,1)
-                    en[i].body:draw('fill')
-                end
-                -- enTip1(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
-            end
-        else
-            if ( en[i].tip==2) then
-                if ( en[i].invTimer and en[i].invTimer ~= en[i].timer) then
-              --      enemySled(en[i].x,en[i].y,2*k,i,1,0.6,0.6,en[i].ugol,en[i].tip)
-                    
-               --     enTip2(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,1,en[i].health,en[i].healthM)
-                else
-               --     enemySled(en[i].x,en[i].y,2*k,i,1,0.1,0.1,en[i].ugol,en[i].tip)
-                    
-               --     enTip2(en[i].r,"fill",en[i].x,en[i].y,4*k,4*k2,en[i].ugol,4*k/2,4*k2/2,0,en[i].health,en[i].healthM)
-                end
-            else
-            
-              
-              
-            end
-            end
+            en[i]:draw()
         end
     end
 end

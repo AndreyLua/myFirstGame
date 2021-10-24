@@ -112,6 +112,11 @@ fon3 =love.graphics.newImage("assets/fons/fon3.png")
 --    return texturecolor * color;
 --}
  -- ]]
+ 
+screenWidth = love.graphics.getWidth()
+screenHeight = love.graphics.getHeight()
+k  = screenWidth/1920*2.5
+k2 = screenHeight/1080*2.5
 --------------STATES--------------
 game = require "game"
 bulletFunction = require "bulletFunction"
@@ -170,10 +175,6 @@ function love.load()
   io.stdout:setvbuf("no") 
   math.randomseed(os.time()) 
   love.window.setFullscreen(true,"desktop")
-  screenWidth = love.graphics.getWidth()
-  screenHeight = love.graphics.getHeight()
-  k  = screenWidth/1920*2.5
-  k2 = screenHeight/1080*2.5
   font = love.graphics.newFont("fonts/kenvector_future.ttf",40)
   love.graphics.setFont(font)  
   kek= love.graphics.newCanvas(screenWidth ,screenHeight)

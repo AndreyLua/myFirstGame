@@ -1,84 +1,10 @@
 local enFunction = {}
 
-function enTip(i,tip)
-    en[i].body:moveTo(en[i].x, en[i].y)
-end
 
 function enMove(i,dt) 
-    enTip(i,en[i].tip)
-    if (en[i].ugol) then 
-        en[i].body:setRotation(-en[i].ugol) 
-    end
-    if ( en[i].tip == 1) then
-        if ( en[i].invTimer and  en[i].invTimer == en[i].timer) then
-            enRotAngle(i,en[i].tip,dt)
-            local ugol = math.atan2(player.x-en[i].x+20*k,player.y-en[i].y+20*k)
-            if (en[i].dash and en[i].dash==en[i].dashTimer) then
-                enUgol(i,ugol,dt)
-            end
-            if ((math.sqrt(math.pow((player.x+40*k/2-en[i].x),2)+math.pow((player.y+40*k2/2-en[i].y),2))) > 30*k) then
-                if (en[i].dash and en[i].dash==en[i].dashTimer) then
-                    if not((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
-                        en[i].ax=en[i].ax+80*k*math.sin(ugol)*dt
-                        en[i].ay=en[i].ay+80*k2*math.cos(ugol)*dt
-                        
-                        if (  en[i].ax >22*k) then
-                            en[i].ax=22*k
-                        end
-                        if (  en[i].ax <-22*k) then
-                            en[i].ax=-22*k
-                        end
-                        if (  en[i].ay >22*k2) then
-                            en[i].ay=22*k2
-                        end
-                        if (  en[i].ay <-22*k2) then
-                           en[i].ay=-22*k2
-                        end
-                        
-                    end
-                end
-            end
-            
-            if (en[i].dash and en[i].dash==en[i].dashTimer and en[i].atack and en[i].atack==en[i].atackTimer and en[i].invTimer ==en[i].timer and (math.sqrt(math.pow((player.x+40*k/2-en[i].x),2)+math.pow((player.y+40*k2/2-en[i].y),2))) <=100*k ) then
-                en[i].atack = en[i].atackTimer-0.001
-                en[i].dash = en[i].dashTimer-0.001
-            end
-            
-            if (en[i].dash and en[i].dash==en[i].dashTimer)  then
-                if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
-                   en[i].x= en[i].x+en[i].ax*dt*0
-                   en[i].y= en[i].y+en[i].ay*dt*0
-                   en[i].ax = 0
-                   en[i].ay = 0 
-                else
-                    en[i].x= en[i].x+en[i].ax*dt*7
-                    en[i].y= en[i].y+en[i].ay*dt*7
-                end
-                 if not((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
-                en[i].x= en[i].x+math.sin(en[i].y/10)*dt*50
-                en[i].y= en[i].y+math.cos(en[i].x/10)*dt*50
-                end
-            else
-                en[i].x= en[i].x+en[i].ax*dt*17
-                en[i].y= en[i].y+en[i].ay*dt*17
-            end
-        -----------------------------------------------  
-        else
-        -----------------------------------------------  
-            if (en[i].ax>0)then
-                en[i].ax =en[i].ax-50*dt
-            else
-                en[i].ax =en[i].ax+50*dt
-            end
-            if (en[i].ay>0)then
-                en[i].ay =en[i].ay-50*dt
-            else
-                en[i].ay =en[i].ay+50*dt
-            end
-            en[i].x= en[i].x-en[i].ax*dt*3
-            en[i].y= en[i].y-en[i].ay*dt*3
-        -----------------------------------------------  
-        end
+    if ( en[i] and  en[i].tip == 1) then
+    en[i]:move(dt)
+    
     end
     if ( en[i].tip == 2) then
         if ( en[i].invTimer and  en[i].invTimer ==en[i].timer) then
@@ -229,8 +155,8 @@ function enCollWithobjInRegularS(index,j,dt)
                             local sumMas = obj[kek[i]].scale +en[j].scale
                             local deepX = intVectorX
                             local deepY = intVectorY
-                            obj[kek[i]].ax= obj[kek[i]].ax +(en[j].ax*k*dt)*10*obj[kek[i]].scale/sumMas
-                            obj[kek[i]].ay= obj[kek[i]].ay  +(en[j].ay*k*dt)*10*obj[kek[i]].scale/sumMas
+                            obj[kek[i]].ax= obj[kek[i]].ax +(en[j].ax*k*dt)*5*sumMas/obj[kek[i]].scale
+                            obj[kek[i]].ay= obj[kek[i]].ay  +(en[j].ay*k*dt)*5*sumMas/obj[kek[i]].scale
                             if ((deepX*deepX+deepY*deepY >=math.pow(0.05*enScale*k,2))) then
                                 obj[kek[i]].x  = obj[kek[i]].x - deepX*dt*10
                                 obj[kek[i]].y = obj[kek[i]].y - deepY*dt*10
