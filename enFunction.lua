@@ -76,7 +76,7 @@ function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip )
                 en[i].health  =  en[i].health - playerAbility.damage
                 en[i].ax =en[i].ax - player.ax
                 en[i].ay =en[i].ay -  player.ay
-                enHit(en,i)
+                spawnResSmall(en,i)
                 
             end
         end
@@ -86,7 +86,7 @@ function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip )
                 en[i].health  =  en[i].health - playerAbility.damage
                 en[i].ax =en[i].ax - player.ax
                 en[i].ay =en[i].ay -  player.ay
-                enHit(en,i)
+                spawnResSmall(en,i)
             end
         end
     else
@@ -104,7 +104,7 @@ function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip )
                 en[i].health  =  en[i].health - playerAbility.damage/1.5
                 en[i].ax =en[i].ax - player.ax
                 en[i].ay =en[i].ay -  player.ay
-                enHit(en,i)
+                spawnResSmall(en,i)
             end  
         end
     end
@@ -170,116 +170,6 @@ function enCollWithobjInRegularS(index,j,dt)
                 end
             end
         end
-    end
-end
-
-function enHit(mas,i)
-    for kek =0, math.random(7,8) do
-        local eh = {
-            tip = 1,
-            r = math.random(0,3),
-            flag =true,
-            color1 =mas[i].color1+math.random()/4,
-            color2= mas[i].color2+math.random()/4,
-            color3 =mas[i].color3+math.random()/4,
-            f = false,
-            x  = mas[i].x, 
-            y =  mas[i].y,  
-            ax  =math.random(-2*k*kek,2*k*kek), 
-            ay = math.random(-2*k*kek,2*k*kek), 
-        }
-        table.insert(res,eh)
-    end
-end
- 
-function enAtack(i,dt)
-    if ( en[i] and en[i].atack) then
-        if ( en[i].atack <  en[i].atackTimer) then
-            en[i].atack  = en[i].atack  - 30*dt
-        end
-        if ( en[i].atack < 0) then
-            en[i].atack  = en[i].atackTimer
-        end
-    end
-    if ( en[i] and en[i].dash) then
-        if ( en[i].dash <  en[i].dashTimer) then
-            en[i].dash  = en[i].dash  - 30*dt
-        end
-        if ( en[i].dash < 0) then
-            en[i].dash  = en[i].dashTimer
-        end
-    end
-end
-  
-function enUgol(i,ugol,dt)
-    if ( en[i].ugol == 0) then
-        en[i].ugol=0.00000001
-    end
-    if ( en[i].ugol < -math.pi) then
-        en[i].ugol=math.pi
-    end
-    if ( en[i].ugol > math.pi) then
-        en[i].ugol=-math.pi
-    end
-    if ( ugol == 0) then
-        ugol=0.00000001
-    end
-    if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
-        if (ugol/math.abs(ugol)==en[i].ugol/math.abs(en[i].ugol))then
-            if ( ugol>en[i].ugol) then
-                en[i].ugol = en[i].ugol+4*dt
-            else 
-                en[i].ugol = en[i].ugol-4*dt
-            end
-        else
-            if (math.abs(ugol)+math.abs(en[i].ugol)> 2*math.pi - math.abs(ugol)-math.abs(en[i].ugol)) then
-                if (en[i].ugol>0) then 
-                    en[i].ugol = en[i].ugol+4*dt
-                else
-                    en[i].ugol = en[i].ugol-4*dt
-                end
-            else 
-                if (en[i].ugol>0) then 
-                    en[i].ugol = en[i].ugol-4*dt
-                else
-                    en[i].ugol = en[i].ugol+4*dt
-                end
-            end
-        end
-    end
-end
-
-function enRotAngle(i,tip,dt)
-    if (tip == 1 ) then
-        if ( en[i] and en[i].r) then
-            if ( en[i].r> 0.1 ) then
-                en[i].flagr = 1 
-            end
-            if ( en[i].r< 0 ) then
-                en[i].flagr = 0 
-            end
-            if ( en[i].flagr ==0) then
-                en[i].r = en[i].r+1.1*dt*math.random(5,10)/7
-            else
-                en[i].r = en[i].r-1.1*dt*math.random(5,10)/7
-            end
-        end
-    end
-    
-    if (tip == 2 ) then
-        if ( en[i] and en[i].r) then
-            if ( en[i].r> 0.22 ) then
-                en[i].flagr = 1 
-            end
-            if ( en[i].r< 0 ) then
-                en[i].flagr = 0 
-            end
-            if ( en[i].flagr ==0) then
-                en[i].r = en[i].r+1*dt*math.random(5,10)/7
-            else
-                en[i].r = en[i].r-1*dt*math.random(5,10)/7
-            end
-        end 
     end
 end
 
@@ -370,50 +260,5 @@ function enRemoveTag(dt)
             end        
         end
     end
-end
-function enRot1(r2,mode,x,y,w,h,r,ox,oy)
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    love.graphics.push()
-    love.graphics.rotate(r2)
-
-   love.graphics.line(5.7708333333333*k,22.15873015873*k2,14.918154761905*k,30.793650793651*k2,7.8035714285715*k,47.047619047619*k2,9.328125*k,33.333333333333*k2,1.7053571428572*k,22.15873015873*k2) 
-      
-
-
-    love.graphics.pop()
-    love.graphics.push()
-    love.graphics.rotate(-r2)
-    
-love.graphics.line(-1.7053571428572*k,22.15873015873*k2,-9.328125*k,33.333333333333*k2,-7.8035714285715*k,47.047619047619*k2,-14.918154761905*k,30.793650793651*k2,-5.7708333333333*k,22.15873015873*k2)
-
-  
-
-    love.graphics.pop()
-    love.graphics.pop()
-    love.graphics.pop()
-end
-
-function enRot2(r2,mode,x,y,w,h,r,ox,oy)
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    love.graphics.push()
-    love.graphics.rotate(r2-0.1)
-
-
- love.graphics.line(-2.7217261904762*k,25.714285714286*k2,-8.311755952381*k,22.666666666667*k2,-3.7380952380952*k,15.555555555556*k2)
-
-    
-    love.graphics.pop()
-    love.graphics.push()
-    love.graphics.rotate(-r2+0.1)
-   love.graphics.line(3.7380952380952*k,15.555555555556*k2,8.311755952381*k,22.666666666667*k2,2.7217261904762*k,25.714285714286*k2)
-    love.graphics.pop()
-    love.graphics.pop()
-    love.graphics.pop()
 end
 return enFunction

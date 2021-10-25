@@ -67,35 +67,35 @@ waves = {
 }
 
 hp = {
-  flag = false,
-  long = screenHeight,
-  long2 =screenHeight,
-  long3 =screenHeight
+    flag = false,
+    long = screenHeight,
+    long2 =screenHeight,
+    long3 =screenHeight
 }
 boost = {
-  flag = true,
-  long = screenHeight,
-  long2 =screenHeight,
-  long3 =screenHeight
+    flag = true,
+    long = screenHeight,
+    long2 =screenHeight,
+    long3 =screenHeight
 }
 player = {
-  debaffStrenght =1,
-  body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,playerAbility.scaleBody*k),
-  invis = 10,
-  clowR = 0, 
-  clowRflag = 0, 
-  boost =  screenHeight,
-  hp =  screenHeight,
-  x = borderWidth/2+40*k/2, 
-  y = borderHeight/2+40*k2/2,  
-  ax = 0,
-  a = 0 , 
-  ay = 0,
-  color = 0,
+    debaffStrenght =1,
+    body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,playerAbility.scaleBody*k),
+    invis = 10,
+    clowR = 0, 
+    clowRflag = 0, 
+    boost =  screenHeight,
+    hp =  screenHeight,
+    x = borderWidth/2+40*k/2, 
+    y = borderHeight/2+40*k2/2,  
+    ax = 0,
+    a = 0 , 
+    ay = 0,
+    color = 0,
 } 
 camera = {
-  x = screenWidth/2+40*k/2, 
-  y = screenHeight/2+40*k2/2
+    x = screenWidth/2+40*k/2, 
+    y = screenHeight/2+40*k2/2
   }
 en = {}
 obj = {}
@@ -122,6 +122,13 @@ if not( player.x > borderWidth*2-screenWidth/2+20*k or  player.x < -borderWidth+
 end
 if not( player.y >  borderHeight*2-screenHeight/2+20*k2 or  player.y < - borderHeight+screenHeight/2+20*k2 ) then
     camera.y = player.y
+end
+
+if ( player.clowR> 0.2 ) then
+    player.clowRflag = 1 
+end
+if ( player.clowR< 0 ) then
+    player.clowRflag = 0 
 end
 --------------------
 playerControl()
@@ -152,12 +159,6 @@ for i = 1 , #obj do
     end
 end
 
-if ( player.clowR> 0.2 ) then
-    player.clowRflag = 1 
-end
-if ( player.clowR< 0 ) then
-    player.clowRflag = 0 
-end
 for i = 1 , #res do
     if (res[i]) then 
         resColl(i)
@@ -171,26 +172,13 @@ end
  
 for i=1,#en do
     if (en[i]) then 
-        allInvTimer(i,en,dt)
+        en[i]:invTimerUpdate(dt)
         en[i]:move(dt) 
-        enAtack(i,dt)
-        if (en[i]) then 
-            local IenRegulS =math.floor((en[i].x-60*k)/(120*k)) + math.floor((en[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-            if (en[i].x>camera.x-screenWidth/2-math.max(en[i].w,en[i].h)*k and  en[i].x<screenWidth+camera.x-screenWidth/2+20*k+math.max(en[i].w,en[i].h)*k and  en[i].y>camera.y-screenHeight/2-math.max(en[i].w,en[i].h)*k2 and en[i].y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(en[i].w,en[i].h)*k2) then
-                if (enRegulS[IenRegulS]) then
-                    table.insert(enRegulS[IenRegulS],i)
-                else
-                    enRegulS[IenRegulS] = {i}
-                end
-            end
-        end
-        if (en[i] and en[i].health and en[i].health<=0 ) then
-            allDecompose(en,i)
-            if (slediEn[i]) then
-                table.remove(slediEn,i)
-            end
-            table.remove(en,i)
-        end
+        en[i]:atackTimerUpdate(dt)
+        en[i]:atackStart()
+        en[i]:insertInRegulS(i)
+        en[i]:traceSpawn(3*k,1,0.8,0.2)
+        en[i]:kill(i)
     end
 end
 
@@ -344,6 +332,7 @@ function  game:draw()
     end
     love.graphics.draw(enBatch)
     love.graphics.pop()
+   
     Health_Boost()
     love.graphics.setColor(1,1,1,1)
     playerDraw(dt)
@@ -511,7 +500,6 @@ function allSpawn(mas,Geo,Tip)
             e.x = x 
             e.y = y 
             e:newBody(e.x, e.y)
-            print(e.angleBody)
             table.insert(mas,e)
         end
         if ( Tip ==2) then 
@@ -558,73 +546,6 @@ function allInvTimer(i,mas,dt)
             if ( mas[i].timer < 0) then
                 mas[i].timer  = mas[i].invTimer
             end
-        end
-    end
-end
-
-function allDecompose(mas,i)
-    local Wave = waves[numberWave]
-    local numberRes = 0
-    if ( mas[i].scale == 'l') then
-        numberRes = math.random(8,14)  
-    end
-    if ( mas[i].scale == 'm') then
-        numberRes = math.random(5,10) 
-    end
-    if ( mas[i].scale == 's') then
-        numberRes = math.random(4,7) 
-    end
-    if ( mas[i].scale == 'xs') then
-        numberRes = math.random(2,4) 
-    end
-    colWave = colWave-1
-    expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2,10)
-    expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2+colWave*300*k2/Wave[4],10)
-    for kek =0, numberRes do
-        local kkek = math.random()
-        local colorDop1 = mas[i].color1+ kkek/3
-        local colorDop2 = mas[i].color2+ kkek/3
-        local colorDop3 = mas[i].color3+ kkek/3
-        if ( math.random(1,30)==1) then
-            local eh = {
-                tip = 4, --hp
-                r = 0,
-                flag =true,
-                color1 =colorDop1,
-                color2=colorDop2,
-                color3 =colorDop3,
-                f = false,
-                x  = mas[i].x, 
-                y =  mas[i].y,  
-                ax  =math.random(-2*k*kek,2*k*kek), 
-                ay = math.random(-2*k*kek,2*k*kek), 
-            }
-            table.insert(res,eh)
-        else
-            local RandomP =  math.random(100) 
-            local RandomTip = 1
-            if ( RandomP >80 and RandomP <90) then
-                RandomTip = 2
-            else
-                  if ( RandomP > 80) then 
-                      RandomTip = 3
-                  end
-            end
-            
-            local eh = {
-                tip = RandomTip,
-                r = math.random(1,3),
-                flag =true,
-                color1 =colorDop1,
-                color2= colorDop2,
-                color3 =colorDop3,
-                f = false,
-                x  = mas[i].x, 
-                y =  mas[i].y,  
-                ax  =math.random(-1.5*k*kek,1.5*k*kek)/RandomTip, 
-                ay = math.random(-1.5*k*kek,1.5*k*kek)/RandomTip, 
-            }
-            table.insert(res,eh)
         end
     end
 end
@@ -699,7 +620,7 @@ end
 
 function allDraw(dt)
   --  player.body:draw('fill')
-    --enemiesSledDraw(dt)
+  --  enemiesSledDraw(dt)
     for i= 1,#res do
         if (res[i].x>camera.x-screenWidth/2-30*k and  res[i].x<camera.x+screenWidth/2+30*k and  res[i].y>camera.y-screenHeight/2-30*k2 and res[i].y<camera.y + screenHeight/2+30*k2) then
             if ( res[i].tip == 1) then
@@ -717,76 +638,66 @@ function allDraw(dt)
             ------------------------------------------------------------------
             if ( res[i].tip == 4) then
                 love.graphics.setColor(0.7,0.2,0.2)
-                --love.graphics.circle("line",res[i].x+8*k,res[i].y+8*k2,2*k)
-                --rot('line',res[i].x,res[i].y,16*k,16*k2,2)
+                love.graphics.circle("line",res[i].x+8*k,res[i].y+8*k2,2*k)
             end
         end
     end 
    
     for i= 1,#obj do
         if (obj[i] and obj[i].body)  then
-          if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
-            local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-            objCollWithObjInRegularS(IobjRegulS,i,dt)
-            objCollWithObjInRegularS(IobjRegulS+1,i,dt)
-            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
-            objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
-            objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
-          end
-        end
-        if (obj[i] and obj[i].body)  then
-       -- love.graphics.circle("line",obj[i].x,obj[i].y,obj[i].collScale/2*k)
-    --    local  kekI = math.floor((obj[i].x/120) + (obj[i].y/120)*(screenWidth/(120*k)) +1)
-        if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
-        if ( obj[i].timer) then
-            if not( obj[i].invTimer == obj[i].timer) then
-                if ( obj[i] and obj[i].bodyDop) then
-                    objFragmVect(i,1,0.6,0.6)
-             --    obj[i].body:draw('line')
-                else
-                  objVect(i,1,0.6,0.6)
-            --      obj[i].body:draw('line')
-              end
-            else
-                if ( obj[i] and obj[i].pok>0) then
-                   objFragmVect(i,1,1,1)
-            --      obj[i].body:draw('line')
-                else
-                 objVect(i,1,1,1)
-           --       obj[i].body:draw('line')
+            if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
+                local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
+                objCollWithObjInRegularS(IobjRegulS,i,dt)
+                objCollWithObjInRegularS(IobjRegulS+1,i,dt)
+                objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+                objCollWithObjInRegularS(IobjRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+                objCollWithObjInRegularS(IobjRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+                if ( obj[i].timer) then
+                    if not( obj[i].invTimer == obj[i].timer) then
+                        if ( obj[i] and obj[i].bodyDop) then
+                            objFragmVect(i,1,0.6,0.6)
+                            --obj[i].body:draw('line')
+                        else
+                            objVect(i,1,0.6,0.6)
+                            --obj[i].body:draw('line')
+                        end
+                    else
+                        if ( obj[i] and obj[i].pok>0) then
+                            objFragmVect(i,1,1,1)
+                            --obj[i].body:draw('line')
+                        else
+                            objVect(i,1,1,1)
+                            --obj[i].body:draw('line')
+                        end
+                    end
                 end
             end
-        end
-        end
---          love.graphics.print(IobjRegulS,obj[i].x,obj[i].y,0,2,2)
-            --    love.graphics.print(kekI, obj[i].x,obj[i].y,0,1,1)
         end
     end
     
     
     for  i=1,#en do
-        if (en[i] and en[i].body)  then
-            if (en[i].x>camera.x-screenWidth/2-math.max(en[i].w,en[i].h)*k and  en[i].x<screenWidth+camera.x-screenWidth/2+20*k+math.max(en[i].w,en[i].h)*k and  en[i].y>camera.y-screenHeight/2-math.max(en[i].w,en[i].h)*k2 and en[i].y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(en[i].w,en[i].h)*k2) then
-                local IenRegulS =math.floor((en[i].x-60*k)/(120*k)) + math.floor((en[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-                enCollWithenInRegularS(IenRegulS,i,dt)
-                enCollWithenInRegularS(IenRegulS+1,i,dt)
-                enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
-                enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
-                enCollWithenInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+        if (en[i] and en[i]:inScreen()) then
+            local IenRegulS =en[i]:IndexInRegulS(120)
+            enCollWithenInRegularS(IenRegulS,i,dt)
+            enCollWithenInRegularS(IenRegulS+1,i,dt)
+            enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithenInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
                 
-                enCollWithobjInRegularS(IenRegulS,i,dt)
-                enCollWithobjInRegularS(IenRegulS-1,i,dt)
-                enCollWithobjInRegularS(IenRegulS+1,i,dt)
-                enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
-                enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
-                enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
-                enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
-                enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
-                enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
-            end
-        end
-        if (en[i].x>camera.x-screenWidth/2-math.max(en[i].w,en[i].h)*k and  en[i].x<screenWidth+camera.x-screenWidth/2+20*k+math.max(en[i].w,en[i].h)*k and  en[i].y>camera.y-screenHeight/2-math.max(en[i].w,en[i].h)*k2 and en[i].y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(en[i].w,en[i].h)*k2) then
-            en[i]:draw()
+            enCollWithobjInRegularS(IenRegulS,i,dt)
+            enCollWithobjInRegularS(IenRegulS-1,i,dt)
+            enCollWithobjInRegularS(IenRegulS+1,i,dt)
+            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
+            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
+            
+            en[i]:traceDraw(dt)
+            en[i]:draw(i)
+           
         end
     end
 end

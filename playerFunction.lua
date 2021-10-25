@@ -98,13 +98,11 @@ function playerDraw(dt)
 end
 
 function playerSledDraw(x,y,dt)
- 
  --   player.body:draw('line')
     love.graphics.circle('fill',controler.x0,controler.y0,10*k)
     love.graphics.circle('line',controler.x0,controler.y0,13*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
-    
     local playerSled = {
         angle = -controler.angle+math.pi,
         ax =-2*k*math.sin(controler.angle) ,

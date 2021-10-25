@@ -25,11 +25,12 @@ enemyMeleeTable = {
     0,  -- ax 
     0,  -- ay
     3, --health
-    3 --healthM
+    3, --healthM
+    {}, -- traces
 }
 
 enemyMeleeClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -55,10 +56,57 @@ enemyMeleeClass = Class{
         self.ay =ay
         self.health = health
         self.healthM = healthM
+        self.traces = traces
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyMeleeTable[1]*k, enemyMeleeTable[2]*k)
         self.body = bodyEn
+    end;
+    IndexInRegulS =  function(self,scaleS)
+        return math.floor((self.x-scaleS/2*k)/(scaleS*k)) + math.floor((self.y-scaleS/2*k2)/(scaleS*k2))*math.floor((screenWidth/(scaleS*k))+1)
+    end;
+    insertInRegulS =  function(self,i)
+        local IenRegulS = self.IndexInRegulS(self,120)
+        if (self.inScreen(self)) then
+            if (enRegulS[IenRegulS]) then
+                table.insert(enRegulS[IenRegulS],i)
+            else
+                enRegulS[IenRegulS] = {i}
+            end
+        end   
+    end;
+    inScreen = function(self)
+        return (self.x>camera.x-screenWidth/2-math.max(self.w,self.h)*k and  self.x<screenWidth+camera.x-screenWidth/2+20*k+math.max(self.w,self.h)*k and  self.y>camera.y-screenHeight/2-math.max(self.w,self.h)*k2 and self.y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(self.w,self.h)*k2)
+    end;
+    invTimerUpdate = function(self,dt) 
+        if ( self.invTimer) then
+            if ( self.timer < self.invTimer) then
+                self.timer  = self.timer - dt* 40
+            end
+            if ( self.timer < 0) then
+                self.timer  = self.invTimer
+            end
+        end
+    end;
+    atackStart = function(self)
+        if (self.dash and self.dash==self.dashTimer and self.atack and self.atack==self.atackTimer and self.invTimer ==           self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <=100*k ) then
+           self.atack = self.atackTimer-0.001
+           self.dash = self.dashTimer-0.001
+        end
+    end;
+    atackTimerUpdate = function(self,dt)
+        if ( self.atack <  self.atackTimer) then
+            self.atack  = self.atack  - 30*dt
+        end
+        if ( self.atack < 0) then
+            self.atack  = self.atackTimer
+        end
+        if ( self.dash <  self.dashTimer) then
+            self.dash  = self.dash  - 30*dt
+        end
+        if ( self.dash < 0) then
+            self.dash  = self.dashTimer
+        end
     end;
     angleBodyTr = function(self,angle,dt)
         if ( self.angleBody == 0) then
@@ -98,7 +146,7 @@ enemyMeleeClass = Class{
         end
     end;
     angleMouthTr = function(self,dt)
-        if ( self.angleMouth> 0.1 ) then
+        if ( self.angleMouth> 1 ) then
             --self.angleMouth = 0.1 
             self.angleMouthFlag = 1 
         end
@@ -149,8 +197,8 @@ enemyMeleeClass = Class{
                 self.ay = 0 
             end
         else
-            self.x= self.x+self.ax*dt*17 -- движение противника ускорение
-            self.y= self.y+self.ay*dt*17
+            self.x= self.x+math.sin(self.angleBody)*dt*500 -- движение противника ускорение
+            self.y= self.y+math.cos(self.angleBody)*dt*500
         end
     end;
     moveWounded =  function(self,dt)
@@ -167,24 +215,70 @@ enemyMeleeClass = Class{
         self.x= self.x-self.ax*dt*3
         self.y= self.y-self.ay*dt*3   
     end;
-    draw =  function(self)
+    draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-            local clow1X =xDraw +26*k*math.sin(controler.angle+0.17219081452294)
-            local clow1Y =yDraw +26*k2*math.cos(controler.angle+0.17219081452294)
-            local clow2X =xDraw +26*k*math.sin(controler.angle-0.17219081452294)
-            local clow2Y =yDraw+26*k2*math.cos(controler.angle-0.17219081452294)
-            enBatch:add(enQuads.clow1,clow1X,clow1Y,-controler.angle+math.pi+player.clowR,k/7,k2/7,176, 80)
-            enBatch:add(enQuads.clow2,clow2X,clow2Y,-controler.angle+math.pi-player.clowR,k/7,k2/7,16, 80)
+            local clow1X =self.x +26*k*math.sin(self.angleMouth)
+            local clow1Y =self.y +26*k2*math.cos(self.angleMouth)
+            local clow2X =self.x +26*k*math.sin(self.angleMouth)
+            local clow2Y =self.y +26*k2*math.cos(self.angleMouth)
+            enBatch:add(enQuads.clow1,clow1X,clow1Y,-self.angleMouth,k/10,k2/10,72, 88)
+            enBatch:add(enQuads.clow2,clow2X,clow2Y,-self.angleMouth,k/10,k2/10,72, 88)
             
             enBatch:setColor(1,0.5,0.5,1)
             enBatch:add(enQuads.body,self.x,self.y,-self.angleBody+math.pi,k/10,k2/10,240/2, 352/2)
             
-            self.body:draw('fill')
+          --  self.body:draw('fill')
         else
+          
+            local clow1X =self.x +20*k*math.sin(self.angleBody+math.pi/8)
+            local clow1Y =self.y +20*k2*math.cos(self.angleBody+math.pi/8)
+            local clow2X =self.x +20*k*math.sin(self.angleBody-math.pi/8)
+            local clow2Y =self.y +20*k2*math.cos(self.angleBody-math.pi/8)
+         --   local clow2X =self.x +16*k*math.sin(self.angleMouth-math.pi)
+        --    local clow2Y =self.y +16*k2*math.cos(self.angleMouth-math.pi)
+            enBatch:add(enQuads.clow1,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/11,k2/11,72, 88)
+            enBatch:add(enQuads.clow2,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/11,k2/11,72, 88)
+          --  enBatch:add(enQuads.clow2,clow2X,clow2Y,self.angleMouth,k/10,k2/10,72, 88)
             enBatch:setColor(1,1,1,1)
             enBatch:add(enQuads.body,self.x,self.y,-self.angleBody+math.pi,k/10,k2/10,240/2, 352/2)
-            self.body:draw('fill')
+          --  self.body:draw('fill')
         end
+    end;
+    traceSpawn = function(self,r,color1,color2,color3)
+        local trace = {
+            angle = self.angleBody,
+            ax =-2*k*math.sin(self.angleBody) ,
+            ay =-2*k2*math.cos(self.angleBody),
+            x = 0 ,
+            y = 0 , 
+            r = r ,
+            color1 = color1,
+            color2 = color2,
+            color3 = color3,
+        }
+        table.insert(self.traces,trace)
+        if ( #self.traces >9) then
+           table.remove(self.traces,1)
+        end
+    end;
+    traceDraw = function(self,dt)
+        for i = 1, #self.traces do
+            local trace = self.traces[i]
+            local radius =trace.r/4*i
+            trace.x = trace.x+90*trace.ax*dt
+            trace.y = trace.y+90*trace.ay*dt
+            love.graphics.setColor(trace.color1*i,trace.color2*i,trace.color3*i) 
+            love.graphics.circle("fill",self.x+ trace.x,self.y+trace.y,radius)
+        end
+    end;
+    kill =  function(self,i) 
+        if (en[i].health and en[i].health<=0 ) then
+            spawnResNormal(en,i)
+            if (slediEn[i]) then
+                table.remove(slediEn,i)
+            end
+            table.remove(en,i)
+        end  
     end;
 }
 

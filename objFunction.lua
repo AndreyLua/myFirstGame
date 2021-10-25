@@ -201,7 +201,7 @@ function objDestroy(mas,i)
             start = finish
             table.insert(obj,ee)
         else
-            allDecompose(mas,i)
+            spawnResBig(mas,i)
         end
     end
 end
