@@ -271,7 +271,7 @@ function game:movement(dt)
       obj[#obj].f = true
         obj[#obj].x = mouse.x
        obj[#obj].y = mouse.y
-        allSpawn(en,Geo,1)
+        allSpawn(en,Geo,2)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -496,42 +496,17 @@ function allSpawn(mas,Geo,Tip)
     if ( mas == en) then
         local x,y = enGeo(Geo)
         if ( Tip ==1) then
-            local e = enemyMelee:clone()
+            local e = enemyHammer:clone()
             e.x = x 
             e.y = y 
             e:newBody(e.x, e.y)
             table.insert(mas,e)
         end
         if ( Tip ==2) then 
-            local w = 16
-            local h =  16 
-            local health = 2
-            local damage = 10
-            local e = {
-                body =HC.rectangle(x,y,w*k,h*k2),
-                w =  w , 
-                h == h ,
-                damage = damage, 
-                invTimer = 20,
-                timer = 0 , 
-                atack = 0,
-                atackTimer = 30,
-                tip = Tip, 
-                ugol =  0,
-                color1 =0.8,
-                color2=0.2,
-                color3 =0.2,
-                scale = 100,
-                r = 0 ,
-                flagr = 0 ,
-                f = false,
-                x  = x, 
-                y = y ,  
-                ax  =0, 
-                ay = 0, 
-                health = health,
-                healthM = health
-                }
+            local e = enemyShooter:clone()
+            e.x = x 
+            e.y = y 
+            e:newBody(e.x, e.y)
             table.insert(mas,e)
         end
     end
@@ -667,7 +642,7 @@ function allDraw(dt)
                             --obj[i].body:draw('line')
                         else
                             objVect(i,1,1,1)
-                            --obj[i].body:draw('line')
+                           -- obj[i].body:draw('line')
                         end
                     end
                 end

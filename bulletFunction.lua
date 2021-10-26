@@ -12,11 +12,11 @@ local bulletFunction = {}
     end
     function bulletsColl(i)
         if (player.a == 1) then
-            if ( (   math.sqrt(math.pow((player.x+40*k/2-enemyBullets[i].x),2)+math.pow((player.y+40*k2/2-enemyBullets[i].y),2)   )) < 35*k) then
+            if ( (   math.sqrt(math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)   )) <playerAbility.scaleBody*k) then
                 table.remove(enemyBullets,i)
             end
         else
-            if ( (   math.sqrt(math.pow((player.x+40*k/2-enemyBullets[i].x),2)+math.pow((player.y+40*k2/2-enemyBullets[i].y),2)   )) < 20*k) then
+            if ( (   math.sqrt(math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)   )) < playerAbility.scaleBody*k) then
                 flaginv = false 
                 shake = 2
                 hp.long = hp.long -enemyBullets[i].damage
@@ -31,9 +31,9 @@ local bulletFunction = {}
       
       
     function bulletsBorder(i)
-          if ( enemyBullets[i] and (enemyBullets[i].x<0 or  enemyBullets[i].x>screenWidth or enemyBullets[i].y<0 or enemyBullets[i].y>screenHeight)) then
-                table.remove(enemyBullets,i)
-          end
+        if not(enemyBullets[i] and  enemyBullets[i].x>camera.x-screenWidth/2-20*k and  enemyBullets[i].x<screenWidth+camera.x-screenWidth/2+20*k+20*k and  enemyBullets[i].y>camera.y-screenHeight/2-20*k2 and enemyBullets[i].y<screenHeight+camera.y-screenHeight/2+20*k2+20*k2) then
+            table.remove(enemyBullets,i)
+        end
     end
 
     function bulletsMove(i,dt)

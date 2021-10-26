@@ -414,6 +414,7 @@ end
 
 function  objVect(i,color1,color2,color3)
     local parametrs = tableMeteorsPar[obj[i].met]
+
     local kHalf  = k/2 
     local k2Half  = k2/2 
     local collWK =  parametrs.collW*kHalf

@@ -21,62 +21,66 @@ playerQuads = {
   wings = love.graphics.newQuad(465,  153,  448, 256,playerSet:getDimensions()),
 }
 enQuads = {
-  body = love.graphics.newQuad(0,  0,  240, 352, enSet:getDimensions()),
-  clow1 = love.graphics.newQuad(241,  0,  144, 176, enSet:getDimensions()),
-  clow2 = love.graphics.newQuad(386,  0,  144, 176, enSet:getDimensions()),
+  bodyMelee = love.graphics.newQuad(0,  0,  120,176, enSet:getDimensions()),
+  clow1Melee = love.graphics.newQuad(120,  0,  72, 88, enSet:getDimensions()),
+  clow2Melee = love.graphics.newQuad(193,  0,  72, 88, enSet:getDimensions()),
+  bodyShooter = love.graphics.newQuad(0,  177,  126,296, enSet:getDimensions()),
+  clow1Shooter = love.graphics.newQuad(142,  177,  80, 64, enSet:getDimensions()),
+  clow2Shooter = love.graphics.newQuad(223,  177,  80, 64, enSet:getDimensions()),
+  
 }
 
 meteorSetW,meteorSetH =  meteorSet:getDimensions()
 tableMeteorsPar ={
   {
-    texX =0,
+    texX =434/meteorSetW,
     texY =0,
-    texCX = (0+228/2)/meteorSetW,
-    texCY = (0+256/2)/meteorSetH,
-    texW = 228,
-    texH = 256,
-    collW = 81.3095,
+    texCX = (434+416/2)/meteorSetW,
+    texCY = (0+440/2)/meteorSetH,
+    texW = 416,
+    texH = 440,
+    collW = 81.3095,--
     collH = 85.3333,
   },
     {
-    texX =259/meteorSetW,
+    texX =860/meteorSetW,
     texY =0,
-    texCX = (259+248/2)/meteorSetW,
-    texCY =(0+256/2)/meteorSetH,
-    texW = 248,
-    texH = 256,
+    texCX = (860+384/2)/meteorSetW,
+    texCY =(0+392/2)/meteorSetH,
+    texW = 384,
+    texH = 392,
     collW = 74.1949,
     collH = 76.6984,
   },
   ------------------------------------
    {
-    texX =1073/meteorSetW,
+    texX =0/meteorSetW,
     texY =0,
-    texCX = (1073+216/2)/meteorSetW,
-    texCY =(0+256/2)/meteorSetH,
-    texW = 216,
-    texH = 256,
+    texCX = (0+424/2)/meteorSetW,
+    texCY =(0+512/2)/meteorSetH,
+    texW = 424,
+    texH = 512,--
     collW = 83.3422,
     collH = 100.5714,
   },
   ----------------------------
    {
-    texX =518/meteorSetW,
+    texX =1254/meteorSetW,
     texY =0,
-    texCX = (518+248/2)/meteorSetW,
-    texCY =(0+216/2)/meteorSetH,
-    texW = 248,
-    texH = 216,
+    texCX = (1254+328/2)/meteorSetW,
+    texCY =(0+288/2)/meteorSetH,
+    texW = 328,
+    texH = 288,--
     collW = 63.0148,
     collH = 55.3650,
   },
      {
-    texX =777/meteorSetW,
+    texX =1592/meteorSetW,
     texY =0,
-    texCX = (777+256/2)/meteorSetW,
-    texCY =(0+208/2)/meteorSetH,
-    texW = 256,
-    texH = 208,
+    texCX = (1592+216/2)/meteorSetW,
+    texCY =(0+168/2)/meteorSetH,
+    texW = 216,
+    texH = 168,--
     collW = 40.14657,
     collH = 32.50793,
   }
@@ -122,7 +126,8 @@ game = require "game"
 bulletFunction = require "bulletFunction"
 playerFunction = require "playerFunction"
 enFunction = require "enFunction" 
-enClass = require "enClass" 
+enClassHammer = require "enClassHammer" 
+enClassShooter = require "enClassShooter" 
 resFunction = require "resFunction" 
 objFunction = require "objFunction" 
 pause = require "pause" 

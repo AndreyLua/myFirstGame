@@ -1,54 +1,5 @@
 local enFunction = {}
 
-
-function enMove(i,dt) 
-    if ( en[i] and  en[i].tip == 1) then
-    en[i]:move(dt)
-    
-    end
-    if ( en[i].tip == 2) then
-        if ( en[i].invTimer and  en[i].invTimer ==en[i].timer) then
-        -----------------------------------------------------    
-            if (en[i].atack and en[i].atack==en[i].atackTimer and en[i].invTimer ==en[i].timer and (math.sqrt(math.pow((player.x+40*k/2-en[i].x),2)+math.pow((player.y+40*k2/2-en[i].y),2))) <= 300*k ) then
-                en[i].atack = en[i].atackTimer-0.001
-                enFire(player.x+40*k/2,player.y+40*k2/2,en[i].x,en[i].y,en[i].ugol,en[i].damage)
-            end
-            enRotAngle(i,en[i].tip,dt)
-            local ugol = math.atan2(player.x-en[i].x+20*k,player.y-en[i].y+20*k)
-            enUgol(i,ugol,dt)
-            if ((math.abs(ugol) -  math.abs(en[i].ugol)) > 2.01*dt or (math.abs(ugol) -  math.abs(en[i].ugol)) <  -2.01*dt ) then
-                en[i].x= en[i].x+en[i].ax*dt*3
-                en[i].y= en[i].y+en[i].ay*dt*3
-            else
-                en[i].x= en[i].x+en[i].ax*dt*7
-                en[i].y= en[i].y+en[i].ay*dt*7
-            end
-            en[i].x= en[i].x+math.sin(en[i].y/7)*dt*50--!!!!!!!!!!!!
-            en[i].y= en[i].y+math.cos(en[i].x/7)*dt*50--!!!!!!!!!!
-        -----------------------------------------------------      
-        else
-        -----------------------------------------------------  
-            if (en[i].ax>0)then
-                en[i].ax =en[i].ax-50*dt
-            else
-                en[i].ax =en[i].ax+50*dt
-            end
-            if (en[i].ay>0)then
-                en[i].ay =en[i].ay-50*dt
-            else
-                en[i].ay =en[i].ay+50*dt
-            end
-            en[i].x= en[i].x-en[i].ax*dt*3
-            en[i].y= en[i].y-en[i].ay*dt*3
-        -----------------------------------------------------  
-        end
-    end
-    if ( en[i].tip == 3) then
-      
-    end   
-    
-end
-
 function enCollWithPlayerInRegularS(index,dt)
      if ( enRegulS[index]) then 
         local kek = enRegulS[index]
@@ -208,28 +159,6 @@ function enemiesSledDraw(dt)
         if ( #slediEn[i] >5) then
            table.remove(slediEn[i],1)
         end
-    end
-end
-
-function enemySled(x,y,r,i,color1,color2,color3,angle,tip)
-    local sledEn = {
-        angle = angle,
-        tip = tip,
-        ax =-2*k*math.sin(angle) ,
-        ay =-2*k2*math.cos(angle),
-        x = x ,
-        y = y , 
-        r = r ,
-        color1 = color1,
-        color2 = color2,
-        color3 = color3,
-    }
-    if ( slediEn[i]) then
-        table.insert(slediEn[i],sledEn)
-    else
-        local ii = {}
-        slediEn[i] = ii
-        table.insert(slediEn[i],sledEn)
     end
 end
 

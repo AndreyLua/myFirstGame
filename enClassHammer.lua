@@ -1,6 +1,6 @@
-local enClass =  {} 
+local enClassHammer =  {} 
 
-enemyMeleeTable = {
+enemyHammerTable = {
     25, --w
     30,  --h
     1,  -- tip
@@ -29,7 +29,7 @@ enemyMeleeTable = {
     {}, -- traces
 }
 
-enemyMeleeClass = Class{
+enemyHammerClass = Class{
     init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces)
         self.w = w
         self.h = h 
@@ -59,7 +59,7 @@ enemyMeleeClass = Class{
         self.traces = traces
     end;
     newBody =  function(self)
-        local bodyEn  = HC.rectangle(self.x,self.y, enemyMeleeTable[1]*k, enemyMeleeTable[2]*k)
+        local bodyEn  = HC.rectangle(self.x,self.y, enemyHammerTable[1]*k, enemyHammerTable[2]*k)
         self.body = bodyEn
     end;
     IndexInRegulS =  function(self,scaleS)
@@ -217,30 +217,24 @@ enemyMeleeClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-            local clow1X =self.x +26*k*math.sin(self.angleMouth)
-            local clow1Y =self.y +26*k2*math.cos(self.angleMouth)
-            local clow2X =self.x +26*k*math.sin(self.angleMouth)
-            local clow2Y =self.y +26*k2*math.cos(self.angleMouth)
-            enBatch:add(enQuads.clow1,clow1X,clow1Y,-self.angleMouth,k/10,k2/10,72, 88)
-            enBatch:add(enQuads.clow2,clow2X,clow2Y,-self.angleMouth,k/10,k2/10,72, 88)
-            
-            enBatch:setColor(1,0.5,0.5,1)
-            enBatch:add(enQuads.body,self.x,self.y,-self.angleBody+math.pi,k/10,k2/10,240/2, 352/2)
-            
-          --  self.body:draw('fill')
-        else
-          
             local clow1X =self.x +20*k*math.sin(self.angleBody+math.pi/8)
             local clow1Y =self.y +20*k2*math.cos(self.angleBody+math.pi/8)
             local clow2X =self.x +20*k*math.sin(self.angleBody-math.pi/8)
             local clow2Y =self.y +20*k2*math.cos(self.angleBody-math.pi/8)
-         --   local clow2X =self.x +16*k*math.sin(self.angleMouth-math.pi)
-        --    local clow2Y =self.y +16*k2*math.cos(self.angleMouth-math.pi)
-            enBatch:add(enQuads.clow1,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/11,k2/11,72, 88)
-            enBatch:add(enQuads.clow2,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/11,k2/11,72, 88)
-          --  enBatch:add(enQuads.clow2,clow2X,clow2Y,self.angleMouth,k/10,k2/10,72, 88)
+            enBatch:add(enQuads.clow1Melee,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/5.5,k2/5.5,36, 44)
+            enBatch:add(enQuads.clow2Melee,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/5.5,k2/5.5,36, 44)
+            enBatch:setColor(1,0.4,0.4,1)
+            enBatch:add(enQuads.bodyMelee,self.x,self.y,-self.angleBody+math.pi,k/5,k2/5,60, 88)
+          --  self.body:draw('fill')
+        else
+            local clow1X =self.x +20*k*math.sin(self.angleBody+math.pi/8)
+            local clow1Y =self.y +20*k2*math.cos(self.angleBody+math.pi/8)
+            local clow2X =self.x +20*k*math.sin(self.angleBody-math.pi/8)
+            local clow2Y =self.y +20*k2*math.cos(self.angleBody-math.pi/8)
+            enBatch:add(enQuads.clow1Melee,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/5.5,k2/5.5,36, 44)
+            enBatch:add(enQuads.clow2Melee,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/5.5,k2/5.5,36, 44)
             enBatch:setColor(1,1,1,1)
-            enBatch:add(enQuads.body,self.x,self.y,-self.angleBody+math.pi,k/10,k2/10,240/2, 352/2)
+            enBatch:add(enQuads.bodyMelee,self.x,self.y,-self.angleBody+math.pi,k/5,k2/5,60, 88)
           --  self.body:draw('fill')
         end
     end;
@@ -282,5 +276,5 @@ enemyMeleeClass = Class{
     end;
 }
 
-enemyMelee = enemyMeleeClass(unpack(enemyMeleeTable))
-return  enClass
+enemyHammer = enemyHammerClass(unpack(enemyHammerTable))
+return  enClassHammer
