@@ -66,7 +66,7 @@ enemyHammerClass = Class{
         return math.floor((self.x-scaleS/2*k)/(scaleS*k)) + math.floor((self.y-scaleS/2*k2)/(scaleS*k2))*math.floor((screenWidth/(scaleS*k))+1)
     end;
     insertInRegulS =  function(self,i)
-        local IenRegulS = self.IndexInRegulS(self,120)
+        local IenRegulS = self.IndexInRegulS(self,80)
         if (self.inScreen(self)) then
             if (enRegulS[IenRegulS]) then
                 table.insert(enRegulS[IenRegulS],i)
@@ -217,38 +217,33 @@ enemyHammerClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-            local clow1X =self.x +20*k*math.sin(self.angleBody+math.pi/8)
-            local clow1Y =self.y +20*k2*math.cos(self.angleBody+math.pi/8)
-            local clow2X =self.x +20*k*math.sin(self.angleBody-math.pi/8)
-            local clow2Y =self.y +20*k2*math.cos(self.angleBody-math.pi/8)
-            enBatch:add(enQuads.clow1Melee,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/5.5,k2/5.5,36, 44)
-            enBatch:add(enQuads.clow2Melee,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/5.5,k2/5.5,36, 44)
-            enBatch:setColor(1,0.4,0.4,1)
-            enBatch:add(enQuads.bodyMelee,self.x,self.y,-self.angleBody+math.pi,k/5,k2/5,60, 88)
+             local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
+            local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
+            local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
+            local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
+            enBatch:setColor(1,0.5,0.5,1)
+            enBatch:add(enQuads.clow1Melee,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/6,k2/6,36, 44)
+            enBatch:add(enQuads.clow2Melee,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
+            enBatch:add(enQuads.bodyMelee,self.x,self.y,-self.angleBody+math.pi,k/6,k2/6,60, 88)
           --  self.body:draw('fill')
         else
-            local clow1X =self.x +20*k*math.sin(self.angleBody+math.pi/8)
-            local clow1Y =self.y +20*k2*math.cos(self.angleBody+math.pi/8)
-            local clow2X =self.x +20*k*math.sin(self.angleBody-math.pi/8)
-            local clow2Y =self.y +20*k2*math.cos(self.angleBody-math.pi/8)
-            enBatch:add(enQuads.clow1Melee,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/5.5,k2/5.5,36, 44)
-            enBatch:add(enQuads.clow2Melee,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/5.5,k2/5.5,36, 44)
+            local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
+            local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
+            local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
+            local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
             enBatch:setColor(1,1,1,1)
-            enBatch:add(enQuads.bodyMelee,self.x,self.y,-self.angleBody+math.pi,k/5,k2/5,60, 88)
-          --  self.body:draw('fill')
+            enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/5,k2/5,125, 95.5)
+           -- self.body:draw('fill')
         end
     end;
-    traceSpawn = function(self,r,color1,color2,color3)
+    traceSpawn = function(self)
         local trace = {
             angle = self.angleBody,
             ax =-2*k*math.sin(self.angleBody) ,
             ay =-2*k2*math.cos(self.angleBody),
-            x = 0 ,
-            y = 0 , 
-            r = r ,
-            color1 = color1,
-            color2 = color2,
-            color3 = color3,
+            x = -10*k*math.sin(self.angleBody) ,
+            y = -10*k2*math.cos(self.angleBody) , 
+            r = 2*k ,
         }
         table.insert(self.traces,trace)
         if ( #self.traces >9) then
@@ -258,11 +253,29 @@ enemyHammerClass = Class{
     traceDraw = function(self,dt)
         for i = 1, #self.traces do
             local trace = self.traces[i]
-            local radius =trace.r/4*i
-            trace.x = trace.x+90*trace.ax*dt
-            trace.y = trace.y+90*trace.ay*dt
-            love.graphics.setColor(trace.color1*i,trace.color2*i,trace.color3*i) 
-            love.graphics.circle("fill",self.x+ trace.x,self.y+trace.y,radius)
+            local radius =trace.r/6*i
+            trace.x = trace.x+80*trace.ax*dt
+            trace.y = trace.y+80*trace.ay*dt
+            love.graphics.setColor(0.09/7*i,0.5/7*i,0.5/7*i) 
+            love.graphics.circle("fill",self.x+  trace.x+math.cos(self.y+trace.y)+k*math.sin(self.angleBody-math.pi/2) ,self.y + trace.y+math.sin(self.x+trace.x) +k2*math.cos(self.angleBody-math.pi/2),radius)
+        end
+    end;
+    hit  = function(self,a,i)
+        if ( a == 0 ) then
+            if ( player.invis == 10 and self.invTimer == self.timer ) then
+                flaginv = false 
+                shake = 2
+                hp.long = hp.long - self.damage
+                hp.long3  = hp.long
+            end 
+        else
+            if ( self.invTimer and  self.invTimer ==self.timer) then
+                self.timer =  self.invTimer-0.001
+                self.health  =  self.health - playerAbility.damage
+                self.ax =self.ax - player.ax
+                self.ay =self.ay -  player.ay
+                spawnResSmall(en,i)
+            end  
         end
     end;
     kill =  function(self,i) 

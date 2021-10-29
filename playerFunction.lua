@@ -142,19 +142,19 @@ function playerCollWithObj(dt)
 end
 
 function playerCollWithEn(dt)
-    local playerIndex =math.floor((player.x-40*k)/(120*k)) + math.floor((player.y-40*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
+    local playerIndex =math.floor((player.x-40*k)/(80*k)) + math.floor((player.y-40*k2)/(80*k2))*math.floor((screenWidth/(80*k))+1) 
     enCollWithPlayerInRegularS(playerIndex,dt)
     enCollWithPlayerInRegularS(playerIndex-1,dt)
     enCollWithPlayerInRegularS(playerIndex+1,dt)
   
-    enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1),dt)
-    enCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1),dt) 
+    enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(80*k))+1),dt)
+    enCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(80*k))+1),dt) 
     
-    enCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)+1,dt)
-    enCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(120*k))+1)-1,dt)
+    enCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(80*k))+1)+1,dt)
+    enCollWithPlayerInRegularS(playerIndex+math.floor((screenWidth/(80*k))+1)-1,dt)
     
-    enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)+1,dt)
-    enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1,dt)
+    enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(80*k))+1)+1,dt)
+    enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(80*k))+1)-1,dt)
 end
 
 function playerClowR(dt)

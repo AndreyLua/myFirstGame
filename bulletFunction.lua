@@ -1,22 +1,83 @@
 local bulletFunction = {}
 
-    function bulletsUpdate(dt)
-        for i = 1, #enemyBullets do
+function bulletsUpdate(dt)
+    for i = 1, #enemyBullets do
+        if ( enemyBullets[i]) then
+            bulletsMove(i,dt)
+            bulletsBorder(i)
             if ( enemyBullets[i]) then
-                bulletsMove(i,dt)
-                bulletsColl(i)
-                bulletsBorder(i)
+                local index = IndexBulletInRegulS(120,i)
+                bulletsCollWithPlayer(index,i)
+                bulletsCollWithPlayer(index-1,i)
+                bulletsCollWithPlayer(index+1,i)
+                bulletsCollWithPlayer(index-math.floor((screenWidth/(120*k))+1),i)
+                bulletsCollWithPlayer(index+math.floor((screenWidth/(120*k))+1),i)
+                bulletsCollWithPlayer(index+math.floor((screenWidth/(120*k))+1)+1,i)
+                bulletsCollWithPlayer(index+math.floor((screenWidth/(120*k))+1)-1,i)
+                bulletsCollWithPlayer(index-math.floor((screenWidth/(120*k))+1)+1,i)
+                bulletsCollWithPlayer(index-math.floor((screenWidth/(120*k))+1)-1,i)
+            end
+            if ( enemyBullets[i]) then
+                local index = IndexBulletInRegulS(120,i)
+                bulletsCollWithObj(index,dt,i)
+                bulletsCollWithObj(index-1,dt,i)
+                bulletsCollWithObj(index+1,dt,i)
+                bulletsCollWithObj(index-math.floor((screenWidth/(120*k))+1),dt,i)
+                bulletsCollWithObj(index+math.floor((screenWidth/(120*k))+1),dt,i)
+                bulletsCollWithObj(index+math.floor((screenWidth/(120*k))+1)+1,dt,i)
+                bulletsCollWithObj(index+math.floor((screenWidth/(120*k))+1)-1,dt,i)
+                bulletsCollWithObj(index-math.floor((screenWidth/(120*k))+1)+1,dt,i)
+                bulletsCollWithObj(index-math.floor((screenWidth/(120*k))+1)-1,dt,i)
             end
         end
-      
     end
+end
+
+function IndexBulletInRegulS(scaleS,i)
+    return math.floor((enemyBullets[i].x-scaleS/2*k)/(scaleS*k)) + math.floor((enemyBullets[i].y-scaleS/2*k2)/(scaleS*k2))*math.floor((screenWidth/(scaleS*k))+1)
+end
+function bulletsCollWithEn(index,dt,j)
+    if ( enRegulS[index]) then 
+        local kek = enRegulS[index]
+        for i =1, #kek do
+            if (en[kek[i]] and en[kek[i]].body and enemyBullets[j] and (math.pow((en[kek[i]].x - (enemyBullets[j].x)),2) + math.pow((en[kek[i]].y - (enemyBullets[j].y)),2))<=math.pow((2*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k),2))  then
+                local bulletBody  =  HC.circle(enemyBullets[j].x,enemyBullets[j].y,2*k)
+                if ( bulletBody:collidesWith(en[kek[i]].body)) then
+                    table.remove(enemyBullets,j)
+                end
+            end
+        end
+    end
+end
+
+function bulletsCollWithObj(index,dt,j)
+    if ( objRegulS[index]) then 
+        local kek = objRegulS[index]
+        for i =1, #kek do
+            if (obj[kek[i]] and obj[kek[i]].body and enemyBullets[j] and (math.pow((obj[kek[i]].x - (enemyBullets[j].x)),2) + math.pow((obj[kek[i]].y - (enemyBullets[j].y)),2))<=math.pow((2*k+obj[kek[i]].collScale/2*k),2))  then
+                local bulletBody  =  HC.circle(enemyBullets[j].x,enemyBullets[j].y,2*k)
+                if ( bulletBody:collidesWith(obj[kek[i]].body)) then
+                    table.remove(enemyBullets,j)
+                end
+            end
+        end
+    end
+end
+
+function bulletsCollWithPlayer(index,i)
+    local playerIndex =math.floor((player.x-40*k)/(120*k)) + math.floor((player.y-40*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
+    if ( index == playerIndex) then 
+        bulletsColl(i)
+    end
+end
+
     function bulletsColl(i)
         if (player.a == 1) then
-            if ( (   math.sqrt(math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)   )) <playerAbility.scaleBody*k) then
+            if ((math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)) < math.pow(playerAbility.scaleBody*k,2)) then
                 table.remove(enemyBullets,i)
             end
         else
-            if ( (   math.sqrt(math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)   )) < playerAbility.scaleBody*k) then
+            if ((math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)) < math.pow(playerAbility.scaleBody*k,2)) then
                 flaginv = false 
                 shake = 2
                 hp.long = hp.long -enemyBullets[i].damage

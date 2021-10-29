@@ -20,45 +20,8 @@ function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip )
         en[i].x  = en[i].x -intVectorX*dt*10
         en[i].y = en[i].y - intVectorY*dt*10
     end
-    if ( a == 1) then
-        if (tip == 1) then 
-            if ( en[i] and en[i].health and en[i].invTimer and  en[i].invTimer ==en[i].timer) then
-                en[i].timer =  en[i].invTimer-0.001
-                en[i].health  =  en[i].health - playerAbility.damage
-                en[i].ax =en[i].ax - player.ax
-                en[i].ay =en[i].ay -  player.ay
-                spawnResSmall(en,i)
-                
-            end
-        end
-        if (tip == 2) then 
-            if ( en[i] and en[i].health and en[i].invTimer and  en[i].invTimer ==en[i].timer) then
-                en[i].timer =  en[i].invTimer-0.001
-                en[i].health  =  en[i].health - playerAbility.damage
-                en[i].ax =en[i].ax - player.ax
-                en[i].ay =en[i].ay -  player.ay
-                spawnResSmall(en,i)
-            end
-        end
-    else
-        if ( en[i].tip == 1) then
-            if ( player.invis == 10 and  en[i] and en[i].health and en[i].atack  and en[i].invTimer ==en[i].timer ) then
-                flaginv = false 
-                shake = 2
-                hp.long = hp.long - en[i].damage
-                hp.long3  = hp.long
-            end 
-        end 
-        if ( en[i].tip == 2) then
-            if ( en[i] and en[i].health and en[i].invTimer and  en[i].invTimer ==en[i].timer) then
-                en[i].timer =  en[i].invTimer-0.001
-                en[i].health  =  en[i].health - playerAbility.damage/1.5
-                en[i].ax =en[i].ax - player.ax
-                en[i].ay =en[i].ay -  player.ay
-                spawnResSmall(en,i)
-            end  
-        end
-    end
+    en[i]:hit(player.a,i)
+  
 end
 
 function enCollWithenInRegularS(index,j,dt)
@@ -108,11 +71,14 @@ function enCollWithobjInRegularS(index,j,dt)
                             local deepY = intVectorY
                             obj[kek[i]].ax= obj[kek[i]].ax +(en[j].ax*k*dt)*5*sumMas/obj[kek[i]].scale
                             obj[kek[i]].ay= obj[kek[i]].ay  +(en[j].ay*k*dt)*5*sumMas/obj[kek[i]].scale
+                            en[j].ax  = en[j].ax*0.8
+                            en[j].ay = en[j].ay*0.8
                             if ((deepX*deepX+deepY*deepY >=math.pow(0.05*enScale*k,2))) then
                                 obj[kek[i]].x  = obj[kek[i]].x - deepX*dt*10
                                 obj[kek[i]].y = obj[kek[i]].y - deepY*dt*10
-                                en[j].ax = 0 
-                                en[j].ay = 0
+            
+                            --    en[j].ax = 0 
+                              --  en[j].ay = 0
                                 en[j].x  = en[j].x + deepX*dt*10
                                 en[j].y = en[j].y +  deepY*dt*10
                             end
@@ -127,8 +93,8 @@ end
 function enFire(x,y,x2,y2,angleEn,damage)
     local ugol = math.atan2(x-x2,y-y2)
     bullet = {
-        x = x2 + 25*k*math.sin(angleEn),
-        y = y2 + 25*k2*math.cos(angleEn),
+        x = x2 + 10*k*math.sin(angleEn),
+        y = y2 + 10*k2*math.cos(angleEn),
         ax = 22*k*math.sin(ugol),
         ay = 22*k2*math.cos(ugol),
         damage = damage

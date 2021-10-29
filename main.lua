@@ -25,9 +25,12 @@ enQuads = {
   clow1Melee = love.graphics.newQuad(120,  0,  72, 88, enSet:getDimensions()),
   clow2Melee = love.graphics.newQuad(193,  0,  72, 88, enSet:getDimensions()),
   bodyShooter = love.graphics.newQuad(0,  177,  126,296, enSet:getDimensions()),
-  clow1Shooter = love.graphics.newQuad(142,  177,  80, 64, enSet:getDimensions()),
-  clow2Shooter = love.graphics.newQuad(223,  177,  80, 64, enSet:getDimensions()),
-  
+  clow1Shooter = love.graphics.newQuad(111,  177,  80, 64, enSet:getDimensions()),
+  clow2Shooter = love.graphics.newQuad(192,  177,  80, 64, enSet:getDimensions()),
+  wing1Shooter = love.graphics.newQuad(127,  242,  224, 272, enSet:getDimensions()),
+  wing2Shooter = love.graphics.newQuad(0,  515, 224, 272, enSet:getDimensions()),
+  bodyHammer = love.graphics.newQuad(352,  0, 250, 191, enSet:getDimensions()),
+  bodyBomb = love.graphics.newQuad(356,  192, 240, 262, enSet:getDimensions()),
 }
 
 meteorSetW,meteorSetH =  meteorSet:getDimensions()
@@ -125,7 +128,8 @@ k2 = screenHeight/1080*2.5
 game = require "game"
 bulletFunction = require "bulletFunction"
 playerFunction = require "playerFunction"
-enFunction = require "enFunction" 
+enFunction = require "enFunction"
+enClassMelee = require "enClassMelee" 
 enClassHammer = require "enClassHammer" 
 enClassShooter = require "enClassShooter" 
 resFunction = require "resFunction" 

@@ -101,6 +101,7 @@ en = {}
 obj = {}
 objRegulS  = {}
 enRegulS  = {}
+bulletRegulS  = {}
 res = {}
 enemyBullets = {} 
 playerSledi = {} 
@@ -177,7 +178,7 @@ for i=1,#en do
         en[i]:atackTimerUpdate(dt)
         en[i]:atackStart()
         en[i]:insertInRegulS(i)
-        en[i]:traceSpawn(3*k,1,0.8,0.2)
+        en[i]:traceSpawn()
         en[i]:kill(i)
     end
 end
@@ -211,7 +212,7 @@ if ( colWave>0 and #obj < 20) then
         for i=1,math.random(0,1) do
             local Wave = waves[numberWave]
             local Geo  =math.random(1,4)
-            local Tip =math.random(1)
+            local Tip =math.random(1,2)
             local Scale =math.random(2,2)
             allSpawn(en,Geo,Tip)
         end
@@ -271,7 +272,7 @@ function game:movement(dt)
       obj[#obj].f = true
         obj[#obj].x = mouse.x
        obj[#obj].y = mouse.y
-        allSpawn(en,Geo,2)
+        allSpawn(en,Geo,math.random(1,2))
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -330,6 +331,7 @@ function  game:draw()
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(meshMeteors, 0,0)
     end
+    love.graphics.setColor(1,1,1,1)
     love.graphics.draw(enBatch)
     love.graphics.pop()
    
@@ -525,74 +527,6 @@ function allInvTimer(i,mas,dt)
     end
 end
 
-function enTip1(r2,mode,x,y,w,h,r,ox,oy,flag,hp,healthM )
-    local dp = 0
-    if (flag == 1) then
-        dp = 0.3
-    end
-    love.graphics.setColor(1+dp,0.18+dp,0.18+dp)
-    enRot1(r2,"fill",x,y,4*k,4*k2,r,4*k/2,4*k2/2)  
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    love.graphics.setColor(0.28+dp,0.04+dp,0.04+dp,1)
-    love.graphics.polygon('fill',1.7053571428572*k,0.3492063492064*k2,0.68898809523814*k,1.3650793650794*k2,4.7544642857143*k,4.4126984126984*k2,6.2790178571428*k,11.015873015873*k2,6.2790178571428*k,17.111111111111*k2,4.7544642857143*k,24.730158730159*k2,-0.8355654761905*k,32.349206349206*k2,0.8355654761905*k,32.349206349206*k2,-3.2299107142857*k,28.285714285714*k2,-4.7544642857143*k,24.730158730159*k2,-6.2790178571428*k,17.111111111111*k2,-6.2790178571428*k,11.015873015873*k2,-4.7544642857143*k,4.4126984126984*k2,-0.68898809523814*k,1.3650793650794*k2,-1.7053571428572*k,0.3492063492064*k2) 
-    love.graphics.setColor(0.616+dp,0.09+dp,0.09+dp,1)
-    if (hp/(healthM/100)>= 70) then
-        love.graphics.line(5.2626488095238*k,22.190476190476*k2,10.852678571429*k,22.190476190476*k2,12.377232142857*k,15.079365079365*k2,14.409970238095*k,23.206349206349*k2,6.7872023809524*k,27.269841269841*k2,3.2299107142857*k,24.730158730159*k2)
-    end
-    if (hp/(healthM/100)>= 50) then
-    love.graphics.line(-3.2299107142857*k,24.730158730159*k2,-6.7872023809524*k,27.269841269841*k2,-14.409970238095*k,23.206349206349*k2,-12.377232142857*k,15.079365079365*k2,-10.852678571429*k,22.190476190476*k2,-5.2626488095238*k,22.190476190476*k2)
-    end
-    love.graphics.setColor(0.616+dp,0.09+dp,0.09+dp,1)
-    love.graphics.line(1.7053571428572*k,0.3492063492064*k2,0.68898809523814*k,1.3650793650794*k2,4.7544642857143*k,4.4126984126984*k2,6.2790178571428*k,11.015873015873*k2,6.2790178571428*k,17.111111111111*k2,4.7544642857143*k,24.730158730159*k2,3.2299107142857*k,28.285714285714*k2,-0.8355654761905*k,32.349206349206*k2)love.graphics.line(0.8355654761905*k,32.349206349206*k2,-3.2299107142857*k,30.285714285714*k2,-4.7544642857143*k,26.730158730159*k2,-6.2790178571428*k,19.111111111111*k2,-6.2790178571428*k,13.015873015873*k2,-4.7544642857143*k,6.4126984126984*k2,-0.68898809523814*k,1.3650793650794*k2,-1.7053571428572*k,0.3492063492064*k2)
-    love.graphics.pop()
-    love.graphics.pop()
-end
-function enTip2(r2,mode,x,y,w,h,r,ox,oy,flag,hp,healthM )
-    local dp = 0
-    if (flag == 1) then
-        dp = 0.3
-    end
-    love.graphics.setColor(0.565+dp,0.137+dp,0.137+dp)
-    enRot2(r2,"fill",x,y,4*k,4*k2,r,4*k/2,4*k2/2)  
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    love.graphics.setColor(0.282+dp,0.067+dp,0.067+dp,0.8)
-    love.graphics.circle('fill',0,8*k2,8*k2)
-    love.graphics.setColor(0.565+dp,0.137+dp,0.137+dp)
-    if (hp/(healthM/100)>= 70) then
-        love.graphics.line(6.2790178571428*k,4.8888888888889*k2,10.344494047619*k,1.3333333333333*k2,10.344494047619*k,-4.7619047619048*k2,15.426339285714*k,8.952380952381*k2,7.295386904762*k,14.031746031746*k2) 
-    end
-    love.graphics.line(-7.295386904762*k,14.031746031746*k2,-15.426339285714*k,8.952380952381*k2,-10.344494047619*k,-4.7619047619048*k2,-10.344494047619*k,1.3333333333333*k2,-6.2790178571428*k,4.8888888888889*k2)
-    love.graphics.setColor(0.282+dp,0.067+dp,0.067+dp)
-    love.graphics.circle('line',0,8*k2,8*k2)
-    love.graphics.pop()
-    love.graphics.pop()
-end
-
-function enTip3(r2,mode,x,y,w,h,r,ox,oy,flag,hp,healthM )
-    love.graphics.setColor(color1,color2,color3)
-   
-    enRot3(r2,"fill",x,y,4*k,4*k2,r,4*k/2,4*k2/2,color1,color2,color3)  
-
-    love.graphics.push()
-    love.graphics.translate( x + ox,y + oy )
-    love.graphics.push()
-    love.graphics.rotate(-r)
-    love.graphics.setColor(0.1,0.1,0.1)
-    love.graphics.polygon('fill',0.18080357142862*k,3.3809523809524*k2,8.311755952381*k,7.952380952381*k2,8.311755952381*k,13.539682539683*k2,-0.3273809523809*k,9.47619047619*k2,0.3273809523809*k,9.47619047619*k2,-8.311755952381*k,13.539682539683*k2,-8.311755952381*k,7.952380952381*k2,-0.18080357142862*k,3.3809523809524*k2)
-    love.graphics.setColor(color1,color2,color3,1)
-    love.graphics.line(0.68898809523814*k,2.3492063492064*k2,5.2626488095238*k,4.3809523809524*k2,8.8199404761905*k,7.4285714285714*k2,9.328125*k,15.555555555556*k2,8.8199404761905*k,22.15873015873*k2,5.2626488095238*k,28.761904761905*k2,2.2135416666667*k,29.777777777778*k2,1.1971726190477*k,31.809523809524*k2,-1.1971726190477*k,31.809523809524*k2,-2.2135416666667*k,29.777777777778*k2,-5.2626488095238*k,28.761904761905*k2,-8.8199404761905*k,22.15873015873*k2,-9.328125*k,15.555555555556*k2,-8.8199404761905*k,7.4285714285714*k2,-5.2626488095238*k,4.3809523809524*k2,-0.68898809523814*k,2.3492063492064*k2) 
-    love.graphics.line(0,33.333333333333*k2,0,37.952380952381*k2)
-    
-    love.graphics.pop()
-    love.graphics.pop()
-end
-
 function allDraw(dt)
   --  player.body:draw('fill')
   --  enemiesSledDraw(dt)
@@ -653,13 +587,14 @@ function allDraw(dt)
     
     for  i=1,#en do
         if (en[i] and en[i]:inScreen()) then
-            local IenRegulS =en[i]:IndexInRegulS(120)
+            local IenRegulS =en[i]:IndexInRegulS(80)
             enCollWithenInRegularS(IenRegulS,i,dt)
             enCollWithenInRegularS(IenRegulS+1,i,dt)
-            enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
-            enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
-            enCollWithenInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
-                
+            enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1),i,dt)
+            enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
+            enCollWithenInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)
+            
+            IenRegulS =en[i]:IndexInRegulS(120)   
             enCollWithobjInRegularS(IenRegulS,i,dt)
             enCollWithobjInRegularS(IenRegulS-1,i,dt)
             enCollWithobjInRegularS(IenRegulS+1,i,dt)
@@ -672,7 +607,6 @@ function allDraw(dt)
             
             en[i]:traceDraw(dt)
             en[i]:draw(i)
-           
         end
     end
 end
