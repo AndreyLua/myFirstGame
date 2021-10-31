@@ -214,7 +214,7 @@ if ( colWave>0 and #obj < 20) then
             local Geo  =math.random(1,4)
             local Tip =math.random(1,2)
             local Scale =math.random(2,2)
-            allSpawn(en,Geo,Tip)
+       --     allSpawn(en,Geo,Tip)
         end
         Timer.clear() 
     end)
@@ -272,7 +272,7 @@ function game:movement(dt)
       obj[#obj].f = true
         obj[#obj].x = mouse.x
        obj[#obj].y = mouse.y
-        allSpawn(en,Geo,math.random(1,2))
+        allSpawn(en,Geo,3)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -304,7 +304,7 @@ function  game:draw()
     love.graphics.translate( 0  ,random(0,shake) )   
   end
   
-    love.graphics.setLineWidth(1)
+    love.graphics.setLineWidth(2)
     love.graphics.setColor(1,1,1,1)
   --   allDraw()
     love.graphics.push()
@@ -506,6 +506,13 @@ function allSpawn(mas,Geo,Tip)
         end
         if ( Tip ==2) then 
             local e = enemyShooter:clone()
+            e.x = x 
+            e.y = y 
+            e:newBody(e.x, e.y)
+            table.insert(mas,e)
+        end
+        if ( Tip ==3) then 
+            local e = enemyMelee:clone()
             e.x = x 
             e.y = y 
             e:newBody(e.x, e.y)

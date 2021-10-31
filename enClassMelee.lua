@@ -27,10 +27,13 @@ enemyMeleeTable = {
     3, --health
     3, --healthM
     {}, -- traces
+    0, --climbFlag
+    0, -- climbAtack
+    10, --climbAtackTimer
 }
 
 enemyMeleeClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,climbFlag,climbAtack,climbAtackTimer)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -41,6 +44,9 @@ enemyMeleeClass = Class{
         self.atackTimer = atackTimer
         self.dash =dash
         self.dashTimer = dashTimer
+        self.climbFlag = climbFlag
+        self.climbAtack = climbAtack
+        self.climbAtackTimer = climbAtackTimer
         self.color1 =color1
         self.color2=color2
         self.color3 =color3
@@ -107,6 +113,12 @@ enemyMeleeClass = Class{
         if ( self.dash < 0) then
             self.dash  = self.dashTimer
         end
+        if ( self.climbAtack <  self.climbAtackTimer) then
+            self.climbAtack  = self.climbAtack  - 30*dt
+        end
+        if ( self.climbAtack < 0) then
+            self.climbAtack  = self.climbAtackTimer
+        end
     end;
     angleBodyTr = function(self,angle,dt)
         if ( self.angleBody == 0) then
@@ -163,10 +175,22 @@ enemyMeleeClass = Class{
     move =  function(self,dt)
         self.body:moveTo(self.x, self.y)
         self.body:setRotation(-self.angleBody) 
-        if (self.invTimer and  self.invTimer == self.timer) then
-            self.moveNormal(self,dt)
+        if ( self.climbFlag == 0) then 
+            if (self.invTimer and  self.invTimer == self.timer) then
+                self.moveNormal(self,dt)
+            else
+                self.moveWounded(self,dt)
+            end
         else
-            self.moveWounded(self,dt)
+            local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+            self.angleBodyTr(self,anglePlayerEn,dt)
+            self.angleMouthTr(self,dt)
+            if (math.abs(-controler.angle+math.pi -  anglePlayerEn) < 0.3 ) then
+                self.climbFlag = 0  
+                self.timer =  self.invTimer-0.001
+            end
+            self.x = player.x -40*k*math.sin(anglePlayerEn)
+            self.y = player.y -40*k2*math.cos(anglePlayerEn)
         end
     end;
     moveNormal = function(self,dt)
@@ -235,7 +259,7 @@ enemyMeleeClass = Class{
             enBatch:add(enQuads.clow1Melee,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/6,k2/6,36, 44)
             enBatch:add(enQuads.clow2Melee,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
             enBatch:add(enQuads.bodyMelee,self.x,self.y,-self.angleBody+math.pi,k/6,k2/6,60, 88)
-           -- self.body:draw('fill')
+          --  self.body:draw('fill')
         end
     end;
     traceSpawn = function(self)
@@ -264,12 +288,15 @@ enemyMeleeClass = Class{
     end;
     hit  = function(self,a,i)
         if ( a == 0 ) then
-            if ( player.invis == 10 and self.invTimer == self.timer ) then
+            if ( player.invis == 10 and self.invTimer == self.timer) then
+                self.climbFlag = 1 
+            end 
+            if (self.climbFlag == 1 and self.climbAtack == self.climbAtackTimer ) then 
                 flaginv = false 
                 shake = 2
                 hp.long = hp.long - self.damage
                 hp.long3  = hp.long
-            end 
+            end
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
                 self.timer =  self.invTimer-0.001

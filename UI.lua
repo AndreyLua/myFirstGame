@@ -45,7 +45,7 @@ function playerHP(dt)
    hp3:every(0.1, function()
       hp.long2= hp.long2+0.5
      hp.long= hp.long+0.5
-      if ( hp.long>d2/2) then
+      if ( hp.long>screenHeight/2) then
         hp.long = screenHeight
         hp.long2 =screenHeight
         hp.long3 =screenHeight
