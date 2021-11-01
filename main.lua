@@ -4,6 +4,15 @@ Timer = require 'libs/hump.timer'
 Class = require "libs/hump.class"
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
+
+
+
+effect = moonshine(moonshine.effects.boxblur)
+                  .chain(moonshine.effects.filmgrain)
+                  .chain(moonshine.effects.vignette)
+effect.disable("boxblur", "filmgrain")
+effect.enable("filmgrain")
+  
 ------------------SETS-----------------------------
 meteorSet = love.graphics.newImage("assets/meteorSet.png")
 enSet = love.graphics.newImage("assets/enSet.png")
@@ -11,6 +20,7 @@ playerSet = love.graphics.newImage("assets/playerSet.png")
 ---------------------------------------------------
 playerBatch = love.graphics.newSpriteBatch(playerSet)
 enBatch = love.graphics.newSpriteBatch(enSet)
+enBatchDop = love.graphics.newSpriteBatch(enSet)
 
 playerQuads = {
   body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),
@@ -132,6 +142,7 @@ enFunction = require "enFunction"
 enClassMelee = require "enClassMelee" 
 enClassHammer = require "enClassHammer" 
 enClassShooter = require "enClassShooter" 
+enClassBomb = require "enClassBomb" 
 resFunction = require "resFunction" 
 objFunction = require "objFunction" 
 pause = require "pause" 

@@ -28,12 +28,15 @@ enemyMeleeTable = {
     3, --healthM
     {}, -- traces
     0, --climbFlag
-    0, -- climbAtack
-    10, --climbAtackTimer
+    100, -- climbAtack
+    100, --climbAtackTimer
+    0, -- meleeAtack
+    10, --meleeAtackTimer
+    0 , -- dopAngle
 }
 
 enemyMeleeClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,climbFlag,climbAtack,climbAtackTimer)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,climbFlag,climbAtack,climbAtackTimer,meleeAtack,meleeAtackTimer,dopAngle)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -47,6 +50,9 @@ enemyMeleeClass = Class{
         self.climbFlag = climbFlag
         self.climbAtack = climbAtack
         self.climbAtackTimer = climbAtackTimer
+        self.meleeAtack = meleeAtack 
+        self.meleeAtackTimer = meleeAtackTimer
+        self.dopAngle = dopAngle
         self.color1 =color1
         self.color2=color2
         self.color3 =color3
@@ -107,6 +113,12 @@ enemyMeleeClass = Class{
         if ( self.atack < 0) then
             self.atack  = self.atackTimer
         end
+        if ( self.meleeAtack <  self.meleeAtackTimer) then
+            self.meleeAtack  = self.meleeAtack  - 30*dt
+        end
+        if ( self.meleeAtack < 0) then
+            self.meleeAtack  = self.meleeAtackTimer
+        end
         if ( self.dash <  self.dashTimer) then
             self.dash  = self.dash  - 30*dt
         end
@@ -118,6 +130,8 @@ enemyMeleeClass = Class{
         end
         if ( self.climbAtack < 0) then
             self.climbAtack  = self.climbAtackTimer
+            self.climbFlag = 0 
+            self.atack  = self.atackTimer - 0.0001
         end
     end;
     angleBodyTr = function(self,angle,dt)
@@ -166,11 +180,23 @@ enemyMeleeClass = Class{
           --self.angleMouth = 0 
             self.angleMouthFlag = 0 
         end
-        if ( self.angleMouthFlag ==0) then
-            self.angleMouth  = self.angleMouth +1.1*dt*math.random(5,10)/7
+      
+        if ( self.dash <  self.dashTimer ) then
+            self.angleMouth = -0.3
         else
-            self.angleMouth  = self.angleMouth -1.1*dt*math.random(5,10)/7
+            if ( self.angleMouthFlag ==  0 ) then
+                self.angleMouth = self.angleMouth + 4*dt
+            else
+                self.angleMouth = self.angleMouth - 4*dt
+            end
         end
+    end;
+    collWithEn =  function(self,IenRegulS,i,dt)
+        enCollWithenInRegularSMelee(IenRegulS,i,dt)
+        enCollWithenInRegularSMelee(IenRegulS+1,i,dt)
+        enCollWithenInRegularSMelee(IenRegulS+math.floor((screenWidth/(80*k))+1),i,dt)
+        enCollWithenInRegularSMelee(IenRegulS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
+        enCollWithenInRegularSMelee(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)  
     end;
     move =  function(self,dt)
         self.body:moveTo(self.x, self.y)
@@ -183,14 +209,11 @@ enemyMeleeClass = Class{
             end
         else
             local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
-            self.angleBodyTr(self,anglePlayerEn,dt)
+            self.angleBody = anglePlayerEn
             self.angleMouthTr(self,dt)
-            if (math.abs(-controler.angle+math.pi -  anglePlayerEn) < 0.3 ) then
-                self.climbFlag = 0  
-                self.timer =  self.invTimer-0.001
-            end
-            self.x = player.x -40*k*math.sin(anglePlayerEn)
-            self.y = player.y -40*k2*math.cos(anglePlayerEn)
+    
+            self.x = player.x -(playerAbility.scaleBody+5)*k*math.sin(controler.angle + self.dopAngle)
+            self.y = player.y -(playerAbility.scaleBody+5)*k2*math.cos(controler.angle + self.dopAngle)
         end
     end;
     moveNormal = function(self,dt)
@@ -259,6 +282,9 @@ enemyMeleeClass = Class{
             enBatch:add(enQuads.clow1Melee,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/6,k2/6,36, 44)
             enBatch:add(enQuads.clow2Melee,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
             enBatch:add(enQuads.bodyMelee,self.x,self.y,-self.angleBody+math.pi,k/6,k2/6,60, 88)
+            enBatchDop:setColor(1,0.5,0.5,0.4)
+            enBatchDop:add(enQuads.clow1Melee,clow1X-camera.x+40*k/2+screenWidth/2,clow1Y-camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi+self.angleMouth,k/6,k2/6,36, 44)
+            enBatchDop:add(enQuads.clow2Melee,clow2X-camera.x+40*k/2+screenWidth/2,clow2Y-camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
           --  self.body:draw('fill')
         end
     end;
@@ -288,10 +314,14 @@ enemyMeleeClass = Class{
     end;
     hit  = function(self,a,i)
         if ( a == 0 ) then
-            if ( player.invis == 10 and self.invTimer == self.timer) then
+            if ( player.invis == 10 and self.invTimer == self.timer and self.climbAtack == self.climbAtackTimer and self.dash  ~= self.dashTimer)  then
                 self.climbFlag = 1 
+                self.climbAtack = self.climbAtackTimer - 0.0001
+              
+                self.dopAngle = self.angleBody-controler.angle
             end 
-            if (self.climbFlag == 1 and self.climbAtack == self.climbAtackTimer ) then 
+            if ( self.climbFlag == 1 and self.meleeAtackTimer == self.meleeAtack )  then 
+                self.meleeAtack = self.meleeAtackTimer - 0.0001
                 flaginv = false 
                 shake = 2
                 hp.long = hp.long - self.damage
@@ -299,6 +329,8 @@ enemyMeleeClass = Class{
             end
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
+                self.climbFlag = 0
+                self.climbAtack = self.climbAtackTimer
                 self.timer =  self.invTimer-0.001
                 self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax

@@ -160,6 +160,13 @@ enemyHammerClass = Class{
             self.angleMouth  = self.angleMouth -1.1*dt*math.random(5,10)/7
         end
     end;
+    collWithEn =  function(self,IenRegulS,i,dt)
+        enCollWithenInRegularS(IenRegulS,i,dt)
+        enCollWithenInRegularS(IenRegulS+1,i,dt)
+        enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1),i,dt)
+        enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
+        enCollWithenInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)  
+    end;
     move =  function(self,dt)
         self.body:moveTo(self.x, self.y)
         self.body:setRotation(-self.angleBody) 

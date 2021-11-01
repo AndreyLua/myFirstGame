@@ -52,6 +52,37 @@ function enCollWithenInRegularS(index,j,dt)
       end
 end
 
+
+
+function enCollWithenInRegularSMelee(index,j,dt)
+    if ( enRegulS[index]) then 
+        local kek = enRegulS[index]
+        local enJScale = 0
+        if (kek) then
+            if ( en[j]) then
+                enJScale = math.max(en[j].w,en[j].h)/2
+            end
+            for i =1, #kek do
+                if (kek[i] and en[kek[i]] and en[j]) then
+                    local enIScale = math.max(en[kek[i]].w,en[kek[i]].h)/2
+                    if ( kek[i]~=j and not(en[kek[i]].climbFlag == 1 and en[j].climbFlag == 1)   and math.abs(en[kek[i]].x - en[j].x)<enIScale*k+enJScale*k and math.abs(en[kek[i]].y - en[j].y)<enIScale*k2+enJScale*k2 and  (math.pow((en[kek[i]].x - en[j].x),2) + math.pow((en[kek[i]].y - en[j].y),2))<=math.pow((enIScale*k+enJScale*k),2)) then
+                        local collisFlag, intVectorX ,intVectorY = en[j].body:collidesWith(en[kek[i]].body)
+                        if ( collisFlag) then 
+                            if ((intVectorX*intVectorX+intVectorY*intVectorY >=math.pow(0.05*math.max(en[j].w,en[j].h)*k,2))) then
+                                en[kek[i]].x  = en[kek[i]].x - intVectorX*dt*5
+                                en[kek[i]].y = en[kek[i]].y - intVectorY*dt*5
+                                en[j].x  = en[j].x + intVectorX*dt*5
+                                en[j].y = en[j].y +  intVectorY*dt*5
+                            end
+                        end 
+                    end
+                end
+            end
+        end
+    end
+end
+
+
 function enCollWithobjInRegularS(index,j,dt)
     if ( objRegulS[index]) then 
         local kek = objRegulS[index]

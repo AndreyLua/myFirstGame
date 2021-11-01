@@ -272,7 +272,7 @@ function game:movement(dt)
       obj[#obj].f = true
         obj[#obj].x = mouse.x
        obj[#obj].y = mouse.y
-        allSpawn(en,Geo,3)
+        allSpawn(en,Geo,4)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -283,9 +283,11 @@ end
 
 
 function  game:draw()
+  
     local dt = love.timer.getDelta()
     playerBatch:clear()
     enBatch:clear()
+    enBatchDop:clear()
     love.graphics.setCanvas(kek)
     love.graphics.clear()
     love.graphics.setColor(1,1,1,1)
@@ -337,9 +339,11 @@ function  game:draw()
    
     Health_Boost()
     love.graphics.setColor(1,1,1,1)
+   
     playerDraw(dt)
     love.graphics.draw(playerBatch)
-    
+   
+    love.graphics.draw(enBatchDop)
     love.graphics.setColor(1,0,0.02)
     love.graphics.print("HP "..math.floor(hp.long/screenHeight*100)..'/'..100, screenWidth-55*k,screenHeight/2+200*k2,-math.pi/2,0.3,0.3)
     love.graphics.setColor(0,0.643,0.502)
@@ -385,6 +389,7 @@ function  game:draw()
   -- local playerIndex =math.floor((player.x)/(120*k)) + math.floor((player.y)/(120*k2))*math.floor((screenWidth/(120*k))+1)
    --love.graphics.print(playerIndex,player.x, player.y)
    vect = {}
+
 end
                
 
@@ -518,6 +523,13 @@ function allSpawn(mas,Geo,Tip)
             e:newBody(e.x, e.y)
             table.insert(mas,e)
         end
+        if ( Tip ==4) then 
+            local e = enemyBomb:clone()
+            e.x = x 
+            e.y = y 
+            e:newBody(e.x, e.y)
+            table.insert(mas,e)
+        end
     end
 end
 
@@ -595,12 +607,8 @@ function allDraw(dt)
     for  i=1,#en do
         if (en[i] and en[i]:inScreen()) then
             local IenRegulS =en[i]:IndexInRegulS(80)
-            enCollWithenInRegularS(IenRegulS,i,dt)
-            enCollWithenInRegularS(IenRegulS+1,i,dt)
-            enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1),i,dt)
-            enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
-            enCollWithenInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)
-            
+            en[i]:collWithEn(IenRegulS,i,dt)
+        
             IenRegulS =en[i]:IndexInRegulS(120)   
             enCollWithobjInRegularS(IenRegulS,i,dt)
             enCollWithobjInRegularS(IenRegulS-1,i,dt)
