@@ -269,7 +269,7 @@ end
 function objCollWithPlayerInRegularS(index,dt)
     if ( objRegulS[index]) then 
         local kek = objRegulS[index]
-        for i =1, #kek do
+        for i = #kek, 1, -1 do
             if (obj[kek[i]] and obj[kek[i]].body and obj[kek[i]].invTimer==obj[kek[i]].timer and math.abs(obj[kek[i]].x - (player.x))<playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k and math.abs(obj[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+obj[kek[i]].collScale/2*k2  and  (math.pow((obj[kek[i]].x - (player.x)),2) + math.pow((obj[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k),2))  then
                 local collisFlag, intVectorX ,intVectorY = player.body:collidesWith(obj[kek[i]].body)
                 if (collisFlag) then
@@ -281,7 +281,7 @@ function objCollWithPlayerInRegularS(index,dt)
 end
 
 function objCollWithPlayerResult(i, dt,intVectorX ,intVectorY)
-   local angleD = math.atan2(player.x-obj[i].x,player.y-obj[i].y)
+    local angleD = math.atan2(player.x-obj[i].x,player.y-obj[i].y)
     local sumMas = obj[i].scale + playerAbility.mass
     if ( player.a == 1 ) then 
         obj[i].ax= obj[i].ax -8000*dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speedA*k*dt*player.debaffStrenght)*10*obj[i].scale/sumMas
@@ -324,7 +324,7 @@ function objCollWithObjInRegularS(index,j,dt)
     if ( objRegulS[index]) then 
         local kek = objRegulS[index]
         if (kek) then
-            for i =1, #kek do
+            for i = #kek, 1, -1 do
                 if (kek[i] and obj[kek[i]] and obj[j]) then
                     if ( kek[i]~=j and math.abs(obj[kek[i]].x - obj[j].x)<obj[kek[i]].collScale*k/2+obj[j].collScale*k/2 and math.abs(obj[kek[i]].y - obj[j].y)<obj[kek[i]].collScale*k2/2+obj[j].collScale*k2/2 and  (math.pow((obj[kek[i]].x - obj[j].x),2) + math.pow((obj[kek[i]].y - obj[j].y),2))<=math.pow((obj[kek[i]].collScale*k/2+obj[j].collScale*k/2),2)) then
                         local collisFlag, intVectorX ,intVectorY = obj[j].body:collidesWith(obj[kek[i]].body)

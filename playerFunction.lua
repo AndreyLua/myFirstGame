@@ -19,8 +19,8 @@ function playerControl()
                 controler.angle = math.atan2(controler.x,controler.y)
             end  
             if (( math.abs(controler.x) >1*k or math.abs(controler.y)>1*k2)) then
-                player.ax  = math.sin(controler.angle)*k*math.abs(controler.x*screenWidth/screenHeight/3.5)
-                player.ay  = math.cos(controler.angle)*k2*math.abs(controler.y*screenWidth/screenHeight/3.5)
+                player.ax  = math.sin(controler.angle)*k*100!!
+                player.ay  = math.cos(controler.angle)*k2*100
                 if ( player.ax > playerAbility.maxSpeed*k) then
                     player.ax = playerAbility.maxSpeed*k 
                 end
@@ -201,19 +201,18 @@ function playerDebaff(dt)
 end
 
 function playerBorder()
-  if ( player.x > borderWidth*2-playerAbility.scaleBody*k) then
-   player.x = borderWidth*2 -playerAbility.scaleBody*k
-  end 
-  if ( player.x < -borderWidth+playerAbility.scaleBody*k) then
-   player.x = -borderWidth +playerAbility.scaleBody*k
-  end 
-  if ( player.y < -borderHeight+playerAbility.scaleBody*k2) then
-   player.y = -borderHeight +playerAbility.scaleBody*k2
-  end 
-  if ( player.y > borderHeight*2- playerAbility.scaleBody*k2) then
-   player.y = borderHeight*2 -playerAbility.scaleBody*k2
-  end 
- 
+    if ( player.x > borderWidth*2-playerAbility.scaleBody*k) then
+        player.x = borderWidth*2 -playerAbility.scaleBody*k
+    end 
+    if ( player.x < -borderWidth+playerAbility.scaleBody*k) then
+        player.x = -borderWidth +playerAbility.scaleBody*k
+    end 
+    if ( player.y < -borderHeight+playerAbility.scaleBody*k2) then
+        player.y = -borderHeight +playerAbility.scaleBody*k2
+    end 
+    if ( player.y > borderHeight*2- playerAbility.scaleBody*k2) then
+        player.y = borderHeight*2 -playerAbility.scaleBody*k2
+    end 
 end
 
 return playerFunction

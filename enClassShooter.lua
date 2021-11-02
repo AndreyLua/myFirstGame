@@ -175,6 +175,17 @@ enemyShooterClass = Class{
         enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
         enCollWithenInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)  
     end;
+    collWithObj = function( self,IenRegulS,i,dt) 
+        enCollWithobjInRegularS(IenRegulS,i,dt)
+        enCollWithobjInRegularS(IenRegulS-1,i,dt)
+        enCollWithobjInRegularS(IenRegulS+1,i,dt)
+        enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
+        enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+        enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+        enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
+        enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+        enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
+    end;
     move =  function(self,dt)
         self.body:moveTo(self.x, self.y)
         self.body:setRotation(-self.angleBody) 

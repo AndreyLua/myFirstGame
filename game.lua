@@ -138,7 +138,7 @@ playerHP(dt)
 explUpdate2(dt)
 -------------------
 local Wave = waves[numberWave] 
-for i = 1 , #obj do
+for i = #obj, 1, -1 do
     if (obj[i]) then  
         allInvTimer(i,obj,dt)
         objMove(i,dt) 
@@ -160,7 +160,7 @@ for i = 1 , #obj do
     end
 end
 
-for i = 1 , #res do
+for i = #res, 1, -1 do
     if (res[i]) then 
         resColl(i)
         resMove(i,dt)
@@ -171,7 +171,7 @@ for i = 1 , #res do
     end
 end 
  
-for i=1,#en do
+for i = #en, 1, -1 do
     if (en[i]) then 
         en[i]:invTimerUpdate(dt)
         en[i]:move(dt) 
@@ -194,8 +194,8 @@ end
 
 playerBoost(dt)
 
-if ( colWave>0 and #obj < 20) then
-    Timer.every(0.5, function()
+if ( colWave>0 and #obj < 200) then
+    Timer.every(5, function()
         for i=1,math.random(1,1) do
             local Wave = waves[numberWave]
             local Geo  =math.random(1,4)
@@ -212,9 +212,9 @@ if ( colWave>0 and #obj < 20) then
         for i=1,math.random(0,1) do
             local Wave = waves[numberWave]
             local Geo  =math.random(1,4)
-            local Tip =math.random(1,2)
+            local Tip =math.random(1,4)
             local Scale =math.random(2,2)
-       --     allSpawn(en,Geo,Tip)
+            allSpawn(en,Geo,Tip)
         end
         Timer.clear() 
     end)
@@ -268,10 +268,10 @@ function game:movement(dt)
     
     if love.keyboard.isDown('e') then
         local Geo  =math.random(1,4)
-      allSpawn(obj,Geo,Tip)
-      obj[#obj].f = true
+        allSpawn(obj,Geo,Tip)
+        obj[#obj].f = true
         obj[#obj].x = mouse.x
-       obj[#obj].y = mouse.y
+        obj[#obj].y = mouse.y
         allSpawn(en,Geo,4)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
@@ -571,7 +571,7 @@ function allDraw(dt)
         end
     end 
    
-    for i= 1,#obj do
+    for i = #obj, 1, -1 do
         if (obj[i] and obj[i].body)  then
             if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
                 local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
@@ -604,22 +604,14 @@ function allDraw(dt)
     end
     
     
-    for  i=1,#en do
+    for i = #en, 1, -1 do
         if (en[i] and en[i]:inScreen()) then
+          
             local IenRegulS =en[i]:IndexInRegulS(80)
             en[i]:collWithEn(IenRegulS,i,dt)
-        
-            IenRegulS =en[i]:IndexInRegulS(120)   
-            enCollWithobjInRegularS(IenRegulS,i,dt)
-            enCollWithobjInRegularS(IenRegulS-1,i,dt)
-            enCollWithobjInRegularS(IenRegulS+1,i,dt)
-            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
-            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
-            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
-            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
-            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
-            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
             
+            local IenRegulS2 =en[i]:IndexInRegulS(120)   
+            en[i]:collWithObj(IenRegulS2,i,dt)
             en[i]:traceDraw(dt)
             en[i]:draw(i)
         end

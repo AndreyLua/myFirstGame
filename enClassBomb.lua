@@ -1,16 +1,14 @@
 local enClassBomb =  {} 
 
 enemyBombTable = {
-    45, --w
-    40,  --h
-    1,  -- tip
+    25, --w
+    30,  --h
+    2,  -- tip
     HC.rectangle(-100*k,-100*k2,16*k,25*k2), --body
     0,  --timer
     20, -- invTimer
-    0, -- atack
-    60, --atackTimer
-    0, -- dash
-    15, --dashTimer
+    30, -- atack
+    30, --atackTimer
     0.8, --color1 
     0.2, --color2
     0.2, --color3
@@ -18,19 +16,24 @@ enemyBombTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    1,  -- damage
+    100,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    3, --health
-    3, --healthM
+    2, --health
+    2, --healthM
     {}, -- traces
+    0,--flagBomb
+    0,--prepar
+    3,--preparTimer
+    3,--animat
+    3,--animatTimer
 }
 
 enemyBombClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,flagBomb,prepar,preparTimer,animat,animatTimer)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -39,8 +42,10 @@ enemyBombClass = Class{
         self.invTimer = invTimer
         self.atack = atack
         self.atackTimer = atackTimer
-        self.dash =dash
-        self.dashTimer = dashTimer
+        self.prepar = prepar 
+        self.preparTimer = preparTimer
+        self.animat = animat
+        self.animatTimer = animatTimer
         self.color1 =color1
         self.color2=color2
         self.color3 =color3
@@ -49,6 +54,7 @@ enemyBombClass = Class{
         self.angleBody =  angleBody
         self.angleMouthFlag = angleMouthFlag
         self.damage = damage
+        self.flagBomb = flagBomb
         self.f = f
         self.x  =x
         self.y =y
@@ -89,23 +95,40 @@ enemyBombClass = Class{
         end
     end;
     atackStart = function(self)
-        if (self.dash and self.dash==self.dashTimer and self.atack and self.atack==self.atackTimer and self.invTimer ==           self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <=100*k ) then
-           self.atack = self.atackTimer-0.001
-           self.dash = self.dashTimer-0.001
+        if (self.atack and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= 50*k ) then
+            self.atack = self.atackTimer-0.001
         end
     end;
     atackTimerUpdate = function(self,dt)
         if ( self.atack <  self.atackTimer) then
             self.atack  = self.atack  - 30*dt
+            if ( self.prepar == self.preparTimer) then
+                self.prepar  = self.preparTimer - 0.0001
+            end
+        end
+        if ( self.prepar <  self.preparTimer) then
+            self.prepar  = self.prepar  - 10*dt
+        end
+        if ( self.prepar < 0) then
+            self.prepar  = self.preparTimer
+        end
+        
+        if ( self.animat <  self.animatTimer) then
+            self.animat  = self.animat  - 15*dt
+        end
+        if ( self.animat < 0) then
+            self.atack  = self.atackTimer
+            self.flagBomb = 1 
+            self.w = 150
+            if (player.a ==0 and  (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= self.w*k+playerAbility.scaleBody*k ) then
+                flaginv = false 
+                shake = 2
+                hp.long = hp.long - self.damage
+                hp.long3  = hp.long
+            end
         end
         if ( self.atack < 0) then
-            self.atack  = self.atackTimer
-        end
-        if ( self.dash <  self.dashTimer) then
-            self.dash  = self.dash  - 30*dt
-        end
-        if ( self.dash < 0) then
-            self.dash  = self.dashTimer
+            self.animat  = self.animat  - 0.0001
         end
     end;
     angleBodyTr = function(self,angle,dt)
@@ -147,17 +170,15 @@ enemyBombClass = Class{
     end;
     angleMouthTr = function(self,dt)
         if ( self.angleMouth> 1 ) then
-            --self.angleMouth = 0.1 
             self.angleMouthFlag = 1 
         end
         if ( self.angleMouth< 0 ) then
-          --self.angleMouth = 0 
             self.angleMouthFlag = 0 
         end
         if ( self.angleMouthFlag ==0) then
-            self.angleMouth  = self.angleMouth +1.1*dt*math.random(5,10)/7
+            self.angleMouth  = self.angleMouth +1.1*dt
         else
-            self.angleMouth  = self.angleMouth -1.1*dt*math.random(5,10)/7
+            self.angleMouth  = self.angleMouth -1.1*dt
         end
     end;
     collWithEn =  function(self,IenRegulS,i,dt)
@@ -166,6 +187,58 @@ enemyBombClass = Class{
         enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1),i,dt)
         enCollWithenInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
         enCollWithenInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)  
+    end;
+    collWithObj = function( self,IenRegulS,i,dt) 
+        if (self.flagBomb == 0 ) then 
+            enCollWithobjInRegularS(IenRegulS,i,dt)
+            enCollWithobjInRegularS(IenRegulS-1,i,dt)
+            enCollWithobjInRegularS(IenRegulS+1,i,dt)
+            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
+            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
+        else
+            enCollWithobjInRegularSBomb(IenRegulS,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS-1,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+1,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
+            ---
+            enCollWithobjInRegularSBomb(IenRegulS-2*math.floor((screenWidth/(120*k))+1)-2,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS-2*math.floor((screenWidth/(120*k))+1)-1,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS-2*math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS-2*math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS-2*math.floor((screenWidth/(120*k))+1)+2,i,dt)
+            
+            enCollWithobjInRegularSBomb(IenRegulS-math.floor((screenWidth/(120*k))+1)-2,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS-math.floor((screenWidth/(120*k))+1)+2,i,dt)
+            
+            enCollWithobjInRegularSBomb(IenRegulS-2,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+2,i,dt)
+            
+            enCollWithobjInRegularSBomb(IenRegulS+math.floor((screenWidth/(120*k))+1)-2,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+math.floor((screenWidth/(120*k))+1)+2,i,dt)
+            
+            
+            enCollWithobjInRegularSBomb(IenRegulS+2*math.floor((screenWidth/(120*k))+1)-2,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+2*math.floor((screenWidth/(120*k))+1)-1,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+2*math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+2*math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularSBomb(IenRegulS+2*math.floor((screenWidth/(120*k))+1)+2,i,dt)
+            
+            
+        end
+        if ( self.flagBomb == 1) then
+            self.flagBomb =0 
+            self.w =enemyBombTable[1]*k
+            self.health = -1 
+        end
     end;
     move =  function(self,dt)
         self.body:moveTo(self.x, self.y)
@@ -178,34 +251,39 @@ enemyBombClass = Class{
     end;
     moveNormal = function(self,dt)
         local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
-        if (self.dash and self.dash==self.dashTimer) then
-            self.angleBodyTr(self,anglePlayerEn,dt)
-            self.angleMouthTr(self,dt)
+        self.angleBodyTr(self,anglePlayerEn,dt)
+        self.angleMouthTr(self,dt)
+        if ( (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) >= 20*k ) then
             self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
             self.ay=self.ay+80*k2*math.cos(anglePlayerEn)*dt
-            self.x= self.x+self.ax*dt*7
-            self.y= self.y+self.ay*dt*7 --- нормальное движение
-            self.x= self.x+math.sin(self.y/20)*dt*30
-            self.y= self.y+math.cos(self.x/20)*dt*30
-            if (  self.ax >22*k) then
-                self.ax=22*k
-            end
-            if (  self.ax <-22*k) then
-                self.ax=-22*k
-            end
-            if (  self.ay >22*k2) then
-                self.ay=22*k2
-            end
-            if (  self.ay <-22*k2) then
-                self.ay=-22*k2
-            end
-            if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
-                self.ax = 0
-                self.ay = 0 
-            end
         else
-            self.x= self.x+math.sin(self.angleBody)*dt*600 -- движение противника ускорение
-            self.y= self.y+math.cos(self.angleBody)*dt*600
+            self.ax = 0 
+            self.ay = 0 
+        end
+        if ( self.atack == self.atackTimer) then 
+            self.x= self.x+self.ax*dt*5
+            self.y= self.y+self.ay*dt*5 --- нормальное движение
+            self.x= self.x+math.sin(self.y/20)*dt*40
+            self.y= self.y+math.cos(self.x/20)*dt*40
+        else
+            self.ax = 0 
+            self.ay = 0 
+        end
+        if (  self.ax >22*k) then
+            self.ax=22*k
+        end
+        if (  self.ax <-22*k) then
+            self.ax=-22*k
+        end
+        if (  self.ay >22*k2) then
+            self.ay=22*k2
+        end
+        if (  self.ay <-22*k2) then
+            self.ay=-22*k2
+        end
+        if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
+            self.ax = 0
+            self.ay = 0 
         end
     end;
     moveWounded =  function(self,dt)
@@ -224,21 +302,36 @@ enemyBombClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-           local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
-            local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
-            local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
-            local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
-            enBatch:setColor(1,0.5,0.5,1)
-            enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/8,k2/8,125, 95.5)
-          --  self.body:draw('fill')
+            local clow1X =self.x +10*k*math.sin(self.angleBody+math.pi/6)
+            local clow1Y =self.y +10*k2*math.cos(self.angleBody+math.pi/6)
+            local clow2X =self.x +10*k*math.sin(self.angleBody-math.pi/6)
+            local clow2Y =self.y +10*k2*math.cos(self.angleBody-math.pi/6)
+            enBatch:setColor(1,0.2,0.2,1)
+            enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7,k2/7,120, 131)
         else
-            local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
-            local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
-            local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
-            local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
-            enBatch:setColor(1,1,1,1)
-            enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7,k2/7,125, 95.5)
-           -- self.body:draw('fill')
+            local clow1X =self.x +13*k*math.sin(self.angleBody+math.pi/4)
+            local clow1Y =self.y +13*k2*math.cos(self.angleBody+math.pi/4)
+            local clow2X =self.x +13*k*math.sin(self.angleBody-math.pi/4)
+            local clow2Y =self.y +13*k2*math.cos(self.angleBody-math.pi/4)
+            if (self.atack==self.atackTimer)  then
+                enBatch:setColor(1,1,1,1)
+                enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7,k2/7,29.5, 43)
+                enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7,k2/7,29.5, 43)
+                enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7,k2/7,120, 131)
+            else 
+                if ( self.prepar > self.preparTimer/2) then
+                    enBatch:setColor(1,0.5,0.5,1)
+                    enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
+                    enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
+                    enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7*(4-self.animat),k2/7*(4-self.animat),120, 131)
+                else
+                    enBatch:setColor(1,1,1,1)
+                    enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
+                    enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
+                    enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7*(4-self.animat),k2/7*(4-self.animat),120, 131)
+                end
+            end
+         --   self.body:draw('fill')
         end
     end;
     traceSpawn = function(self)
@@ -246,9 +339,9 @@ enemyBombClass = Class{
             angle = self.angleBody,
             ax =-2*k*math.sin(self.angleBody) ,
             ay =-2*k2*math.cos(self.angleBody),
-            x = -10*k*math.sin(self.angleBody) ,
-            y = -10*k2*math.cos(self.angleBody) , 
-            r = 3*k ,
+            x = -17*k*math.sin(self.angleBody) ,
+            y = -17*k2*math.cos(self.angleBody) , 
+            r = 2*k ,
         }
         table.insert(self.traces,trace)
         if ( #self.traces >9) then
@@ -258,23 +351,20 @@ enemyBombClass = Class{
     traceDraw = function(self,dt)
         for i = 1, #self.traces do
             local trace = self.traces[i]
-            local radius =trace.r/8*i
+            local radius =trace.r/6*i
             trace.x = trace.x+80*trace.ax*dt
             trace.y = trace.y+80*trace.ay*dt
-            love.graphics.setColor(0.09/7*i,0.5/7*i,0.5/7*i) 
-            love.graphics.circle("line",self.x+ trace.x,self.y + trace.y,radius)
+            love.graphics.setColor(0.5/7*i,0.2/7*i,0.2/7*i) 
+            love.graphics.circle("fill",self.x+  trace.x ,self.y + trace.y,radius)
         end
     end;
     hit  = function(self,a,i)
         if ( a == 0 ) then
-            if ( player.invis == 10 and self.invTimer == self.timer and self.dash~=self.dashTimer) then
-                flaginv = false 
-                shake = 2
-                hp.long = hp.long - self.damage
-                hp.long3  = hp.long
-            end 
+            
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
+                self.prepar  = self.preparTimer
+                self.atack  = self.atackTimer
                 self.timer =  self.invTimer-0.001
                 self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax

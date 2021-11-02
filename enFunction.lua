@@ -3,7 +3,7 @@ local enFunction = {}
 function enCollWithPlayerInRegularS(index,dt)
      if ( enRegulS[index]) then 
         local kek = enRegulS[index]
-        for i =1, #kek do
+        for i = #kek, 1, -1 do
             if (en[kek[i]] and en[kek[i]].body and en[kek[i]].invTimer==en[kek[i]].timer and math.abs(en[kek[i]].x - (player.x))<playerAbility.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k and math.abs(en[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+math.max(en[kek[i]].w,en[kek[i]].h)/2*k2  and  (math.pow((en[kek[i]].x - (player.x)),2) + math.pow((en[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k),2))  then
                 local collisFlag, intVectorX ,intVectorY = player.body:collidesWith(en[kek[i]].body)
                 if (collisFlag) then
@@ -32,7 +32,7 @@ function enCollWithenInRegularS(index,j,dt)
             if ( en[j]) then
                 enJScale = math.max(en[j].w,en[j].h)/2
             end
-            for i =1, #kek do
+            for i = #kek, 1, -1 do
                 if (kek[i] and en[kek[i]] and en[j]) then
                     local enIScale = math.max(en[kek[i]].w,en[kek[i]].h)/2
                     if ( kek[i]~=j and math.abs(en[kek[i]].x - en[j].x)<enIScale*k+enJScale*k and math.abs(en[kek[i]].y - en[j].y)<enIScale*k2+enJScale*k2 and  (math.pow((en[kek[i]].x - en[j].x),2) + math.pow((en[kek[i]].y - en[j].y),2))<=math.pow((enIScale*k+enJScale*k),2)) then
@@ -62,7 +62,7 @@ function enCollWithenInRegularSMelee(index,j,dt)
             if ( en[j]) then
                 enJScale = math.max(en[j].w,en[j].h)/2
             end
-            for i =1, #kek do
+            for i = #kek, 1, -1 do
                 if (kek[i] and en[kek[i]] and en[j]) then
                     local enIScale = math.max(en[kek[i]].w,en[kek[i]].h)/2
                     if ( kek[i]~=j and not(en[kek[i]].climbFlag == 1 and en[j].climbFlag == 1)   and math.abs(en[kek[i]].x - en[j].x)<enIScale*k+enJScale*k and math.abs(en[kek[i]].y - en[j].y)<enIScale*k2+enJScale*k2 and  (math.pow((en[kek[i]].x - en[j].x),2) + math.pow((en[kek[i]].y - en[j].y),2))<=math.pow((enIScale*k+enJScale*k),2)) then
@@ -91,10 +91,10 @@ function enCollWithobjInRegularS(index,j,dt)
             if ( en[j]) then
                 enScale = math.max(en[j].w,en[j].h)/2
             end
-            for i =1, #kek do
+            for i = #kek, 1, -1 do
                 if (kek[i] and obj[kek[i]] and en[j]) then
                     local objScale = obj[kek[i]].collScale/2
-                    if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+objScale*k),2)) then
+                    if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+enScale*k),2)) then
                         local collisFlag, intVectorX ,intVectorY = en[j].body:collidesWith(obj[kek[i]].body)
                         if ( collisFlag) then 
                             local sumMas = obj[kek[i]].scale +en[j].scale
@@ -107,13 +107,38 @@ function enCollWithobjInRegularS(index,j,dt)
                             if ((deepX*deepX+deepY*deepY >=math.pow(0.05*enScale*k,2))) then
                                 obj[kek[i]].x  = obj[kek[i]].x - deepX*dt*10
                                 obj[kek[i]].y = obj[kek[i]].y - deepY*dt*10
-            
-                            --    en[j].ax = 0 
-                              --  en[j].ay = 0
                                 en[j].x  = en[j].x + deepX*dt*10
                                 en[j].y = en[j].y +  deepY*dt*10
                             end
                         end 
+                    end
+                end
+            end
+        end
+    end
+end
+
+function enCollWithobjInRegularSBomb(index,j,dt)
+    if ( objRegulS[index]) then 
+        local kek = objRegulS[index]
+        local enScale = 0
+        if (kek) then
+            if ( en[j]) then
+                enScale = math.max(en[j].w,en[j].h)/2
+            end
+            for i = #kek, 1, -1 do
+                if (kek[i] and obj[kek[i]] and en[j]) then
+                    local objScale = obj[kek[i]].collScale/2
+                    if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+enScale*k),2)) then
+                        local angleD = math.atan2(en[j].x-obj[kek[i]].x,en[j].y-obj[kek[i]].y)
+                        obj[kek[i]].ax= obj[kek[i]].ax -800000*dt*k*math.sin(angleD)/obj[kek[i]].scale
+                        obj[kek[i]].ay= obj[kek[i]].ay -800000*dt*k*math.cos(angleD)/obj[kek[i]].scale
+                        obj[kek[i]].health = obj[kek[i]].health - 10000
+                        obj[kek[i]].timer= obj[kek[i]].invTimer - 0.001
+                        if (obj[kek[i]].health<0) then 
+                            objDestroy(obj,kek[i]) 
+                            table.remove(obj,kek[i])
+                        end
                     end
                 end
             end
@@ -160,7 +185,7 @@ function enemiesSledDraw(dt)
 end
 
 function enRemoveTag(dt)
-    for i=1,#removeEn do
+    for i = #removeEn, 1, -1 do
         local h =  removeEn[i]
         if ( removeEn[i]) then
             if ( h.tip == 4 ) then

@@ -41,6 +41,8 @@ enQuads = {
   wing2Shooter = love.graphics.newQuad(0,  515, 224, 272, enSet:getDimensions()),
   bodyHammer = love.graphics.newQuad(352,  0, 250, 191, enSet:getDimensions()),
   bodyBomb = love.graphics.newQuad(356,  192, 240, 262, enSet:getDimensions()),
+  clow1Bomb = love.graphics.newQuad(597,  190,  59, 86, enSet:getDimensions()),
+  clow2Bomb = love.graphics.newQuad(657,  190,  59, 86, enSet:getDimensions()),
 }
 
 meteorSetW,meteorSetH =  meteorSet:getDimensions()
