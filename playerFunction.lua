@@ -19,19 +19,20 @@ function playerControl()
                 controler.angle = math.atan2(controler.x,controler.y)
             end  
             if (( math.abs(controler.x) >1*k or math.abs(controler.y)>1*k2)) then
-                player.ax  = math.sin(controler.angle)*k*100!!
-                player.ay  = math.cos(controler.angle)*k2*100
-                if ( player.ax > playerAbility.maxSpeed*k) then
-                    player.ax = playerAbility.maxSpeed*k 
+                player.ax  =math.sin(controler.angle)*math.abs(controler.x*screenWidth/screenHeight/3.5)
+                player.ay  =math.cos(controler.angle)*math.abs(controler.y*screenWidth/screenHeight/3.5)
+                
+                if ( player.ax > playerAbility.maxSpeed) then
+                    player.ax = playerAbility.maxSpeed 
                 end
-                if ( player.ax < -playerAbility.maxSpeed*k) then
-                    player.ax = -playerAbility.maxSpeed*k 
+                if ( player.ax < -playerAbility.maxSpeed) then
+                    player.ax = -playerAbility.maxSpeed 
                 end
-                if ( player.ay > playerAbility.maxSpeed*k2) then
-                    player.ay = playerAbility.maxSpeed*k2
+                if ( player.ay > playerAbility.maxSpeed) then
+                    player.ay = playerAbility.maxSpeed
                 end
-                if ( player.ay < -playerAbility.maxSpeed*k2) then
-                    player.ay = -playerAbility.maxSpeed*k2
+                if ( player.ay < -playerAbility.maxSpeed) then
+                    player.ay = -playerAbility.maxSpeed
                 end
             end
         else

@@ -135,10 +135,6 @@ function enCollWithobjInRegularSBomb(index,j,dt)
                         obj[kek[i]].ay= obj[kek[i]].ay -800000*dt*k*math.cos(angleD)/obj[kek[i]].scale
                         obj[kek[i]].health = obj[kek[i]].health - 10000
                         obj[kek[i]].timer= obj[kek[i]].invTimer - 0.001
-                        if (obj[kek[i]].health<0) then 
-                            objDestroy(obj,kek[i]) 
-                            table.remove(obj,kek[i])
-                        end
                     end
                 end
             end

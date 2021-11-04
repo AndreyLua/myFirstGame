@@ -299,10 +299,10 @@ function objCollWithPlayerResult(i, dt,intVectorX ,intVectorY)
     player.debaffStrenght =(1-obj[i].scale/sumMas)
     obj[i].health = obj[i].health -2*playerAbility.damage
     obj[i].timer= obj[i].invTimer - 0.001
-    if (obj[i].health<0) then 
-        objDestroy(obj,i) 
-        table.remove(obj,i)
-    end
+   --if (obj[i].health<0) then 
+    --    objDestroy(obj,i) 
+    --    table.remove(obj,i)
+   -- end
   --[[
     local angleD = math.atan2(player.x-obj[i].x+20*k,player.y-obj[i].y+20*k)
     local sumMas = obj[i].scale +playerAbility.mass 
