@@ -18,7 +18,7 @@ enemyMeleeTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    1,  -- damage
+    12,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
@@ -222,9 +222,8 @@ enemyMeleeClass = Class{
             local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
             self.angleBody = anglePlayerEn
             self.angleMouthTr(self,dt)
-    
-            self.x = player.x -(playerAbility.scaleBody+5)*k*math.sin(controler.angle + self.dopAngle)
-            self.y = player.y -(playerAbility.scaleBody+5)*k2*math.cos(controler.angle + self.dopAngle)
+            self.x =self.x + ((player.x -(playerAbility.scaleBody+5)*k*math.sin(controler.angle + self.dopAngle)) - self.x)*dt*20*k
+            self.y = self.y + (( player.y -(playerAbility.scaleBody+5)*k2*math.cos(controler.angle + self.dopAngle)) - self.y)*dt*20*k2
         end
     end;
     moveNormal = function(self,dt)
@@ -296,7 +295,7 @@ enemyMeleeClass = Class{
             enBatchDop:setColor(1,0.5,0.5,0.4)
             enBatchDop:add(enQuads.clow1Melee,clow1X-camera.x+40*k/2+screenWidth/2,clow1Y-camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi+self.angleMouth,k/6,k2/6,36, 44)
             enBatchDop:add(enQuads.clow2Melee,clow2X-camera.x+40*k/2+screenWidth/2,clow2Y-camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
-          --  self.body:draw('fill')
+         --   self.body:draw('fill')
         end
     end;
     traceSpawn = function(self)
@@ -328,7 +327,6 @@ enemyMeleeClass = Class{
             if ( player.invis == 10 and self.invTimer == self.timer and self.climbAtack == self.climbAtackTimer and self.dash  ~= self.dashTimer)  then
                 self.climbFlag = 1 
                 self.climbAtack = self.climbAtackTimer - 0.0001
-              
                 self.dopAngle = self.angleBody-controler.angle
             end 
             if ( self.climbFlag == 1 and self.meleeAtackTimer == self.meleeAtack )  then 
@@ -336,7 +334,7 @@ enemyMeleeClass = Class{
                 flaginv = false 
                 shake = 2
                 hp.long = hp.long - self.damage
-                hp.long3  = hp.long
+          
             end
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then

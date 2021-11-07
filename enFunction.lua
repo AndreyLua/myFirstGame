@@ -21,7 +21,6 @@ function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip )
         en[i].y = en[i].y - intVectorY*dt*10
     end
     en[i]:hit(player.a,i)
-  
 end
 
 function enCollWithenInRegularS(index,j,dt)
@@ -134,7 +133,7 @@ function enCollWithobjInRegularSBomb(index,j,dt)
                         obj[kek[i]].ax= obj[kek[i]].ax -800000*dt*k*math.sin(angleD)/obj[kek[i]].scale
                         obj[kek[i]].ay= obj[kek[i]].ay -800000*dt*k*math.cos(angleD)/obj[kek[i]].scale
                         obj[kek[i]].health = obj[kek[i]].health - 10000
-                        obj[kek[i]].timer= obj[kek[i]].invTimer - 0.001
+                       --уу obj[kek[i]].timer= obj[kek[i]].invTimer - 0.001
                     end
                 end
             end

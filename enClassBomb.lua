@@ -16,7 +16,7 @@ enemyBombTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    100,  -- damage
+    150,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
@@ -124,7 +124,6 @@ enemyBombClass = Class{
                 flaginv = false 
                 shake = 2
                 hp.long = hp.long - self.damage
-                hp.long3  = hp.long
             end
         end
         if ( self.atack < 0) then
@@ -324,14 +323,17 @@ enemyBombClass = Class{
                     enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
                     enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
                     enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7*(4-self.animat),k2/7*(4-self.animat),120, 131)
+                    love.graphics.circle('line',self.x,self.y,self.w/2)
                 else
                     enBatch:setColor(1,1,1,1)
                     enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
                     enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
                     enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7*(4-self.animat),k2/7*(4-self.animat),120, 131)
+            --        love.graphics.circle('line',self.x,self.y,self.w/2)
                 end
             end
-         --   self.body:draw('fill')
+            --self.body:draw('fill')
+        --     love.graphics.circle('line',self.x,self.y,self.w)
         end
     end;
     traceSpawn = function(self)

@@ -5,8 +5,6 @@ Class = require "libs/hump.class"
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
 
-
-
 effect = moonshine(moonshine.effects.boxblur)
                   .chain(moonshine.effects.filmgrain)
                   .chain(moonshine.effects.vignette)
@@ -120,6 +118,18 @@ fon1 =love.graphics.newImage("assets/fons/fon1.png")
 fon2 =love.graphics.newImage("assets/fons/fon2.png") 
 fon3 =love.graphics.newImage("assets/fons/fon3.png") 
 ----------------------------------
+
+--myShader = love.graphics.newShader[[
+--vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
+ -- vec4 pixel = Texel(texture, texture_coords );
+  --number average = (pixel.r+pixel.b+pixel.g)/3.0;
+ -- number factor = screen_coords.x/1920;
+ -- pixel.r = pixel.r + (average-pixel.r) * factor;
+--  pixel.g = pixel.g + (average-pixel.g) * factor;
+ -- pixel.b = pixel.b + (average-pixel.b) * factor;
+ -- return pixel;
+--}
+
 --  myShader = love.graphics.newShader[[
 --vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
 --  vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
@@ -180,6 +190,8 @@ playerAbility = {
       speedA  = 10,
       debaffStrenght =0.2,
       scaleBody = 35,
+      boostRegen = 100,
+      boostWaste = 250,
 }
 -------------CONST AND FLAGS------
 lvl =0

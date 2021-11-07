@@ -18,7 +18,7 @@ enemyHammerTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    1,  -- damage
+    5,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
@@ -215,8 +215,8 @@ enemyHammerClass = Class{
                 self.ay = 0 
             end
         else
-            self.x= self.x+math.sin(self.angleBody)*dt*600 -- движение противника ускорение
-            self.y= self.y+math.cos(self.angleBody)*dt*600
+            self.x= self.x+math.sin(self.angleBody)*dt*450*k -- движение противника ускорение
+            self.y= self.y+math.cos(self.angleBody)*dt*450*k2
         end
     end;
     moveWounded =  function(self,dt)
@@ -278,11 +278,10 @@ enemyHammerClass = Class{
     end;
     hit  = function(self,a,i)
         if ( a == 0 ) then
-            if ( player.invis == 10 and self.invTimer == self.timer and self.dash~=self.dashTimer) then
+            if (self.invTimer == self.timer and self.dash~=self.dashTimer) then
                 flaginv = false 
                 shake = 2
                 hp.long = hp.long - self.damage
-                hp.long3  = hp.long
             end 
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then

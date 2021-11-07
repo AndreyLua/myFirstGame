@@ -57,19 +57,19 @@ end
 
 function objColorAndScale(t)
     if  t == 1 then 
-        return 0.631,0.435,0.345,200,100 -- big
+        return 0.478,0.239,0.373,200,95 -- big
     end
     if  t == 2 then 
-        return 0.412,0.463,0.537,210,95 -- big
+        return  0.165,0.243,0.357,210,100 -- big
     end
     if  t == 3 then 
-        return 0.247,0.286,0.424,400,120 -- big
+        return 0.212,0.224,0.404,400,120 -- big
     end
     if  t == 4 then 
-        return 0.302,0.176,0.227,100,67 -- small
+        return 0.208,0.208,0.208,100,67 -- small
     end
     if  t == 5 then 
-        return 0.498,0.361,0.525,20,50 -- small
+        return 0.267,0.075,0.188,20,50 -- small
     end
 end
 
@@ -343,10 +343,10 @@ function objCollWithObjInRegularS(index,j,dt)
                                 scImp = scImp/(1/obj[kek[i]].scale+1/obj[j].scale)
                                 local sumMas = obj[kek[i]].scale + obj[j].scale
                                 local impulsX, impulsY = scImp * intVectorX, scImp* intVectorY
-                                obj[kek[i]].ax= obj[kek[i]].ax + dt*100*(1/obj[kek[i]].scale*impulsX)*obj[kek[i]].scale/sumMas
-                                obj[kek[i]].ay= obj[kek[i]].ay +dt*100*(1/obj[kek[i]].scale*impulsY)*obj[kek[i]].scale/sumMas
-                                obj[j].ax=obj[j].ax - dt*100*(1/obj[j].scale*impulsX)*obj[j].scale/sumMas
-                                obj[j].ay=obj[j].ay - dt*100*(1/obj[j].scale*impulsY)*obj[j].scale/sumMas
+                                obj[kek[i]].ax= obj[kek[i]].ax + dt*80*(1/obj[kek[i]].scale*impulsX)*obj[kek[i]].scale/sumMas
+                                obj[kek[i]].ay= obj[kek[i]].ay +dt*80*(1/obj[kek[i]].scale*impulsY)*obj[kek[i]].scale/sumMas
+                                obj[j].ax=obj[j].ax - dt*80*(1/obj[j].scale*impulsX)*obj[j].scale/sumMas
+                                obj[j].ay=obj[j].ay - dt*80*(1/obj[j].scale*impulsY)*obj[j].scale/sumMas
                           
                             end
                             if ((deepX*deepX+deepY*deepY>=math.pow(0.05*obj[j].collScale*k,2))) then

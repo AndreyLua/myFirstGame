@@ -33,48 +33,29 @@ function sc(x,y)
 end
 
 function playerHP(dt)
-  
   if ( hp.long/screenHeight*100> 100) then
     hp.long = screenHeight
     hp.long2 = screenHeight 
-    hp.long3 = screenHeight
   end
   
-  if ( hp.long3> hp.long2 and hp.long >= hp.long2) then
-    hp3:update(dt)
-   hp3:every(0.1, function()
-      hp.long2= hp.long2+0.5
-     hp.long= hp.long+0.5
-      if ( hp.long>screenHeight/2) then
-        hp.long = screenHeight
-        hp.long2 =screenHeight
-        hp.long3 =screenHeight
-      end
-   end)
+  if (hp.long > hp.long2) then
+      hp.long2= hp.long
   end
-
-  if (hp.long< hp.long2 ) then
-    hp1:update(dt)
-    hp1:every(0.01, function()
-      hp.long2 = hp.long2-1
-      hp1:clear()
-    end)
+  if (hp.long<hp.long2 ) then
+      hp.long2 = hp.long2-70*dt
   end
-  
+  if ( hp.long> hp.long3) then
+      hp.long3 = hp.long3+ 100*dt
+  else
+      hp.long3  = hp.long
+  end
   if ( flaginv == false) then
-   hp2:update(dt)
-    hp2:every(0.01, function()
-      hp.long = hp.long- 1
-    hp.long3  = hp.long
-     hp2:clear()
-  end)
-
-  inv:update(dt)
-   inv:every(playerAbility.invTimer, function()
-     inv:clear() 
-     shake  = 0    
-    flaginv =  true
-   end)
+      inv:update(dt)
+      inv:every(playerAbility.invTimer, function()
+          inv:clear() 
+          shake  = 0    
+          flaginv =  true
+      end)
   end
   
 end
@@ -87,54 +68,41 @@ function playerBoost(dt)
   end
   
   if ( boost.long2>boost.long) then
-    boost2:update(dt)
-    boost2:every(0.01, function()
-      boost.long2 = boost.long2-2
-      boost2:clear()
-    end)
+      boost.long2 = boost.long2-70*dt
   end
-  
   if ( boost.long2<boost.long) then
-     boost2:update(dt)
-     boost2:every(0.01, function()
-       boost.long2 = boost.long2+1
-       boost2:clear()
-     end)
+      boost.long2 = boost.long2+playerAbility.boostRegen *dt*2
   end
-
   if ( boost.long <= 30*k2 ) then
     player.a=0
     boost.long =30*k2
   end
   
   if ( player.a==1) then
-    boost1:update(dt)
-    boost1:every(0.01, function()
-      boost.long = boost.long -5
-      boost1:clear()
-    end)
+      boost.long = boost.long -playerAbility.boostWaste*dt
   else
-    boost1:update(dt)
-    boost1:every(0.01, function()
-      boost.long = boost.long +0.6
-      boost1:clear()
-    end)
+      boost.long = boost.long + playerAbility.boostRegen *dt
   end
-  
   if  (boost.long>screenHeight) then
-    boost.long = screenHeight
+      boost.long = screenHeight
   end
 end
 
 function Health_Boost()
-    love.graphics.setColor(0.64,0,0.02)
-    love.graphics.rectangle("line",screenWidth-40*k+10*k,screenHeight-(hp.long2-20*k2)/2-10*k2,25*k,(hp.long2-20*k2)/2,5)
-    love.graphics.setColor(1,0,0.02)
-    love.graphics.rectangle("line",screenWidth-40*k+10*k,screenHeight-(hp.long2-20*k2)/2-10*k2,25*k,(hp.long-20*k2)/2,5)
-    love.graphics.setColor(0,0.32,0.225)
-    love.graphics.rectangle("line",screenWidth-40*k+10*k,-(boost.long2-20*k2)/2+screenHeight/2-10*k2,25*k,(boost.long2-20*k2)/2,5)
-    love.graphics.setColor(0,0.643,0.502)
-    love.graphics.rectangle("line",screenWidth-40*k+10*k,-(boost.long-20*k2)/2+screenHeight/2-10*k2,25*k,(boost.long-20*k2)/2,5)
+    love.graphics.setColor(0.02,0.3,0.02,1)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+12)*k,player.y+31*k2,3*k2,-screenHeight/7)
+    love.graphics.setColor(0.04,0.85,0.04,1)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+12)*k,player.y+31*k2,3*k2,-hp.long2/7)
+    love.graphics.setColor(0.02,0.6,0.02,1)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+12)*k,player.y+31*k2,3*k2,-hp.long3/7)
+    
+    
+    love.graphics.setColor(0,0.32,0.225,1)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+7)*k,player.y+31*k2,2*k2,-screenHeight/7)
+    love.graphics.setColor(0,0.85,0.75,1)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+7)*k,player.y+31*k2,2*k2,-boost.long2/7)
+    love.graphics.setColor(0,0.643,0.502,1)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+7)*k,player.y+31*k2,2*k2,-boost.long/7)
 end
 
 function exit(x,y)

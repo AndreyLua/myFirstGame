@@ -34,8 +34,8 @@ end
 
 function settings:update(dt)
 mouse.x,mouse.y=love.mouse.getPosition()
-mouse.x = mouse.x/sx
-mouse.y = mouse.y/sy
+mouse.x = mouse.x
+mouse.y = mouse.y
 
 ggtouch =(sens)
 

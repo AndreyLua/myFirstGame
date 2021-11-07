@@ -2,6 +2,7 @@ local resFunction = {}
 
 
 function spawnResBig(mas,i)
+ 
     local Wave = waves[numberWave]
     colWave = colWave-1
     expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2,10)
@@ -54,9 +55,11 @@ function spawnResBig(mas,i)
             table.insert(res,eh)
         end
     end
+    
 end
 
 function spawnResNormal(mas,i)
+  
     for kek =0, math.random(7,8) do
         local RandomP =  math.random(100) 
         local RandomTip = 1
@@ -79,9 +82,11 @@ function spawnResNormal(mas,i)
         }
         table.insert(res,eh)
     end
+  
 end
 
 function spawnResSmall(mas,i)
+  
     for kek =0, math.random(7,8) do
         local eh = {
             tip = 1,
@@ -98,6 +103,7 @@ function spawnResSmall(mas,i)
         }
         table.insert(res,eh)
     end
+    
 end
 
 function resMove(i,dt)
@@ -156,7 +162,7 @@ end
 function resСollect(i)
     if ( checkCollision(player.x-20*k,player.y-20*k2, 40*k, 40*k2,res[i].x,res[i].y,1*k,1*k2)) then
         if ( res[i].tip == 4) then
-            hp.long3=hp.long3+50*k2
+            hp.long=hp.long+50*k2
             resRemove(i,res)
         else
             score = score +1
