@@ -30,7 +30,7 @@ function random(min,max)
 end
 
 function rot(mode,x,y,w,h,rx,ry,segments,r,ox,oy)
-     if not oy and rx then r,ox,oy = rx,ry, segments end
+  if not oy and rx then r,ox,oy = rx,ry, segments end
   r = r or 0 
   ox = ox or w/2
   oy = oy or h/2

@@ -303,8 +303,8 @@ function objCollWithPlayerResult(i, dt,intVectorX ,intVectorY)
         obj[i].ax= obj[i].ax-80000*dt*k*math.sin(angleD)/obj[i].scale +(player.ax*playerAbility.speedA*k*dt*player.debaffStrenght)/obj[i].scale*1000
         obj[i].ay=  obj[i].ay-80000*dt*k2*math.cos(angleD)/obj[i].scale +(player.ay*playerAbility.speedA*k2*dt*player.debaffStrenght)/obj[i].scale*1000
     else
-        obj[i].ax= obj[i].ax-40000*dt*k*math.sin(angleD)/obj[i].scale +(player.ax*playerAbility.speed*k*dt*player.debaffStrenght)/obj[i].scale*400
-        obj[i].ay=  obj[i].ay-40000*dt*k2*math.cos(angleD)/obj[i].scale +(player.ay*playerAbility.speed*k2*dt*player.debaffStrenght)/obj[i].scale*400
+        obj[i].ax= obj[i].ax-40000*dt*k*math.sin(angleD)/obj[i].scale +(player.ax*playerAbility.speed*k*dt*player.debaffStrenght)/obj[i].scale*500
+        obj[i].ay=  obj[i].ay-40000*dt*k2*math.cos(angleD)/obj[i].scale +(player.ay*playerAbility.speed*k2*dt*player.debaffStrenght)/obj[i].scale*500
     end
     ---
     if ((intVectorX*intVectorX+intVectorY*intVectorY>=math.pow(0.05*obj[i].collScale*k,2))) then

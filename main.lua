@@ -14,10 +14,12 @@ effect.enable("filmgrain")
 ------------------SETS-----------------------------
 meteorSet = love.graphics.newImage("assets/meteorSet.png")
 enSet = love.graphics.newImage("assets/enSet.png")
+resSet = love.graphics.newImage("assets/resSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
 ---------------------------------------------------
 playerBatch = love.graphics.newSpriteBatch(playerSet)
 enBatch = love.graphics.newSpriteBatch(enSet)
+resBatch = love.graphics.newSpriteBatch(resSet)
 enBatchDop = love.graphics.newSpriteBatch(enSet)
 
 playerQuads = {
@@ -41,6 +43,10 @@ enQuads = {
   bodyBomb = love.graphics.newQuad(360,  249, 217, 218, enSet:getDimensions()),
   clow1Bomb = love.graphics.newQuad(597,  190,  59, 86, enSet:getDimensions()),
   clow2Bomb = love.graphics.newQuad(657,  190,  59, 86, enSet:getDimensions()),
+}
+resQuads = {
+  hp =   love.graphics.newQuad(0,0,130,210, resSet:getDimensions()),
+  
 }
 
 meteorSetW,meteorSetH =  meteorSet:getDimensions()
@@ -181,17 +187,17 @@ mouse = {
   y=0
 }
 playerAbility = {
-      mass =200,
-      radiusCollect = 100,
-      damage = 100,
-      invTimer = 0.5,
-      maxSpeed = 30,
-      speed = 6,
-      speedA  = 10,
-      debaffStrenght =0.2,
-      scaleBody = 35,
-      boostRegen = 100,
-      boostWaste = 250,
+    mass =200,
+    radiusCollect = 100,
+    damage = 1,
+    invTimer = 0.5,
+    maxSpeed = 30,
+    speed = 6,
+    speedA  = 10,
+    debaffStrenght =0.2,
+    scaleBody = 35,
+    boostRegen = 100,
+    boostWaste = 250,
 }
 -------------CONST AND FLAGS------
 lvl =0

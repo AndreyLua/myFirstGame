@@ -1,94 +1,98 @@
 local resFunction = {}
 
 function spawnResCrackMet(i)
-    local Wave = waves[numberWave]
-    colWave = colWave-1
-    expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2,10)
-    expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2+colWave*300*k2/Wave[4],10)
     for kV =1, math.random(5,obj[i].scale/10) do
-        newPoint(i,kV) 
+        newPoint(obj,i,kV) 
     end
 end
 
 function spawnDelMet(i)
-    local Wave = waves[numberWave]
-    colWave = colWave-1
-    expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2,10)
-    expl(50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2+colWave*300*k2/Wave[4],10)
     for kV =1, math.random(3,obj[i].scale/5) do
-        newPoint(i,kV) 
+        newPoint(obj,i,kV) 
+        newHealPoint(obj,i,kV) 
     end
 end
 
-function spawnResSmall(mas,i)
-  --[[
-    for kek =0, math.random(7,8) do
-        local eh = {
-            tip = 1,
-            r = math.random(0,3),
-            flag =true,
-            color1 =mas[i].color1+math.random()/4,
-            color2= mas[i].color2+math.random()/4,
-            color3 =mas[i].color3+math.random()/4,
-            f = false,
-            x  = mas[i].x, 
-            y =  mas[i].y,  
-            ax  =math.random(-2*k*kek,2*k*kek), 
-            ay = math.random(-2*k*kek,2*k*kek), 
-        }
-        table.insert(res,eh)
+function spawnResHitEn(i)
+     for kV =1, math.random(2,3) do
+        newPoint(en,i,kV) 
     end
-    
-    ]]--
-    
 end
-function newHealPoint(i,kV) 
+function spawnResKillEn(i)
+    for kV =1, math.random(5,9) do
+        newPoint(en,i,kV) 
+    end
+end
+
+function newHealPoint(mas,i,kV) 
     if ( math.random(1,30)==1) then
-        local objHPoint = {
+        local masHPoint = {
             timer = 3-0.00001, 
             invTimer = 3,
             tip = 4, 
-            r = 0,
-            flag =true,
-            f = false,
-            x  = obj[i].x, 
-            y =  obj[i].y,  
+            flagR = 0 , 
+            r = math.random(-1,1)*math.random(),
+            x  = mas[i].x, 
+            y =  mas[i].y,  
             ax  =math.random(-2*k*kV,2*k2*kV), 
             ay =math.random(-2*k*kV,2*k2*kV), 
         }
-        table.insert(res,objHPoint)
+        table.insert(res,masHPoint)
     end
 end
-function newPoint(i,kV) 
+function newPoint(mas,i,kV) 
     local randomColor = math.random()
-    local colorDop1 = obj[i].color1+ randomColor/3
-    local colorDop2 = obj[i].color2+ randomColor/3
-    local colorDop3 = obj[i].color3+ randomColor/3
+    local colorDop1 = mas[i].color1+ randomColor/3
+    local colorDop2 = mas[i].color2+ randomColor/3
+    local colorDop3 = mas[i].color3+ randomColor/3
     local RandomP =  math.random(100) 
     local RandomTip = 1
-    if ( RandomP >90 and RandomP <100) then
-        RandomTip = 2
-    else
-        if ( RandomP > 80) then 
-            RandomTip = 3
+    if (mas == obj) then 
+        if ( RandomP >90 and RandomP <100) then
+            RandomTip = 2
+        else
+            if ( RandomP > 80) then 
+                RandomTip = 3
+            end
         end
+    else
+      if ( RandomP >90 and RandomP <100) then
+          RandomTip = 2
+      end
     end
-    local objPoint = {
-        timer = 3-0.00001, 
-        invTimer = 3,
-        tip = RandomTip,
-        r = math.random(1,3),
-        flag =true,
-        color1 =colorDop1,
-        color2= colorDop2,
-        color3 =colorDop3,
-        f = false,
-        x  = obj[i].x, 
-        y =  obj[i].y,  
-        ax  =obj[i].ax/12 + math.random(-1.5*k*kV,1.5*k2*kV)/RandomTip, 
-        ay = obj[i].ay/12+math.random(-1.5*k*kV,1.5*k2*kV)/RandomTip, 
-    }
-    table.insert(res,objPoint)
+    if (mas == obj) then 
+        local masPoint = {
+            timer = 3-0.00001, 
+            invTimer = 3,
+            tip = RandomTip,
+            r = math.random(1,3),
+            color1 =colorDop1,
+            color2= colorDop2,
+            color3 =colorDop3,
+            x  = mas[i].x, 
+            y =  mas[i].y,  
+            ax  =mas[i].ax/12 + math.random(-1.5*k*kV,1.5*k2*kV)/RandomTip, 
+            ay = mas[i].ay/12+math.random(-1.5*k*kV,1.5*k2*kV)/RandomTip, 
+        }
+        table.insert(res,masPoint)
+    else
+        local masPoint = {
+            timer =10-0.00001, 
+            invTimer = 10,
+            tip = RandomTip,
+            r = math.random(1,3),
+            flag =true,
+            color1 =colorDop1,
+            color2= colorDop2,
+            color3 =colorDop3,
+            f = false,
+            x  = mas[i].x, 
+            y =  mas[i].y,  
+            ax  =math.random(-2*k*kV,2*k2*kV)/RandomTip, 
+            ay = math.random(-2*k*kV,2*k2*kV)/RandomTip, 
+        }
+        table.insert(res,masPoint)
+    end
 end
 
 function resMove(i,dt)
@@ -124,6 +128,20 @@ function resMove(i,dt)
     end
     if ( res[i].timer < 0) then
         res[i].timer  = res[i].invTimer
+    end
+    
+    if ( res[i].r and res[i].flagR ) then
+        if (  res[i].r > 0.5) then
+            res[i].flagR  =0
+        end
+        if ( res[i].r < 0 ) then
+            res[i].flagR  =1 
+        end
+        if (res[i].flagR == 0 )   then 
+            res[i].r = res[i].r - 1*dt
+        else
+            res[i].r = res[i].r + 1*dt
+        end 
     end
 end
 

@@ -9,9 +9,9 @@ enemyBombTable = {
     20, -- invTimer
     30, -- atack
     30, --atackTimer
-    0.8, --color1 
-    0.2, --color2
-    0.2, --color3
+    0.286, --color1 
+    0.333, --color2
+    0.435, --color3
     100, -- scale
     0, -- angleMouth 
     0, -- angleBody
@@ -372,13 +372,13 @@ enemyBombClass = Class{
                 self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
-                spawnResSmall(en,i)
+                spawnResHitEn(i)
             end  
         end
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
---            spawnResNormal(en,i)
+            spawnResKillEn(i)
             if (slediEn[i]) then
                 table.remove(slediEn,i)
             end

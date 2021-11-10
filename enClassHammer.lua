@@ -1,8 +1,8 @@
 local enClassHammer =  {} 
 
 enemyHammerTable = {
-    45, --w
-    40,  --h
+    30, --w
+    30,  --h
     1,  -- tip
     HC.rectangle(-100*k,-100*k2,16*k,25*k2), --body
     0,  --timer
@@ -11,9 +11,9 @@ enemyHammerTable = {
     60, --atackTimer
     0, -- dash
     15, --dashTimer
-    0.8, --color1 
-    0.2, --color2
-    0.2, --color3
+    0.553, --color1 
+    0.133, --color2
+    0.173, --color3
     100, -- scale
     0, -- angleMouth 
     0, -- angleBody
@@ -241,7 +241,7 @@ enemyHammerClass = Class{
             local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
             enBatch:setColor(1,0.5,0.5,1)
             enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/8,k2/8,125, 95.5)
-          --  self.body:draw('fill')
+         --   self.body:draw('fill')
         else
             local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
             local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
@@ -289,13 +289,13 @@ enemyHammerClass = Class{
                 self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
-                spawnResSmall(en,i)
+                spawnResHitEn(i)
             end  
         end
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
-          --  spawnResNormal(en,i)
+            spawnResKillEn(i)
             if (slediEn[i]) then
                 table.remove(slediEn,i)
             end

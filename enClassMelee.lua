@@ -11,9 +11,9 @@ enemyMeleeTable = {
     60, --atackTimer
     0, -- dash
     15, --dashTimer
-    0.8, --color1 
-    0.2, --color2
-    0.2, --color3
+    0.035, --color1 
+    0.184, --color2
+    0.196, --color3
     100, -- scale
     0, -- angleMouth 
     0, -- angleBody
@@ -344,13 +344,13 @@ enemyMeleeClass = Class{
                 self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
-                spawnResSmall(en,i)
+                spawnResHitEn(i)
             end  
         end
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
-         --   spawnResNormal(en,i)
+            spawnResKillEn(i)
             if (slediEn[i]) then
                 table.remove(slediEn,i)
             end

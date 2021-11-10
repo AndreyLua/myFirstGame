@@ -292,9 +292,9 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-    --    allSpawn(en,Geo,math.random(1,4))
-     --   en[#en].x = mouse.x
-      --  en[#en].y = mouse.y
+        allSpawn(en,Geo,math.random(1,4))
+        en[#en].x = mouse.x
+        en[#en].y = mouse.y
     end
       if love.keyboard.isDown('y') then
      table.remove(obj,#obj)
@@ -306,6 +306,7 @@ function  game:draw()
   
     local dt = love.timer.getDelta()
     playerBatch:clear()
+    resBatch:clear()
     enBatch:clear()
     enBatchDop:clear()
     love.graphics.setCanvas(kek)
@@ -334,10 +335,11 @@ function  game:draw()
     love.graphics.rectangle('line',-borderWidth,-borderHeight,borderWidth*3,borderHeight*3,k,k2)
     --    
       --  love.graphics.draw(meteors.m1,200*k,200*k2,0,1,1,meteors.m1:getWidth()/2,meteors.m1:getHeight()/2
-  
+    
     allDraw(dt)
     love.graphics.setColor(1,1,1,1)
     love.graphics.setLineWidth(1)
+    love.graphics.draw(resBatch)
     bulletsDraw()
     enRemoveTag(dt)
     if ( #obj  >0 and #vect > 0) then
@@ -583,7 +585,8 @@ function allDraw(dt)
             ------------------------------------------------------------------
             if ( res[i].tip == 4) then
                 love.graphics.setColor(0.7,0.2,0.2)
-                love.graphics.circle("line",res[i].x+8*k,res[i].y+8*k2,2*k)
+                resBatch:add(resQuads.hp,res[i].x,res[i].y,res[i].r+math.pi/2,k/11,k2/11,65,105)
+             
             end
         end
     end 
