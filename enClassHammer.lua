@@ -240,7 +240,7 @@ enemyHammerClass = Class{
             local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
             local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
             enBatch:setColor(1,0.5,0.5,1)
-            enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/5,k2/5,125, 95.5)
+            enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/8,k2/8,125, 95.5)
           --  self.body:draw('fill')
         else
             local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
@@ -248,7 +248,7 @@ enemyHammerClass = Class{
             local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
             local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
             enBatch:setColor(1,1,1,1)
-            enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/5,k2/5,125, 95.5)
+            enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/8,k2/8,125, 95.5)
            -- self.body:draw('fill')
         end
     end;
@@ -257,12 +257,12 @@ enemyHammerClass = Class{
             angle = self.angleBody,
             ax =-2*k*math.sin(self.angleBody) ,
             ay =-2*k2*math.cos(self.angleBody),
-            x = -10*k*math.sin(self.angleBody) ,
-            y = -10*k2*math.cos(self.angleBody) , 
+            x = -14*k*math.sin(self.angleBody) ,
+            y = -14*k2*math.cos(self.angleBody) , 
             r = 3*k ,
         }
         table.insert(self.traces,trace)
-        if ( #self.traces >9) then
+        if ( #self.traces >15) then
            table.remove(self.traces,1)
         end
     end;
@@ -270,10 +270,10 @@ enemyHammerClass = Class{
         for i = 1, #self.traces do
             local trace = self.traces[i]
             local radius =trace.r/8*i
-            trace.x = trace.x+80*trace.ax*dt
-            trace.y = trace.y+80*trace.ay*dt
-            love.graphics.setColor(0.09/7*i,0.5/7*i,0.5/7*i) 
-            love.graphics.circle("line",self.x+ trace.x,self.y + trace.y,radius)
+            trace.x = trace.x+70*trace.ax*dt
+            trace.y = trace.y+70*trace.ay*dt
+            love.graphics.setColor(0.75/7*i,0.34/7*i,0.08/7*i) 
+            love.graphics.circle("fill",self.x+ trace.x,self.y + trace.y,radius)
         end
     end;
     hit  = function(self,a,i)
@@ -295,7 +295,7 @@ enemyHammerClass = Class{
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
-            spawnResNormal(en,i)
+          --  spawnResNormal(en,i)
             if (slediEn[i]) then
                 table.remove(slediEn,i)
             end

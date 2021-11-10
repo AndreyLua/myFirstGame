@@ -133,7 +133,6 @@ function enCollWithobjInRegularSBomb(index,j,dt)
                         obj[kek[i]].ax= obj[kek[i]].ax -800000*dt*k*math.sin(angleD)/obj[kek[i]].scale
                         obj[kek[i]].ay= obj[kek[i]].ay -800000*dt*k*math.cos(angleD)/obj[kek[i]].scale
                         obj[kek[i]].health = obj[kek[i]].health - 10000
-                       --уу obj[kek[i]].timer= obj[kek[i]].invTimer - 0.001
                     end
                 end
             end

@@ -292,9 +292,9 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,math.random(4,4))
-        en[#en].x = mouse.x
-        en[#en].y = mouse.y
+    --    allSpawn(en,Geo,math.random(1,4))
+     --   en[#en].x = mouse.x
+      --  en[#en].y = mouse.y
     end
       if love.keyboard.isDown('y') then
      table.remove(obj,#obj)
@@ -577,8 +577,9 @@ function allDraw(dt)
             end
             if ( res[i].tip == 3) then
                 love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
-                rot('fill',res[i].x,res[i].y,10*k,10*k2,res[i].r,2*k,2*k2)
+                rot('fill',res[i].x,res[i].y,9*k,9*k2,res[i].r,2*k,2*k2)
             end
+      
             ------------------------------------------------------------------
             if ( res[i].tip == 4) then
                 love.graphics.setColor(0.7,0.2,0.2)
@@ -619,7 +620,6 @@ function allDraw(dt)
             end
         end
     end
-    
     
     for i = #en, 1, -1 do
         if (en[i] and en[i]:inScreen()) then

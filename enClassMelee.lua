@@ -350,7 +350,7 @@ enemyMeleeClass = Class{
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
-            spawnResNormal(en,i)
+         --   spawnResNormal(en,i)
             if (slediEn[i]) then
                 table.remove(slediEn,i)
             end

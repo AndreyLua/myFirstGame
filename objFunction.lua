@@ -63,13 +63,13 @@ function objColorAndScale(t)
         return  0.165,0.243,0.357,210,100 -- big
     end
     if  t == 3 then 
-        return 0.212,0.224,0.404,400,120 -- big
+        return 0.212,0.224,0.404,300,120 -- big
     end
     if  t == 4 then 
         return 0.208,0.208,0.208,100,67 -- small
     end
     if  t == 5 then 
-        return 0.267,0.075,0.188,20,50 -- small
+        return 0.267,0.075,0.188,80,50 -- small
     end
 end
 
@@ -105,6 +105,7 @@ function objDestroy(mas,i)
             kolMeteor = 8
         end
         if (#masGl>kolMeteor) then
+            spawnResCrackMet(i)
             for kkl = 1, #masGl/2-1 do 
                 if ( #masGl> 8) then
                     finish = finish+4 
@@ -141,7 +142,7 @@ function objDestroy(mas,i)
                     xc  = xc, 
                     yc =  yc , 
                     r =mas[i].r ,
-                    timer =8-0.001,
+                    timer =8-0.0001,
                     flag =true,
                     color1 =colorDop1,
                     color2=colorDop2,
@@ -154,7 +155,7 @@ function objDestroy(mas,i)
                     met = mas[i].met,
                     ra =math.random()*math.random(-1,1),
                 
-              }
+                }
                 start = finish
                 table.insert(obj,ee)
                 count = count + 1
@@ -181,7 +182,7 @@ function objDestroy(mas,i)
                 rDop2 = 0,
                 rDop = mas[i].r,
                 r =0 ,
-                timer = 8-0.0001,
+                timer = 8-0.00001,
                 flag =true,
                 color1 =colorDop1,
                 color2=colorDop2,
@@ -201,7 +202,7 @@ function objDestroy(mas,i)
             start = finish
             table.insert(obj,ee)
         else
-            spawnResBig(mas,i)
+            spawnDelMet(i)
         end
     end
 end
@@ -263,6 +264,21 @@ function objMove(i,dt)
       if ( obj[i].ay < -200*k2 ) then 
           obj[i].ay =-200*k2
       end 
+      
+      
+      
+      if ( obj[i].ax > 100*k) then 
+          obj[i].ax =obj[i].ax - 10*dt*k
+      end 
+      if ( obj[i].ax < -100*k ) then 
+          obj[i].ax =obj[i].ax + 10*dt*k
+      end 
+      if ( obj[i].ay > 100*k2 ) then 
+          obj[i].ay =obj[i].ay - 10*dt*k2
+      end 
+      if ( obj[i].ay < -100*k2 ) then 
+          obj[i].ay =obj[i].ay + 10*dt*k2
+      end 
     end
 end
 
@@ -284,11 +300,11 @@ function objCollWithPlayerResult(i, dt,intVectorX ,intVectorY)
     local angleD = math.atan2(player.x-obj[i].x,player.y-obj[i].y)
     local sumMas = obj[i].scale + playerAbility.mass
     if ( player.a == 1 ) then 
-        obj[i].ax= obj[i].ax -8000*dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speedA*k*dt*player.debaffStrenght)*10*obj[i].scale/sumMas
-        obj[i].ay= obj[i].ay -8000*dt*k*math.cos(angleD)*obj[i].scale/sumMas+ (player.ay*playerAbility.speedA*k2*dt*player.debaffStrenght)*10*obj[i].scale/sumMas
+        obj[i].ax= obj[i].ax-80000*dt*k*math.sin(angleD)/obj[i].scale +(player.ax*playerAbility.speedA*k*dt*player.debaffStrenght)/obj[i].scale*1000
+        obj[i].ay=  obj[i].ay-80000*dt*k2*math.cos(angleD)/obj[i].scale +(player.ay*playerAbility.speedA*k2*dt*player.debaffStrenght)/obj[i].scale*1000
     else
-        obj[i].ax= obj[i].ax -8000*dt*k*math.sin(angleD)*obj[i].scale/sumMas+(player.ax*playerAbility.speed*k*dt*player.debaffStrenght)*10*obj[i].scale/sumMas
-        obj[i].ay= obj[i].ay -8000*dt*k*math.cos(angleD)*obj[i].scale/sumMas+ (player.ay*playerAbility.speed*k2*dt*player.debaffStrenght)*10*obj[i].scale/sumMas
+        obj[i].ax= obj[i].ax-40000*dt*k*math.sin(angleD)/obj[i].scale +(player.ax*playerAbility.speed*k*dt*player.debaffStrenght)/obj[i].scale*400
+        obj[i].ay=  obj[i].ay-40000*dt*k2*math.cos(angleD)/obj[i].scale +(player.ay*playerAbility.speed*k2*dt*player.debaffStrenght)/obj[i].scale*400
     end
     ---
     if ((intVectorX*intVectorX+intVectorY*intVectorY>=math.pow(0.05*obj[i].collScale*k,2))) then

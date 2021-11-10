@@ -301,34 +301,35 @@ enemyBombClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-            local clow1X =self.x +10*k*math.sin(self.angleBody+math.pi/6)
-            local clow1Y =self.y +10*k2*math.cos(self.angleBody+math.pi/6)
-            local clow2X =self.x +10*k*math.sin(self.angleBody-math.pi/6)
-            local clow2Y =self.y +10*k2*math.cos(self.angleBody-math.pi/6)
+            local clow1X =self.x +17*k*math.sin(self.angleBody+math.pi/5)
+            local clow1Y =self.y +17*k2*math.cos(self.angleBody+math.pi/5)
+            local clow2X =self.x +17*k*math.sin(self.angleBody-math.pi/5)
+            local clow2Y =self.y +17*k2*math.cos(self.angleBody-math.pi/5)
             enBatch:setColor(1,0.2,0.2,1)
-            enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7,k2/7,120, 131)
+            enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7,k2/7,29.5, 43)
+            enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7,k2/7,29.5, 43)
+            enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7,k2/7,108.5, 109)
         else
-            local clow1X =self.x +13*k*math.sin(self.angleBody+math.pi/4)
-            local clow1Y =self.y +13*k2*math.cos(self.angleBody+math.pi/4)
-            local clow2X =self.x +13*k*math.sin(self.angleBody-math.pi/4)
-            local clow2Y =self.y +13*k2*math.cos(self.angleBody-math.pi/4)
+            local clow1X =self.x +17*k*math.sin(self.angleBody+math.pi/5)
+            local clow1Y =self.y +17*k2*math.cos(self.angleBody+math.pi/5)
+            local clow2X =self.x +17*k*math.sin(self.angleBody-math.pi/5)
+            local clow2Y =self.y +17*k2*math.cos(self.angleBody-math.pi/5)
             if (self.atack==self.atackTimer)  then
                 enBatch:setColor(1,1,1,1)
                 enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7,k2/7,29.5, 43)
                 enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7,k2/7,29.5, 43)
-                enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7,k2/7,120, 131)
+                enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7,k2/7,108.5, 109)
             else 
                 if ( self.prepar > self.preparTimer/2) then
                     enBatch:setColor(1,0.5,0.5,1)
                     enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
                     enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
-                    enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7*(4-self.animat),k2/7*(4-self.animat),120, 131)
-                    love.graphics.circle('line',self.x,self.y,self.w/2)
+                    enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7*(4-self.animat),k2/7*(4-self.animat),108.5, 109)
                 else
                     enBatch:setColor(1,1,1,1)
                     enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
                     enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7*(4-self.animat),k2/7*(4-self.animat),29.5, 43)
-                    enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7*(4-self.animat),k2/7*(4-self.animat),120, 131)
+                    enBatch:add(enQuads.bodyBomb,self.x,self.y,-self.angleBody+math.pi,k/7*(4-self.animat),k2/7*(4-self.animat),108.5, 109)
             --        love.graphics.circle('line',self.x,self.y,self.w/2)
                 end
             end
@@ -341,8 +342,8 @@ enemyBombClass = Class{
             angle = self.angleBody,
             ax =-2*k*math.sin(self.angleBody) ,
             ay =-2*k2*math.cos(self.angleBody),
-            x = -17*k*math.sin(self.angleBody) ,
-            y = -17*k2*math.cos(self.angleBody) , 
+            x = -14*k*math.sin(self.angleBody) ,
+            y = -14*k2*math.cos(self.angleBody) , 
             r = 2*k ,
         }
         table.insert(self.traces,trace)
@@ -377,7 +378,7 @@ enemyBombClass = Class{
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
-            spawnResNormal(en,i)
+--            spawnResNormal(en,i)
             if (slediEn[i]) then
                 table.remove(slediEn,i)
             end
