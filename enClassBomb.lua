@@ -122,7 +122,6 @@ enemyBombClass = Class{
             self.w = 150
             if (player.a ==0 and  (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= self.w*k+playerAbility.scaleBody*k ) then
                 flaginv = false 
-                shake = 2
                 hp.long = hp.long - self.damage
             end
         end

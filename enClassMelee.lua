@@ -332,9 +332,7 @@ enemyMeleeClass = Class{
             if ( self.climbFlag == 1 and self.meleeAtackTimer == self.meleeAtack )  then 
                 self.meleeAtack = self.meleeAtackTimer - 0.0001
                 flaginv = false 
-                shake = 2
                 hp.long = hp.long - self.damage
-          
             end
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then

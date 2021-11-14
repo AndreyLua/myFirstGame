@@ -5,12 +5,15 @@ Class = require "libs/hump.class"
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
 
-effect = moonshine(moonshine.effects.boxblur)
-                  .chain(moonshine.effects.filmgrain)
-                  .chain(moonshine.effects.vignette)
-effect.disable("boxblur", "filmgrain")
-effect.enable("filmgrain")
-  
+
+
+effect1 = moonshine(moonshine.effects.pixelate)
+                --  .chain(moonshine.effects.desaturate)
+effect1.pixelate.size =2
+
+
+
+--size
 ------------------SETS-----------------------------
 meteorSet = love.graphics.newImage("assets/meteorSet.png")
 enSet = love.graphics.newImage("assets/enSet.png")
@@ -45,7 +48,8 @@ enQuads = {
   clow2Bomb = love.graphics.newQuad(657,  190,  59, 86, enSet:getDimensions()),
 }
 resQuads = {
-  hp =   love.graphics.newQuad(0,0,130,210, resSet:getDimensions()),
+  boost =   love.graphics.newQuad(0,0,130,210, resSet:getDimensions()),
+  hp =   love.graphics.newQuad(131,0,210,210, resSet:getDimensions()),
   
 }
 
@@ -152,6 +156,8 @@ screenWidth = love.graphics.getWidth()
 screenHeight = love.graphics.getHeight()
 k  = screenWidth/1920*2.5
 k2 = screenHeight/1080*2.5
+
+
 --------------STATES--------------
 game = require "game"
 bulletFunction = require "bulletFunction"

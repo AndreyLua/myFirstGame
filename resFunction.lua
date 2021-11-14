@@ -30,8 +30,7 @@ function newHealPoint(mas,i,kV)
             timer = 3-0.00001, 
             invTimer = 3,
             tip = 4, 
-            flagR = 0 , 
-            r = math.random(-1,1)*math.random(),
+            r = math.random(-3,3)*math.random(),
             x  = mas[i].x, 
             y =  mas[i].y,  
             ax  =math.random(-2*k*kV,2*k2*kV), 
@@ -128,20 +127,6 @@ function resMove(i,dt)
     end
     if ( res[i].timer < 0) then
         res[i].timer  = res[i].invTimer
-    end
-    
-    if ( res[i].r and res[i].flagR ) then
-        if (  res[i].r > 0.5) then
-            res[i].flagR  =0
-        end
-        if ( res[i].r < 0 ) then
-            res[i].flagR  =1 
-        end
-        if (res[i].flagR == 0 )   then 
-            res[i].r = res[i].r - 1*dt
-        else
-            res[i].r = res[i].r + 1*dt
-        end 
     end
 end
 

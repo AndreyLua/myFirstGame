@@ -90,19 +90,19 @@ end
 
 function Health_Boost()
     love.graphics.setColor(0.02,0.3,0.02,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+12)*k,player.y+31*k2,3*k2,-screenHeight/7)
+    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+15)*k,HealthAndBoostBar.y+31*k2,3*k2,-screenHeight/7)
     love.graphics.setColor(0.04,0.85,0.04,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+12)*k,player.y+31*k2,3*k2,-hp.long2/7)
+    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+15)*k,HealthAndBoostBar.y+31*k2,3*k2,-hp.long2/7)
     love.graphics.setColor(0.02,0.6,0.02,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+12)*k,player.y+31*k2,3*k2,-hp.long3/7)
+    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+15)*k,HealthAndBoostBar.y+31*k2,3*k2,-hp.long3/7)
     
     
     love.graphics.setColor(0,0.32,0.225,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+7)*k,player.y+31*k2,2*k2,-screenHeight/7)
+    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+10)*k,HealthAndBoostBar.y+31*k2,2*k2,-screenHeight/7)
     love.graphics.setColor(0,0.85,0.75,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+7)*k,player.y+31*k2,2*k2,-boost.long2/7)
+    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+10)*k,HealthAndBoostBar.y+31*k2,2*k2,-boost.long2/7)
     love.graphics.setColor(0,0.643,0.502,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+7)*k,player.y+31*k2,2*k2,-boost.long/7)
+    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+10)*k,HealthAndBoostBar.y+31*k2,2*k2,-boost.long/7)
 end
 
 function exit(x,y)

@@ -280,7 +280,6 @@ enemyHammerClass = Class{
         if ( a == 0 ) then
             if (self.invTimer == self.timer and self.dash~=self.dashTimer) then
                 flaginv = false 
-                shake = 2
                 hp.long = hp.long - self.damage
             end 
         else

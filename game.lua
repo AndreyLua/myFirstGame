@@ -72,6 +72,7 @@ hp = {
     long2 =screenHeight,
     long3 =screenHeight
 }
+
 boost = {
     flag = true,
     long = screenHeight,
@@ -93,6 +94,10 @@ player = {
     ay = 0,
     color = 0,
 } 
+HealthAndBoostBar = {
+  x = borderWidth/2+40*k/2, 
+  y = borderHeight/2+40*k2/2,  
+}
 camera = {
     x = borderWidth/2+40*k/2, 
     y = borderHeight/2+40*k2/2
@@ -112,34 +117,31 @@ end
 function game:update(dt)
 objRegulS = {}
 enRegulS = {}
-boost.long = 1000
+--boost.long = 1000
 hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
 flagtouch2 = false -- для выхода в состояние пауза
+
+HealthAndBoostBar.x = HealthAndBoostBar.x+(player.x-HealthAndBoostBar.x)
+HealthAndBoostBar.y = HealthAndBoostBar.y+(player.y-HealthAndBoostBar.y)
+
+
 if not( player.x > borderWidth*2-screenWidth/2+20*k or  player.x < -borderWidth+screenWidth/2+20*k) then
-    if (player.x > camera.x) then 
-       camera.x =camera.x+(player.x-camera.x)*dt*5*k
-    else
-        camera.x =camera.x-(camera.x-player.x)*dt*5*k2
-    end
+    camera.x =camera.x+(player.x-camera.x)*dt*5*k
 else
     if (  player.x > borderWidth*2-screenWidth/2+20*k) then
         camera.x =camera.x+( borderWidth*2-screenWidth/2+20*k-camera.x)*dt*5*k
     else
-        camera.x =camera.x+(-borderWidth+screenWidth/2+20*k-camera.x)*dt*5*k2
+        camera.x =camera.x+(-borderWidth+screenWidth/2+20*k-camera.x)*dt*5*k
     end
 end
 if not( player.y >  borderHeight*2-screenHeight/2+20*k2 or  player.y < - borderHeight+screenHeight/2+20*k2 ) then
-     if (player.y > camera.y) then 
-        camera.y =camera.y+(player.y-camera.y)*dt*5*k
-    else
-        camera.y =camera.y-(camera.y-player.y)*dt*5*k2
-    end
+    camera.y =camera.y+(player.y-camera.y)*dt*5*k2
 else
     if (  player.y >borderHeight*2-screenHeight/2+20*k2) then
-        camera.y =camera.y+(borderHeight*2-screenHeight/2+20*k2-camera.y)*dt*5*k
+        camera.y =camera.y+(borderHeight*2-screenHeight/2+20*k2-camera.y)*dt*5*k2
     else
         camera.y =camera.y+(-borderHeight+screenHeight/2+20*k2-camera.y)*dt*5*k2
     end
@@ -324,7 +326,7 @@ function  game:draw()
     --  end
    --end 
     if (flaginv == false ) then
-    love.graphics.translate( 0  ,random(0,shake) )   
+    love.graphics.translate( 0  ,random()*random(-2,0,2)*k )   
   end
   
     love.graphics.setLineWidth(2)
@@ -389,25 +391,23 @@ function  game:draw()
   --  end
     love.graphics.setCanvas()
     love.graphics.setColor(1,1,1,1)
-   -- love.graphics.setBlendMode('alpha','premultiplied')
-   
--- effect(function()
-    
-    love.graphics.draw(kek,0,0,0,sx,sy)
-  
-   -- end)
+    if (flaginv == false ) then
+        effect1(function()
+            love.graphics.draw(kek,0,0,0,sx,sy)
+        end)
+    else
+        love.graphics.draw(kek,0,0,0,sx,sy)
+    end
 
 
-
-   love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10,0,k,k2)
+  love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10,0,k,k2)
   love.graphics.print("EN: "..tostring(#en), 10, 40)
-
-   local stat  =  love.graphics.getStats()
-   love.graphics.print("Stat  "..tostring(stat.drawcalls), 10, 70)
-   love.graphics.print("OBJ: "..tostring(#obj), 10, 110)
-   love.graphics.print("RES: "..tostring(#res), 10, 150)
+  local stat  =  love.graphics.getStats()
+  love.graphics.print("Stat  "..tostring(stat.drawcalls), 10, 70)
+  love.graphics.print("OBJ: "..tostring(#obj), 10, 110)
+  love.graphics.print("RES: "..tostring(#res), 10, 150)
   
-   vect = {}
+  vect = {}
 end
                
 
@@ -585,7 +585,7 @@ function allDraw(dt)
             ------------------------------------------------------------------
             if ( res[i].tip == 4) then
                 love.graphics.setColor(0.7,0.2,0.2)
-                resBatch:add(resQuads.hp,res[i].x,res[i].y,res[i].r+math.pi/2,k/11,k2/11,65,105)
+                resBatch:add(resQuads.hp,res[i].x,res[i].y,res[i].r+math.pi/2,k/19,k2/19,105,105)
              
             end
         end
