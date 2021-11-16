@@ -295,7 +295,7 @@ enemyMeleeClass = Class{
             enBatchDop:setColor(1,0.5,0.5,0.4)
             enBatchDop:add(enQuads.clow1Melee,clow1X-camera.x+40*k/2+screenWidth/2,clow1Y-camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi+self.angleMouth,k/6,k2/6,36, 44)
             enBatchDop:add(enQuads.clow2Melee,clow2X-camera.x+40*k/2+screenWidth/2,clow2Y-camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
-         --   self.body:draw('fill')
+            --self.body:draw('fill')
         end
     end;
     traceSpawn = function(self)
@@ -349,9 +349,7 @@ enemyMeleeClass = Class{
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
             spawnResKillEn(i)
-            if (slediEn[i]) then
-                table.remove(slediEn,i)
-            end
+            
             table.remove(en,i)
         end  
     end;

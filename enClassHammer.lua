@@ -235,7 +235,7 @@ enemyHammerClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-           local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
+            local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
             local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
             local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
             local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
@@ -295,9 +295,21 @@ enemyHammerClass = Class{
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
             spawnResKillEn(i)
-            if (slediEn[i]) then
-                table.remove(slediEn,i)
-            end
+            local enDrawDie = {
+              timer = 4, 
+              quad = enQuads.bodyHammer,
+              x = self.x,
+              y = self.y,
+              ax = self.ax,
+              ay = self.ay,
+              r = -self.angleBody+math.pi,
+              ra = math.random(-3,-1),
+              koff = k/8,
+              koff2 = k2/8,
+              ox = 125,
+              oy = 95.5
+            }
+            table.insert(enAfterDieTex,enDrawDie)
             table.remove(en,i)
         end  
     end;

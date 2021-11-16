@@ -35,7 +35,6 @@ preyi= -1
 klacK = 0 
 removeEn = {}
 colll = {}
-slediEn ={}
 flagclass = "slicer" 
 tap =  false
 np = 0 
@@ -101,13 +100,16 @@ HealthAndBoostBar = {
 camera = {
     x = borderWidth/2+40*k/2, 
     y = borderHeight/2+40*k2/2
-  }
+}
+
 en = {}
 obj = {}
+res = {}
 objRegulS  = {}
 enRegulS  = {}
+enAfterDieTex = {} 
+resTraces = {}
 bulletRegulS  = {}
-res = {}
 enemyBullets = {} 
 playerSledi = {} 
 
@@ -186,6 +188,7 @@ for i = #res, 1, -1 do
     if (res[i]) then 
         resColl(i)
         resMove(i,dt)
+        res[i]:traceSpawn()
         resBorder(i,res)    
         if (res[i]) then  
             resСollect(i)
@@ -294,7 +297,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,math.random(1,4))
+        allSpawn(en,Geo,math.random(4,4))
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -305,7 +308,6 @@ end
 
 
 function  game:draw()
-  
     local dt = love.timer.getDelta()
     playerBatch:clear()
     resBatch:clear()
@@ -324,7 +326,7 @@ function  game:draw()
        --  love.graphics.circle('line', i*120*k,j*120*k2,60*k)  
 
     --  end
-   --end 
+    --end 
     if (flaginv == false ) then
     love.graphics.translate( 0  ,random()*random(-2,0,2)*k )   
   end
@@ -335,9 +337,7 @@ function  game:draw()
     love.graphics.push()
     love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
     love.graphics.rectangle('line',-borderWidth,-borderHeight,borderWidth*3,borderHeight*3,k,k2)
-    --    
-      --  love.graphics.draw(meteors.m1,200*k,200*k2,0,1,1,meteors.m1:getWidth()/2,meteors.m1:getHeight()/2
-    
+   
     allDraw(dt)
     love.graphics.setColor(1,1,1,1)
     love.graphics.setLineWidth(1)
@@ -569,24 +569,22 @@ function allDraw(dt)
   --  enemiesSledDraw(dt)
     for i= 1,#res do
         if (res[i].x>camera.x-screenWidth/2-30*k and  res[i].x<camera.x+screenWidth/2+30*k and  res[i].y>camera.y-screenHeight/2-30*k2 and res[i].y<camera.y + screenHeight/2+30*k2) then
+            res[i]:traceDraw(dt)
             if ( res[i].tip == 1) then
                 love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
-                rot('fill',res[i].x,res[i].y,4*k,4*k2,res[i].r,2*k,2*k2)
+                rot('fill',res[i].x,res[i].y,4*k,4*k2,1,2*k,2*k2)
             end
             if ( res[i].tip == 2) then
                  love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
-                 rot('fill',res[i].x,res[i].y,7*k,7*k2,res[i].r,2*k,2*k2)
+                 rot('fill',res[i].x,res[i].y,7*k,7*k2,1,3.5*k,3.5*k2)
             end
             if ( res[i].tip == 3) then
                 love.graphics.setColor(res[i].color1,res[i].color2,res[i].color3)
-                rot('fill',res[i].x,res[i].y,9*k,9*k2,res[i].r,2*k,2*k2)
+                rot('fill',res[i].x,res[i].y,9*k,9*k2,1,4.5*k,4.5*k2)
             end
-      
             ------------------------------------------------------------------
             if ( res[i].tip == 4) then
-                love.graphics.setColor(0.7,0.2,0.2)
                 resBatch:add(resQuads.hp,res[i].x,res[i].y,res[i].r+math.pi/2,k/19,k2/19,105,105)
-             
             end
         end
     end 
@@ -623,7 +621,7 @@ function allDraw(dt)
             end
         end
     end
-    
+    enAfterDieDraw(dt)----inscreen
     for i = #en, 1, -1 do
         if (en[i] and en[i]:inScreen()) then
             local IenRegulS =en[i]:IndexInRegulS(80)

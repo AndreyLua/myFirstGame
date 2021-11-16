@@ -13,6 +13,7 @@ function enCollWithPlayerInRegularS(index,dt)
         end
     end
 end
+
 function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip )
     if ((intVectorX*intVectorX+intVectorY*intVectorY>=math.pow(0.05*math.max(en[i].w,en[i].h)*k,2))) then
         en[i].ax = 0 
@@ -50,8 +51,6 @@ function enCollWithenInRegularS(index,j,dt)
         end
       end
 end
-
-
 
 function enCollWithenInRegularSMelee(index,j,dt)
     if ( enRegulS[index]) then 
@@ -151,33 +150,20 @@ function enFire(x,y,x2,y2,angleEn,damage)
     }
     table.insert(enemyBullets,bullet)
 end
-function enemiesSledDraw(dt)
-    for i = 1, #slediEn do
-        for j = 1, #slediEn[i] do
-            local kkk = slediEn[i]
-            if (kkk[j].tip == 1 ) then
-                local radius =kkk[j].r/4*j
-                kkk[j].x = kkk[j].x+50*kkk[j].ax*dt
-                kkk[j].y = kkk[j].y+50*kkk[j].ay*dt
-                love.graphics.setColor(kkk[j].color1*j,kkk[j].color2*j,kkk[j].color3*j) 
-                love.graphics.circle("fill",kkk[j].x+radius,kkk[j].y+radius,radius)
-            else
-                if (kkk[j].tip == 2 ) then
-                    local radius =kkk[j].r/1.3
-                    kkk[j].x = kkk[j].x+40*kkk[j].ax*dt
-                    kkk[j].y = kkk[j].y+40*kkk[j].ay*dt
-                    love.graphics.setColor(kkk[j].color1*j,kkk[j].color2*j,kkk[j].color3*j) 
-                    love.graphics.circle("fill", kkk[j].x+math.cos(kkk[j].y)+radius+1*k*math.sin(kkk[j].angle-math.pi/2) ,kkk[j].y+math.sin(kkk[j].x)+radius +1*k2*math.cos(kkk[j].angle-math.pi/2),radius)
-                    love.graphics.circle("fill", kkk[j].x+math.sin(kkk[j].y)+radius+1*k*math.sin(kkk[j].angle+math.pi/2) ,kkk[j].y+math.cos(kkk[j].x)+radius +1*k2*math.cos(kkk[j].angle+math.pi/2),radius)
-                end
-            end
-        end
-        if ( #slediEn[i] >5) then
-           table.remove(slediEn[i],1)
+function enAfterDieDraw(dt)
+    for i = #enAfterDieTex, 1, -1 do
+        if ( enAfterDieTex[i].timer> 0) then
+            enBatch:setColor(1,1,1,enAfterDieTex[i].timer/5)
+            enBatch:add(enAfterDieTex[i].quad,enAfterDieTex[i].x,enAfterDieTex[i].y,enAfterDieTex[i].r,enAfterDieTex[i].koff,enAfterDieTex[i].koff2,enAfterDieTex[i].ox, enAfterDieTex[i].oy)
+            enAfterDieTex[i].r =  enAfterDieTex[i].r + enAfterDieTex[i].ra*dt*1
+            enAfterDieTex[i].x =enAfterDieTex[i].x-enAfterDieTex[i].ax*dt*3
+            enAfterDieTex[i].y =enAfterDieTex[i].y-enAfterDieTex[i].ay*dt*3
+            enAfterDieTex[i].timer = enAfterDieTex[i].timer - dt*3
+        else
+            table.remove(enAfterDieTex,i)
         end
     end
 end
-
 function enRemoveTag(dt)
     for i = #removeEn, 1, -1 do
         local h =  removeEn[i]
@@ -206,4 +192,5 @@ function enRemoveTag(dt)
         end
     end
 end
+
 return enFunction

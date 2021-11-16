@@ -308,9 +308,6 @@ enemyShooterClass = Class{
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
             spawnResKillEn(i)
-            if (slediEn[i]) then
-                table.remove(slediEn,i)
-            end
             table.remove(en,i)
         end  
     end;

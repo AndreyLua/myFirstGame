@@ -50,7 +50,9 @@ enQuads = {
 resQuads = {
   boost =   love.graphics.newQuad(0,0,130,210, resSet:getDimensions()),
   hp =   love.graphics.newQuad(131,0,210,210, resSet:getDimensions()),
-  
+  res1 =   love.graphics.newQuad(366,20,14,7, resSet:getDimensions()),
+  res2 =   love.graphics.newQuad(366,0,14,14, resSet:getDimensions()),
+  res3 =   love.graphics.newQuad(386,0,14,21, resSet:getDimensions()),
 }
 
 meteorSetW,meteorSetH =  meteorSet:getDimensions()
@@ -163,6 +165,7 @@ game = require "game"
 bulletFunction = require "bulletFunction"
 playerFunction = require "playerFunction"
 enFunction = require "enFunction"
+resSimpleClass =  require "resSimpleClass" 
 enClassMelee = require "enClassMelee" 
 enClassHammer = require "enClassHammer" 
 enClassShooter = require "enClassShooter" 
@@ -195,7 +198,7 @@ mouse = {
 playerAbility = {
     mass =200,
     radiusCollect = 100,
-    damage = 1,
+    damage = 1000,
     invTimer = 0.5,
     maxSpeed = 30,
     speed = 6,

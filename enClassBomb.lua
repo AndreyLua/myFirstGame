@@ -378,9 +378,32 @@ enemyBombClass = Class{
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
             spawnResKillEn(i)
-            if (slediEn[i]) then
-                table.remove(slediEn,i)
-            end
+            
+            local clow1X =self.x +17*k*math.sin(self.angleBody+math.pi/5)
+            local clow1Y =self.y +17*k2*math.cos(self.angleBody+math.pi/5)
+            local clow2X =self.x +17*k*math.sin(self.angleBody-math.pi/5)
+            local clow2Y =self.y +17*k2*math.cos(self.angleBody-math.pi/5)
+          --  if (self.atack==self.atackTimer)  then
+             --   enBatch:setColor(1,1,1,1)
+              --  enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7,k2/7,29.5, 43)
+                
+                --enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7,k2/7,29.5, 43)
+               
+            local enDrawDie = {
+              timer = 4, 
+              quad = enQuads.bodyBomb,
+              x = self.x,
+              y = self.y,
+              ax = self.ax,
+              ay = self.ay,
+              r = -self.angleBody+math.pi,
+              ra = math.random(-3,-1),
+              koff = k/7,
+              koff2 = k2/7,
+              ox = 108.5, 
+              oy = 109,
+            }
+            table.insert(enAfterDieTex,enDrawDie)
             table.remove(en,i)
         end  
     end;
