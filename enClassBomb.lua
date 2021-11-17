@@ -376,19 +376,13 @@ enemyBombClass = Class{
         end
     end;
     kill =  function(self,i) 
-        if (en[i].health and en[i].health<=0 ) then
+        if (en[i].health and en[i].health<=0 and en[i].flagBomb ~= 1) then
             spawnResKillEn(i)
-            
             local clow1X =self.x +17*k*math.sin(self.angleBody+math.pi/5)
             local clow1Y =self.y +17*k2*math.cos(self.angleBody+math.pi/5)
             local clow2X =self.x +17*k*math.sin(self.angleBody-math.pi/5)
             local clow2Y =self.y +17*k2*math.cos(self.angleBody-math.pi/5)
-          --  if (self.atack==self.atackTimer)  then
-             --   enBatch:setColor(1,1,1,1)
-              --  enBatch:add(enQuads.clow1Bomb,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/7,k2/7,29.5, 43)
-                
-                --enBatch:add(enQuads.clow2Bomb,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/7,k2/7,29.5, 43)
-               
+        
             local enDrawDie = {
               timer = 4, 
               quad = enQuads.bodyBomb,
@@ -404,7 +398,43 @@ enemyBombClass = Class{
               oy = 109,
             }
             table.insert(enAfterDieTex,enDrawDie)
+            
+            local enDrawDie2 = {
+              timer = 4, 
+              quad = enQuads.clow1Bomb,
+              x = clow2X,
+              y = clow2Y,
+              ax = self.ax/5+math.random(-1.5*k,1.5*k)*10,
+              ay = self.ay/5+math.random(-1.5*k,1.5*k)*10,
+              r = -self.angleBody-math.pi-self.angleMouth,
+              ra = math.random(-5,-1),
+              koff = k/7,
+              koff2 = k2/7,
+              ox = 29.5, 
+              oy = 43 ,
+            }
+            table.insert(enAfterDieTex,enDrawDie2)
+            
+            local enDrawDie3 = {
+              timer = 4, 
+              quad = enQuads.clow2Bomb,
+              x = clow1X,
+              y = clow1Y,
+              ax = self.ax/5+math.random(-1.5*k,1.5*k)*10,
+              ay = self.ay/5+math.random(-1.5*k,1.5*k)*10,
+              r = -self.angleBody-math.pi+self.angleMouth,
+              ra = math.random(-5,-1),
+              koff = k/7,
+              koff2 = k2/7,
+              ox = 29.5, 
+              oy = 43 ,
+            }
+            table.insert(enAfterDieTex,enDrawDie3)
             table.remove(en,i)
+        else
+            if (en[i].health and en[i].health<=0) then
+                table.remove(en,i) 
+            end
         end  
     end;
 }

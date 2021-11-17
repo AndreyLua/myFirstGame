@@ -297,7 +297,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,math.random(4,4))
+        allSpawn(en,Geo,math.random(2,2))
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -313,6 +313,7 @@ function  game:draw()
     resBatch:clear()
     enBatch:clear()
     enBatchDop:clear()
+    enBatchAfterDie:clear()
     love.graphics.setCanvas(kek)
     love.graphics.clear()
     love.graphics.setColor(1,1,1,1)
@@ -341,6 +342,7 @@ function  game:draw()
     allDraw(dt)
     love.graphics.setColor(1,1,1,1)
     love.graphics.setLineWidth(1)
+    love.graphics.draw(enBatchAfterDie)
     love.graphics.draw(resBatch)
     bulletsDraw()
     enRemoveTag(dt)

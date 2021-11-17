@@ -153,8 +153,8 @@ end
 function enAfterDieDraw(dt)
     for i = #enAfterDieTex, 1, -1 do
         if ( enAfterDieTex[i].timer> 0) then
-            enBatch:setColor(1,1,1,enAfterDieTex[i].timer/5)
-            enBatch:add(enAfterDieTex[i].quad,enAfterDieTex[i].x,enAfterDieTex[i].y,enAfterDieTex[i].r,enAfterDieTex[i].koff,enAfterDieTex[i].koff2,enAfterDieTex[i].ox, enAfterDieTex[i].oy)
+            enBatchAfterDie:setColor(1,1,1,enAfterDieTex[i].timer/5)
+            enBatchAfterDie:add(enAfterDieTex[i].quad,enAfterDieTex[i].x,enAfterDieTex[i].y,enAfterDieTex[i].r,enAfterDieTex[i].koff,enAfterDieTex[i].koff2,enAfterDieTex[i].ox, enAfterDieTex[i].oy)
             enAfterDieTex[i].r =  enAfterDieTex[i].r + enAfterDieTex[i].ra*dt*1
             enAfterDieTex[i].x =enAfterDieTex[i].x-enAfterDieTex[i].ax*dt*3
             enAfterDieTex[i].y =enAfterDieTex[i].y-enAfterDieTex[i].ay*dt*3

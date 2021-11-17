@@ -349,7 +349,56 @@ enemyMeleeClass = Class{
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
             spawnResKillEn(i)
-            
+            local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
+            local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
+            local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
+            local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
+      
+            local enDrawDie = {
+                timer = 4, 
+                quad = enQuads.bodyMelee,
+                x = self.x,
+                y = self.y,
+                ax = self.ax,
+                ay = self.ay,
+                r = -self.angleBody+math.pi,
+                ra = math.random(-3,-1),
+                koff = k/6,
+                koff2 = k2/6,
+                ox = 60,
+                oy = 88
+            }
+            table.insert(enAfterDieTex,enDrawDie)
+            local enDrawDie2 = {
+                timer = 4, 
+                quad = enQuads.clow2Melee,
+                x = clow2X,
+                y = clow2Y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi-self.angleMouth,
+                ra = math.random(-3,-1),
+                koff = k/6,
+                koff2 = k2/6,
+                ox = 36,
+                oy = 44
+            }
+            table.insert(enAfterDieTex,enDrawDie2)
+            local enDrawDie3 = {
+                timer = 4, 
+                quad = enQuads.clow1Melee,
+                x = clow1X,
+                y = clow1Y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi+self.angleMouth,
+                ra = math.random(1,3),
+                koff = k/6,
+                koff2 = k2/6,
+                ox = 36,
+                oy = 44
+            }
+            table.insert(enAfterDieTex,enDrawDie3)
             table.remove(en,i)
         end  
     end;

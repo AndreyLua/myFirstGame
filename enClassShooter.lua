@@ -308,6 +308,86 @@ enemyShooterClass = Class{
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
             spawnResKillEn(i)
+            local clow1X =self.x +10*k*math.sin(self.angleBody+math.pi/6)
+            local clow1Y =self.y +10*k2*math.cos(self.angleBody+math.pi/6)
+            local clow2X =self.x +10*k*math.sin(self.angleBody-math.pi/6)
+            local clow2Y =self.y +10*k2*math.cos(self.angleBody-math.pi/6)
+        
+            local enDrawDie = {
+                timer = 4, 
+                quad = enQuads.bodyShooter,
+                x = self.x,
+                y = self.y,
+                ax = self.ax,
+                ay = self.ay,
+                r = -self.angleBody+math.pi,
+                ra = math.random(-3,-1),
+                koff = k/8,
+                koff2 = k2/8,
+                ox = 60,
+                oy = 88
+            }
+            table.insert(enAfterDieTex,enDrawDie)
+            local enDrawDie2 = {
+                timer = 4, 
+                quad = enQuads.wing1Shooter,
+                x = self.x,
+                y = self.y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi+math.pi/10-self.angleWing,
+                ra = math.random(-2,-1),
+                koff = k/8,
+                koff2 = k2/8,
+                ox = 208,
+                oy = 64
+            }
+            table.insert(enAfterDieTex,enDrawDie2)
+            local enDrawDie3 = {
+                timer = 4, 
+                quad = enQuads.wing2Shooter,
+                x = self.x,
+                y = self.y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi-math.pi/10-self.angleWing,
+                ra = math.random(1,2),
+                koff = k/8,
+                koff2 = k2/8,
+                ox = 16,
+                oy = 64
+            }
+            table.insert(enAfterDieTex,enDrawDie3)
+            local enDrawDie4 = {
+                timer = 4, 
+                quad = enQuads.clow1Shooter,
+                x = clow1X,
+                y = clow1Y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi+self.angleMouth,
+                ra = math.random(-2,-1),
+                koff = k/8,
+                koff2 = k2/8,
+                ox = 64,
+                oy = 48
+            }
+            table.insert(enAfterDieTex,enDrawDie4)
+            local enDrawDie5 = {
+                timer = 4, 
+                quad = enQuads.clow2Shooter,
+                x = clow2X,
+                y = clow2Y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi-self.angleMouth,
+                ra = math.random(1,2),
+                koff = k/8,
+                koff2 = k2/8,
+                ox = 16,
+                oy = 48
+            }
+            table.insert(enAfterDieTex,enDrawDie5)
             table.remove(en,i)
         end  
     end;

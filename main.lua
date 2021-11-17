@@ -24,6 +24,7 @@ playerBatch = love.graphics.newSpriteBatch(playerSet)
 enBatch = love.graphics.newSpriteBatch(enSet)
 resBatch = love.graphics.newSpriteBatch(resSet)
 enBatchDop = love.graphics.newSpriteBatch(enSet)
+enBatchAfterDie = love.graphics.newSpriteBatch(enSet)
 
 playerQuads = {
   body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),
@@ -158,7 +159,6 @@ screenWidth = love.graphics.getWidth()
 screenHeight = love.graphics.getHeight()
 k  = screenWidth/1920*2.5
 k2 = screenHeight/1080*2.5
-
 
 --------------STATES--------------
 game = require "game"
