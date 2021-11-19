@@ -99,16 +99,16 @@ love.graphics.setCanvas()
 
 fon:draw()
 love.graphics.setColor(0,0,0, 0.0039*180)
-love.graphics.rectangle('fill',0,0,d1,d2)
+love.graphics.rectangle('fill',0,0,screenWidth,screenHeight)
 love.graphics.setColor(1,1,1)
-love.graphics.draw(kek3,0,0,0,sx,sy) 
+love.graphics.draw(kek3,0,0,0,1,1) 
 end
 
 function skills:update(dt)
-explUpdate()
+explUpdate(dt)
 mouse.x,mouse.y=love.mouse.getPosition()
-mouse.x = mouse.x/sx
-mouse.y = mouse.y/sy
+mouse.x = mouse.x
+mouse.y = mouse.y
 
 if love.mouse.isDown(1)  then
     flagtouch3 =true

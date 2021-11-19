@@ -126,7 +126,7 @@ end
 end
 end
 
-function explUpdate()
+function explUpdate(dt)
 
   for i =1, #exp do
     if( exp[i]) then

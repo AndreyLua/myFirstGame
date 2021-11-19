@@ -16,6 +16,7 @@ resClass = Class {
         self.traces = traces
     end;
     traceSpawn = function(self)
+      --[[
         if ( self.tip == 1 or self.tip == 2 or self.tip == 3) then 
             local trace = {
                 ax =-math.sin(math.atan2(self.ax,self.ay))*k*math.abs(self.ax),
@@ -29,8 +30,10 @@ resClass = Class {
                table.remove(self.traces,1)
             end
         end
+        ]]--
     end;
     traceDraw = function(self,dt)
+      --[[
         if ( self.tip == 1 or self.tip == 2 or self.tip == 3) then 
             for i = 1, #self.traces do
                 local trace = self.traces[i]
@@ -47,9 +50,9 @@ resClass = Class {
                 if ( self.tip == 3 ) then
                     rot('fill',self.x+trace.x,self.y + trace.y,8.5*k,8.5*k2,self.r,8.5*k/2,8.5*k2/2)
                 end
-              --  love.graphics.circle("fill",self.x+trace.x,self.y + trace.y,radius)
             end
         end
+        ]]--
     end;
 }
 
