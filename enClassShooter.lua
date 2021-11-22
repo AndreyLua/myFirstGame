@@ -16,7 +16,7 @@ enemyShooterTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    10,  -- damage
+    40,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
@@ -388,6 +388,7 @@ enemyShooterClass = Class{
                 oy = 48
             }
             table.insert(enAfterDieTex,enDrawDie5)
+         --   colWave =  colWave - 5
             table.remove(en,i)
         end  
     end;

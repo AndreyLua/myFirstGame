@@ -101,120 +101,38 @@ function newPoint(mas,i,kV)
     end
 end
 
-function resMove(i,dt)
- -- print(#resTraces)
-   -- if ( resTraces[ш]) then
-   ---   local trace = {
-     -- -    x = res[i].x,
-      ---    y = res[i].y, 
-      --    }
-      --    table.insert(resTraces[i],trace)
-     --     if ( #resTraces[i] >2) then
-    --          table.remove(resTraces[i],1)
-     --     end
-   -- else
-    --    local traceBeg = 
---     -   {
-    --        trace
-    --    }
-  --      table.insert(resTraces,i,traceBeg)
- --  end
-    if (res[i].tip == 1) then
-        res[i].x= res[i].x+res[i].ax*dt*5*k
-        res[i].y= res[i].y+res[i].ay*dt*5*k2
-    end
-    if (res[i].tip == 2) then
-        res[i].x= res[i].x+res[i].ax*dt*4*k
-        res[i].y= res[i].y+res[i].ay*dt*4*k2
-    end
-    if (res[i].tip == 3) then
-        res[i].x= res[i].x+res[i].ax*dt*2*k
-        res[i].y= res[i].y+res[i].ay*dt*2*k2
-    end
-    if (res[i].tip == 4) then
-        res[i].x= res[i].x+res[i].ax*dt*5*k
-        res[i].y= res[i].y+res[i].ay*dt*5*k2
-    end
-    if ( res[i].ax > 0 ) then
-        res[i].ax  = res[i].ax - 4*dt*k
-    else
-        res[i].ax  = res[i].ax + 4*dt*k
-    end
-    if ( res[i].ay > 0 ) then
-        res[i].ay  = res[i].ay - 4*dt*k2
-    else
-        res[i].ay  = res[i].ay + 4*dt*k2
-    end
-    
-    if ( res[i].timer < res[i].invTimer) then
-        res[i].timer  = res[i].timer - dt* 40
-    end
-    if ( res[i].timer < 0) then
-        res[i].timer  = res[i].invTimer
-    end
-end
-
-function resColl(i)
-    if ( player.a==0  ) then 
-        if (res[i].timer == res[i].invTimer and (math.sqrt(math.pow((player.x-res[i].x),2)+math.pow((player.y-res[i].y),2))) < playerAbility.radiusCollect*k) then
-            local x1 = (player.x)-res[i].x+1*k
-            local y1 = (player.y)-res[i].y+1*k2          
-            local ugol = math.atan2(x1,y1)
-            player.clowRflag =3
-            if ( res[i].ax> 17*k*math.sin(ugol)) then
-                res[i].ax = res[i].ax - 2*k 
-            else
-                res[i].ax = res[i].ax + 2*k 
-            end
-            if ( res[i].ay> 17*k2*math.cos(ugol)) then
-                res[i].ay = res[i].ay - 2*k2
-            else
-                res[i].ay = res[i].ay + 2*k2 
-            end
-        end
-    end
-end
-
-function resСollect(i)
-    if (res[i].timer == res[i].invTimer and  checkCollision(player.x-20*k,player.y-20*k2, 40*k, 40*k2,res[i].x,res[i].y,1*k,1*k2)) then
-        if ( res[i].tip == 4) then
-            hp.long=hp.long+50*k2
-            resRemove(i,res)
-        else
-            score = score +1
-            resRemove(i,res)
-        end
-    end
-end
-
-function resRemove(i,mas)
+function resRemove(i)
     local kek = 0
-    table.insert(mas[i],kek)
-    table.insert(removeEn,mas[i])
-    table.remove(mas,i)
+    table.insert(res[i],kek)
+    table.insert(removeEn,res[i])
+    table.remove(res,i)
 end 
 
-function resBorder(i,mas)
-    --------------------------------------------------
-    if ( mas[i]) then
-        if ( mas[i].x > screenWidth*2) then 
-            mas[i].ax = -mas[i].ax
-            mas[i].x =screenWidth*2 - 0.1*k
-        end
-        if ( mas[i].x <  -screenWidth) then 
-            mas[i].ax = -mas[i].ax
-            mas[i].x = -screenWidth + 0.1*k
-        end
-        if ( mas[i].y < -screenHeight) then 
-            mas[i].ay = -mas[i].ay
-            mas[i].y = -screenHeight+0.1*k2
-        end
-        if ( mas[i].y > screenHeight*2) then 
-            mas[i].ay = -mas[i].ay
-            mas[i].y = screenHeight*2 - 0.1*k2
-        end
-        if ( mas[i].x > screenWidth*2 or mas[i].x < -screenWidth or mas[i].y < -screenHeight or  mas[i].y > screenHeight*2 ) then
-           table.remove(mas,i)
+function resAfterDie(dt)
+    for i = #removeEn, 1, -1 do
+        local h =  removeEn[i]
+        if ( removeEn[i]) then
+            if ( h.tip == 4 ) then
+                love.graphics.setColor(1,0.1,0.1)
+                love.graphics.print("+HP",removeEn[i].x,removeEn[i].y,-math.pi/2,0.4*k)  
+            else 
+                if ( h.tip == 1 ) then
+                    love.graphics.setColor(0.235,0.616,0.816,0.6)
+                    love.graphics.print("+1",removeEn[i].x,removeEn[i].y,-math.pi/2,0.3*k)    
+                end
+                if ( h.tip == 2 ) then
+                    love.graphics.setColor(0.514,0.941,0.235,0.6)
+                    love.graphics.print("+3",removeEn[i].x,removeEn[i].y,-math.pi/2,0.35*k)    
+                end
+                if ( h.tip == 3 ) then
+                    love.graphics.setColor(0.8,0.8,0.235,0.6)
+                    love.graphics.print("+5",removeEn[i].x,removeEn[i].y,-math.pi/2,0.4*k)    
+                end
+            end
+            h[#h] =  h[#h]+ 0.15*dt
+            if (  h[#h]> 0.1) then
+                table.remove(removeEn,i)
+            end        
         end
     end
 end

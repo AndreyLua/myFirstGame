@@ -164,33 +164,5 @@ function enAfterDieDraw(dt)
         end
     end
 end
-function enRemoveTag(dt)
-    for i = #removeEn, 1, -1 do
-        local h =  removeEn[i]
-        if ( removeEn[i]) then
-            if ( h.tip == 4 ) then
-                love.graphics.setColor(1,0.1,0.1)
-                love.graphics.print("+HP",removeEn[i].x,removeEn[i].y,-math.pi/2,0.4)  
-            else 
-                if ( h.tip == 1 ) then
-                    love.graphics.setColor(0.235,0.616,0.816,0.6)
-                    love.graphics.print("+1",removeEn[i].x,removeEn[i].y,-math.pi/2,0.2)    
-                end
-                if ( h.tip == 2 ) then
-                    love.graphics.setColor(0.514,0.941,0.235,0.6)
-                    love.graphics.print("+3",removeEn[i].x,removeEn[i].y,-math.pi/2,0.3)    
-                end
-                if ( h.tip == 3 ) then
-                    love.graphics.setColor(0.549,0.427,0.843,0.6)
-                    love.graphics.print("+5",removeEn[i].x,removeEn[i].y,-math.pi/2,0.4)    
-                end
-            end
-            h[#h] =  h[#h]+ 0.15*dt
-            if (  h[#h]> 0.1) then
-                table.remove(removeEn,i)
-            end        
-        end
-    end
-end
 
 return enFunction

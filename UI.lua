@@ -61,48 +61,47 @@ function playerHP(dt)
 end
 
 function playerBoost(dt)
- 
-  if ( boost.long/screenHeight*100> 100) then
-    boost.long = screenHeight
-    boost.long2 = screenHeight
-  end
-  
-  if ( boost.long2>boost.long) then
-      boost.long2 = boost.long2-70*dt
-  end
-  if ( boost.long2<boost.long) then
-      boost.long2 = boost.long2+playerAbility.boostRegen *dt*2
-  end
-  if ( boost.long <= 30*k2 ) then
-    player.a=0
-    boost.long =30*k2
-  end
-  
-  if ( player.a==1) then
-      boost.long = boost.long -playerAbility.boostWaste*dt
-  else
-      boost.long = boost.long + playerAbility.boostRegen *dt
-  end
-  if  (boost.long>screenHeight) then
+    if ( boost.long/screenHeight*100 > 100) then
       boost.long = screenHeight
-  end
+      boost.long2 = screenHeight
+    end
+    
+    if ( boost.long2>boost.long) then
+        boost.long2 = boost.long2-70*dt
+    end
+    if ( boost.long2<boost.long) then
+        boost.long2 = boost.long2+playerAbility.boostRegen *dt*2
+    end
+    
+    if ( boost.long <= 30*k2 ) then
+      player.a=0
+      boost.long =30*k2
+    end
+    
+    if ( player.a==1) then
+        boost.long = boost.long -playerAbility.boostWaste*dt
+    else
+        boost.long = boost.long + playerAbility.boostRegen *dt
+    end
+    if  (boost.long>screenHeight) then
+        boost.long = screenHeight
+    end
 end
 
 function Health_Boost()
     love.graphics.setColor(0.02,0.3,0.02,1)
-    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+15)*k,HealthAndBoostBar.y+31*k2,3*k2,-screenHeight/7)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+31*k2,3*k2,-screenHeight/7)
     love.graphics.setColor(0.04,0.85,0.04,1)
-    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+15)*k,HealthAndBoostBar.y+31*k2,3*k2,-hp.long2/7)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+31*k2,3*k2,-hp.long2/7)
     love.graphics.setColor(0.02,0.6,0.02,1)
-    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+15)*k,HealthAndBoostBar.y+31*k2,3*k2,-hp.long3/7)
-    
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+31*k2,3*k2,-hp.long3/7)
     
     love.graphics.setColor(0,0.32,0.225,1)
-    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+10)*k,HealthAndBoostBar.y+31*k2,2*k2,-screenHeight/7)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-screenHeight/7)
     love.graphics.setColor(0,0.85,0.75,1)
-    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+10)*k,HealthAndBoostBar.y+31*k2,2*k2,-boost.long2/7)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long2/7)
     love.graphics.setColor(0,0.643,0.502,1)
-    love.graphics.rectangle("fill",HealthAndBoostBar.x-(playerAbility.scaleBody+10)*k,HealthAndBoostBar.y+31*k2,2*k2,-boost.long/7)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long/7)
 end
 
 function exit(x,y)
@@ -126,9 +125,11 @@ function exit(x,y)
 end
 
 function lineW()
-    love.graphics.setColor(0.897,0.507,0)
     local Wave = waves[numberWave]
-    love.graphics.rectangle("line",50*k,screenHeight/2-(colWave*300*k2/Wave[4])/2,10*k,colWave*300*k2/Wave[4])
+   -- love.graphics.setColor(0.897,0.507,0)
+   -- love.graphics.rectangle("fill",50*k,screenHeight/2-(colWave*250*k2/Wave[4])/2,7*k,colWave*250*k2/Wave[4])
+    love.graphics.setColor(0.497,0.257,0)
+    love.graphics.rectangle("line",50*k,screenHeight/2-(colWave*250*k2/Wave[4])/2,8*k,colWave*250*k2/Wave[4])
 end 
 
 

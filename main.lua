@@ -5,14 +5,9 @@ Class = require "libs/hump.class"
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
 
-
-
 effect1 = moonshine(moonshine.effects.pixelate)
                 --  .chain(moonshine.effects.desaturate)
 effect1.pixelate.size =2
-
-
-
 --size
 ------------------SETS-----------------------------
 meteorSet = love.graphics.newImage("assets/meteorSet.png")
@@ -224,7 +219,7 @@ function love.load()
   io.stdout:setvbuf("no") 
   math.randomseed(os.time()) 
   love.window.setFullscreen(true,"desktop")
-  font = love.graphics.newFont("fonts/kenvector_future.ttf",40)
+  font = love.graphics.newFont("fonts/1.ttf",60)
   love.graphics.setFont(font)  
   kek= love.graphics.newCanvas(screenWidth ,screenHeight)
   kek2= love.graphics.newCanvas(screenWidth ,screenHeight)
