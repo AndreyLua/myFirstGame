@@ -16,14 +16,26 @@ touchy = 0
 ggtouch = 30
 fflag= false
 score = 0
+
 waveflag = 0
 wavex = -250*k
 wavey = 0
+numberWave =1 
+colWave= 200
+waves = {
+  {100,20,0,200},
+  {100,100,0,25},
+  {100,30,0,15},
+  {100,50,0,20},
+  {100,70,0,25},
+  {100,50,20,20},
+  {100,100,100,25}
+}
+
 spped = 460
 flagsp = false
 fff3flag = false
 flagCircle =false  
-numberWave =1 
 texti = 0 
 textL = ""
 textK = 0 
@@ -53,16 +65,6 @@ controler = {
   flag = false
 }
 
-colWave= 200
-waves = {
-  {100,20,0,200},
-  {100,100,0,25},
-  {100,30,0,15},
-  {100,50,0,20},
-  {100,70,0,25},
-  {100,50,20,20},
-  {100,100,100,25}
-}
 
 hp = {
     flag = false,
@@ -112,6 +114,7 @@ end
 
 
 function game:update(dt)
+--explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 boost.long = 1000
@@ -121,7 +124,7 @@ mouse.x = mouse.x
 mouse.y = mouse.y
 flagtouch2 = false -- для выхода в состояние пауза
 
-
+wavesUpdate(dt)
 if not( player.x > borderWidth*2-screenWidth/2+20*k or  player.x < -borderWidth+screenWidth/2+20*k) then
     camera.x =camera.x+(player.x-camera.x)*dt*5*k
 else
@@ -151,9 +154,8 @@ end
 playerControl()
 playerClowR(dt)
 playerHP(dt)
-explUpdate2(dt)
 -------------------
-local Wave = waves[numberWave] 
+
 for i = #obj, 1, -1 do
     if (obj[i]) then  
         allInvTimer(i,obj,dt)
@@ -199,34 +201,20 @@ for i = #en, 1, -1 do
     end
 end
 
-if ( colWave<=0) then
-    numberWave = numberWave +1 
-    local Wave = waves[numberWave]
-    colWave =Wave[4]
-    waveflag = 0
-    wavex = -250*k
-    wavey = 0
-end
+
 
 playerBoost(dt)
 
-if ( colWave>0 and #obj < 200) then
+if (#obj < 200) then
     Timer.every(5, function()
         for i=1,math.random(1,1) do
-            local Wave = waves[numberWave]
             local Geo  =math.random(1,4)
             local Tip =1
             local Scale =math.random(1,2)
-            if (math.random(1,100)<Wave[2]) then
-                Tip =1
-            else
-                Tip =1
-            end
             allSpawn(obj,Geo,Tip)
         end
   
         for i=1,math.random(0,1) do
-            local Wave = waves[numberWave]
             local Geo  =math.random(1,4)
             local Tip =math.random(1,4)
             local Scale =math.random(2,2)
@@ -338,8 +326,8 @@ function  game:draw()
         end
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(enBatch)
+        love.graphics.setColor(1,0,0,1)
         for i=1,#exp do
-            love.graphics.setColor(exp[i].color1,exp[i].color2,exp[i].color3)
             love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*20*k,exp[i].scale*20*k2,4*exp[i].scale*k)
         end
     love.graphics.pop()
@@ -356,7 +344,7 @@ function  game:draw()
     
     local kkol = #(tostring (score))
     love.graphics.print(score,22*k-(70*k*0.5)/2, screenHeight/2+(kkol*45/2*k2*0.5),-math.pi/2,0.5,0.5)
-    Waves(numberWave,dt)
+    wavesTitleDraw(numberWave,dt)
     sc(0,screenHeight/2)
     exit(-7*k,-7*k2)
     lineW()
@@ -382,47 +370,7 @@ function  game:draw()
 end
                
 
-function Waves(n,dt)
-    if ( waveflag == 0   ) then
-        wavetimer:update(dt)
-        wavetimer:every(0.001, function()
-            wavetimer:clear() 
-            if (wavex*k<0) then
-                wavex = wavex+0.2*k
-            else
-                wavex = 0 
-                waveflag = 1
-            end
-        end)
-    end
-    if ( waveflag == 1) then
-        wavetimer:update(dt)
-        wavetimer:every(3, function()
-            wavetimer:clear() 
-            waveflag = 2
-        end)
-    end
-    if ( waveflag == 2 and wavex == 0) then
-        wavetimer:update(dt)
-        wavetimer:every(0.001, function()
-            wavetimer:clear() 
-            if (wavey*k<screenHeight/2+200*k2) then
-                wavey = wavey+0.6*k
-            end
-        end)
-    end
-    love.graphics.setColor(0.8,0.5,0,(125*k+wavex)/125*k+0.4)
-    love.graphics.print("Waves", 80*k+wavex*k,screenHeight/2+110*k2-wavey*k2,-math.pi/2,1,1)
-    love.graphics.setColor(0.7,0.48,0.2,(125*k+wavex)/125*k+0.4)
-    local  char = tostring(n)
-    if (#char==1) then
-        love.graphics.print(">>"..tostring (n)..'<<', 125*k+wavex*k,screenHeight/2+65*k2+wavey*k2,-math.pi/2,1,1)
-    end
-    if (#char==2) then
-        love.graphics.print(">>"..tostring (n)..'<<', 125*k+wavex*k,screenHeight/2+90*k2+wavey*k2,-math.pi/2,1,1)
-    end
-    
-end
+
 
 function enGeo(Geo)
     if (Geo==1) then

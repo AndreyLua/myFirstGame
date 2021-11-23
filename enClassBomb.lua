@@ -235,8 +235,6 @@ enemyBombClass = Class{
         if ( self.flagBomb == 1) then
             self.flagBomb =0 
             self.w =enemyBombTable[1]*k
-            --!
-            expl(self.x,self.y,1000)
             self.health = -1 
         end
     end;
