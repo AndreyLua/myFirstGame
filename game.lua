@@ -210,15 +210,14 @@ if (#obj < 200) then
         for i=1,math.random(1,1) do
             local Geo  =math.random(1,4)
             local Tip =1
-            local Scale =math.random(1,2)
             allSpawn(obj,Geo,Tip)
         end
   
-        for i=1,math.random(0,1) do
+        for i=1,math.random(1,2) do
             local Geo  =math.random(1,4)
             local Tip =math.random(1,4)
-            local Scale =math.random(2,2)
             allSpawn(en,Geo,Tip)
+           -- wavesSpawnGroup(4)
         end
         Timer.clear() 
     end)
@@ -288,6 +287,7 @@ end
 
 function  game:draw()
     local dt = love.timer.getDelta()
+    UIBatch:clear()
     playerBatch:clear()
     resBatch:clear()
     enBatch:clear()
@@ -347,6 +347,7 @@ function  game:draw()
     wavesTitleDraw(numberWave,dt)
     sc(0,screenHeight/2)
     exit(-7*k,-7*k2)
+    love.graphics.draw(UIBatch)
     lineW()
    
     love.graphics.setCanvas()
@@ -359,12 +360,12 @@ function  game:draw()
         love.graphics.draw(kek,0,0,0,sx,sy)
     end
     
-    love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10,0,k,k2)
-    love.graphics.print("EN: "..tostring(#en), 10, 40)
-    local stat  =  love.graphics.getStats()
-    love.graphics.print("Stat  "..tostring(stat.drawcalls), 10, 70)
-    love.graphics.print("OBJ: "..tostring(#obj), 10, 110)
-    love.graphics.print("RES: "..tostring(#res), 10, 150)
+  --  love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10,0,k,k2)
+  --  love.graphics.print("EN: "..tostring(#en), 10, 40)
+  --  local stat  =  love.graphics.getStats()
+  --  love.graphics.print("Stat  "..tostring(stat.drawcalls), 10, 70)
+   -- love.graphics.print("OBJ: "..tostring(#obj), 10, 110)
+   -- love.graphics.print("RES: "..tostring(#res), 10, 150)
     
     vect = {}
 end

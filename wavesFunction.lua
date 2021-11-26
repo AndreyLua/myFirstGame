@@ -19,22 +19,61 @@ end
 function wavesSpawnGroup(numb)
     ---------Front-------------
     if ( numb == 1 ) then
-        
+        local Geo  =math.random(1,4)
+        local Tip =math.random(1,2)
+        if ( Tip == 2 ) then 
+            Tip = 3
+        end
+        for i = 1, math.random(1,2) do 
+            allSpawn(en,Geo,Tip) 
+        end 
+        Tip = 2
+        for i = 1, math.random(1,2) do 
+            allSpawn(en,Geo,Tip) 
+        end 
     end
     ---------------------------
     ---------Around------------
     if ( numb == 2 ) then
-      
+        local Geo  =1
+        local Tip =math.random(1,3)
+        for i = 1, math.random(1,2) do 
+            allSpawn(en,Geo,Tip) 
+        end 
+        Geo  =2
+        for i = 1, math.random(1,2) do 
+            allSpawn(en,Geo,Tip) 
+        end 
+        Geo  =3
+        for i = 1, math.random(1,2) do 
+            allSpawn(en,Geo,Tip) 
+        end 
+        Geo  =4
+        for i = 1, math.random(1,2) do 
+            allSpawn(en,Geo,Tip) 
+        end 
     end
     ---------------------------
     ---------Group-------------
     if ( numb == 3 ) then
-      
+        local Geo  =math.random(1,4)
+        local Tip =math.random(1,3)
+        for i = 2, math.random(3,4) do 
+            allSpawn(en,Geo,Tip) 
+        end 
     end
     ---------------------------
     ---------Boom--------------
     if ( numb == 4 ) then
-      
+        local Geo  =1
+        local Tip =4
+        allSpawn(en,Geo,Tip) 
+        Geo  =2
+        allSpawn(en,Geo,Tip) 
+        Geo  =3
+        allSpawn(en,Geo,Tip) 
+        Geo  =4
+        allSpawn(en,Geo,Tip) 
     end
     ---------------------------
 end
@@ -65,9 +104,14 @@ function wavesTitleDraw(n,dt)
     end
 
     local fontWidth = font:getWidth("Waves")
-    love.graphics.setColor(0.8,0.5,0,(125*k+wavex)/125*k+0.4)
-    love.graphics.print("Waves", 80*k+wavex*k,screenHeight/2+fontWidth/2*k2-wavey*k2,-math.pi/2,k,k2)
-    love.graphics.setColor(0.7,0.48,0.2,(125*k+wavex)/125*k+0.4)
+    
+    love.graphics.setColor(0.431,0.545,0.573,(125*k+wavex)/125*k+0.4)
+    love.graphics.print("W   v   s", 80*k+wavex*k,screenHeight/2+fontWidth/2*k2-wavey*k2,-math.pi/2,k,k2)
+    
+    love.graphics.setColor(0.531,0.645,0.673,(125*k+wavex)/125*k+0.4)
+    love.graphics.print("    a   e   ", 80*k+wavex*k,screenHeight/2+fontWidth/2*k2-wavey*k2,-math.pi/2,k,k2)
+    
+    love.graphics.setColor(0.431,0.545,0.573,(125*k+wavex)/125*k+0.4)
     fontWidth = font:getWidth(">>"..tostring (n)..'<<')
     love.graphics.print(">>"..tostring (n)..'<<', 125*k+wavex*k,screenHeight/2+fontWidth/2*k2+wavey*k2,-math.pi/2,k,k2)
 end

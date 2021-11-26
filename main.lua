@@ -14,12 +14,23 @@ meteorSet = love.graphics.newImage("assets/meteorSet.png")
 enSet = love.graphics.newImage("assets/enSet.png")
 resSet = love.graphics.newImage("assets/resSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
+UISet = love.graphics.newImage("assets/UISet.png")
 ---------------------------------------------------
+UIBatch = love.graphics.newSpriteBatch(UISet)
 playerBatch = love.graphics.newSpriteBatch(playerSet)
 enBatch = love.graphics.newSpriteBatch(enSet)
 resBatch = love.graphics.newSpriteBatch(resSet)
 enBatchDop = love.graphics.newSpriteBatch(enSet)
 enBatchAfterDie = love.graphics.newSpriteBatch(enSet)
+
+UIQuads = { 
+  add = love.graphics.newQuad(241,  0,  240, 250, UISet:getDimensions()),
+  ex= love.graphics.newQuad(0,  0,  240, 250, UISet:getDimensions()),
+  no= love.graphics.newQuad(241,  251,  240, 240, UISet:getDimensions()),
+  yes= love.graphics.newQuad(0,  251,  240, 240, UISet:getDimensions()),
+  
+}
+
 
 playerQuads = {
   body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),

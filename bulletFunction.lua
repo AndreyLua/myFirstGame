@@ -104,8 +104,9 @@ end
     end
     
     function bulletsDraw()
+        love.graphics.setColor(0.8,0.4,0.3,1)
         for i = 1, #enemyBullets do
-          love.graphics.circle('line',enemyBullets[i].x,enemyBullets[i].y,2*k)
+          love.graphics.circle('fill',enemyBullets[i].x,enemyBullets[i].y,2*k)
         end
     end
   

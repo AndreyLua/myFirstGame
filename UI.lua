@@ -21,14 +21,14 @@ end
 function slot(x,y,scale,number)
   local  kol = #(tostring(number))
   love.graphics.setLineWidth(2)
-  love.graphics.setColor(0.0039*230,0.0039*130,0)
+  love.graphics.setColor(0.231,0.345,0.373)
   love.graphics.rectangle('line',x-(75*k*scale)/2,y-(75*k2*scale)/2,75*k*scale,75*k2*scale)
   love.graphics.print(number,x-(75*k*scale)/2+3*k,y-(75*k*scale)/2+(kol*45*scale/2*k2*0.4)+3*k2,-3.14/2,0.4*k,0.4*k2)
 end
 
 function sc(x,y)
   love.graphics.setLineWidth(2)
-  love.graphics.setColor(0.0039*200,0.0039*150,0)
+  love.graphics.setColor(0.231,0.345,0.373)
   love.graphics.rectangle('line',x,y-100*k2,35*k,200*k2)
 end
 
@@ -113,12 +113,10 @@ function exit(x,y)
       love.graphics.rectangle('line',x+35*k,y+20*k2,8*k,40*k2,2)
       love.graphics.rectangle('line',x+50*k,y+20*k2,8*k,40*k2,2)
   else
-      love.graphics.setLineWidth(2)
-      love.graphics.setColor(0.897,0.507,0)
-      love.graphics.rectangle('line',x+10*k,y+10*k2,60*k,60*k2)
-      love.graphics.rectangle('line',x+20*k,y+20*k2,8*k,40*k2,2)
-      love.graphics.rectangle('line',x+35*k,y+20*k2,8*k,40*k2,2)
-      love.graphics.rectangle('line',x+50*k,y+20*k2,8*k,40*k2,2)
+     
+      love.graphics.setColor(0.75,0.75,0.75,1)
+      UIBatch:add(UIQuads.add,x+125/4*k+5*k,y+125/4*k2+5*k2,-math.pi/2,k/4,k2/4,120, 125)
+ 
   end
   
   
@@ -128,7 +126,7 @@ function lineW()
     local Wave = waves[numberWave]
    -- love.graphics.setColor(0.897,0.507,0)
    -- love.graphics.rectangle("fill",50*k,screenHeight/2-(colWave*250*k2/Wave[4])/2,7*k,colWave*250*k2/Wave[4])
-    love.graphics.setColor(0.497,0.257,0)
+    love.graphics.setColor(0.431,0.545,0.573)
     love.graphics.rectangle("line",50*k,screenHeight/2-(colWave*250*k2/Wave[4])/2,8*k,colWave*250*k2/Wave[4])
 end 
 
