@@ -64,21 +64,19 @@ controler = {
   angle = 0,
   flag = false
 }
-
-
 hp = {
     flag = false,
     long = screenHeight,
     long2 =screenHeight,
     long3 =screenHeight
 }
-
 boost = {
     flag = true,
     long = screenHeight,
     long2 =screenHeight,
     long3 =screenHeight
 }
+
 player = {
     debaffStrenght =1,
     body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,playerAbility.scaleBody*k),
@@ -94,10 +92,14 @@ player = {
     ay = 0,
     color = 0,
 } 
+
 camera = {
     x = borderWidth/2+40*k/2, 
     y = borderHeight/2+40*k2/2
 }
+
+enBoomAnimat = {}
+
 removeEn = {}
 en = {}
 obj = {}
@@ -117,7 +119,7 @@ function game:update(dt)
 --explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
-boost.long = 1000
+--boost.long = 1000
 hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
@@ -287,6 +289,7 @@ end
 
 function  game:draw()
     local dt = love.timer.getDelta()
+    boomBatch:clear()
     UIBatch:clear()
     playerBatch:clear()
     resBatch:clear()
@@ -338,15 +341,21 @@ function  game:draw()
     love.graphics.push()
         love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
         Health_Boost()
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.draw(boomBatch)
         resAfterDie(dt)
     love.graphics.pop()
     love.graphics.setColor(1,1,1,1)
     
-    local kkol = #(tostring (score))
-    love.graphics.print(score,22*k-(70*k*0.5)/2, screenHeight/2+(kkol*45/2*k2*0.5),-math.pi/2,0.5,0.5)
+ 
+    local fontWidth = font:getWidth(tostring(score))
+    local fontHeight = font:getHeight(tostring(score))
+    love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
+    
     wavesTitleDraw(numberWave,dt)
     sc(0,screenHeight/2)
     exit(-7*k,-7*k2)
+    
     love.graphics.draw(UIBatch)
     lineW()
    
@@ -360,12 +369,12 @@ function  game:draw()
         love.graphics.draw(kek,0,0,0,sx,sy)
     end
     
-  --  love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10,0,k,k2)
-  --  love.graphics.print("EN: "..tostring(#en), 10, 40)
-  --  local stat  =  love.graphics.getStats()
-  --  love.graphics.print("Stat  "..tostring(stat.drawcalls), 10, 70)
-   -- love.graphics.print("OBJ: "..tostring(#obj), 10, 110)
-   -- love.graphics.print("RES: "..tostring(#res), 10, 150)
+    love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
+    love.graphics.print("EN: "..tostring(#en), 100, 40,0,k/2,k2/2)
+    local stat  =  love.graphics.getStats()
+    love.graphics.print("Stat  "..tostring(stat.drawcalls), 100, 70,0,k/2,k2/2)
+    love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
+    love.graphics.print("RES: "..tostring(#res), 100, 150,0,k/2,k2/2)
     
     vect = {}
 end
@@ -485,6 +494,7 @@ function allInvTimer(i,mas,dt)
 end
 
 function allDraw(dt)
+
     for i= 1,#res do
         if (res[i] and res[i].x>camera.x-screenWidth/2-30*k and  res[i].x<camera.x+screenWidth/2+30*k and  res[i].y>camera.y-screenHeight/2-30*k2 and res[i].y<camera.y + screenHeight/2+30*k2) then
             res[i]:draw()
@@ -524,6 +534,7 @@ function allDraw(dt)
         end
     end
     enAfterDieDraw(dt)
+    enBoomAfterDieDraw(dt)
     for i = #en, 1, -1 do
         if (en[i] and en[i]:inScreen()) then
             local IenRegulS =en[i]:IndexInRegulS(80)
@@ -540,6 +551,11 @@ function allBorder(i,mas)
     if (mas[i].x< borderWidth*2-mas[i].collScale*k/2 and  mas[i].x> -borderWidth +mas[i].collScale*k/2 and  mas[i].y> -borderHeight+mas[i].collScale*k2/2 and  mas[i].y<borderHeight*2-mas[i].collScale*k2/2) then
         mas[i].f = true
     end
+    if ( mas == obj and mas[i].pok > 0 ) then 
+        if ( mas[i].x > borderWidth*2 or mas[i].x < -borderWidth or mas[i].y < -borderHeight or  mas[i].y > borderHeight*2 ) then
+           table.remove(mas,i)
+        end 
+    end 
     --------------------------------------------------
     if ( mas[i] and mas[i].f == true) then
         if ( mas[i].x > borderWidth*2-mas[i].collScale*k/2) then 

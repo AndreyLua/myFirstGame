@@ -6,6 +6,9 @@ function settings:draw()
   
 love.graphics.setCanvas(kek3)
 love.graphics.clear()
+love.graphics.setColor(1,1,1,0.7)
+love.graphics.draw(kek,0,0,0,1,1) 
+love.graphics.setColor(1,1,1,1)
 exit(-7*k,-7*k2)
 textButton("Volume",screenWidth/2.2,screenHeight/2,0.9)
 
@@ -24,7 +27,7 @@ boolenButton("Not",screenWidth/1.38,screenHeight/3.6,1)
 love.graphics.setCanvas()
 
 
-fon:draw()
+
 love.graphics.setColor(0,0,0, 0.0039*180)
 love.graphics.rectangle('fill',0,0,screenWidth,screenHeight)
 love.graphics.setColor(1,1,1)

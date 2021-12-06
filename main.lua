@@ -6,16 +6,19 @@ HC = require 'libs/HC'
 moonshine = require 'moonshine'
 
 effect1 = moonshine(moonshine.effects.pixelate)
-                --  .chain(moonshine.effects.desaturate)
 effect1.pixelate.size =2
---size
+
 ------------------SETS-----------------------------
 meteorSet = love.graphics.newImage("assets/meteorSet.png")
 enSet = love.graphics.newImage("assets/enSet.png")
 resSet = love.graphics.newImage("assets/resSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
 UISet = love.graphics.newImage("assets/UISet.png")
+
+enBoomAnSet = love.graphics.newImage("assets/enBoomAn.png")
+
 ---------------------------------------------------
+boomBatch =  love.graphics.newSpriteBatch(enBoomAnSet)
 UIBatch = love.graphics.newSpriteBatch(UISet)
 playerBatch = love.graphics.newSpriteBatch(playerSet)
 enBatch = love.graphics.newSpriteBatch(enSet)
@@ -23,15 +26,25 @@ resBatch = love.graphics.newSpriteBatch(resSet)
 enBatchDop = love.graphics.newSpriteBatch(enSet)
 enBatchAfterDie = love.graphics.newSpriteBatch(enSet)
 
+boomQuads = { }
+boomQuads[1] = love.graphics.newQuad(0,  0,  320, 320, enBoomAnSet:getDimensions())
+boomQuads[2] = love.graphics.newQuad(320,  0,  320, 320, enBoomAnSet:getDimensions())
+boomQuads[3] = love.graphics.newQuad(620,  0,  320, 320, enBoomAnSet:getDimensions())
+boomQuads[4] = love.graphics.newQuad(940,  0,  320, 320, enBoomAnSet:getDimensions())
+boomQuads[5] = love.graphics.newQuad(0,  320,  320, 320, enBoomAnSet:getDimensions())
+boomQuads[6] = love.graphics.newQuad(320,  320,  320, 320, enBoomAnSet:getDimensions())
+boomQuads[7] = love.graphics.newQuad(620,  320,  320, 320, enBoomAnSet:getDimensions())
+boomQuads[8] = love.graphics.newQuad(940,  320,  320, 320, enBoomAnSet:getDimensions())
+boomQuads[9] = love.graphics.newQuad(0,  640,  320, 320, enBoomAnSet:getDimensions())
+boomQuads[10] = love.graphics.newQuad(320,  640,  320, 320, enBoomAnSet:getDimensions())
+
 UIQuads = { 
   add = love.graphics.newQuad(241,  0,  240, 250, UISet:getDimensions()),
   ex= love.graphics.newQuad(0,  0,  240, 250, UISet:getDimensions()),
   no= love.graphics.newQuad(241,  251,  240, 240, UISet:getDimensions()),
   yes= love.graphics.newQuad(0,  251,  240, 240, UISet:getDimensions()),
-  
+  panel = love.graphics.newQuad(0,  492,  1000, 240, UISet:getDimensions()),
 }
-
-
 playerQuads = {
   body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),
   clow1 = love.graphics.newQuad(465,  0,  200, 152, playerSet:getDimensions()),

@@ -119,7 +119,7 @@ enemyBombClass = Class{
         if ( self.animat < 0) then
             self.atack  = self.atackTimer
             self.flagBomb = 1 
-            self.w = 150
+            self.w = 100
             if (player.a ==0 and  (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= self.w*k+playerAbility.scaleBody*k ) then
                 flaginv = false 
                 hp.long = hp.long - self.damage
@@ -236,6 +236,15 @@ enemyBombClass = Class{
             self.flagBomb =0 
             self.w =enemyBombTable[1]*k
             self.health = -1 
+            local enBoomAnTabl =
+            {
+              an = 1,
+              timer = 1,
+              x = self.x,
+              y = self.y,
+              r = self.angleBody
+            }
+            table.insert(enBoomAnimat,enBoomAnTabl)
         end
     end;
     move =  function(self,dt)
@@ -333,7 +342,7 @@ enemyBombClass = Class{
                 end
             end
             --self.body:draw('fill')
-        --     love.graphics.circle('line',self.x,self.y,self.w)
+        --   love.graphics.circle('line',self.x,self.y,100*k)
         end
     end;
     traceSpawn = function(self)

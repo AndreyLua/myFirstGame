@@ -254,8 +254,8 @@ enemyMeleeClass = Class{
                 self.ay = 0 
             end
         else
-            self.x= self.x+math.sin(self.angleBody)*dt*500 -- движение противника ускорение
-            self.y= self.y+math.cos(self.angleBody)*dt*500
+            self.x= self.x+math.sin(self.angleBody)*dt*300*k -- движение противника ускорение
+            self.y= self.y+math.cos(self.angleBody)*dt*300*k2
         end
     end;
     moveWounded =  function(self,dt)

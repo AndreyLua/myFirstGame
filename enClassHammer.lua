@@ -215,8 +215,8 @@ enemyHammerClass = Class{
                 self.ay = 0 
             end
         else
-            self.x= self.x+math.sin(self.angleBody)*dt*450*k -- движение противника ускорение
-            self.y= self.y+math.cos(self.angleBody)*dt*450*k2
+            self.x= self.x+math.sin(self.angleBody)*dt*400*k -- движение противника ускорение
+            self.y= self.y+math.cos(self.angleBody)*dt*400*k2
         end
     end;
     moveWounded =  function(self,dt)

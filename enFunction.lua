@@ -150,6 +150,23 @@ function enFire(x,y,x2,y2,angleEn,damage)
     }
     table.insert(enemyBullets,bullet)
 end
+function enBoomAfterDieDraw(dt)
+    for i = #enBoomAnimat, 1, -1 do
+      enBoomAnimat[i].timer =  enBoomAnimat[i].timer -80*dt
+      if (enBoomAnimat[i].timer < 0) then
+          enBoomAnimat[i].timer = 1
+          enBoomAnimat[i].an = enBoomAnimat[i].an+1
+      end
+      if (  enBoomAnimat[i].an> 10 ) then
+          table.remove(enBoomAnimat,i)
+      end
+      if ( enBoomAnimat[i] and enBoomAnimat[i].an <=10) then  
+          boomBatch:setColor(1,1,1,1)
+          boomBatch:add(boomQuads[enBoomAnimat[i].an],enBoomAnimat[i].x,enBoomAnimat[i].y,enBoomAnimat[i].r,k/2.2,k2/2.2,160, 160)
+      end
+  end
+end
+
 function enAfterDieDraw(dt)
     for i = #enAfterDieTex, 1, -1 do
         if ( enAfterDieTex[i].timer> 0) then

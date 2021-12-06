@@ -1,6 +1,6 @@
 local skills = {}
 local cost = 10
-  images ={
+local images ={
     i1 = love.graphics.newImage("assets/skills/1.png"),
     i2 = love.graphics.newImage("assets/skills/2.png"),
     i3  = love.graphics.newImage("assets/skills/3.png"),
@@ -12,7 +12,7 @@ local cost = 10
     i9  = love.graphics.newImage("assets/skills/9.png"),
     i10  = love.graphics.newImage("assets/skills/10.png"),
     i11  = love.graphics.newImage("assets/skills/11.png")
-     }
+}
 local tip = 0 
 rolls = 100 
 flagrolls = false 
@@ -46,17 +46,24 @@ exp =  {}
 slots = { 0 , 0 , 0 , 0 }
 
 function skills:draw()
-  
+UIBatch:clear()
 love.graphics.setCanvas(kek3)
 love.graphics.clear()
+love.graphics.setColor(1,1,1,0.7)
+love.graphics.draw(kek,0,0,0,1,1) 
+love.graphics.setColor(1,1,1,1)
 exit(-7*k,-7*k2)
 love.graphics.circle("line",screenWidth/3,screenHeight/2,65*k)
 slot(screenWidth/3,screenHeight/5,1.4,1)
 slot(screenWidth/3,screenHeight/5*4,1.4,1 )
 slot(screenWidth/5.5,screenHeight/2-screenHeight/7,1.4,1 )
 slot(screenWidth/5.5,screenHeight/2+screenHeight/7,1.4, 1)
-fbutton("Update",screenWidth/1.26,screenHeight/2,1)
+bodyButton(screenWidth/1.26,screenHeight/2,false)
+textButton("Update",screenWidth/1.26,screenHeight/2,1)
+
+
 love.graphics.setColor(0.0039*250,0.0039*200,0)
+love.graphics.draw(UIBatch)
 love.graphics.print("Cost",screenWidth/1.55,screenHeight/1.60,-1.57,0.8,0.8)
 local kal = tostring(rolls)
 local kakal = #kal
@@ -86,18 +93,12 @@ if ( flagrolls == true) then
 end
 
 for i=1,#exp do
-  love.graphics.setColor(0.0039*exp[i].color1,0.0039*exp[i].color2,0.0039*exp[i].color3)
-   love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*40*k,exp[i].scale*40*k2,4*exp[i].scale*k)
-  end
+    love.graphics.setColor(0.0039*exp[i].color1,0.0039*exp[i].color2,0.0039*exp[i].color3)
+    love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*40*k,exp[i].scale*40*k2,4*exp[i].scale*k)
+end
 love.graphics.setColor(1,1,1)
-
---print(stat.drawcalls)
-
-         
+ 
 love.graphics.setCanvas()
-
-
-fon:draw()
 love.graphics.setColor(0,0,0, 0.0039*180)
 love.graphics.rectangle('fill',0,0,screenWidth,screenHeight)
 love.graphics.setColor(1,1,1)

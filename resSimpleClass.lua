@@ -18,20 +18,24 @@ resClass = Class {
     
     move = function(self,dt)
         if (self.tip == 1) then
-            self.x= self.x+self.ax*dt*5*k
-            self.y= self.y+self.ay*dt*5*k2
+            self.x= self.x+self.ax*dt*6*k
+            self.y= self.y+self.ay*dt*6*k2
         end
         if (self.tip == 2) then
             self.x= self.x+self.ax*dt*4*k
             self.y= self.y+self.ay*dt*4*k2
         end
         if (self.tip == 3) then
-            self.x= self.x+self.ax*dt*2*k
-            self.y= self.y+self.ay*dt*2*k2
+            self.x= self.x+self.ax*dt*4*k
+            self.y= self.y+self.ay*dt*4*k2
         end
         if (self.tip == 4) then
-            self.x= self.x+self.ax*dt*5*k
-            self.y= self.y+self.ay*dt*5*k2
+            self.x= self.x+self.ax*dt*6*k
+            self.y= self.y+self.ay*dt*6*k2
+        end
+        if (self.tip == 5) then
+            self.x= self.x+self.ax*dt*6*k
+            self.y= self.y+self.ay*dt*6*k2
         end
         if ( self.ax > 0 ) then
             self.ax  = self.ax - 4*dt*k
@@ -75,9 +79,15 @@ resClass = Class {
     
     collWithPlayer = function(self,i)
         if (self.timer == self.invTimer and  checkCollision(player.x-20*k,player.y-20*k2, 40*k, 40*k2,self.x,self.y,1*k,1*k2)) then
-            if ( self.tip == 4) then
-                hp.long=hp.long+50*k2
-                resRemove(i)
+            if ( self.tip == 4 or self.tip == 5 ) then
+                if ( self.tip == 4 ) then 
+                    hp.long=hp.long+50*k2
+                    resRemove(i)
+                end
+                if ( self.tip == 5 ) then 
+                    boost.long=boost.long+50*k2
+                    resRemove(i)
+                end
             else
                 score = score +1
                 resRemove(i)
@@ -99,6 +109,9 @@ resClass = Class {
         end
         if ( self.tip == 4) then
             resBatch:add(resQuads.hp,self.x,self.y,self.r+math.pi/2,k/19,k2/19,105,105)
+        end
+        if ( self.tip == 5) then
+            resBatch:add(resQuads.boost,self.x,self.y,self.r+math.pi/2,k/13,k2/13,65,105)
         end
     end;
     traceSpawn = function(self)

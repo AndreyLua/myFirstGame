@@ -1,21 +1,28 @@
 local UI = {}
 
 
-function fbutton(name,x,y,scale,flag)
-  local  kol = #name
-  if (flag) then 
-      love.graphics.setLineWidth(2)
-      love.graphics.setColor(0.697,	0.307,0)
-      love.graphics.rectangle('line',x-(70*k*scale)/2,y-(350*k2*scale)/2,70*k*scale,350*k2*scale)
-      love.graphics.setColor(0.775,	0.78,0)
-      love.graphics.print(name, x-(70*k*scale*0.8)/2,y+(kol*45*scale/2*k2*0.8),-math.pi/2,0.8*scale,0.8*scale)
-  else
-      love.graphics.setLineWidth(2)
-      love.graphics.setColor(0.897,	0.507,0)
-      love.graphics.rectangle('line',x-(70*k*scale)/2,y-(350*k2*scale)/2,70*k*scale,350*k2*scale)
-      love.graphics.setColor(0.975,	0.78,0)
-      love.graphics.print(name, x-(70*k*scale*0.8)/2,y+(kol*45*scale/2*k2*0.8),-math.pi/2,0.8*scale,0.8*scale)
-  end
+function bodyButton(x,y,flag)
+    love.graphics.setColor(1,1,1,1)
+    if (flag) then 
+        UIBatch:setColor(1,1,1,0.6)
+        UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
+        UIBatch:setColor(1,1,1,1) 
+    else
+        UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
+    end
+    love.graphics.setColor(1,1,1,1)
+end
+
+function textButton(name,x,y,flag)
+    local fontWidth = font:getWidth(name)
+    
+    if (flag) then 
+        love.graphics.setColor(1,1,1,0.6)
+        love.graphics.print(name, x-25*k,y+fontWidth/2*k2,-math.pi/2,k,k2)
+        love.graphics.setColor(1,1,1,1)
+    else
+        love.graphics.print(name, x-25*k,y+fontWidth/2*k2,-math.pi/2,k,k2)
+    end
 end
 
 function slot(x,y,scale,number)
@@ -24,12 +31,14 @@ function slot(x,y,scale,number)
   love.graphics.setColor(0.231,0.345,0.373)
   love.graphics.rectangle('line',x-(75*k*scale)/2,y-(75*k2*scale)/2,75*k*scale,75*k2*scale)
   love.graphics.print(number,x-(75*k*scale)/2+3*k,y-(75*k*scale)/2+(kol*45*scale/2*k2*0.4)+3*k2,-3.14/2,0.4*k,0.4*k2)
+  love.graphics.setColor(1,1,1,1)
 end
 
 function sc(x,y)
   love.graphics.setLineWidth(2)
-  love.graphics.setColor(0.231,0.345,0.373)
+  love.graphics.setColor(0.731,0.845,0.873)
   love.graphics.rectangle('line',x,y-100*k2,35*k,200*k2)
+  love.graphics.setColor(1,1,1,1)
 end
 
 function playerHP(dt)
@@ -101,36 +110,26 @@ function Health_Boost()
     love.graphics.setColor(0,0.85,0.75,1)
     love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long2/7)
     love.graphics.setColor(0,0.643,0.502,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long/7)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long/7)               
+    love.graphics.setColor(1,1,1,1)
 end
 
 function exit(x,y)
   if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and ((flagtouch==true and flagtouch1== true) or flagtouch2 == true or flagtouch3 == true) )  then
-      love.graphics.setLineWidth(2)
-      love.graphics.setColor(0.697,0.307,0)
-      love.graphics.rectangle('line',x+10*k,y+10*k2,60*k,60*k2)
-      love.graphics.rectangle('line',x+20*k,y+20*k2,8*k,40*k2,2)
-      love.graphics.rectangle('line',x+35*k,y+20*k2,8*k,40*k2,2)
-      love.graphics.rectangle('line',x+50*k,y+20*k2,8*k,40*k2,2)
+      UIBatch:setColor(1,1,1,0.6)
+      UIBatch:add(UIQuads.add,x+120/4*k+5*k,y+125/4*k2+5*k2,-math.pi/2,k/4,k2/4,120, 125)
+      UIBatch:setColor(1,1,1,1)
   else
-     
-      love.graphics.setColor(0.75,0.75,0.75,1)
-      UIBatch:add(UIQuads.add,x+125/4*k+5*k,y+125/4*k2+5*k2,-math.pi/2,k/4,k2/4,120, 125)
- 
+      UIBatch:add(UIQuads.add,x+120/4*k+5*k,y+125/4*k2+5*k2,-math.pi/2,k/4,k2/4,120, 125)
   end
-  
-  
+  love.graphics.setColor(1,1,1,1)
 end
 
 function lineW()
     local Wave = waves[numberWave]
-   -- love.graphics.setColor(0.897,0.507,0)
-   -- love.graphics.rectangle("fill",50*k,screenHeight/2-(colWave*250*k2/Wave[4])/2,7*k,colWave*250*k2/Wave[4])
     love.graphics.setColor(0.431,0.545,0.573)
     love.graphics.rectangle("line",50*k,screenHeight/2-(colWave*250*k2/Wave[4])/2,8*k,colWave*250*k2/Wave[4])
+    love.graphics.setColor(1,1,1,1)
 end 
-
-
-
 
 return UI

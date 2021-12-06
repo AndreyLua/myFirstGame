@@ -9,7 +9,11 @@ end
 function spawnDelMet(i)
     for kV =1, math.random(3,obj[i].scale/5) do
         newPoint(obj,i,kV) 
-        newHealPoint(obj,i,kV) 
+        if ( math.random(-1,1) < 0) then
+            newHealPoint(obj,i,kV) 
+        else
+            newBoostPoint(obj,i,kV) 
+        end
     end
 end
 
@@ -30,6 +34,26 @@ function newHealPoint(mas,i,kV)
             3-0.00001, --timer
             3, --invTimer
             4, -- tip
+            math.random(-3,3)*math.random(), --r
+            1, -- color1
+            1, -- color2
+            1, -- color3
+            mas[i].x,  --x
+            mas[i].y,   --y
+            math.random(-2*k*kV,2*k2*kV),  --ax
+            math.random(-2*k*kV,2*k2*kV),  --ay
+            {},
+        }
+        local resClone = resClass(unpack(masHPoint))
+        table.insert(res,resClone)
+    end
+end
+function newBoostPoint(mas,i,kV) 
+    if ( math.random(1,30)==1) then
+        local masHPoint = {
+            3-0.00001, --timer
+            3, --invTimer
+            5, -- tip
             math.random(-3,3)*math.random(), --r
             1, -- color1
             1, -- color2
@@ -112,9 +136,15 @@ function resAfterDie(dt)
     for i = #removeEn, 1, -1 do
         local h =  removeEn[i]
         if ( removeEn[i]) then
-            if ( h.tip == 4 ) then
-                love.graphics.setColor(1,0.1,0.1)
-                love.graphics.print("+HP",removeEn[i].x,removeEn[i].y,-math.pi/2,0.4*k)  
+            if ( h.tip == 4 or h.tip == 5) then
+                if ( h.tip == 4) then
+                    love.graphics.setColor(1,0.1,0.1)
+                    love.graphics.print("+HP",removeEn[i].x,removeEn[i].y,-math.pi/2,0.4*k)
+                end
+                if ( h.tip == 5) then
+                    love.graphics.setColor(0.4,0.4,1)
+                    love.graphics.print("+ENERGY",removeEn[i].x,removeEn[i].y,-math.pi/2,0.3*k)
+                end
             else 
                 if ( h.tip == 1 ) then
                     love.graphics.setColor(0.235,0.616,0.816,0.6)
