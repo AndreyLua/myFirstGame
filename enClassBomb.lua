@@ -369,7 +369,7 @@ enemyBombClass = Class{
             love.graphics.circle("fill",self.x+  trace.x ,self.y + trace.y,radius)
         end
     end;
-    hit  = function(self,a,i)
+    hit  = function(self,a,i,dt)
         if ( a == 0 ) then
             
         else

@@ -14,14 +14,14 @@ function enCollWithPlayerInRegularS(index,dt)
     end
 end
 
-function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip )
+function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip)
     if ((intVectorX*intVectorX+intVectorY*intVectorY>=math.pow(0.05*math.max(en[i].w,en[i].h)*k,2))) then
         en[i].ax = 0 
         en[i].ay = 0 
         en[i].x  = en[i].x -intVectorX*dt*10
         en[i].y = en[i].y - intVectorY*dt*10
     end
-    en[i]:hit(player.a,i)
+    en[i]:hit(player.a,i,dt)
 end
 
 function enCollWithenInRegularS(index,j,dt)
@@ -49,7 +49,7 @@ function enCollWithenInRegularS(index,j,dt)
                 end
             end
         end
-      end
+    end
 end
 
 function enCollWithenInRegularSMelee(index,j,dt)
@@ -92,6 +92,13 @@ function enCollWithobjInRegularS(index,j,dt)
             for i = #kek, 1, -1 do
                 if (kek[i] and obj[kek[i]] and en[j]) then
                     local objScale = obj[kek[i]].collScale/2
+                    if ( en[j] and en[j].tip == 1 and en[j].targetDestroy ==en[j].targetDestroyTimer ) then
+                        if ( en[j].targetY > (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2)) ) then
+                            en[j].targetX =kek[i]
+                            en[j].targetY =(math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))
+                        end
+                    end
+                    
                     if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+enScale*k),2)) then
                         local collisFlag, intVectorX ,intVectorY = en[j].body:collidesWith(obj[kek[i]].body)
                         if ( collisFlag) then 
@@ -107,6 +114,11 @@ function enCollWithobjInRegularS(index,j,dt)
                                 obj[kek[i]].y = obj[kek[i]].y - deepY*dt*10
                                 en[j].x  = en[j].x + deepX*dt*10
                                 en[j].y = en[j].y +  deepY*dt*10
+                            end
+                            if ( en[j] and en[j].tip == 1 and en[j].target =="obj" and en[j].atack == en[j].atackTimer ) then
+                                en[j].targetDestroy = en[j].targetDestroyTimer - 0.001
+                                obj[kek[i]].health = obj[kek[i]].health - 2
+                                en[j].atack = en[j].atackTimer-0.001
                             end
                         end 
                     end

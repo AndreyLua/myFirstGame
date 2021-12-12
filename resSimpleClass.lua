@@ -15,7 +15,9 @@ resClass = Class {
         self.ay = ay 
         self.traces = traces
     end;
-    
+    IndexInRegulS =  function(self,scaleS)
+        return math.floor((self.x-scaleS/2*k)/(scaleS*k)) + math.floor((self.y-scaleS/2*k2)/(scaleS*k2))*math.floor((screenWidth/(scaleS*k))+1)
+    end;
     move = function(self,dt)
         if (self.tip == 1) then
             self.x= self.x+self.ax*dt*6*k
@@ -75,7 +77,24 @@ resClass = Class {
             end
         end
     end;
-    
+    collWithEn = function(self,index,j,dt)
+        if ( enRegulS[index]) then 
+            local kek = enRegulS[index]
+            if (kek) then
+                for i = #kek, 1, -1 do
+                    if (kek[i] and en[kek[i]] and res[j] and en[kek[i]].tip == 1 ) then
+                        if (res[j] and math.abs(en[kek[i]].x - res[j].x)<10*k and math.abs(en[kek[i]].y - res[j].y)<10*k2 and  (math.pow((en[kek[i]].x - res[j].x),2) + math.pow((en[kek[i]].y - res[j].y),2))<=math.pow((10*k),2)) then
+                            en[kek[i]].angleMouth = 0.5
+                            en[kek[i]].ax =  en[kek[i]].ax / 5
+                            en[kek[i]].ay =  en[kek[i]].ay /5
+                            table.remove(res,j) 
+                            break   
+                        end
+                    end
+                end
+            end
+        end
+    end;
     
     collWithPlayer = function(self,i)
         if (self.timer == self.invTimer and  checkCollision(player.x-20*k,player.y-20*k2, 40*k, 40*k2,self.x,self.y,1*k,1*k2)) then

@@ -179,17 +179,6 @@ for i = #obj, 1, -1 do
         table.remove(obj,i)
     end
 end
-
-for i = #res, 1, -1 do
-    if (res[i]) then 
-        res[i]:GravityWithPlayer()
-        res[i]:move(dt)
-        res[i]:border(i)
-        if (res[i]) then  
-            res[i]:collWithPlayer(i)
-        end
-    end
-end 
  
 for i = #en, 1, -1 do
     if (en[i]) then 
@@ -203,7 +192,20 @@ for i = #en, 1, -1 do
     end
 end
 
-
+for i = #res, 1, -1 do
+    if (res[i]) then 
+        res[i]:GravityWithPlayer()
+        res[i]:move(dt)
+        res[i]:border(i)
+        if (res[i]) then  
+            res[i]:collWithPlayer(i)
+        end
+        if (res[i]) then  
+            local indexResInRegS = res[i]:IndexInRegulS(80)
+            res[i]:collWithEn(indexResInRegS,i,dt)
+        end
+    end
+end 
 
 playerBoost(dt)
 
@@ -277,7 +279,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,math.random(1,4))
+        allSpawn(en,Geo,3)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -336,7 +338,11 @@ function  game:draw()
     love.graphics.pop()
     love.graphics.setColor(1,1,1,1)
     playerDraw(dt)
+    if (flaginv == false ) then
+        love.graphics.setColor(1,0.7,0.7,1)
+    end
     love.graphics.draw(playerBatch)
+    love.graphics.setColor(1,1,1,1)
     love.graphics.draw(enBatchDop)
     love.graphics.push()
         love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)

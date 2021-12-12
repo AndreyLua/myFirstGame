@@ -226,7 +226,7 @@ playerAbility = {
     debaffStrenght =0.2,
     scaleBody = 35,
     boostRegen = 100,
-    boostWaste = 250,
+    boostWaste = 150,
 }
 -------------CONST AND FLAGS------
 lvl =0

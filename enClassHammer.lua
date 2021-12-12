@@ -3,7 +3,7 @@ local enClassHammer =  {}
 enemyHammerTable = {
     30, --w
     30,  --h
-    1,  -- tip
+    2,  -- tip
     HC.rectangle(-100*k,-100*k2,16*k,25*k2), --body
     0,  --timer
     20, -- invTimer
@@ -276,7 +276,7 @@ enemyHammerClass = Class{
             love.graphics.circle("fill",self.x+ trace.x,self.y + trace.y,radius)
         end
     end;
-    hit  = function(self,a,i)
+    hit  = function(self,a,i,dt)
         if ( a == 0 ) then
             if (self.invTimer == self.timer and self.dash~=self.dashTimer) then
                 flaginv = false 

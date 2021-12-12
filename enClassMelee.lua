@@ -33,10 +33,15 @@ enemyMeleeTable = {
     0, -- meleeAtack
     10, --meleeAtackTimer
     0 , -- dopAngle
+    "player", --target
+    0 , --targetX
+    screenWidth, --targetY
+    90, -- targetDestroy
+    90, --targetDestroyTimer
 }
 
 enemyMeleeClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,climbFlag,climbAtack,climbAtackTimer,meleeAtack,meleeAtackTimer,dopAngle)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,climbFlag,climbAtack,climbAtackTimer,meleeAtack,meleeAtackTimer,dopAngle,target,targetX,targetY,targetDestroy,targetDestroyTimer)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -69,6 +74,11 @@ enemyMeleeClass = Class{
         self.health = health
         self.healthM = healthM
         self.traces = traces
+        self.target = target
+        self.targetX = targetX
+        self.targetY = targetY
+        self.targetDestroy = targetDestroy
+        self.targetDestroyTimer = targetDestroyTimer
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyMeleeTable[1]*k, enemyMeleeTable[2]*k)
@@ -133,6 +143,15 @@ enemyMeleeClass = Class{
             self.climbFlag = 0 
             self.atack  = self.atackTimer - 0.0001
         end
+        
+        if ( self.targetDestroy <  self.targetDestroyTimer) then
+            self.targetDestroy  = self.targetDestroy  - 10*dt
+        end
+        if ( self.targetDestroy < 0) then
+            self.targetDestroy  = self.targetDestroyTimer
+        end
+        
+        
     end;
     angleBodyTr = function(self,angle,dt)
         if ( self.angleBody == 0) then
@@ -199,6 +218,8 @@ enemyMeleeClass = Class{
         enCollWithenInRegularSMelee(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)  
     end;
     collWithObj = function( self,IenRegulS,i,dt) 
+        self.targetY = 400*400*k*k
+        self.targetX = -1
         enCollWithobjInRegularS(IenRegulS,i,dt)
         enCollWithobjInRegularS(IenRegulS-1,i,dt)
         enCollWithobjInRegularS(IenRegulS+1,i,dt)
@@ -208,6 +229,11 @@ enemyMeleeClass = Class{
         enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
         enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
         enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
+        if (self.targetX > 0) then
+            self.target = "obj"
+        else
+            self.target = "player"
+        end
     end;
     move =  function(self,dt)
         self.body:moveTo(self.x, self.y)
@@ -227,7 +253,14 @@ enemyMeleeClass = Class{
         end
     end;
     moveNormal = function(self,dt)
-        local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+        local anglePlayerEn =0
+        if (self.target =="player") then 
+            anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+        else
+          if (obj[self.targetX] and obj[self.targetX].x) then
+            anglePlayerEn = math.atan2(obj[self.targetX].x-self.x,obj[self.targetX].y-self.y)
+            end
+        end
         if (self.dash and self.dash==self.dashTimer) then
             self.angleBodyTr(self,anglePlayerEn,dt)
             self.angleMouthTr(self,dt)
@@ -249,7 +282,7 @@ enemyMeleeClass = Class{
             if (  self.ay <-22*k2) then
                 self.ay=-22*k2
             end
-            if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
+            if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) >2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
                 self.ax = 0
                 self.ay = 0 
             end
@@ -322,7 +355,7 @@ enemyMeleeClass = Class{
             love.graphics.circle("fill",self.x+  trace.x+math.cos(self.y+trace.y)+k*math.sin(self.angleBody-math.pi/2) ,self.y + trace.y+math.sin(self.x+trace.x) +k2*math.cos(self.angleBody-math.pi/2),radius)
         end
     end;
-    hit  = function(self,a,i)
+    hit  = function(self,a,i,dt)
         if ( a == 0 ) then
             if ( player.invis == 10 and self.invTimer == self.timer and self.climbAtack == self.climbAtackTimer and self.dash  ~= self.dashTimer)  then
                 self.climbFlag = 1 
@@ -336,6 +369,7 @@ enemyMeleeClass = Class{
             end
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
+                boost.long = boost.long -playerAbility.boostWaste*10*dt
                 self.climbFlag = 0
                 self.climbAtack = self.climbAtackTimer
                 self.timer =  self.invTimer-0.001

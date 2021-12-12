@@ -3,7 +3,7 @@ local enClassShooter =  {}
 enemyShooterTable = {
     25, --w
     30,  --h
-    2,  -- tip
+    4,  -- tip
     HC.rectangle(-100*k,-100*k2,16*k,25*k2), --body
     0,  --timer
     20, -- invTimer
@@ -292,7 +292,7 @@ enemyShooterClass = Class{
             love.graphics.circle("fill",self.x+  trace.x+math.cos(self.y+trace.y)+k*math.sin(self.angleBody-math.pi/2) ,self.y + trace.y+math.sin(self.x+trace.x) +k2*math.cos(self.angleBody-math.pi/2),radius)
         end
     end;
-    hit  = function(self,a,i)
+    hit  = function(self,a,i,dt)
         if ( a == 0 ) then
           
         else
