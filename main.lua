@@ -14,7 +14,6 @@ enSet = love.graphics.newImage("assets/enSet.png")
 resSet = love.graphics.newImage("assets/resSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
 UISet = love.graphics.newImage("assets/UISet.png")
-
 enBoomAnSet = love.graphics.newImage("assets/enBoomAn.png")
 
 ---------------------------------------------------

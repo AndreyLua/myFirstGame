@@ -316,23 +316,7 @@ function objCollWithPlayerResult(i, dt,intVectorX ,intVectorY)
     player.debaffStrenght =(1-obj[i].scale/sumMas)
     obj[i].health = obj[i].health -2*playerAbility.damage
     obj[i].timer= obj[i].invTimer - 0.001
-   --if (obj[i].health<0) then 
-    --    objDestroy(obj,i) 
-    --    table.remove(obj,i)
-   -- end
-  --[[
-    local angleD = math.atan2(player.x-obj[i].x+20*k,player.y-obj[i].y+20*k)
-    local sumMas = obj[i].scale +playerAbility.mass 
-    player.debaffStrenght =1-(obj[i].scale/500) +0.1
-    obj[i].ax= obj[i].ax -dt*k*math.sin(angleD) *sumMas/obj[i].scale+(player.ax*playerAbility.speedA*k*dt)*20
-    obj[i].ay= obj[i].ay -dt*k*math.sin(angleD) *sumMas/obj[i].scale+ (player.ay*playerAbility.speedA*k2*dt)*20
-    obj[i].health = obj[i].health -2*playerAbility.damage
-    obj[i].timer= obj[i].invTimer - 0.001
-    if (obj[i].health<0) then 
-        objDestroy(obj,i) 
-        table.remove(obj,i)
-    end
-    ]]--
+
 end
 
 
@@ -360,11 +344,10 @@ function objCollWithObjInRegularS(index,j,dt)
                                 scImp = scImp/(1/obj[kek[i]].scale+1/obj[j].scale)
                                 local sumMas = obj[kek[i]].scale + obj[j].scale
                                 local impulsX, impulsY = scImp * intVectorX, scImp* intVectorY
-                                obj[kek[i]].ax= obj[kek[i]].ax + dt*80*(1/obj[kek[i]].scale*impulsX)*obj[kek[i]].scale/sumMas
-                                obj[kek[i]].ay= obj[kek[i]].ay +dt*80*(1/obj[kek[i]].scale*impulsY)*obj[kek[i]].scale/sumMas
+                                obj[kek[i]].ax= obj[kek[i]].ax+dt*80*(1/obj[kek[i]].scale*impulsX)*obj[kek[i]].scale/sumMas
+                                obj[kek[i]].ay= obj[kek[i]].ay+dt*80*(1/obj[kek[i]].scale*impulsY)*obj[kek[i]].scale/sumMas
                                 obj[j].ax=obj[j].ax - dt*80*(1/obj[j].scale*impulsX)*obj[j].scale/sumMas
                                 obj[j].ay=obj[j].ay - dt*80*(1/obj[j].scale*impulsY)*obj[j].scale/sumMas
-                          
                             end
                             if ((deepX*deepX+deepY*deepY>=math.pow(0.05*obj[j].collScale*k,2))) then
                                 obj[kek[i]].x  = obj[kek[i]].x - deepX*dt*5

@@ -355,7 +355,6 @@ function  game:draw()
     
  
     local fontWidth = font:getWidth(tostring(score))
-    local fontHeight = font:getHeight(tostring(score))
     love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
     
     wavesTitleDraw(numberWave,dt)

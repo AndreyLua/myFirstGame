@@ -218,7 +218,7 @@ enemyMeleeClass = Class{
         enCollWithenInRegularSMelee(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)  
     end;
     collWithObj = function( self,IenRegulS,i,dt) 
-        self.targetY = 400*400*k*k
+        self.targetY = math.pow(player.x-self.x,2) + math.pow(player.y-self.y,2)
         self.targetX = -1
         enCollWithobjInRegularS(IenRegulS,i,dt)
         enCollWithobjInRegularS(IenRegulS-1,i,dt)

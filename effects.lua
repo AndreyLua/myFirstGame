@@ -94,79 +94,110 @@ for  i=1,#m3 do
 end
  
 end
-
-
 return m1
-
 end
 
- function explUpdate2(dt)
-  for i =1, #exp do
-    if( exp[i]) then
-  exp[i].x= exp[i].x+exp[i].ax*dt*k
-  exp[i].y= exp[i].y+exp[i].ay*dt*k2
-  
-  if (  exp[i].flag ==false) then 
-     if ( exp[i].ax > 0 ) then
-      exp[i].ax  = exp[i].ax - 50*dt*k
-     else
-       exp[i].ax  = exp[i].ax + 50*dt*k
-      end
-      if ( exp[i].ay > 0 ) then
-       exp[i].ay  = exp[i].ay - 50*dt*k2
-     else
-       exp[i].ay  = exp[i].ay + 50*dt*k2
+function explUpdate3(dt)
+    for i =1, #exp do
+        if( exp[i]) then
+           -- local x1 = screenWidth/2- exp[i].x
+            --local y1 = screenHeight/2-exp[i].y 
+            if ( exp[i].flag == false) then 
+                local x1 = exp[i].x -screenWidth/2
+                local y1 = exp[i].y -screenHeight/2
+                local ugol = math.atan2(x1,y1)
+                if ( exp[i].x> screenWidth/2.5) then 
+                    exp[i].x= exp[i].x+exp[i].ax*dt*k
+                    exp[i].y= exp[i].y+exp[i].ay*dt*k2
+                else
+                    exp[i].x= exp[i].x+exp[i].ax*dt*k+math.sin(exp[i].y)*1.7
+                    exp[i].y= exp[i].y+exp[i].ay*dt*k2+math.cos(exp[i].x)*1.7
+                end
+                exp[i].ax= exp[i].ran*math.sin(ugol+math.pi/2+math.pi/4)
+                exp[i].ay= exp[i].ran*math.cos(ugol+math.pi/2+math.pi/4)
+            else
+              
+                exp[i].x= exp[i].x+exp[i].ax*dt*k
+                exp[i].y= exp[i].y+exp[i].ay*dt*k2
+                local realX = exp[i].x-screenWidth/1.7
+                local realY = exp[i].y -screenHeight/2
+                if ( realX*realX + realY*realY < 100*k*100*k) then
+                    exp[i].ax = exp[i].ran
+                else
+                    exp[i].ax = 0
+                    exp[i].ay = 0
+                end
+            end
+           -- exp[i].ax= exp[i].ran*math.sin(ugol+math.pi/2-math.pi/4)
+           -- exp[i].ay= exp[i].ran*math.cos(ugol+math.pi/2-math.pi/4)
+        end
     end
-  end
-      if ( (exp[i].ay<3*k2 and  exp[i].ay>-3*k2) or (exp[i].ax<3*k and  exp[i].ax>-3*k)) then
-       table.remove(exp,i)
-  end
+end
 
-end
-end
+function explUpdate2(dt)
+    for i =1, #exp do
+        if( exp[i]) then
+            exp[i].x= exp[i].x+exp[i].ax*dt*k
+            exp[i].y= exp[i].y+exp[i].ay*dt*k2
+            if (  exp[i].flag ==false) then 
+                if ( exp[i].ax > 0 ) then
+                    exp[i].ax  = exp[i].ax - 50*dt*k
+                else
+                    exp[i].ax  = exp[i].ax + 50*dt*k
+                end
+                if ( exp[i].ay > 0 ) then
+                    exp[i].ay  = exp[i].ay - 50*dt*k2
+                else
+                    exp[i].ay  = exp[i].ay + 50*dt*k2
+                end
+            end
+            if ( (exp[i].ay<3*k2 and  exp[i].ay>-3*k2) or (exp[i].ax<3*k and  exp[i].ax>-3*k)) then
+                table.remove(exp,i)
+            end
+        end
+    end
 end
 
 function explUpdate(dt)
-
-  for i =1, #exp do
-    if( exp[i]) then
-  exp[i].x= exp[i].x+exp[i].ax*dt*2*k
-  exp[i].y= exp[i].y+exp[i].ay*dt*2*k2
-  if (  exp[i].flag ==false) then 
-     if ( exp[i].ax > 0 ) then
-      exp[i].ax  = exp[i].ax - 50*dt*k
-     else
-       exp[i].ax  = exp[i].ax + 50*dt*k
-      end
-      if ( exp[i].ay > 0 ) then
-       exp[i].ay  = exp[i].ay - 50*dt*k2
-     else
-       exp[i].ay  = exp[i].ay + 50*dt*k2
+    for i =1, #exp do
+        if( exp[i]) then
+            exp[i].x= exp[i].x+exp[i].ax*dt*2*k
+            exp[i].y= exp[i].y+exp[i].ay*dt*2*k2
+            if (  exp[i].flag ==false) then 
+                if ( exp[i].ax > 0 ) then
+                    exp[i].ax  = exp[i].ax - 50*dt*k
+                else
+                    exp[i].ax  = exp[i].ax + 50*dt*k
+                end
+                if ( exp[i].ay > 0 ) then
+                    exp[i].ay  = exp[i].ay - 50*dt*k2
+                else
+                    exp[i].ay  = exp[i].ay + 50*dt*k2
+                end
+            end
+            if ( (exp[i].ay<10*k2 and  exp[i].ay>-10*k2) or (exp[i].ax<10*k and  exp[i].ax>-10*k)) then
+                exp[i].flag =true
+            end
+            if ( exp[i].flag == true) then
+                local x1 = exp[i].x - exp[i].xx
+                local y1 = exp[i].y - exp[i].yy
+                local ugol = math.atan2(x1,y1)
+                exp[i].ax=90*k*math.sin(ugol+2)
+                exp[i].ay=90*k2*math.cos(ugol+2)
+            end
+            if ( ((exp[i].y<exp[i].yy+200*k2*dt and  exp[i].y>exp[i].yy-200*k2*dt) and (exp[i].x<exp[i].xx+200*k*dt and  exp[i].x>exp[i].xx-200*k*dt)) and exp[i].flag == true ) then
+                table.remove(exp,i)
+            end
+        end
     end
-  end
-      if ( (exp[i].ay<10*k2 and  exp[i].ay>-10*k2) or (exp[i].ax<10*k and  exp[i].ax>-10*k)) then
-      exp[i].flag =true
-  end
-
-   if ( exp[i].flag == true) then
-local x1 = exp[i].x - exp[i].xx
-local y1 = exp[i].y - exp[i].yy
-local ugol = math.atan2(x1,y1)
-exp[i].ax=90*k*math.sin(ugol+2)
-exp[i].ay=90*k2*math.cos(ugol+2)
-end
- if ( ((exp[i].y<exp[i].yy+200*k2*dt and  exp[i].y>exp[i].yy-200*k2*dt) and (exp[i].x<exp[i].xx+200*k*dt and  exp[i].x>exp[i].xx-200*k*dt)) and exp[i].flag == true ) then
-    table.remove(exp,i)
-  end
-  end
-end
-
 end
 
 function expl(x,y,kol)
     for kek =0, kol do
         local e = {
-        flag  =false,
+        ran = math.random(100,180), -----------new
+        body =  HC.circle(x,y,0.15*20*k),----new
+        flag  =false,-----new but old
         tip = 1,
         r = 0 ,
         color1 = math.random(200,255),
