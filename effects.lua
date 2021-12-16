@@ -116,17 +116,17 @@ function explUpdate3(dt)
                 exp[i].ax= exp[i].ran*math.sin(ugol+math.pi/2+math.pi/4)
                 exp[i].ay= exp[i].ran*math.cos(ugol+math.pi/2+math.pi/4)
             else
-              
-                exp[i].x= exp[i].x+exp[i].ax*dt*k
-                exp[i].y= exp[i].y+exp[i].ay*dt*k2
                 local realX = exp[i].x-screenWidth/1.7
                 local realY = exp[i].y -screenHeight/2
+                local angleF = math.atan2(realX,realY) 
                 if ( realX*realX + realY*realY < 100*k*100*k) then
-                    exp[i].ax = exp[i].ran
+  
                 else
-                    exp[i].ax = 0
-                    exp[i].ay = 0
+                    exp[i].ax=exp[i].ax-math.sin(angleF)*50
+                    exp[i].ay=exp[i].ay-math.cos(angleF)*50
                 end
+                exp[i].x= exp[i].x+exp[i].ax*dt*k
+                exp[i].y= exp[i].y+exp[i].ay*dt*k2
             end
            -- exp[i].ax= exp[i].ran*math.sin(ugol+math.pi/2-math.pi/4)
            -- exp[i].ay= exp[i].ran*math.cos(ugol+math.pi/2-math.pi/4)
@@ -196,13 +196,13 @@ function expl(x,y,kol)
     for kek =0, kol do
         local e = {
         ran = math.random(100,180), -----------new
-        body =  HC.circle(x,y,0.15*20*k),----new
+        body =  HC.circle(x,y,0.15*30*k),----new
         flag  =false,-----new but old
         tip = 1,
         r = 0 ,
-        color1 = math.random(200,255),
-        color2= math.random(90,255),
-        color3 = math.random(0,50),
+        color1 = math.random(11,31)/100,
+        color2= math.random(58,88)/100,
+        color3 = math.random(37,57)/100,
         f = false,
         x  = x, 
         y =  y,  
