@@ -196,7 +196,7 @@ function expl(x,y,kol)
     for kek =0, kol do
         local e = {
         ran = math.random(100,180), -----------new
-        body =  HC.circle(x,y,0.15*30*k),----new
+        body =  HC.circle(x,y,4.5*k),----new
         flag  =false,-----new but old
         tip = 1,
         r = 0 ,
