@@ -15,13 +15,13 @@ end
 
 function textButton(name,x,y,flag)
     local fontWidth = font:getWidth(name)
-    
+    local fontHeight = font:getHeight(name)
     if (flag) then 
         love.graphics.setColor(1,1,1,0.6)
-        love.graphics.print(name, x-25*k,y+fontWidth/2*k2,-math.pi/2,k,k2)
+        love.graphics.print(name, x-fontHeight/1.9*k2,y+fontWidth/2*k,-math.pi/2,k,k2)
         love.graphics.setColor(1,1,1,1)
     else
-        love.graphics.print(name, x-25*k,y+fontWidth/2*k2,-math.pi/2,k,k2)
+        love.graphics.print(name, x-fontHeight/1.9*k2,y+fontWidth/2*k,-math.pi/2,k,k2)
     end
 end
 
@@ -117,10 +117,10 @@ end
 function exit(x,y)
   if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and ((flagtouch==true and flagtouch1== true) or flagtouch2 == true or flagtouch3 == true) )  then
       UIBatch:setColor(1,1,1,0.6)
-      UIBatch:add(UIQuads.add,x+120/4*k+5*k,y+125/4*k2+5*k2,-math.pi/2,k/4,k2/4,120, 125)
+      UIBatch:add(UIQuads.add,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
       UIBatch:setColor(1,1,1,1)
   else
-      UIBatch:add(UIQuads.add,x+120/4*k+5*k,y+125/4*k2+5*k2,-math.pi/2,k/4,k2/4,120, 125)
+      UIBatch:add(UIQuads.add,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
   end
   love.graphics.setColor(1,1,1,1)
 end

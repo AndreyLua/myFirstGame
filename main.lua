@@ -175,8 +175,9 @@ fon3 =love.graphics.newImage("assets/fons/fon3.png")
  
 screenWidth = love.graphics.getWidth()
 screenHeight = love.graphics.getHeight()
-k  = screenWidth/1920*2.5
+--k  = screenWidth/1920*2.5
 k2 = screenHeight/1080*2.5
+k = k2 
 
 --------------STATES--------------
 game = require "game"

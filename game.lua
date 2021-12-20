@@ -359,7 +359,7 @@ function  game:draw()
     
     wavesTitleDraw(numberWave,dt)
     sc(0,screenHeight/2)
-    exit(-7*k,-7*k2)
+    exit(0,0)
     
     love.graphics.draw(UIBatch)
     lineW()
