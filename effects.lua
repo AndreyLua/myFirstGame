@@ -97,60 +97,6 @@ end
 return m1
 end
 
-function explUpdate3(dt)
-    for i =1, #exp do
-        if( exp[i]) then
-           -- local x1 = screenWidth/2- exp[i].x
-            --local y1 = screenHeight/2-exp[i].y 
-            if ( exp[i].flag == false) then 
-                if ( exp[i].side == 1 ) then 
-                    local x1 = exp[i].x+6.5*k -screenWidth/2
-                    local y1 = exp[i].y+6.5*k2 -screenHeight/2
-                    local ugol = math.atan2(x1,y1)
-                    exp[i].x= exp[i].x+exp[i].ax*dt*k
-                    exp[i].y= exp[i].y+exp[i].ay*dt*k2
-                    exp[i].ax= exp[i].ran*math.sin(ugol+math.pi/2+math.pi/4)
-                    exp[i].ay= exp[i].ran*math.cos(ugol+math.pi/2+math.pi/4)
-              else
-                    local x1 = screenWidth/2- exp[i].x
-                    local y1 = screenHeight/2-exp[i].y 
-                    local ugol = math.atan2(x1,y1)
-                    exp[i].x= exp[i].x+exp[i].ax*dt*k
-                    exp[i].y= exp[i].y+exp[i].ay*dt*k2
-                    exp[i].ax= exp[i].ran*math.sin(ugol+math.pi/2-math.pi/4)
-                    exp[i].ay= exp[i].ran*math.cos(ugol+math.pi/2-math.pi/4)
-                end
-            else
-              
-                local realX = exp[i].x+6.5*k-screenWidth/1.7
-                local realY = exp[i].y+6.5*k2 -screenHeight/2
-                local angleF = math.atan2(realX,realY) 
-                if ( realX*realX + realY*realY < 80*k*80*k) then
-  
-                else
-                    exp[i].ax=exp[i].ax-math.sin(angleF)*50
-                    exp[i].ay=exp[i].ay-math.cos(angleF)*50
-                end
-                if ( exp[i].ax > 100) then
-                    exp[i].ax = 100
-                end
-                if ( exp[i].ax < -100) then
-                    exp[i].ax = -100
-                end
-                if ( exp[i].ay > 100) then
-                    exp[i].ay = 100
-                end
-                if ( exp[i].ay < -100) then
-                    exp[i].ay = -100
-                end
-                exp[i].x= exp[i].x+exp[i].ax*dt*k
-                exp[i].y= exp[i].y+exp[i].ay*dt*k2
-          
-            end
-        end
-    end
-end
-
 function explUpdate2(dt)
     for i =1, #exp do
         if( exp[i]) then
@@ -211,16 +157,14 @@ end
 
 function expl(x,y,kol)
     for kek =0, kol do
+       -- local Color1,Color2,Color3  = expColor() 
         local e = {
-        side = math.random(1,2), --- new
-        ran = math.random(100,180), -----------new
-        body =  HC.circle(x,y,10*k),----new
         flag  =false,-----new but old
         tip = 1,
         r = 0 ,
-        color1 = math.random(11,31)/100,
-        color2= math.random(58,88)/100,
-        color3 = math.random(37,57)/100,
+        color1 = 0.4,--- old 
+        color2= 0.4,--- old 
+        color3 = 0.4,--- old 
         f = false,
         x  = x, 
         y =  y,  

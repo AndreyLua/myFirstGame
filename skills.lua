@@ -1,11 +1,11 @@
 local skills = {}
 local cost = 10
 local colba = love.graphics.newImage("assets/constrSet.png")
-local expRegulS = {}
+local particlRegulS = {}
 local flagColl =  false
 
 local colbaBody = HC.circle(screenWidth/1.7,screenHeight/2,80*k)
-
+local colbaFill = false
 local bodyL1 = HC.rectangle(0,0,25*k,30*k2)--2.1867155200084
 bodyL1:moveTo(screenWidth/1.7-math.sin(2.1867155200084)*108*k	,screenHeight/2- math.cos(2.1867155200084)*108*k)
 bodyL1:setRotation(1.14)
@@ -34,160 +34,108 @@ local bodyR4 = HC.circle(0,0,10*k)--2.5465780219889
 bodyR4:moveTo(screenWidth/1.7-math.sin(2.5465780219889+math.pi*1.378)*115*k	,screenHeight/2- math.cos(2.5465780219889+math.pi*1.378)*115*k)
 
 
-
-local tip = 0 
-flagrolls = false 
-exp =  {}
-slots = { 0 , 0 , 0 , 0 }
-
-function skills:draw()
-local dt = love.timer.getDelta()
-UIBatch:clear()
-love.graphics.setColor(1,1,1,1)
-love.graphics.draw(fon1,0,0,0,k,k2)
-love.graphics.draw(fon2,0,0,0,k,k2)
-love.graphics.draw(fon3,0,0,0,k,k2)
-exit(0,0)
-sc(0,screenHeight/2)
-bodyButton(screenWidth/1.2,screenHeight/2,false)
-love.graphics.draw(UIBatch)
-textButton("Convert",screenWidth/1.2,screenHeight/2,false)
-local fontWidth = font:getWidth(tostring(score))
-local fontHeight = font:getHeight(tostring(score))
-
-love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
-
-love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
+local flagButton1 = false
 
 
-for i=1,#exp do
-    local IexpRegulS =math.floor((exp[i].x-10*k)/(20*k)) + math.floor((exp[i].y-10*k2)/(20*k2))*math.floor((screenWidth/(20*k))+1)
-    flagColl =  false
-    if (exp[i].flag == true  ) then 
-        expCollWithExp(IexpRegulS,i,dt)
-        expCollWithExp(IexpRegulS+1,i,dt)
-        expCollWithExp(IexpRegulS+math.floor((screenWidth/(20*k))+1),i,dt) 
-        expCollWithExp(IexpRegulS+math.floor((screenWidth/(20*k))+1)+1,i,dt)
-        expCollWithExp(IexpRegulS-math.floor((screenWidth/(20*k))+1)+1,i,dt)
-    end
-    exp[i].ax =exp[i].ax+ 60*dt
-    if ( exp[i].ay > 0.5*k ) then
-        exp[i].ay =exp[i].ay- 1
-    end
-    if ( exp[i].ay < -0.5*k ) then
-        exp[i].ay =exp[i].ay+ 1
-    end
-    love.graphics.setColor(exp[i].color1,exp[i].color2,exp[i].color3)
-    love.graphics.rectangle("fill",  exp[i].x,exp[i].y,13*k,13*k2,2)
-  
-    
-   -- exp[i].body:draw('fill')
-end
-love.graphics.setColor(1,1,1,0.5)
-love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
-
---love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-1.57,k,k2,250,193.5)
-
-love.graphics.setColor(1,1,1,1)
-love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
-love.graphics.print("EXP: "..tostring(#exp), 100, 70,0,k/2,k2/2)
-  love.graphics.circle("fill",  screenWidth/1.7,screenHeight/2,1)
-  if ( kekKK == 0) then 
---bodyL1:draw('fill')
---bodyL2:draw('fill')
---bodyL3:draw('fill')
---bodyL4:draw('fill')
---bodyR1:draw('fill')
---bodyR2:draw('fill')
---bodyR3:draw('fill')
---bodyR4:draw('fill')
-end
-
---colbaBody:draw('fill')
---text(screenWidth/2.2,screenHeight/2+screenHeight/2.7,0.5)
-end
 function skills:update(dt)
-    expRegulS = {}
-for i=1,#exp do
-    exp[i].body:moveTo(exp[i].x+6.5*k,exp[i].y+6.5*k2)
-    
-    if (exp[i] and exp[i].flag == true) then 
-        local IexpRegulS =math.floor((exp[i].x-10*k)/(20*k)) + math.floor((exp[i].y-10*k2)/(20*k2))*math.floor((screenWidth/(20*k))+1)
-        if (expRegulS[IexpRegulS]) then
-            table.insert(expRegulS[IexpRegulS],i)
+particlRegulS = {}
+if (#particl == 140) then 
+    colbaFill= true
+else
+    colbaFill= false
+end
+for i=1,#particl do
+    particl[i].body:moveTo(particl[i].x+6.5*k,particl[i].y+6.5*k2)
+    if (particl[i] and particl[i].flag == true) then 
+        local IparticlRegulS =math.floor((particl[i].x-10*k)/(20*k)) + math.floor((particl[i].y-10*k2)/(20*k2))*math.floor((screenWidth/(20*k))+1)
+        if (particlRegulS[IparticlRegulS]) then
+            table.insert(particlRegulS[IparticlRegulS],i)
         else
-            expRegulS[IexpRegulS] = {i}
+            particlRegulS[IparticlRegulS] = {i}
         end
     end
-    if (exp[i].flag ==  false) then 
-        local collisFlag, intVectorX ,intVectorY = exp[i].body:collidesWith(bodyL1)
-        if ( exp[i].body:collidesWith(bodyL1)) then 
-            exp[i].x = exp[i].x + intVectorX*dt*20*k
-            exp[i].y = exp[i].y +  intVectorY*dt*20*k2
+    if (particl[i].flag ==  false) then 
+        local collisFlag, intVectorX ,intVectorY = particl[i].body:collidesWith(bodyL1)
+        if ( particl[i].body:collidesWith(bodyL1)) then 
+            particl[i].x = particl[i].x + intVectorX*dt*20*k
+            particl[i].y = particl[i].y +  intVectorY*dt*20*k2
         end
-        collisFlag, intVectorX ,intVectorY = exp[i].body:collidesWith(bodyL2)
-        if ( exp[i].body:collidesWith(bodyL2)) then 
-            exp[i].x = exp[i].x + intVectorX*dt*20*k
-            exp[i].y = exp[i].y +  intVectorY*dt*20*k2
+        collisFlag, intVectorX ,intVectorY = particl[i].body:collidesWith(bodyL2)
+        if ( particl[i].body:collidesWith(bodyL2)) then 
+            particl[i].x = particl[i].x + intVectorX*dt*20*k
+            particl[i].y = particl[i].y +  intVectorY*dt*20*k2
         end
-        collisFlag, intVectorX ,intVectorY = exp[i].body:collidesWith(bodyL3)
-        if (exp[i].body:collidesWith(bodyL3)) then 
-            exp[i].x = exp[i].x + intVectorX*dt*20*k
-            exp[i].y = exp[i].y +  intVectorY*dt*20*k2
+        collisFlag, intVectorX ,intVectorY = particl[i].body:collidesWith(bodyL3)
+        if (particl[i].body:collidesWith(bodyL3)) then 
+            particl[i].x = particl[i].x + intVectorX*dt*20*k
+            particl[i].y = particl[i].y +  intVectorY*dt*20*k2
         end
-        collisFlag, intVectorX ,intVectorY = exp[i].body:collidesWith(bodyL4)
-        if ( exp[i].body:collidesWith(bodyL4)) then 
-            exp[i].x = exp[i].x + intVectorX*dt*20*k
-            exp[i].y = exp[i].y +  intVectorY*dt*20*k2
+        collisFlag, intVectorX ,intVectorY = particl[i].body:collidesWith(bodyL4)
+        if ( particl[i].body:collidesWith(bodyL4)) then 
+            particl[i].x = particl[i].x + intVectorX*dt*20*k
+            particl[i].y = particl[i].y +  intVectorY*dt*20*k2
         end
         
-        collisFlag, intVectorX ,intVectorY = exp[i].body:collidesWith(bodyR1)
-        if ( exp[i].body:collidesWith(bodyR1)) then 
-            exp[i].x = exp[i].x + intVectorX*dt*20*k
-            exp[i].y = exp[i].y +  intVectorY*dt*20*k2
+        collisFlag, intVectorX ,intVectorY = particl[i].body:collidesWith(bodyR1)
+        if ( particl[i].body:collidesWith(bodyR1)) then 
+            particl[i].x = particl[i].x + intVectorX*dt*20*k
+            particl[i].y = particl[i].y +  intVectorY*dt*20*k2
         end
-        collisFlag, intVectorX ,intVectorY = exp[i].body:collidesWith(bodyR2)
-        if ( exp[i].body:collidesWith(bodyR2)) then 
-            exp[i].x = exp[i].x + intVectorX*dt*20*k
-            exp[i].y = exp[i].y +  intVectorY*dt*20*k2
+        collisFlag, intVectorX ,intVectorY = particl[i].body:collidesWith(bodyR2)
+        if ( particl[i].body:collidesWith(bodyR2)) then 
+            particl[i].x = particl[i].x + intVectorX*dt*20*k
+            particl[i].y = particl[i].y +  intVectorY*dt*20*k2
         end
-        collisFlag, intVectorX ,intVectorY = exp[i].body:collidesWith(bodyR3)
-        if (exp[i].body:collidesWith(bodyR3)) then 
-            exp[i].x = exp[i].x + intVectorX*dt*20*k
-            exp[i].y = exp[i].y +  intVectorY*dt*20*k2
+        collisFlag, intVectorX ,intVectorY = particl[i].body:collidesWith(bodyR3)
+        if (particl[i].body:collidesWith(bodyR3)) then 
+            particl[i].x = particl[i].x + intVectorX*dt*20*k
+            particl[i].y = particl[i].y +  intVectorY*dt*20*k2
         end
-        collisFlag, intVectorX ,intVectorY = exp[i].body:collidesWith(bodyR4)
-        if ( exp[i].body:collidesWith(bodyR4)) then 
-            exp[i].x = exp[i].x + intVectorX*dt*20*k
-            exp[i].y = exp[i].y +  intVectorY*dt*20*k2
+        collisFlag, intVectorX ,intVectorY = particl[i].body:collidesWith(bodyR4)
+        if ( particl[i].body:collidesWith(bodyR4)) then 
+            particl[i].x = particl[i].x + intVectorX*dt*20*k
+            particl[i].y = particl[i].y +  intVectorY*dt*20*k2
         end
-        if (exp[i].body:collidesWith(colbaBody)) then 
-            exp[i].flag = true 
-            exp[i].ax =exp[i].ax / 200
-            exp[i].ay =exp[i].ay / 200 
+        if (particl[i].body:collidesWith(colbaBody)) then 
+            particl[i].flag = true 
+            particl[i].ax =particl[i].ax / 200
+            particl[i].ay =particl[i].ay / 200 
         end
     end
 end
-    if love.keyboard.isDown('w') then
-        kekKK = kekKK +0.01
-    end
-    if love.keyboard.isDown('s') then
-        kekKK = kekKK -0.01
-    end
-explUpdate3(dt)
+particllUpdate(dt)
 mouse.x,mouse.y=love.mouse.getPosition()
 
---bodyL3:moveTo(mouse.x,mouse.y)
---bodyR1:setRotation(kekKK)
 
 if love.mouse.isDown(1)  then
-    expl(mouse.x,mouse.y,1)
     flagtouch3 =true
+    flagButton1 = true
+    local realX = mouse.x-screenWidth/1.7
+    local realY = mouse.y -screenHeight/2
+    if ( (realX*realX + realY*realY < 100*k*100*k) and #particl<140 ) then
+        if ( score >=scoreForParticle) then
+            score = score - scoreForParticle
+            if ( math.random(1,2) == 1 ) then
+                particlSpawn(0,math.random(screenHeight/2-90*k2,screenHeight/2-40*k2),1)
+            else
+                particlSpawn(0,math.random(screenHeight/2+40*k2,screenHeight/2+90*k2),1)
+            end
+        end
+    end
 else
     if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
-        exp =  {}
         gamestate.switch(game)
+    end 
+
+    if (  mouse.x > screenWidth/1.2-k2/4*120 and  mouse.x <screenWidth/1.2+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagButton1 == true) then
+      print(colbaFill, #particl)
+        if (colbaFill==true) then
+              -- give something player
+              -- delete ) 
+              particl = {}
+        end
     end
+    flagButton1 = false
     flagtouch3 =false
 end
 
@@ -203,6 +151,57 @@ end
 --if ( tip~= 0 ) then 
    -- textUpdate(textMas[tip],0.1,dt) 
 --end
+end
+
+function skills:draw()
+local dt = love.timer.getDelta()
+UIBatch:clear()
+love.graphics.setColor(1,1,1,1)
+love.graphics.draw(fon1,0,0,0,k,k2)
+love.graphics.draw(fon2,0,0,0,k,k2)
+love.graphics.draw(fon3,0,0,0,k,k2)
+exit(0,0)
+bodyButton(screenWidth/1.2,screenHeight/2,false)
+love.graphics.draw(UIBatch)
+textButton("Convert",screenWidth/1.2,screenHeight/2,false)
+love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
+
+
+for i=1,#particl do
+    local IparticlRegulS =math.floor((particl[i].x-10*k)/(20*k)) + math.floor((particl[i].y-10*k2)/(20*k2))*math.floor((screenWidth/(20*k))+1)
+    flagColl =  false
+    if (particl[i].flag == true  ) then 
+        particlCollWithparticl(IparticlRegulS,i,dt)
+        particlCollWithparticl(IparticlRegulS+1,i,dt)
+        particlCollWithparticl(IparticlRegulS+math.floor((screenWidth/(20*k))+1),i,dt) 
+        particlCollWithparticl(IparticlRegulS+math.floor((screenWidth/(20*k))+1)+1,i,dt)
+        particlCollWithparticl(IparticlRegulS-math.floor((screenWidth/(20*k))+1)+1,i,dt)
+    end
+    particl[i].ax =particl[i].ax+ 60*dt
+    if ( particl[i].ay > 0.5*k ) then
+        particl[i].ay =particl[i].ay- 1
+    end
+    if ( particl[i].ay < -0.5*k ) then
+        particl[i].ay =particl[i].ay+ 1
+    end
+    love.graphics.setColor(particl[i].color1,particl[i].color2,particl[i].color3)
+    love.graphics.rectangle("fill",  particl[i].x,particl[i].y,13*k,13*k2,2)
+   -- particl[i].body:draw('fill')
+end
+love.graphics.setColor(1,1,1,0.6)
+love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
+love.graphics.setColor(0,0,0,1)
+love.graphics.rectangle('fill',0,screenHeight/2-100*k2,35*k,200*k2)
+love.graphics.setColor(1,1,1,1)
+textButton("Tap to convert",screenWidth/1.53,screenHeight/2,false,0.5)
+sc(0,screenHeight/2)
+local fontWidth = font:getWidth(tostring(score))
+local fontHeight = font:getHeight(tostring(score))
+love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
+love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
+love.graphics.print("particl: "..tostring(#particl), 100, 70,0,k/2,k2/2)
+
+--text(screenWidth/2.2,screenHeight/2+screenHeight/2.7,0.5)
 end
 
 function textUpdate(text,speed,dt) 
@@ -225,17 +224,17 @@ function textUpdate(text,speed,dt)
         end)
     end
 end
-function expCollWithExp(index,j,dt)
-    if ( expRegulS[index]) then 
-        local kek = expRegulS[index]
+function particlCollWithparticl(index,j,dt)
+    if ( particlRegulS[index]) then 
+        local kek = particlRegulS[index]
         if (kek) then
             for i = #kek, 1, -1 do
-                if (kek[i] and exp[kek[i]] and exp[j] and kek[i]~=j and math.abs(exp[kek[i]].x - exp[j].x)<14*k and math.abs(exp[kek[i]].y - exp[j].y)<14*k2 and  (math.pow((exp[kek[i]].x - exp[j].x),2) + math.pow((exp[kek[i]].y - exp[j].y),2))<=math.pow(14*k,2)) then
-                    local collisFlag, intVectorX ,intVectorY = exp[kek[i]].body:collidesWith(exp[j].body)
+                if (kek[i] and particl[kek[i]] and particl[j] and kek[i]~=j and math.abs(particl[kek[i]].x - particl[j].x)<14*k and math.abs(particl[kek[i]].y - particl[j].y)<14*k2 and  (math.pow((particl[kek[i]].x - particl[j].x),2) + math.pow((particl[kek[i]].y - particl[j].y),2))<=math.pow(14*k,2)) then
+                    local collisFlag, intVectorX ,intVectorY = particl[kek[i]].body:collidesWith(particl[j].body)
                     if (collisFlag) then
                         flagColl = true 
                         local lenIntVector = math.sqrt(intVectorX*intVectorX+intVectorY*intVectorY)
-                        local rvX, rvY = exp[j].ax-exp[kek[i]].ax,  exp[j].ay -exp[kek[i]].ay
+                        local rvX, rvY = particl[j].ax-particl[kek[i]].ax,  particl[j].ay -particl[kek[i]].ay
                         local deepX = intVectorX
                         local deepY = intVectorY
                         intVectorX = (intVectorX/lenIntVector)
@@ -245,31 +244,31 @@ function expCollWithExp(index,j,dt)
                             local e =0.1
                             local scImp = -(1+e)*velAlNorm
                             local impulsX, impulsY = scImp * intVectorX, scImp* intVectorY
-                            local realX = exp[j].x+6.5*k-screenWidth/1.7
-                            local realY = exp[j].y+6.5*k2 -screenHeight/2
+                            local realX = particl[j].x+6.5*k-screenWidth/1.7
+                            local realY = particl[j].y+6.5*k2 -screenHeight/2
                             if ( realX*realX + realY*realY <= 80*k*80*k) then
-                                exp[j].ax=exp[j].ax+dt*40*impulsX
-                                exp[j].ay=exp[j].ay+dt*40*impulsY
+                                particl[j].ax=particl[j].ax+dt*40*impulsX
+                                particl[j].ay=particl[j].ay+dt*40*impulsY
                             end
-                            realX = exp[kek[i]].x+6.5*k-screenWidth/1.7
-                            realY = exp[kek[i]].y+6.5*k2 -screenHeight/2
+                            realX = particl[kek[i]].x+6.5*k-screenWidth/1.7
+                            realY = particl[kek[i]].y+6.5*k2 -screenHeight/2
                             if ( realX*realX + realY*realY <= 80*k*80*k) then
-                                exp[kek[i]].ax=exp[kek[i]].ax - dt*40*impulsX
-                                exp[kek[i]].ay=exp[kek[i]].ay - dt*40*impulsY
+                                particl[kek[i]].ax=particl[kek[i]].ax - dt*40*impulsX
+                                particl[kek[i]].ay=particl[kek[i]].ay - dt*40*impulsY
                             end
                         end
                         if ((deepX*deepX+deepY*deepY>=math.pow(1*k,2))) then
-                            local realX = exp[kek[i]].x+6.5*k-screenWidth/1.7
-                            local realY = exp[kek[i]].y+6.5*k2 -screenHeight/2
+                            local realX = particl[kek[i]].x+6.5*k-screenWidth/1.7
+                            local realY = particl[kek[i]].y+6.5*k2 -screenHeight/2
                             if ( realX*realX + realY*realY <= 80*k*80*k) then
-                                exp[kek[i]].x  = exp[kek[i]].x + deepX*dt*5
-                                exp[kek[i]].y = exp[kek[i]].y + deepY*dt*5
+                                particl[kek[i]].x  = particl[kek[i]].x + deepX*dt*5
+                                particl[kek[i]].y = particl[kek[i]].y + deepY*dt*5
                             end
-                            realX = exp[j].x+6.5*k-screenWidth/1.7
-                            realY = exp[j].y+6.5*k2 -screenHeight/2
+                            realX = particl[j].x+6.5*k-screenWidth/1.7
+                            realY = particl[j].y+6.5*k2 -screenHeight/2
                             if ( realX*realX + realY*realY <= 80*k*80*k) then
-                                exp[j].x  = exp[j].x - deepX*dt*5
-                                exp[j].y = exp[j].y - deepY*dt*5
+                                particl[j].x  = particl[j].x - deepX*dt*5
+                                particl[j].y = particl[j].y - deepY*dt*5
                             end
                         end
                     end
@@ -282,6 +281,100 @@ end
 function text(x,y,scale)
     love.graphics.setColor(0.0039*200,0.0039*150,0)
     love.graphics.print(textL,x,y,-3.14/2,scale,scale)
+end
+
+function particlSpawn(x,y,kol)
+    for kek =0, kol do
+        local Color1,Color2,Color3  = particlColor() 
+        local e = {
+        side = math.random(1,2), --- new
+        ran = math.random(100,180), -----------new
+        body =  HC.circle(x,y,10*k),----new
+        flag  =false,-----new but old
+        color1 = Color1,--- old 
+        color2= Color2,--- old 
+        color3 = Color3,--- old
+        x  = x, 
+        y =  y,  
+        xx  = x, 
+        yy =  y,
+        ax  =math.random(-1.72*k*40,1.73*k*40), 
+        ay = math.random(-1.73*k*40,1.73*k*40), 
+        }
+    table.insert(particl,e)
+    end
+end
+
+function particllUpdate(dt)
+    for i =1, #particl do
+        if( particl[i]) then
+           -- local x1 = screenWidth/2- particl[i].x
+            --local y1 = screenHeight/2-particl[i].y 
+            if ( particl[i].flag == false) then 
+                if ( particl[i].side == 1 ) then 
+                    local x1 = particl[i].x+6.5*k -screenWidth/2
+                    local y1 = particl[i].y+6.5*k2 -screenHeight/2
+                    local ugol = math.atan2(x1,y1)
+                    particl[i].x= particl[i].x+particl[i].ax*dt*k
+                    particl[i].y= particl[i].y+particl[i].ay*dt*k2
+                    particl[i].ax= particl[i].ran*math.sin(ugol+math.pi/2+math.pi/4)
+                    particl[i].ay= particl[i].ran*math.cos(ugol+math.pi/2+math.pi/4)
+              else
+                    local x1 = screenWidth/2- particl[i].x
+                    local y1 = screenHeight/2-particl[i].y 
+                    local ugol = math.atan2(x1,y1)
+                    particl[i].x= particl[i].x+particl[i].ax*dt*k
+                    particl[i].y= particl[i].y+particl[i].ay*dt*k2
+                    particl[i].ax= particl[i].ran*math.sin(ugol+math.pi/2-math.pi/4)
+                    particl[i].ay= particl[i].ran*math.cos(ugol+math.pi/2-math.pi/4)
+                end
+            else
+              
+                local realX = particl[i].x+6.5*k-screenWidth/1.7
+                local realY = particl[i].y+6.5*k2 -screenHeight/2
+                local angleF = math.atan2(realX,realY) 
+                if ( realX*realX + realY*realY < 80*k*80*k) then
+  
+                else
+                    particl[i].ax=particl[i].ax-math.sin(angleF)*50
+                    particl[i].ay=particl[i].ay-math.cos(angleF)*50
+                end
+                if ( particl[i].ax > 100) then
+                    particl[i].ax = 100
+                end
+                if ( particl[i].ax < -100) then
+                    particl[i].ax = -100
+                end
+                if ( particl[i].ay > 100) then
+                    particl[i].ay = 100
+                end
+                if ( particl[i].ay < -100) then
+                    particl[i].ay = -100
+                end
+                particl[i].x= particl[i].x+particl[i].ax*dt*k
+                particl[i].y= particl[i].y+particl[i].ay*dt*k2
+            end
+        end
+    end
+end
+
+function particlColor() 
+    local randomNumber = math.random(1,5)
+    if ( randomNumber ==  1 ) then 
+        return 0.878,0.639,0.773
+    end 
+    if ( randomNumber ==  2 ) then 
+        return 0.465,0.643,0.757
+    end 
+    if ( randomNumber ==  3 ) then 
+        return 0.612,0.624,0.804
+    end 
+    if ( randomNumber ==  4 ) then 
+        return 0.608,0.608,0.608
+    end 
+    if ( randomNumber == 5 ) then 
+        return 0.467,0.275,0.388
+    end 
 end
 
 function skills:keypressed(key, code)

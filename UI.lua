@@ -13,15 +13,18 @@ function bodyButton(x,y,flag)
     love.graphics.setColor(1,1,1,1)
 end
 
-function textButton(name,x,y,flag)
+function textButton(name,x,y,flag,scale)
+    if not(scale) then
+        scale = 1 
+    end
     local fontWidth = font:getWidth(name)
     local fontHeight = font:getHeight(name)
     if (flag) then 
         love.graphics.setColor(1,1,1,0.6)
-        love.graphics.print(name, x-fontHeight/1.9*k2,y+fontWidth/2*k,-math.pi/2,k,k2)
+        love.graphics.print(name, x-fontHeight/1.9*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
         love.graphics.setColor(1,1,1,1)
     else
-        love.graphics.print(name, x-fontHeight/1.9*k2,y+fontWidth/2*k,-math.pi/2,k,k2)
+        love.graphics.print(name, x-fontHeight/1.9*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
     end
 end
 

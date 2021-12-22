@@ -148,31 +148,8 @@ meshMeteors:setTexture(meteorSet)
 fon1 =love.graphics.newImage("assets/fons/fon1.png") 
 fon2 =love.graphics.newImage("assets/fons/fon2.png") 
 fon3 =love.graphics.newImage("assets/fons/fon3.png") 
-----------------------------------
 
---myShader = love.graphics.newShader[[
---vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
- -- vec4 pixel = Texel(texture, texture_coords );
-  --number average = (pixel.r+pixel.b+pixel.g)/3.0;
- -- number factor = screen_coords.x/1920;
- -- pixel.r = pixel.r + (average-pixel.r) * factor;
---  pixel.g = pixel.g + (average-pixel.g) * factor;
- -- pixel.b = pixel.b + (average-pixel.b) * factor;
- -- return pixel;
---}
 
---  myShader = love.graphics.newShader[[
---vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
---  vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
---  return pixel;
---}
---vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
---{
----    vec4 texturecolor = Texel(tex, texture_coords);
---    return texturecolor * color;
---}
- -- ]]
- 
 screenWidth = love.graphics.getWidth()
 screenHeight = love.graphics.getHeight()
 --k  = screenWidth/1920*2.5
@@ -211,6 +188,7 @@ wavetimer=  Timer.new()
 ----------------------------------
 -------------MASIIIIIIV-----------
 exp =  {}
+particl =  {}
 mouse = {
   x=0,
   y=0
@@ -229,6 +207,7 @@ playerAbility = {
     boostWaste = 150,
 }
 -------------CONST AND FLAGS------
+scoreForParticle = 0
 lvl =0
 volume = 50
 sens = 50
@@ -240,15 +219,15 @@ gradientI = 1
 ----------------------------------
 
 function love.load()
-  if arg[#arg] == "-debug" then require("mobdebug").start() end
-  io.stdout:setvbuf("no") 
-  math.randomseed(os.time()) 
-  love.window.setFullscreen(true,"desktop")
-  font = love.graphics.newFont("fonts/1.ttf",60)
-  love.graphics.setFont(font)  
-  kek= love.graphics.newCanvas(screenWidth ,screenHeight)
-  kek2= love.graphics.newCanvas(screenWidth ,screenHeight)
-  kek3= love.graphics.newCanvas(screenWidth ,screenHeight)
-  gamestate.registerEvents()
-  gamestate.switch(game)
+    if arg[#arg] == "-debug" then require("mobdebug").start() end
+    io.stdout:setvbuf("no") 
+    math.randomseed(os.time()) 
+    love.window.setFullscreen(true,"desktop")
+    font = love.graphics.newFont("fonts/1.ttf",60)
+    love.graphics.setFont(font)  
+    kek= love.graphics.newCanvas(screenWidth ,screenHeight)
+    kek2= love.graphics.newCanvas(screenWidth ,screenHeight)
+    kek3= love.graphics.newCanvas(screenWidth ,screenHeight)
+    gamestate.registerEvents()
+    gamestate.switch(game)
 end
