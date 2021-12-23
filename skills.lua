@@ -3,7 +3,6 @@ local cost = 10
 local colba = love.graphics.newImage("assets/constrSet.png")
 local particlRegulS = {}
 local flagColl =  false
-
 local colbaBody = HC.circle(screenWidth/1.7,screenHeight/2,80*k)
 local colbaFill = false
 local bodyL1 = HC.rectangle(0,0,25*k,30*k2)--2.1867155200084
@@ -33,18 +32,20 @@ bodyR3:setRotation(-0.58)
 local bodyR4 = HC.circle(0,0,10*k)--2.5465780219889
 bodyR4:moveTo(screenWidth/1.7-math.sin(2.5465780219889+math.pi*1.378)*115*k	,screenHeight/2- math.cos(2.5465780219889+math.pi*1.378)*115*k)
 
+local particlClearFlag = false
+local particlClearX = 0
 
 local flagButton1 = false
 
-
 function skills:update(dt)
+explUpdate2(dt)
 particlRegulS = {}
-if (#particl == 140) then 
+if ( math.ceil(colbaPar/1.4)>= 30 ) then 
     colbaFill= true
 else
     colbaFill= false
 end
-for i=1,#particl do
+for i=#particl,1, -1  do
     particl[i].body:moveTo(particl[i].x+6.5*k,particl[i].y+6.5*k2)
     if (particl[i] and particl[i].flag == true) then 
         local IparticlRegulS =math.floor((particl[i].x-10*k)/(20*k)) + math.floor((particl[i].y-10*k2)/(20*k2))*math.floor((screenWidth/(20*k))+1)
@@ -98,10 +99,26 @@ for i=1,#particl do
         end
         if (particl[i].body:collidesWith(colbaBody)) then 
             particl[i].flag = true 
+            colbaPar =   colbaPar + 1 
             particl[i].ax =particl[i].ax / 200
             particl[i].ay =particl[i].ay / 200 
         end
     end
+    
+    -----------------------------------------------------------
+    if (particlClearFlag == true and particl[i].x >screenWidth/1.7+80*k-particlClearX ) then
+        expl(particl[i].x,particl[i].y,3)
+        table.remove(particl,i) ---
+        colbaPar = colbaPar - 1
+    end
+    if ( particlClearFlag == true) then
+        particlClearX = particlClearX + 1 * dt 
+    end
+    if ( particlClearX > 160 * k ) then 
+        particlClearFlag = false
+        particlClearX  = 0 
+    end
+    -----------------------------------------------------------
 end
 particllUpdate(dt)
 mouse.x,mouse.y=love.mouse.getPosition()
@@ -124,15 +141,16 @@ if love.mouse.isDown(1)  then
     end
 else
     if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
+        exp = {}
         gamestate.switch(game)
     end 
 
     if (  mouse.x > screenWidth/1.2-k2/4*120 and  mouse.x <screenWidth/1.2+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagButton1 == true) then
-      print(colbaFill, #particl)
         if (colbaFill==true) then
               -- give something player
               -- delete ) 
-              particl = {}
+            --  colbaPar = 0 
+              particlClearFlag = true
         end
     end
     flagButton1 = false
@@ -167,7 +185,7 @@ textButton("Convert",screenWidth/1.2,screenHeight/2,false)
 love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
 
 
-for i=1,#particl do
+for i=#particl,1, -1  do
     local IparticlRegulS =math.floor((particl[i].x-10*k)/(20*k)) + math.floor((particl[i].y-10*k2)/(20*k2))*math.floor((screenWidth/(20*k))+1)
     flagColl =  false
     if (particl[i].flag == true  ) then 
@@ -193,14 +211,27 @@ love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,
 love.graphics.setColor(0,0,0,1)
 love.graphics.rectangle('fill',0,screenHeight/2-100*k2,35*k,200*k2)
 love.graphics.setColor(1,1,1,1)
-textButton("Tap to convert",screenWidth/1.53,screenHeight/2,false,0.5)
+textButton("Tap to fill",screenWidth/1.53,screenHeight/2,false,0.5)
 sc(0,screenHeight/2)
 local fontWidth = font:getWidth(tostring(score))
-local fontHeight = font:getHeight(tostring(score))
 love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
+if ( math.ceil(colbaPar/1.4)>= 30 ) then 
+    love.graphics.setColor(0.308,0.661,0.445,1) 
+end
+if ( math.ceil(colbaPar/1.4)>= 60 ) then 
+    love.graphics.setColor(0.6,0.3,0.6,1) 
+end
+if ( math.ceil(colbaPar/1.4)== 100 ) then 
+    love.graphics.setColor(0.8,0.8,0.3,1) 
+end
+fontWidth = font:getWidth(tostring(math.ceil(colbaPar/1.4))..'%')
+love.graphics.print(tostring(math.ceil(colbaPar/1.4))..'%',screenWidth/1.7-250*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
+love.graphics.setColor(1,1,1,1) 
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 love.graphics.print("particl: "..tostring(#particl), 100, 70,0,k/2,k2/2)
-
+for i=1,#exp do
+    love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*20*k,exp[i].scale*20*k2,4*exp[i].scale*k)
+end
 --text(screenWidth/2.2,screenHeight/2+screenHeight/2.7,0.5)
 end
 
@@ -306,7 +337,7 @@ function particlSpawn(x,y,kol)
 end
 
 function particllUpdate(dt)
-    for i =1, #particl do
+    for i=#particl,1, -1  do
         if( particl[i]) then
            -- local x1 = screenWidth/2- particl[i].x
             --local y1 = screenHeight/2-particl[i].y 
@@ -361,19 +392,19 @@ end
 function particlColor() 
     local randomNumber = math.random(1,5)
     if ( randomNumber ==  1 ) then 
-        return 0.878,0.639,0.773
+        return 0.408,0.761,0.545
     end 
     if ( randomNumber ==  2 ) then 
-        return 0.465,0.643,0.757
+        return 0.349,0.741,0.639
     end 
     if ( randomNumber ==  3 ) then 
-        return 0.612,0.624,0.804
+        return 0.306,0.722,0.71
     end 
     if ( randomNumber ==  4 ) then 
-        return 0.608,0.608,0.608
+        return 0.259,0.706,0.788
     end 
     if ( randomNumber == 5 ) then 
-        return 0.467,0.275,0.388
+        return 0.231,0.694,0.835
     end 
 end
 

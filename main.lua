@@ -207,7 +207,6 @@ playerAbility = {
     boostWaste = 150,
 }
 -------------CONST AND FLAGS------
-scoreForParticle = 0
 lvl =0
 volume = 50
 sens = 50
@@ -216,6 +215,9 @@ gradientR = 1
 gradientG = 0 
 gradientB = 0 
 gradientI = 1
+
+scoreForParticle = 0
+colbaPar =  0
 ----------------------------------
 
 function love.load()
