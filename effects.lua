@@ -157,14 +157,14 @@ end
 
 function expl(x,y,kol)
     for kek =0, kol do
-       -- local Color1,Color2,Color3  = expColor() 
+        local Color1,Color2,Color3  = particlColor()
         local e = {
         flag  =false,-----new but old
         tip = 1,
         r = 0 ,
-        color1 = 0.4,--- old 
-        color2= 0.4,--- old 
-        color3 = 0.4,--- old 
+        color1 = Color1,--- old 
+        color2= Color2,--- old 
+        color3 =Color3,--- old 
         f = false,
         x  = x, 
         y =  y,  

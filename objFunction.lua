@@ -102,7 +102,7 @@ function objDestroy(mas,i)
         local angle = math.atan2(mas[i].x- player.x,mas[i].y- player.y)
         local kolMeteor = 6 
        
-        if ( mas[i].scale <6 ) then
+        if ( mas[i].scale <50 ) then
             kolMeteor = 8
         end
         if (#masGl>kolMeteor) then
@@ -111,7 +111,6 @@ function objDestroy(mas,i)
                 if ( #masGl> 8) then
                     finish = finish+4 
                 else
-                 
                     finish = finish+2
                 end
                 if (finish+1> #masGl) then
@@ -214,7 +213,7 @@ function objDestroyAngle(mas)
    local leng = 0 
    local sinx = 0
    local cosy = 0 
-   local Gk = k * 16
+   --local Gk = k * 16
    for i = 3, #mas-1, 2 do
      angle = math.atan2(mas[i]-mas[i-2],mas[i+1]- mas[i-1]) 
      leng =  math.sqrt(math.pow(mas[i]-mas[i-2],2)+math.pow(mas[i+1]- mas[i-1],2))

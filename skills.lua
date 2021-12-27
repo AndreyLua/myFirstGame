@@ -1,6 +1,7 @@
 local skills = {}
 local cost = 10
 local colba = love.graphics.newImage("assets/constrSet.png")
+
 local particlRegulS = {}
 local flagColl =  false
 local colbaBody = HC.circle(screenWidth/1.7,screenHeight/2,80*k)
@@ -180,8 +181,6 @@ love.graphics.draw(fon2,0,0,0,k,k2)
 love.graphics.draw(fon3,0,0,0,k,k2)
 exit(0,0)
 bodyButton(screenWidth/1.2,screenHeight/2,false)
-love.graphics.draw(UIBatch)
-textButton("Convert",screenWidth/1.2,screenHeight/2,false)
 love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
 
 
@@ -224,12 +223,17 @@ end
 if ( math.ceil(colbaPar/1.4)== 100 ) then 
     love.graphics.setColor(0.8,0.8,0.3,1) 
 end
-fontWidth = font:getWidth(tostring(math.ceil(colbaPar/1.4))..'%')
-love.graphics.print(tostring(math.ceil(colbaPar/1.4))..'%',screenWidth/1.7-250*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
+fontWidth = font:getWidth(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%')
+love.graphics.print(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%',screenWidth/1.7-280*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
 love.graphics.setColor(1,1,1,1) 
+--UIBatch:add(UIQuads.tableSkill,screenWidth/1.9,screenHeight/2,0,k,k2,160,160)
+love.graphics.draw(UIBatch)
+textButton("Convert",screenWidth/1.2,screenHeight/2,false)
+
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 love.graphics.print("particl: "..tostring(#particl), 100, 70,0,k/2,k2/2)
 for i=1,#exp do
+    love.graphics.setColor(exp[i].color1,exp[i].color2,exp[i].color3,1) 
     love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*20*k,exp[i].scale*20*k2,4*exp[i].scale*k)
 end
 --text(screenWidth/2.2,screenHeight/2+screenHeight/2.7,0.5)
@@ -391,21 +395,39 @@ end
 
 function particlColor() 
     local randomNumber = math.random(1,5)
-    if ( randomNumber ==  1 ) then 
-        return 0.408,0.761,0.545
+   --[[ if ( randomNumber ==  1 ) then 
+        return 0,0.471,0.176
     end 
     if ( randomNumber ==  2 ) then 
-        return 0.349,0.741,0.639
+        return 0.137,0.545,0.286
     end 
     if ( randomNumber ==  3 ) then 
-        return 0.306,0.722,0.71
+        return 0,0.725,0.271
     end 
     if ( randomNumber ==  4 ) then 
-        return 0.259,0.706,0.788
+        return 0.216,0.863,0.455
     end 
     if ( randomNumber == 5 ) then 
-        return 0.231,0.694,0.835
+        return 0.388,0.863,0.565
+    end
+  ]]--  
+    
+     if ( randomNumber ==  1 ) then 
+        return 0.008,0.298,0.408
     end 
+    if ( randomNumber ==  2 ) then 
+        return 0.133,0.376,0.471
+    end 
+    if ( randomNumber ==  3 ) then 
+        return 0.027,0.463,0.627
+    end 
+    if ( randomNumber ==  4 ) then 
+        return 0.227,0.651,0.816
+    end 
+    if ( randomNumber == 5 ) then 
+        return 0.384,0.694,0.816
+    end 
+    
 end
 
 function skills:keypressed(key, code)

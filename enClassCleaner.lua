@@ -1,9 +1,9 @@
-local enClassHammer =  {} 
+local enClassСleaner =  {} 
 
-enemyHammerTable = {
+enemyСleanerTable = {
     30, --w
     30,  --h
-    2,  -- tip
+    5,  -- tip
     HC.rectangle(-100*k,-100*k2,16*k,25*k2), --body
     0,  --timer
     20, -- invTimer
@@ -27,10 +27,12 @@ enemyHammerTable = {
     3, --health
     3, --healthM
     {}, -- traces
+    0,--angleWing
+    0,--angleWingFlag
 }
 
-enemyHammerClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces)
+enemyСleanerClass = Class{
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -57,9 +59,11 @@ enemyHammerClass = Class{
         self.health = health
         self.healthM = healthM
         self.traces = traces
+        self.angleWing = angleWing
+        self.angleWingFlag = angleWingFlag
     end;
     newBody =  function(self)
-        local bodyEn  = HC.rectangle(self.x,self.y, enemyHammerTable[1]*k, enemyHammerTable[2]*k)
+        local bodyEn  = HC.rectangle(self.x,self.y, enemyСleanerTable[1]*k, enemyСleanerTable[2]*k)
         self.body = bodyEn
     end;
     IndexInRegulS =  function(self,scaleS)
@@ -145,6 +149,19 @@ enemyHammerClass = Class{
             end
         end
     end;
+    angleWingTr = function(self,dt)
+        if ( self.angleWing> 0.6 ) then
+            self.angleWingFlag = 0.6 
+        end
+        if ( self.angleWing< 0 ) then
+            self.angleWingFlag = 0 
+        end
+        if ( self.angleWingFlag ==0) then
+            self.angleWing  = self.angleWing +1.5*dt
+        else
+            self.angleWing  = self.angleWing -1.5*dt
+        end
+    end;
     angleMouthTr = function(self,dt)
         if ( self.angleMouth> 1 ) then
             --self.angleMouth = 0.1 
@@ -192,6 +209,7 @@ enemyHammerClass = Class{
         if (self.dash and self.dash==self.dashTimer) then
             self.angleBodyTr(self,anglePlayerEn,dt)
             self.angleMouthTr(self,dt)
+            self.angleWingTr(self,dt)
             self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
             self.ay=self.ay+80*k2*math.cos(anglePlayerEn)*dt
             self.x= self.x+self.ax*dt*7
@@ -235,37 +253,44 @@ enemyHammerClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
+         
             enBatch:setColor(1,0.5,0.5,1)
-            enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/8,k2/8,125, 95.5)
+            enBatch:add(enQuads.bodyСleaner,self.x,self.y,-self.angleBody+math.pi,k/10,k2/10,119, 182)
+            enBatch:add(enQuads.wing1Сleaner,self.x,self.y,-self.angleBody-math.pi+math.pi/10-self.angleWing,k/8,k2/8,196+50, 21)
+            enBatch:add(enQuads.wing2Сleaner,self.x,self.y,-self.angleBody-math.pi-math.pi/10+self.angleWing,k/8,k2/8,21-50, 21)
          --   self.body:draw('fill')
         else
+         
             enBatch:setColor(1,1,1,1)
-            enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/8,k2/8,125, 95.5)
+            enBatch:add(enQuads.bodyСleaner,self.x,self.y,-self.angleBody+math.pi,k/10,k2/10,119, 182)
+            enBatch:add(enQuads.wing1Сleaner,self.x,self.y,-self.angleBody-math.pi+math.pi/10-self.angleWing,k/8,k2/8,196+50, 21)
+            enBatch:add(enQuads.wing2Сleaner,self.x,self.y,-self.angleBody-math.pi-math.pi/10+self.angleWing,k/8,k2/8,21-50, 21)
+      
            -- self.body:draw('fill')
         end
     end;
-    traceSpawn = function(self)
+     traceSpawn = function(self)
         local trace = {
             angle = self.angleBody,
             ax =-2*k*math.sin(self.angleBody) ,
             ay =-2*k2*math.cos(self.angleBody),
-            x = -14*k*math.sin(self.angleBody) ,
-            y = -14*k2*math.cos(self.angleBody) , 
+            x = -15*k*math.sin(self.angleBody) ,
+            y = -15*k2*math.cos(self.angleBody) , 
             r = 3*k ,
         }
         table.insert(self.traces,trace)
-        if ( #self.traces >15) then
+        if ( #self.traces >9) then
            table.remove(self.traces,1)
         end
     end;
     traceDraw = function(self,dt)
         for i = 1, #self.traces do
             local trace = self.traces[i]
-            local radius =trace.r/8*i
-            trace.x = trace.x+70*trace.ax*dt
-            trace.y = trace.y+70*trace.ay*dt
-            love.graphics.setColor(0.75/7*i,0.34/7*i,0.08/7*i) 
-            love.graphics.circle("fill",self.x+ trace.x,self.y + trace.y,radius)
+            local radius =trace.r/6*i
+            trace.x = trace.x+80*trace.ax*dt
+            trace.y = trace.y+80*trace.ay*dt
+            love.graphics.setColor(0.44/7*i,0.26/7*i,0.26/7*i) 
+            love.graphics.circle("fill",self.x+  trace.x+math.cos(self.y+trace.y)+k*math.sin(self.angleBody-math.pi/2) ,self.y + trace.y+math.sin(self.x+trace.x) +k2*math.cos(self.angleBody-math.pi/2),radius)
         end
     end;
     hit  = function(self,a,i,dt)
@@ -277,7 +302,6 @@ enemyHammerClass = Class{
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
                 self.timer =  self.invTimer-0.001
-                self.dash = self.dashTimer
                 self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
@@ -290,7 +314,7 @@ enemyHammerClass = Class{
             spawnResKillEn(i)
             local enDrawDie = {
               timer = 4, 
-              quad = enQuads.bodyHammer,
+              quad = enQuads.bodyСleaner,
               x = self.x,
               y = self.y,
               ax = self.ax,
@@ -307,6 +331,6 @@ enemyHammerClass = Class{
         end  
     end;
 }
+enemyСleaner = enemyСleanerClass(unpack(enemyСleanerTable))
 
-enemyHammer = enemyHammerClass(unpack(enemyHammerTable))
-return  enClassHammer
+return  enClassСleaner

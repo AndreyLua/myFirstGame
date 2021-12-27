@@ -155,11 +155,9 @@ enemyShooterClass = Class{
     end;
     angleWingTr = function(self,dt)
         if ( self.angleWing> 0.6 ) then
-            --self.angleMouth = 0.1 
             self.angleWingFlag = 0.6 
         end
         if ( self.angleWing< 0 ) then
-          --self.angleMouth = 0 
             self.angleWingFlag = 0 
         end
         if ( self.angleWingFlag ==0) then

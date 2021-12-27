@@ -261,7 +261,7 @@ enemyMeleeClass = Class{
             anglePlayerEn = math.atan2(obj[self.targetX].x-self.x,obj[self.targetX].y-self.y)
             end
         end
-        if (self.dash and self.dash==self.dashTimer) then
+        if (self.dash and self.dash==self.dashTimer ) then
             self.angleBodyTr(self,anglePlayerEn,dt)
             self.angleMouthTr(self,dt)
             self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
@@ -287,6 +287,7 @@ enemyMeleeClass = Class{
                 self.ay = 0 
             end
         else
+            
             self.x= self.x+math.sin(self.angleBody)*dt*300*k -- движение противника ускорение
             self.y= self.y+math.cos(self.angleBody)*dt*300*k2
         end
@@ -307,7 +308,7 @@ enemyMeleeClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-             local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
+            local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
             local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
             local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
             local clow2Y =self.y +15*k2*math.cos(self.angleBody-math.pi/8)
@@ -373,6 +374,7 @@ enemyMeleeClass = Class{
                 self.climbFlag = 0
                 self.climbAtack = self.climbAtackTimer
                 self.timer =  self.invTimer-0.001
+                self.dash = self.dashTimer
                 self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay

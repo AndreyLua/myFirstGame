@@ -116,6 +116,8 @@ end
 
 
 function game:update(dt)
+--flaginv =true
+--en = {}
 --explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
@@ -279,7 +281,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,3)
+        allSpawn(en,Geo,6)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -290,6 +292,7 @@ end
 
 
 function  game:draw()
+ -- flaginv =true
     local dt = love.timer.getDelta()
     boomBatch:clear()
     UIBatch:clear()
@@ -477,6 +480,20 @@ function allSpawn(mas,Geo,Tip)
         end
         if ( Tip ==4) then 
             local e = enemyBomb:clone()
+            e.x = x 
+            e.y = y 
+            e:newBody(e.x, e.y)
+            table.insert(mas,e)
+        end
+        if ( Tip ==5) then 
+            local e = enemyСleaner:clone()
+            e.x = x 
+            e.y = y 
+            e:newBody(e.x, e.y)
+            table.insert(mas,e)
+        end
+        if ( Tip ==6) then 
+            local e = enemyInvader:clone()
             e.x = x 
             e.y = y 
             e:newBody(e.x, e.y)

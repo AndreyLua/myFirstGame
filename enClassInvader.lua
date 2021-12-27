@@ -1,36 +1,36 @@
-local enClassHammer =  {} 
+local enClassInvader =  {} 
 
-enemyHammerTable = {
-    30, --w
+enemyInvaderTable = {
+    25, --w
     30,  --h
-    2,  -- tip
+    6,  -- tip
     HC.rectangle(-100*k,-100*k2,16*k,25*k2), --body
     0,  --timer
     20, -- invTimer
     0, -- atack
     60, --atackTimer
-    0, -- dash
-    15, --dashTimer
-    0.553, --color1 
-    0.133, --color2
-    0.173, --color3
+    0.216, --color1 
+    0.224, --color2
+    0.314, --color3
     100, -- scale
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    5,  -- damage
+    40,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    3, --health
-    3, --healthM
+    2, --health
+    2, --healthM
     {}, -- traces
+    0,-- angleWing
+    0,-- angleWingFlag
 }
 
-enemyHammerClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces)
+enemyInvaderClass = Class{
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -39,13 +39,13 @@ enemyHammerClass = Class{
         self.invTimer = invTimer
         self.atack = atack
         self.atackTimer = atackTimer
-        self.dash =dash
-        self.dashTimer = dashTimer
         self.color1 =color1
         self.color2=color2
         self.color3 =color3
         self.scale = scale
         self.angleMouth = angleMouth
+        self.angleWing = angleWing
+        self.angleWingFlag = angleWingFlag
         self.angleBody =  angleBody
         self.angleMouthFlag = angleMouthFlag
         self.damage = damage
@@ -59,7 +59,7 @@ enemyHammerClass = Class{
         self.traces = traces
     end;
     newBody =  function(self)
-        local bodyEn  = HC.rectangle(self.x,self.y, enemyHammerTable[1]*k, enemyHammerTable[2]*k)
+        local bodyEn  = HC.rectangle(self.x,self.y, enemyInvaderTable[1]*k, enemyInvaderTable[2]*k)
         self.body = bodyEn
     end;
     IndexInRegulS =  function(self,scaleS)
@@ -89,9 +89,10 @@ enemyHammerClass = Class{
         end
     end;
     atackStart = function(self)
-        if (self.dash and self.dash==self.dashTimer and self.atack and self.atack==self.atackTimer and self.invTimer ==           self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <=100*k ) then
-           self.atack = self.atackTimer-0.001
-           self.dash = self.dashTimer-0.001
+        if (self.atack and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= 450*k ) then
+            self.atack = self.atackTimer-0.001
+            self.angleMouth = 1.5
+            enFire(player.x,player.y,self.x,self.y,self.angleBody,self.damage)
         end
     end;
     atackTimerUpdate = function(self,dt)
@@ -100,12 +101,6 @@ enemyHammerClass = Class{
         end
         if ( self.atack < 0) then
             self.atack  = self.atackTimer
-        end
-        if ( self.dash <  self.dashTimer) then
-            self.dash  = self.dash  - 30*dt
-        end
-        if ( self.dash < 0) then
-            self.dash  = self.dashTimer
         end
     end;
     angleBodyTr = function(self,angle,dt)
@@ -147,17 +142,28 @@ enemyHammerClass = Class{
     end;
     angleMouthTr = function(self,dt)
         if ( self.angleMouth> 1 ) then
-            --self.angleMouth = 0.1 
             self.angleMouthFlag = 1 
         end
         if ( self.angleMouth< 0 ) then
-          --self.angleMouth = 0 
             self.angleMouthFlag = 0 
         end
         if ( self.angleMouthFlag ==0) then
-            self.angleMouth  = self.angleMouth +1.1*dt*math.random(5,10)/7
+            self.angleMouth  = self.angleMouth +1.1*dt
         else
-            self.angleMouth  = self.angleMouth -1.1*dt*math.random(5,10)/7
+            self.angleMouth  = self.angleMouth -1.1*dt
+        end
+    end;
+    angleWingTr = function(self,dt)
+        if ( self.angleWing> 0.6 ) then
+            self.angleWingFlag = 0.6 
+        end
+        if ( self.angleWing< 0 ) then
+            self.angleWingFlag = 0 
+        end
+        if ( self.angleWingFlag ==0) then
+            self.angleWing  = self.angleWing +1.6*dt
+        else
+            self.angleWing  = self.angleWing -1.6*dt
         end
     end;
     collWithEn =  function(self,IenRegulS,i,dt)
@@ -189,34 +195,35 @@ enemyHammerClass = Class{
     end;
     moveNormal = function(self,dt)
         local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
-        if (self.dash and self.dash==self.dashTimer) then
-            self.angleBodyTr(self,anglePlayerEn,dt)
-            self.angleMouthTr(self,dt)
+        self.angleBodyTr(self,anglePlayerEn,dt)
+        self.angleMouthTr(self,dt)
+        self.angleWingTr(self,dt)
+        if ( (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) >= 400*k ) then
             self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
             self.ay=self.ay+80*k2*math.cos(anglePlayerEn)*dt
-            self.x= self.x+self.ax*dt*7
-            self.y= self.y+self.ay*dt*7 --- нормальное движение
-            self.x= self.x+math.sin(self.y/20)*dt*30
-            self.y= self.y+math.cos(self.x/20)*dt*30
-            if (  self.ax >22*k) then
-                self.ax=22*k
-            end
-            if (  self.ax <-22*k) then
-                self.ax=-22*k
-            end
-            if (  self.ay >22*k2) then
-                self.ay=22*k2
-            end
-            if (  self.ay <-22*k2) then
-                self.ay=-22*k2
-            end
-            if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
-                self.ax = 0
-                self.ay = 0 
-            end
         else
-            self.x= self.x+math.sin(self.angleBody)*dt*400*k -- движение противника ускорение
-            self.y= self.y+math.cos(self.angleBody)*dt*400*k2
+            self.ax = 0 
+            self.ay = 0 
+        end
+        self.x= self.x+self.ax*dt*5
+        self.y= self.y+self.ay*dt*5 --- нормальное движение
+        self.x= self.x+math.sin(self.y/20)*dt*70
+        self.y= self.y+math.cos(self.x/20)*dt*70
+        if (  self.ax >22*k) then
+            self.ax=22*k
+        end
+        if (  self.ax <-22*k) then
+            self.ax=-22*k
+        end
+        if (  self.ay >22*k2) then
+            self.ay=22*k2
+        end
+        if (  self.ay <-22*k2) then
+            self.ay=-22*k2
+        end
+        if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
+            self.ax = 0
+            self.ay = 0 
         end
     end;
     moveWounded =  function(self,dt)
@@ -235,13 +242,16 @@ enemyHammerClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-            enBatch:setColor(1,0.5,0.5,1)
-            enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/8,k2/8,125, 95.5)
-         --   self.body:draw('fill')
+            enBatch:setColor(1,0.2,0.2,1)
+            enBatch:add(enQuads.wing2Invader,self.x,self.y,-self.angleBody-math.pi-math.pi/25+self.angleWing,k/9,k2/9,14-20, 224)
+            enBatch:add(enQuads.wing1Invader,self.x,self.y,-self.angleBody-math.pi+math.pi/25-self.angleWing,k/9,k2/9,238+20, 224)
+            enBatch:add(enQuads.bodyInvader,self.x,self.y,-self.angleBody+math.pi,k/9,k2/9,112, 210)
         else
             enBatch:setColor(1,1,1,1)
-            enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/8,k2/8,125, 95.5)
-           -- self.body:draw('fill')
+            enBatch:add(enQuads.wing2Invader,self.x,self.y,-self.angleBody-math.pi-math.pi/25+self.angleWing,k/9,k2/9,14-20, 224)
+            enBatch:add(enQuads.wing1Invader,self.x,self.y,-self.angleBody-math.pi+math.pi/25-self.angleWing,k/9,k2/9,238+20, 224)
+            enBatch:add(enQuads.bodyInvader,self.x,self.y,-self.angleBody+math.pi,k/9,k2/9,112, 210)
+          --  self.body:draw('fill')
         end
     end;
     traceSpawn = function(self)
@@ -249,35 +259,31 @@ enemyHammerClass = Class{
             angle = self.angleBody,
             ax =-2*k*math.sin(self.angleBody) ,
             ay =-2*k2*math.cos(self.angleBody),
-            x = -14*k*math.sin(self.angleBody) ,
-            y = -14*k2*math.cos(self.angleBody) , 
-            r = 3*k ,
+            x = -20*k*math.sin(self.angleBody) ,
+            y = -20*k2*math.cos(self.angleBody) , 
+            r = 2.5*k ,
         }
         table.insert(self.traces,trace)
-        if ( #self.traces >15) then
+        if ( #self.traces >7) then
            table.remove(self.traces,1)
         end
     end;
     traceDraw = function(self,dt)
         for i = 1, #self.traces do
             local trace = self.traces[i]
-            local radius =trace.r/8*i
-            trace.x = trace.x+70*trace.ax*dt
-            trace.y = trace.y+70*trace.ay*dt
-            love.graphics.setColor(0.75/7*i,0.34/7*i,0.08/7*i) 
-            love.graphics.circle("fill",self.x+ trace.x,self.y + trace.y,radius)
+            local radius =trace.r/5*i
+            trace.x = trace.x+80*trace.ax*dt
+            trace.y = trace.y+80*trace.ay*dt
+            love.graphics.setColor(0.78/5*i,0.66/5*i,0.188/5*i) 
+            love.graphics.circle("fill",self.x+  trace.x+math.cos(self.y+trace.y)+k*math.sin(self.angleBody-math.pi/2) ,self.y + trace.y+math.sin(self.x+trace.x) +k2*math.cos(self.angleBody-math.pi/2),radius)
         end
     end;
     hit  = function(self,a,i,dt)
         if ( a == 0 ) then
-            if (self.invTimer == self.timer and self.dash~=self.dashTimer) then
-                flaginv = false 
-                hp.long = hp.long - self.damage
-            end 
+          
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
                 self.timer =  self.invTimer-0.001
-                self.dash = self.dashTimer
                 self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
@@ -288,25 +294,62 @@ enemyHammerClass = Class{
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
             spawnResKillEn(i)
+            local clow1X =self.x +10*k*math.sin(self.angleBody+math.pi/6)
+            local clow1Y =self.y +10*k2*math.cos(self.angleBody+math.pi/6)
+            local clow2X =self.x +10*k*math.sin(self.angleBody-math.pi/6)
+            local clow2Y =self.y +10*k2*math.cos(self.angleBody-math.pi/6)
+        
             local enDrawDie = {
-              timer = 4, 
-              quad = enQuads.bodyHammer,
-              x = self.x,
-              y = self.y,
-              ax = self.ax,
-              ay = self.ay,
-              r = -self.angleBody+math.pi,
-              ra = math.random(-3,-1),
-              koff = k/8,
-              koff2 = k2/8,
-              ox = 125,
-              oy = 95.5
+                timer = 4, 
+                quad = enQuads.bodyInvader,
+                x = self.x,
+                y = self.y,
+                ax = self.ax,
+                ay = self.ay,
+                r = -self.angleBody+math.pi,
+                ra = math.random(-3,-1),
+                koff = k/8,
+                koff2 = k2/8,
+                ox = 60,
+                oy = 88
             }
             table.insert(enAfterDieTex,enDrawDie)
+            local enDrawDie2 = {
+                timer = 4, 
+                quad = enQuads.wing1Invader,
+                x = self.x,
+                y = self.y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi+math.pi/10-self.angleWing,
+                ra = math.random(-2,-1),
+                koff = k/8,
+                koff2 = k2/8,
+                ox = 208,
+                oy = 64
+            }
+            table.insert(enAfterDieTex,enDrawDie2)
+            local enDrawDie3 = {
+                timer = 4, 
+                quad = enQuads.wing2Invader,
+                x = self.x,
+                y = self.y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi-math.pi/10-self.angleWing,
+                ra = math.random(1,2),
+                koff = k/8,
+                koff2 = k2/8,
+                ox = 16,
+                oy = 64
+            }
+            table.insert(enAfterDieTex,enDrawDie3)
+            
+         --   colWave =  colWave - 5
             table.remove(en,i)
         end  
     end;
 }
 
-enemyHammer = enemyHammerClass(unpack(enemyHammerTable))
-return  enClassHammer
+enemyInvader = enemyInvaderClass(unpack(enemyInvaderTable))
+return  enClassInvader

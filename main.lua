@@ -43,6 +43,7 @@ UIQuads = {
   no= love.graphics.newQuad(241,  251,  240, 240, UISet:getDimensions()),
   yes= love.graphics.newQuad(0,  251,  240, 240, UISet:getDimensions()),
   panel = love.graphics.newQuad(0,  492,  1000, 240, UISet:getDimensions()),
+  tableSkill = love.graphics.newQuad(482,  0, 320, 320, UISet:getDimensions()),
 }
 playerQuads = {
   body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),
@@ -53,18 +54,34 @@ playerQuads = {
   wings = love.graphics.newQuad(465,  153,  448, 256,playerSet:getDimensions()),
 }
 enQuads = {
+  -----------------------------------------------------------------------------
   bodyMelee = love.graphics.newQuad(0,  0,  120,176, enSet:getDimensions()),
   clow1Melee = love.graphics.newQuad(120,  0,  72, 88, enSet:getDimensions()),
   clow2Melee = love.graphics.newQuad(193,  0,  72, 88, enSet:getDimensions()),
+  -----------------------------------------------------------------------------
   bodyShooter = love.graphics.newQuad(0,  177,  126,296, enSet:getDimensions()),
   clow1Shooter = love.graphics.newQuad(111,  177,  80, 64, enSet:getDimensions()),
   clow2Shooter = love.graphics.newQuad(192,  177,  80, 64, enSet:getDimensions()),
   wing1Shooter = love.graphics.newQuad(127,  242,  224, 272, enSet:getDimensions()),
   wing2Shooter = love.graphics.newQuad(0,  515, 224, 272, enSet:getDimensions()),
+  -----------------------------------------------------------------------------
   bodyHammer = love.graphics.newQuad(248, 522, 240, 310, enSet:getDimensions()),
+  -----------------------------------------------------------------------------
   bodyBomb = love.graphics.newQuad(360,  249, 217, 218, enSet:getDimensions()),
   clow1Bomb = love.graphics.newQuad(597,  190,  59, 86, enSet:getDimensions()),
   clow2Bomb = love.graphics.newQuad(657,  190,  59, 86, enSet:getDimensions()),
+  -----------------------------------------------------------------------------
+  bodyСleaner = love.graphics.newQuad(0,  833, 238, 364, enSet:getDimensions()),
+  wing1Сleaner = love.graphics.newQuad(239,  833,  217, 154, enSet:getDimensions()),
+  wing2Сleaner = love.graphics.newQuad(239,  988, 217, 154, enSet:getDimensions()),
+  -----------------------------------------------------------------------------
+  bodyClower = love.graphics.newQuad(457,  983, 182, 217, enSet:getDimensions()),
+  clow1Clower = love.graphics.newQuad(489,  530, 175, 245, enSet:getDimensions()),
+  clow2Clower = love.graphics.newQuad(640,  955, 175, 245, enSet:getDimensions()),
+  -----------------------------------------------------------------------------
+  bodyInvader = love.graphics.newQuad(717,  0, 224, 420, enSet:getDimensions()),
+  wing1Invader = love.graphics.newQuad(942,  22, 252, 364, enSet:getDimensions()),
+  wing2Invader = love.graphics.newQuad(912,  405, 252, 364, enSet:getDimensions()),
 }
 resQuads = {
   boost =   love.graphics.newQuad(0,0,130,210, resSet:getDimensions()),
@@ -165,7 +182,9 @@ resSimpleClass =  require "resSimpleClass"
 enClassMelee = require "enClassMelee" 
 enClassHammer = require "enClassHammer" 
 enClassShooter = require "enClassShooter" 
+enClassInvader = require "enClassInvader" 
 enClassBomb = require "enClassBomb" 
+enClassСleaner = require "enClassCleaner" 
 resFunction = require "resFunction" 
 objFunction = require "objFunction" 
 wavesFunction = require "wavesFunction" 
