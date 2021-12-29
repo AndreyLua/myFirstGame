@@ -14,11 +14,13 @@ enSet = love.graphics.newImage("assets/enSet.png")
 resSet = love.graphics.newImage("assets/resSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
 UISet = love.graphics.newImage("assets/UISet.png")
+skillSet = love.graphics.newImage("assets/skillSet.png")
 enBoomAnSet = love.graphics.newImage("assets/enBoomAn.png")
 
 ---------------------------------------------------
 boomBatch =  love.graphics.newSpriteBatch(enBoomAnSet)
 UIBatch = love.graphics.newSpriteBatch(UISet)
+skillBatch = love.graphics.newSpriteBatch(skillSet)
 playerBatch = love.graphics.newSpriteBatch(playerSet)
 enBatch = love.graphics.newSpriteBatch(enSet)
 resBatch = love.graphics.newSpriteBatch(resSet)
@@ -45,6 +47,17 @@ UIQuads = {
   panel = love.graphics.newQuad(0,  492,  1000, 240, UISet:getDimensions()),
   tableSkill = love.graphics.newQuad(482,  0, 320, 320, UISet:getDimensions()),
 }
+
+skillQuads = { 
+  hp = love.graphics.newQuad(0,  0,  320, 320, skillSet:getDimensions()),
+  energy = love.graphics.newQuad(320,  0,  320, 320, skillSet:getDimensions()),  
+  atack = love.graphics.newQuad(640,  0,  320, 320, skillSet:getDimensions()),
+  meleeDef = love.graphics.newQuad(0,  640,  320, 320, skillSet:getDimensions()),
+  rangedDef = love.graphics.newQuad(320,  640,  320, 320, skillSet:getDimensions()),
+  vampir = love.graphics.newQuad(0,  960,  320, 320, skillSet:getDimensions()),
+  
+}
+
 playerQuads = {
   body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),
   clow1 = love.graphics.newQuad(465,  0,  200, 152, playerSet:getDimensions()),
@@ -190,6 +203,7 @@ objFunction = require "objFunction"
 wavesFunction = require "wavesFunction" 
 pause = require "pause" 
 skills = require "skills" 
+convert = require "convert"
 settings = require "settings" 
 effects = require "effects" 
 system = require "system" 
@@ -225,8 +239,51 @@ playerAbility = {
     boostRegen = 100,
     boostWaste = 150,
 }
+playerSkills = {}
+playerSkills[1] ={
+img =skillQuads.hp,
+    x = screenWidth/2.2,
+    y = screenHeight/2,
+    ox = 160,
+    oy = 160
+}
+playerSkills[2] ={
+img =skillQuads.energy,
+    x = screenWidth/2.2,
+    y = screenHeight/2,
+    ox = 160,
+    oy = 160
+}
+playerSkills[3] ={
+img =skillQuads.atack,
+    x = screenWidth/2.2,
+    y = screenHeight/2,
+    ox = 160,
+    oy = 160
+}
+playerSkills[4] ={
+img =skillQuads.meleeDef,
+    x = screenWidth/2.2,
+    y = screenHeight/2,
+    ox = 160,
+    oy = 160
+}
+playerSkills[5] ={
+img =skillQuads.rangedDef,
+    x = screenWidth/2.2,
+    y = screenHeight/2,
+    ox = 160,
+    oy = 160
+}
+playerSkills[6] ={
+img =skillQuads.vampir,
+    x = screenWidth/2.2,
+    y = screenHeight/2,
+    ox = 160,
+    oy = 160
+}
+
 -------------CONST AND FLAGS------
-lvl =0
 volume = 50
 sens = 50
 flagVibr = false

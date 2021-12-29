@@ -1,5 +1,4 @@
 local skills = {}
-local cost = 10
 local colba = love.graphics.newImage("assets/constrSet.png")
 
 local particlRegulS = {}
@@ -224,9 +223,8 @@ if ( math.ceil(colbaPar/1.4)== 100 ) then
     love.graphics.setColor(0.8,0.8,0.3,1) 
 end
 fontWidth = font:getWidth(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%')
-love.graphics.print(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%',screenWidth/1.7-280*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
+love.graphics.print(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%',screenWidth/1.7-250*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
 love.graphics.setColor(1,1,1,1) 
---UIBatch:add(UIQuads.tableSkill,screenWidth/1.9,screenHeight/2,0,k,k2,160,160)
 love.graphics.draw(UIBatch)
 textButton("Convert",screenWidth/1.2,screenHeight/2,false)
 

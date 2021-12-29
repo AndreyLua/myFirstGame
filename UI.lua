@@ -2,7 +2,6 @@ local UI = {}
 
 
 function bodyButton(x,y,flag)
-    love.graphics.setColor(1,1,1,1)
     if (flag) then 
         UIBatch:setColor(1,1,1,0.6)
         UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
@@ -10,7 +9,6 @@ function bodyButton(x,y,flag)
     else
         UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
     end
-    love.graphics.setColor(1,1,1,1)
 end
 
 function textButton(name,x,y,flag,scale)
@@ -28,13 +26,21 @@ function textButton(name,x,y,flag,scale)
     end
 end
 
-function slot(x,y,scale,number)
-  local  kol = #(tostring(number))
-  love.graphics.setLineWidth(2)
-  love.graphics.setColor(0.231,0.345,0.373)
-  love.graphics.rectangle('line',x-(75*k*scale)/2,y-(75*k2*scale)/2,75*k*scale,75*k2*scale)
-  love.graphics.print(number,x-(75*k*scale)/2+3*k,y-(75*k*scale)/2+(kol*45*scale/2*k2*0.4)+3*k2,-3.14/2,0.4*k,0.4*k2)
-  love.graphics.setColor(1,1,1,1)
+function slot(img,x,y,ox,oy,scale,light)
+    if ( light == nil ) then
+        light = 1 
+    end
+    UIBatch:setColor(light,light,light,light)
+    skillBatch:setColor(light,light,light,light)
+    if (img) then 
+        UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
+        skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,ox,oy)
+    else
+      
+        UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
+    end
+    UIBatch:setColor(1,1,1,1)
+    skillBatch:setColor(1,1,1,1)
 end
 
 function sc(x,y)

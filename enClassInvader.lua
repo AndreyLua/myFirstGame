@@ -245,7 +245,7 @@ enemyInvaderClass = Class{
             enBatch:setColor(1,0.2,0.2,1)
             enBatch:add(enQuads.wing2Invader,self.x,self.y,-self.angleBody-math.pi-math.pi/25+self.angleWing,k/9,k2/9,14-20, 224)
             enBatch:add(enQuads.wing1Invader,self.x,self.y,-self.angleBody-math.pi+math.pi/25-self.angleWing,k/9,k2/9,238+20, 224)
-            enBatch:add(enQuads.bodyInvader,self.x,self.y,-self.angleBody+math.pi,k/9,k2/9,112, 210)
+            enBatch:add(enQuads.bodyInvader,self.x,self.y,-self.  angleBody+math.pi,k/9,k2/9,112, 210)
         else
             enBatch:setColor(1,1,1,1)
             enBatch:add(enQuads.wing2Invader,self.x,self.y,-self.angleBody-math.pi-math.pi/25+self.angleWing,k/9,k2/9,14-20, 224)
