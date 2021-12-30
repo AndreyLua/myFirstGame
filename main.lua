@@ -46,6 +46,7 @@ UIQuads = {
   yes= love.graphics.newQuad(0,  251,  240, 240, UISet:getDimensions()),
   panel = love.graphics.newQuad(0,  492,  1000, 240, UISet:getDimensions()),
   tableSkill = love.graphics.newQuad(482,  0, 320, 320, UISet:getDimensions()),
+  butDirect = love.graphics.newQuad(803,  0, 180, 320, UISet:getDimensions()),
 }
 
 skillQuads = { 

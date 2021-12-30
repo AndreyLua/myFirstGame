@@ -1,5 +1,6 @@
 local skills = {}
 local colba = love.graphics.newImage("assets/constrSet.png")
+local podst = love.graphics.newImage("assets/constrSet2.png")
 
 local particlRegulS = {}
 local flagColl =  false
@@ -145,7 +146,7 @@ else
         gamestate.switch(game)
     end 
 
-    if (  mouse.x > screenWidth/1.2-k2/4*120 and  mouse.x <screenWidth/1.2+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagButton1 == true) then
+    if (  mouse.x > screenWidth/1.7+220*k-k2/4*120 and  mouse.x <screenWidth/1.7+220*k+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagButton1 == true) then
         if (colbaFill==true) then
               -- give something player
               -- delete ) 
@@ -179,8 +180,9 @@ love.graphics.draw(fon1,0,0,0,k,k2)
 love.graphics.draw(fon2,0,0,0,k,k2)
 love.graphics.draw(fon3,0,0,0,k,k2)
 exit(0,0)
-bodyButton(screenWidth/1.2,screenHeight/2,false)
+bodyButton(screenWidth/1.7+220*k,screenHeight/2,false)
 love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
+love.graphics.draw(podst,screenWidth/1.7+95*k,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,200,150.5)
 
 
 for i=#particl,1, -1  do
@@ -226,7 +228,7 @@ fontWidth = font:getWidth(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%')
 love.graphics.print(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%',screenWidth/1.7-250*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
 love.graphics.setColor(1,1,1,1) 
 love.graphics.draw(UIBatch)
-textButton("Convert",screenWidth/1.2,screenHeight/2,false)
+textButton("Convert",screenWidth/1.7+220*k,screenHeight/2,false)
 
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 love.graphics.print("particl: "..tostring(#particl), 100, 70,0,k/2,k2/2)
