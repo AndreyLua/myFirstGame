@@ -1,5 +1,7 @@
 local convert = {}
 local but1 = false
+local but2 = false
+local but3 = false
 local masSkill = {}
 local mousePosX = 0 
 local mousePosY = 0 
@@ -11,6 +13,12 @@ function convert:update(dt)
         if ( flagtouch3 == false) then 
             mousePosX = mouse.x
             mousePosY = mouse.y
+        end 
+        if (  mouse.x > screenWidth/2.2-math.sin(-math.pi/1.4)*300*k-k2/3*160 and  mouse.x <screenWidth/2.2-math.sin(-math.pi/1.4)*300*k+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3) then
+            but2 = true
+        end
+        if (  mouse.x > screenWidth/2.2-math.sin(-math.pi/3.5)*300*k-k2/3*160 and  mouse.x <screenWidth/2.2-math.sin(-math.pi/3.5)*300*k+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*300*k-90*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*300*k+160*k/3) then
+            but3 = true
         end
         flagtouch3 =true
     else
@@ -18,16 +26,26 @@ function convert:update(dt)
             exp = {}
             gamestate.switch(game)
         end 
-        if (flagtouch3 == true and  math.abs( mouse.y - mousePosY ) > 40*k ) then 
+        if (  mouse.x > screenWidth/2.2-math.sin(-math.pi/1.4)*300*k-k2/3*160 and  mouse.x <screenWidth/2.2-math.sin(-math.pi/1.4)*300*k+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3 and but2 == true) then
+            speedR =2.2
+        end
+        if (  mouse.x > screenWidth/2.2-math.sin(-math.pi/3.5)*300*k-k2/3*160 and  mouse.x <screenWidth/2.2-math.sin(-math.pi/3.5)*300*k+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*300*k-90*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*300*k+160*k/3 and but3 == true ) then
+            speedR =-2.2
+        end
+        
+        if (flagtouch3 == true and  math.abs( mouse.y - mousePosY ) > 40*k and mouse.x > screenWidth/2.2 and  mouse.x < screenWidth/2.2 + 250*k   ) then 
             if (  mouse.y >  mousePosY) then 
                 speedR = speedR- 10*math.abs( mouse.y - mousePosY )/screenHeight
             else
                 speedR = speedR+ 10*math.abs( mouse.y - mousePosY )/screenHeight
             end
             if ( math.abs( speedR) < 2) then
-                speedR =2* speedR / math.abs( speedR)
+                speedR =2.2* speedR / math.abs( speedR)
             end
         end
+        but3 = false
+        but2 = false
+        but1 = false
         flagtouch3 =false
     end
 end
@@ -107,8 +125,8 @@ for i = 1 , 20 do
         slot(nil,screenWidth/2.2-math.sin(angle)*160*k	,screenHeight/2- math.cos(angle)*160*k,160,160,scale,light) 
     end
 end
-bodyButtonDirect(screenWidth/2.2-math.sin(-math.pi/1.4)*300*k,screenHeight/2-math.cos(-math.pi/1.4)*300*k,false,'left')
-bodyButtonDirect(screenWidth/2.2-math.sin(-math.pi/3.5)*300*k,screenHeight/2-math.cos(-math.pi/3.5)*300*k,false,'right')
+bodyButtonDirect(screenWidth/2.2-math.sin(-math.pi/1.4)*300*k,screenHeight/2-math.cos(-math.pi/1.4)*300*k,but2,'left')
+bodyButtonDirect(screenWidth/2.2-math.sin(-math.pi/3.5)*300*k,screenHeight/2-math.cos(-math.pi/3.5)*300*k,but3,'right')
 bodyButton(screenWidth/2.2-math.sin(-math.pi/2)*310*k,screenHeight/2-math.cos(-math.pi/2)*310*k,but1)
 love.graphics.draw(UIBatch)
 love.graphics.draw(skillBatch)
