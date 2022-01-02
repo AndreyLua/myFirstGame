@@ -281,7 +281,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,6)
+        allSpawn(en,Geo,5)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end

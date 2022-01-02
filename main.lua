@@ -44,8 +44,9 @@ UIQuads = {
   ex= love.graphics.newQuad(0,  0,  240, 250, UISet:getDimensions()),
   no= love.graphics.newQuad(241,  251,  240, 240, UISet:getDimensions()),
   yes= love.graphics.newQuad(0,  251,  240, 240, UISet:getDimensions()),
-  panel = love.graphics.newQuad(0,  492,  1000, 240, UISet:getDimensions()),
+  panel = love.graphics.newQuad(0,  648,  1000, 240, UISet:getDimensions()),
   tableSkill = love.graphics.newQuad(482,  0, 320, 320, UISet:getDimensions()),
+  tableSkillDestr = love.graphics.newQuad(482,  321, 320, 320, UISet:getDimensions()),
   butDirect = love.graphics.newQuad(803,  0, 180, 320, UISet:getDimensions()),
 }
 
@@ -180,7 +181,6 @@ fon1 =love.graphics.newImage("assets/fons/fon1.png")
 fon2 =love.graphics.newImage("assets/fons/fon2.png") 
 fon3 =love.graphics.newImage("assets/fons/fon3.png") 
 
-
 screenWidth = love.graphics.getWidth()
 screenHeight = love.graphics.getHeight()
 --k  = screenWidth/1920*2.5
@@ -227,6 +227,22 @@ mouse = {
   x=0,
   y=0
 }
+-------------------------------------------------------------------
+allSkills = {
+}
+--######################COMMON###########################################
+allSkills[1] = skillQuads.hp
+allSkills[2] = skillQuads.energy
+allSkills[3] = skillQuads.meleeDef
+allSkills[4] = skillQuads.rangedDef
+allSkills[5] = skillQuads.atack
+
+-------------------------------------------------------------------
+
+
+
+
+
 playerAbility = {
     mass =200,
     radiusCollect = 100,
@@ -243,45 +259,22 @@ playerAbility = {
 playerSkills = {}
 playerSkills[1] ={
 img =skillQuads.hp,
-    x = screenWidth/2.2,
-    y = screenHeight/2,
-    ox = 160,
-    oy = 160
+lvl = 0,
 }
 playerSkills[2] ={
 img =skillQuads.energy,
-    x = screenWidth/2.2,
-    y = screenHeight/2,
-    ox = 160,
-    oy = 160
 }
 playerSkills[3] ={
 img =skillQuads.atack,
-    x = screenWidth/2.2,
-    y = screenHeight/2,
-    ox = 160,
-    oy = 160
 }
 playerSkills[4] ={
 img =skillQuads.meleeDef,
-    x = screenWidth/2.2,
-    y = screenHeight/2,
-    ox = 160,
-    oy = 160
 }
 playerSkills[5] ={
 img =skillQuads.rangedDef,
-    x = screenWidth/2.2,
-    y = screenHeight/2,
-    ox = 160,
-    oy = 160
 }
 playerSkills[6] ={
 img =skillQuads.vampir,
-    x = screenWidth/2.2,
-    y = screenHeight/2,
-    ox = 160,
-    oy = 160
 }
 
 -------------CONST AND FLAGS------
@@ -303,6 +296,7 @@ function love.load()
     math.randomseed(os.time()) 
     love.window.setFullscreen(true,"desktop")
     font = love.graphics.newFont("fonts/1.ttf",60)
+    font:setFilter("nearest")
     love.graphics.setFont(font)  
     kek= love.graphics.newCanvas(screenWidth ,screenHeight)
     kek2= love.graphics.newCanvas(screenWidth ,screenHeight)

@@ -1,13 +1,25 @@
 local UI = {}
 
 
-function bodyButton(x,y,flag)
-    if (flag) then 
-        UIBatch:setColor(1,1,1,0.6)
-        UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
-        UIBatch:setColor(1,1,1,1) 
+function bodyButton(x,y,flag,dopLight)
+    if (dopLight) then 
+        if (flag) then 
+            UIBatch:setColor(1-dopLight,1-dopLight,1-dopLight,0.6-dopLight)
+            UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
+            UIBatch:setColor(1,1,1,1) 
+        else
+            UIBatch:setColor(1-dopLight,1-dopLight,1-dopLight,1-dopLight)
+            UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
+            UIBatch:setColor(1,1,1,1) 
+        end
     else
-        UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
+        if (flag) then 
+            UIBatch:setColor(1,1,1,0.6)
+            UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
+            UIBatch:setColor(1,1,1,1) 
+        else
+            UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k/4,k2/4,500,120)
+        end
     end
 end
 
@@ -45,7 +57,21 @@ function textButton(name,x,y,flag,scale)
         love.graphics.print(name, x-fontHeight/1.9*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
     end
 end
-
+function acceptBut(x,y,scale,flag) 
+    UIBatch:add(UIQuads.yes,x,y,-math.pi/2,k*scale,k2*scale,120,120)      
+end
+function rewardSlot(img,x,y,scale,money)
+    if (img) then 
+        UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
+        skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+    else
+        if ( money == 0) then 
+            UIBatch:add(UIQuads.tableSkillDestr,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)
+        else
+            UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)   
+        end
+    end    
+end
 function slot(img,x,y,ox,oy,scale,light)
     if ( light == nil ) then
         light = 1 
@@ -56,7 +82,6 @@ function slot(img,x,y,ox,oy,scale,light)
         UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
         skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,ox,oy)
     else
-      
         UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
     end
     UIBatch:setColor(1,1,1,1)
