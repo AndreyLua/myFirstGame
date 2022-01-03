@@ -29,10 +29,11 @@ enemyСleanerTable = {
     {}, -- traces
     0,--angleWing
     0,--angleWingFlag
+    0,--numberTarget
 }
 
 enemyСleanerClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag,numberTarget)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -61,6 +62,7 @@ enemyСleanerClass = Class{
         self.traces = traces
         self.angleWing = angleWing
         self.angleWingFlag = angleWingFlag
+        self.numberTarget = numberTarget
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyСleanerTable[1]*k, enemyСleanerTable[2]*k)
@@ -93,7 +95,7 @@ enemyСleanerClass = Class{
         end
     end;
     atackStart = function(self)
-        if (self.dash and self.dash==self.dashTimer and self.atack and self.atack==self.atackTimer and self.invTimer ==           self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <=100*k ) then
+        if (obj[self.numberTarget] and self.dash and self.dash==self.dashTimer and self.atack and self.atack==self.atackTimer and self.invTimer ==           self.timer and (math.sqrt(math.pow((obj[self.numberTarget].x-self.x),2)+math.pow((obj[self.numberTarget].y-self.y),2))) <=100*k ) then
            self.atack = self.atackTimer-0.001
            self.dash = self.dashTimer-0.001
         end
@@ -205,7 +207,20 @@ enemyСleanerClass = Class{
         end
     end;
     moveNormal = function(self,dt)
-        local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+        local anglePlayerEn = math.atan2(screenWidth/2-self.x,screenHeight/2-self.y)
+        if ( self.numberTarget == 0 ) then
+            local randomNumberObj = math.random(0,#obj)
+            if ( obj[randomNumberObj]) then 
+                self.numberTarget = randomNumberObj 
+                anglePlayerEn = math.atan2(obj[self.numberTarget].x-self.x,obj[self.numberTarget].y-self.y)
+            end
+        else
+            if ( obj[self.numberTarget]) then 
+                anglePlayerEn = math.atan2(obj[self.numberTarget].x-self.x,obj[self.numberTarget].y-self.y)
+            else
+                self.numberTarget = 0 
+            end
+        end
         if (self.dash and self.dash==self.dashTimer) then
             self.angleBodyTr(self,anglePlayerEn,dt)
             self.angleMouthTr(self,dt)
@@ -233,8 +248,18 @@ enemyСleanerClass = Class{
                 self.ay = 0 
             end
         else
-            self.x= self.x+math.sin(self.angleBody)*dt*400*k -- движение противника ускорение
-            self.y= self.y+math.cos(self.angleBody)*dt*400*k2
+            self.angleBodyTr(self,anglePlayerEn,dt)
+            self.angleMouthTr(self,dt)
+            self.angleWingTr(self,dt)
+            self.ax = 0
+            self.ay = 0 -- движение противника атака затягивание 
+            self.x= self.x+math.sin(self.y/20)*dt*30
+            self.y= self.y+math.cos(self.x/20)*dt*30
+            if ( obj[self.numberTarget] ) then 
+                local angleObj = math.atan2(obj[self.numberTarget].x-self.x,obj[self.numberTarget].y-self.y)
+                obj[self.numberTarget].ax =obj[self.numberTarget].ax -math.sin(angleObj)*dt*300*k
+                obj[self.numberTarget].ay =obj[self.numberTarget].ay -math.cos(angleObj)*dt*300*k
+            end
         end
     end;
     moveWounded =  function(self,dt)
@@ -253,19 +278,16 @@ enemyСleanerClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-         
             enBatch:setColor(1,0.5,0.5,1)
             enBatch:add(enQuads.bodyСleaner,self.x,self.y,-self.angleBody+math.pi,k/10,k2/10,119, 182)
-            enBatch:add(enQuads.wing1Сleaner,self.x,self.y,-self.angleBody-math.pi+math.pi/10-self.angleWing,k/8,k2/8,196+50, 21)
-            enBatch:add(enQuads.wing2Сleaner,self.x,self.y,-self.angleBody-math.pi-math.pi/10+self.angleWing,k/8,k2/8,21-50, 21)
+            enBatch:add(enQuads.wing1Сleaner,self.x,self.y,-self.angleBody-math.pi+math.pi/10-self.angleWing,k/10,k2/10,246, 21)
+            enBatch:add(enQuads.wing2Сleaner,self.x,self.y,-self.angleBody-math.pi-math.pi/10+self.angleWing,k/10,k2/10,-29, 21)
          --   self.body:draw('fill')
         else
-         
             enBatch:setColor(1,1,1,1)
             enBatch:add(enQuads.bodyСleaner,self.x,self.y,-self.angleBody+math.pi,k/10,k2/10,119, 182)
-            enBatch:add(enQuads.wing1Сleaner,self.x,self.y,-self.angleBody-math.pi+math.pi/10-self.angleWing,k/8,k2/8,196+50, 21)
-            enBatch:add(enQuads.wing2Сleaner,self.x,self.y,-self.angleBody-math.pi-math.pi/10+self.angleWing,k/8,k2/8,21-50, 21)
-      
+            enBatch:add(enQuads.wing1Сleaner,self.x,self.y,-self.angleBody-math.pi+math.pi/10-self.angleWing,k/10,k2/10,246, 21)
+            enBatch:add(enQuads.wing2Сleaner,self.x,self.y,-self.angleBody-math.pi-math.pi/10+self.angleWing,k/10,k2/10,-29, 21)
            -- self.body:draw('fill')
         end
     end;
