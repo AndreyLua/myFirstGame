@@ -108,7 +108,7 @@ enemyСleanerClass = Class{
             self.atack  = self.atackTimer
         end
         if ( self.dash <  self.dashTimer) then
-            self.dash  = self.dash  - 30*dt
+            self.dash  = self.dash  - 3*dt
         end
         if ( self.dash < 0) then
             self.dash  = self.dashTimer
@@ -196,6 +196,17 @@ enemyСleanerClass = Class{
         enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
         enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
         enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
+        if not(self.dash and self.dash==self.dashTimer) then
+            enCollWithobjInRegularSCleaner(IenRegulS,i,dt)
+            enCollWithobjInRegularSCleaner(IenRegulS-1,i,dt)
+            enCollWithobjInRegularSCleaner(IenRegulS+1,i,dt)
+            enCollWithobjInRegularSCleaner(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularSCleaner(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+            enCollWithobjInRegularSCleaner(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularSCleaner(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
+            enCollWithobjInRegularSCleaner(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+            enCollWithobjInRegularSCleaner(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
+        end
     end;
     move =  function(self,dt)
         self.body:moveTo(self.x, self.y)
@@ -252,14 +263,14 @@ enemyСleanerClass = Class{
             self.angleMouthTr(self,dt)
             self.angleWingTr(self,dt)
             self.ax = 0
-            self.ay = 0 -- движение противника атака затягивание 
-            self.x= self.x+math.sin(self.y/20)*dt*30
-            self.y= self.y+math.cos(self.x/20)*dt*30
-            if ( obj[self.numberTarget] ) then 
-                local angleObj = math.atan2(obj[self.numberTarget].x-self.x,obj[self.numberTarget].y-self.y)
-                obj[self.numberTarget].ax =obj[self.numberTarget].ax -math.sin(angleObj)*dt*300*k
-                obj[self.numberTarget].ay =obj[self.numberTarget].ay -math.cos(angleObj)*dt*300*k
-            end
+            self.ay = 0 
+                -- движение противника атака затягивание 
+          --  if ( obj[self.numberTarget] ) then 
+         --       local angleObj = math.atan2(obj[self.numberTarget].x-self.x,obj[self.numberTarget].y-self.y)
+           --     obj[self.numberTarget].ax =obj[self.numberTarget].ax -math.sin(angleObj)*dt*300*k
+          --      obj[self.numberTarget].ay =obj[self.numberTarget].ay -math.cos(angleObj)*dt*300*k
+           --     obj[self.numberTarget].health = obj[self.numberTarget].health - 1*dt
+           -- end
         end
     end;
     moveWounded =  function(self,dt)

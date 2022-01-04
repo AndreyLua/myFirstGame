@@ -230,7 +230,6 @@ enemyBombClass = Class{
             enCollWithobjInRegularSBomb(IenRegulS+2*math.floor((screenWidth/(120*k))+1)+1,i,dt)
             enCollWithobjInRegularSBomb(IenRegulS+2*math.floor((screenWidth/(120*k))+1)+2,i,dt)
             
-            
         end
         if ( self.flagBomb == 1) then
             self.flagBomb =0 

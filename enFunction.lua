@@ -98,7 +98,6 @@ function enCollWithobjInRegularS(index,j,dt)
                             en[j].targetY =(math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))
                         end
                     end
-                    
                     if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+enScale*k),2)) then
                         local collisFlag, intVectorX ,intVectorY = en[j].body:collidesWith(obj[kek[i]].body)
                         if ( collisFlag) then 
@@ -109,11 +108,14 @@ function enCollWithobjInRegularS(index,j,dt)
                             obj[kek[i]].ay= obj[kek[i]].ay  +(en[j].ay*k*dt)*5*sumMas/obj[kek[i]].scale
                             en[j].ax  = en[j].ax*0.8
                             en[j].ay = en[j].ay*0.8
+                            
                             if ((deepX*deepX+deepY*deepY >=math.pow(0.05*enScale*k,2))) then
                                 obj[kek[i]].x  = obj[kek[i]].x - deepX*dt*10
                                 obj[kek[i]].y = obj[kek[i]].y - deepY*dt*10
-                                en[j].x  = en[j].x + deepX*dt*10
-                                en[j].y = en[j].y +  deepY*dt*10
+                                if not( en[j].tip == 5 and en[j].dash and en[j].dash~=en[j].dashTimer)then 
+                                    en[j].x  = en[j].x + deepX*dt*10
+                                    en[j].y = en[j].y +  deepY*dt*10
+                                end
                             end
                             if ( en[j] and en[j].tip == 1 and en[j].target =="obj" and en[j].atack == en[j].atackTimer ) then
                                 en[j].targetDestroy = en[j].targetDestroyTimer - 0.001
@@ -144,6 +146,31 @@ function enCollWithobjInRegularSBomb(index,j,dt)
                         obj[kek[i]].ax= obj[kek[i]].ax -800000*dt*k*math.sin(angleD)/obj[kek[i]].scale
                         obj[kek[i]].ay= obj[kek[i]].ay -800000*dt*k*math.cos(angleD)/obj[kek[i]].scale
                         obj[kek[i]].health = obj[kek[i]].health - 10000
+                    end
+                end
+            end
+        end
+    end
+end
+
+function enCollWithobjInRegularSCleaner(index,j,dt)
+    if ( objRegulS[index]) then 
+        local kek = objRegulS[index]
+        local enScale = 0
+        if (kek) then
+            if ( en[j]) then
+                enScale = math.max(en[j].w,en[j].h)/2
+            end
+            for i = #kek, 1, -1 do
+                if (kek[i] and obj[kek[i]] and en[j]) then
+                    local objScale =200*k
+                    if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+enScale*k),2)) then
+                        local angleD = math.atan2(en[j].x-obj[kek[i]].x,en[j].y-obj[kek[i]].y)
+                        if ( math.abs(angleD) -  math.abs(en[j].angleBody) < math.pi/4) then
+                            obj[kek[i]].ax=80000*dt*k*math.sin(angleD)/obj[kek[i]].scale
+                            obj[kek[i]].ay=80000*dt*k*math.cos(angleD)/obj[kek[i]].scale
+                            obj[kek[i]].health = obj[kek[i]].health - 1*dt
+                        end
                     end
                 end
             end
