@@ -92,12 +92,15 @@ function enCollWithobjInRegularS(index,j,dt)
             for i = #kek, 1, -1 do
                 if (kek[i] and obj[kek[i]] and en[j]) then
                     local objScale = obj[kek[i]].collScale/2
-                    if ( en[j] and en[j].tip == 1 and en[j].targetDestroy ==en[j].targetDestroyTimer ) then
-                        if ( en[j].targetY > (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2)) ) then
+                   
+                    ---------------------------------------------
+                    if ( (en[j] and en[j].tip == 1 and en[j].targetDestroy ==en[j].targetDestroyTimer) or ( en[j] and en[j].tip == 5)  ) then
+                        if ( en[j].targetY > (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2)) and obj[kek[i]].f ) then
                             en[j].targetX =kek[i]
                             en[j].targetY =(math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))
                         end
                     end
+                    ---------------------------------------------
                     if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+enScale*k),2)) then
                         local collisFlag, intVectorX ,intVectorY = en[j].body:collidesWith(obj[kek[i]].body)
                         if ( collisFlag) then 
@@ -121,6 +124,9 @@ function enCollWithobjInRegularS(index,j,dt)
                                 en[j].targetDestroy = en[j].targetDestroyTimer - 0.001
                                 obj[kek[i]].health = obj[kek[i]].health - 2
                                 en[j].atack = en[j].atackTimer-0.001
+                            end
+                            if ( en[j] and en[j].tip == 5 and en[j].dash ~= en[j].dashTimer) then
+                                obj[kek[i]].health =  -1 
                             end
                         end 
                     end
@@ -163,13 +169,30 @@ function enCollWithobjInRegularSCleaner(index,j,dt)
             end
             for i = #kek, 1, -1 do
                 if (kek[i] and obj[kek[i]] and en[j]) then
-                    local objScale =200*k
+                    local objScale =100*k
                     if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+enScale*k),2)) then
-                        local angleD = math.atan2(en[j].x-obj[kek[i]].x,en[j].y-obj[kek[i]].y)
-                        if ( math.abs(angleD) -  math.abs(en[j].angleBody) < math.pi/4) then
-                            obj[kek[i]].ax=80000*dt*k*math.sin(angleD)/obj[kek[i]].scale
-                            obj[kek[i]].ay=80000*dt*k*math.cos(angleD)/obj[kek[i]].scale
-                            obj[kek[i]].health = obj[kek[i]].health - 1*dt
+                        local angleD = math.atan2(obj[kek[i]].x-en[j].x,obj[kek[i]].y-en[j].y)
+                        local flagObjZone = false
+                        if (angleD/math.abs(angleD)==en[j].angleBody/math.abs(en[j].angleBody))then
+                            if (math.abs(math.abs(angleD) - math.abs(en[j].angleBody)) <  math.pi/4) then 
+                                flagObjZone = true
+                            end
+                        else
+                            if (math.abs(angleD)+math.abs(en[j].angleBody)> 2*math.pi - math.abs(angleD)-math.abs(en[j].angleBody)) then
+                                if ((2*math.pi - math.abs(angleD)-math.abs(en[j].angleBody)) <  math.pi/4) then 
+                                    flagObjZone = true
+                                end
+                            else 
+                                if ((math.abs(angleD)+math.abs(en[j].angleBody)) <  math.pi/4) then 
+                                    flagObjZone = true
+                                end
+                            end
+                        end
+          
+                        if (flagObjZone) then 
+                            obj[kek[i]].ax=-7000*dt*k*math.sin(angleD)
+                            obj[kek[i]].ay=-7000*dt*k*math.cos(angleD)
+                            en[j].dash  = en[j].dashTimer/100
                         end
                     end
                 end

@@ -117,7 +117,7 @@ end
 
 function game:update(dt)
 --flaginv =true
---en = {}
+en = {en[1]}
 --explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
@@ -222,7 +222,7 @@ if (#obj < 200) then
         for i=1,math.random(1,2) do
             local Geo  =math.random(1,4)
             local Tip =math.random(1,4)
-            allSpawn(en,Geo,Tip)
+            allSpawn(en,Geo,5)
            -- wavesSpawnGroup(4)
         end
         Timer.clear() 
