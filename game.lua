@@ -1,6 +1,7 @@
 local game = {} 
 
 function game:init()
+numberCleaner = 0 
 -------------BODY------
 ----------------------------------
 borderWidth =screenWidth/2
@@ -116,8 +117,8 @@ end
 
 
 function game:update(dt)
+  en  = {en[1]}
 --flaginv =true
-en = {en[1]}
 --explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
@@ -205,6 +206,33 @@ for i = #res, 1, -1 do
         if (res[i]) then  
             local indexResInRegS = res[i]:IndexInRegulS(80)
             res[i]:collWithEn(indexResInRegS,i,dt)
+            if (numberCleaner > 0) then 
+                if (res[i]) then  
+                    res[i]:collWithEn(indexResInRegS-1,i,dt)
+                end
+                if (res[i]) then
+                    res[i]:collWithEn(indexResInRegS+1,i,dt)
+                end
+                if (res[i]) then
+                    res[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1),i,dt)
+                end
+                if (res[i]) then
+                    res[i]:collWithEn(indexResInRegS+math.floor((screenWidth/(80*k))+1),i,dt)
+                end
+                if (res[i]) then
+                    res[i]:collWithEn(indexResInRegS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
+                end
+                if (res[i]) then
+                    res[i]:collWithEn(indexResInRegS+math.floor((screenWidth/(80*k))+1)-1,i,dt)
+                end
+                if (res[i]) then
+                    res[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1)+1,i,dt)
+                end
+                if (res[i]) then
+                    res[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1)-1,i,dt)
+                end
+            end
+           -- res[i]:collWithEn(indexResInRegS,i,dt)
         end
     end
 end 
@@ -215,13 +243,12 @@ if (#obj < 200) then
     Timer.every(5, function()
         for i=1,math.random(1,1) do
             local Geo  =math.random(1,4)
-            local Tip =1
-            allSpawn(obj,Geo,Tip)
+            allSpawn(obj,Geo)
         end
   
         for i=1,math.random(1,2) do
             local Geo  =math.random(1,4)
-            local Tip =math.random(1,4)
+            local Tip =math.random(1,5)
             allSpawn(en,Geo,5)
            -- wavesSpawnGroup(4)
         end
@@ -277,11 +304,11 @@ function game:movement(dt)
     
     if love.keyboard.isDown('e') then
         local Geo  =math.random(1,4)
-        allSpawn(obj,Geo,Tip)
+        allSpawn(obj,Geo)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,5)
+        allSpawn(en,Geo,6)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -485,7 +512,8 @@ function allSpawn(mas,Geo,Tip)
             e:newBody(e.x, e.y)
             table.insert(mas,e)
         end
-        if ( Tip ==5) then 
+        if ( Tip ==5 and numberCleaner <3 ) then 
+            numberCleaner = numberCleaner+1
             local e = enemyСleaner:clone()
             e.x = x 
             e.y = y 

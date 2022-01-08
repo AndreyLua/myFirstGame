@@ -169,8 +169,8 @@ function enCollWithobjInRegularSCleaner(index,j,dt)
             end
             for i = #kek, 1, -1 do
                 if (kek[i] and obj[kek[i]] and en[j]) then
-                    local objScale =100*k
-                    if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2 and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+enScale*k),2)) then
+                    local objScale =obj[kek[i]].collScale/2
+                    if (math.abs(obj[kek[i]].x - en[j].x)<enScale*k+objScale*k+200*k and math.abs(obj[kek[i]].y - en[j].y)<objScale*k2+enScale*k2+200*k and (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2))<=math.pow((objScale*k+enScale*k+200*k),2)) then
                         local angleD = math.atan2(obj[kek[i]].x-en[j].x,obj[kek[i]].y-en[j].y)
                         local flagObjZone = false
                         if (angleD/math.abs(angleD)==en[j].angleBody/math.abs(en[j].angleBody))then

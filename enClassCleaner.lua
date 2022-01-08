@@ -192,38 +192,16 @@ enemyСleanerClass = Class{
     collWithObj = function( self,IenRegulS,i,dt) 
         self.targetY =1000000000000
         self.targetX = -1
-         enCollWithobjInRegularS(IenRegulS,i,dt)
-            enCollWithobjInRegularS(IenRegulS-1,i,dt)
-            enCollWithobjInRegularS(IenRegulS+1,i,dt)
-            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
-            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
-            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
-            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
-            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
-            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
-            ---
-            enCollWithobjInRegularS(IenRegulS-2*math.floor((screenWidth/(120*k))+1)-2,i,dt)
-            enCollWithobjInRegularS(IenRegulS-2*math.floor((screenWidth/(120*k))+1)-1,i,dt)
-            enCollWithobjInRegularS(IenRegulS-2*math.floor((screenWidth/(120*k))+1),i,dt)
-            enCollWithobjInRegularS(IenRegulS-2*math.floor((screenWidth/(120*k))+1)+1,i,dt)
-            enCollWithobjInRegularS(IenRegulS-2*math.floor((screenWidth/(120*k))+1)+2,i,dt)
-            
-            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-2,i,dt)
-            enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+2,i,dt)
-            
-            enCollWithobjInRegularS(IenRegulS-2,i,dt)
-            enCollWithobjInRegularS(IenRegulS+2,i,dt)
-            
-            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-2,i,dt)
-            enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+2,i,dt)
-            
-            
-            enCollWithobjInRegularS(IenRegulS+2*math.floor((screenWidth/(120*k))+1)-2,i,dt)
-            enCollWithobjInRegularS(IenRegulS+2*math.floor((screenWidth/(120*k))+1)-1,i,dt)
-            enCollWithobjInRegularS(IenRegulS+2*math.floor((screenWidth/(120*k))+1),i,dt)
-            enCollWithobjInRegularS(IenRegulS+2*math.floor((screenWidth/(120*k))+1)+1,i,dt)
-            enCollWithobjInRegularS(IenRegulS+2*math.floor((screenWidth/(120*k))+1)+2,i,dt)
-      
+        enCollWithobjInRegularS(IenRegulS,i,dt)
+        enCollWithobjInRegularS(IenRegulS-1,i,dt)
+        enCollWithobjInRegularS(IenRegulS+1,i,dt)
+        enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1),i,dt)
+        enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1),i,dt)
+        enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)+1,i,dt)
+        enCollWithobjInRegularS(IenRegulS+math.floor((screenWidth/(120*k))+1)-1,i,dt)
+        enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)+1,i,dt)
+        enCollWithobjInRegularS(IenRegulS-math.floor((screenWidth/(120*k))+1)-1,i,dt)
+
         if not(self.dash and self.dash==self.dashTimer) then
               enCollWithobjInRegularSCleaner(IenRegulS,i,dt)
               enCollWithobjInRegularSCleaner(IenRegulS-1,i,dt)
@@ -237,6 +215,7 @@ enemyСleanerClass = Class{
         end
     end;
     move =  function(self,dt)
+        self.border(self,dt)
         self.body:moveTo(self.x, self.y)
         self.body:setRotation(-self.angleBody) 
         if (self.invTimer and  self.invTimer == self.timer) then
@@ -246,7 +225,7 @@ enemyСleanerClass = Class{
         end
     end;
     moveNormal = function(self,dt)
-        local anglePlayerEn = math.atan2(screenWidth/2-self.x,screenHeight/2-self.y)
+        local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
         if ( self.targetX > 0 and obj[self.targetX] ) then
             anglePlayerEn = math.atan2(obj[self.targetX].x-self.x,obj[self.targetX].y-self.y)
             
@@ -256,8 +235,8 @@ enemyСleanerClass = Class{
             self.angleWingTr(self,dt)
             self.ax=self.ax+80*k*math.sin(self.angleBody)*dt
             self.ay=self.ay+80*k2*math.cos(self.angleBody)*dt
-            self.x= self.x+self.ax*dt*7
-            self.y= self.y+self.ay*dt*7 --- нормальное движение
+            self.x= self.x+self.ax*dt*5
+            self.y= self.y+self.ay*dt*5 --- нормальное движение
             
           
             if (  self.ax >22*k) then
@@ -279,8 +258,8 @@ enemyСleanerClass = Class{
                 self.angleWingTr(self,dt)
                 self.ax = self.ax/1.5
                 self.ay = self.ay/1.5
-                self.x= self.x+self.ax*dt*7
-                self.y= self.y+self.ay*dt*7 --- нормальное движение
+                self.x= self.x+self.ax*dt*5
+                self.y= self.y+self.ay*dt*5 --- нормальное движение
             
           end
         else   
@@ -372,7 +351,9 @@ enemyСleanerClass = Class{
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
+            numberCleaner = numberCleaner-1
             spawnResKillEn(i)
+          
             local enDrawDie = {
               timer = 4, 
               quad = enQuads.bodyСleaner,
@@ -382,16 +363,62 @@ enemyСleanerClass = Class{
               ay = self.ay,
               r = -self.angleBody+math.pi,
               ra = math.random(-3,-1),
-              koff = k/8,
-              koff2 = k2/8,
-              ox = 125,
-              oy = 95.5
+              koff = k/10,
+              koff2 = k2/10,
+              ox =119, 
+              oy = 182
             }
             table.insert(enAfterDieTex,enDrawDie)
+            local enDrawDie2 = {
+                timer = 4, 
+                quad = enQuads.wing1Сleaner,
+                x = self.x,
+                y = self.y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi+math.pi/10-self.angleWing,
+                ra = math.random(-2,-1),
+                koff = k/10,
+                koff2 = k2/10,
+                ox = 246,
+                oy = 21
+            }
+            table.insert(enAfterDieTex,enDrawDie2)
+            local enDrawDie3 = {
+                timer = 4, 
+                quad = enQuads.wing2Сleaner,
+                x = self.x,
+                y = self.y,
+                ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
+                ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
+                r = -self.angleBody-math.pi-math.pi/10-self.angleWing,
+                ra = math.random(1,2),
+                koff = k/10,
+                koff2 = k2/10,
+                ox = 29,
+                oy = 21
+            }
+            table.insert(enAfterDieTex,enDrawDie3)
+            
             table.remove(en,i)
         end  
     end;
+    border = function(self,dt)
+        if ( self.x > borderWidth*2-20*k or self.x < -borderWidth+20*k or self.y < -borderHeight+20*k or  self.y > borderHeight*2-20*k ) then
+            local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+            self.ax=self.ax+80*k*math.sin(self.angleBody)*dt
+            self.ay=self.ay+80*k2*math.cos(self.angleBody)*dt
+            self.dash=self.dashTimer
+            self.atack  = self.atackTimer - 0.0001
+        end
+    end;
+    
 }
+
+
+
+
+
 enemyСleaner = enemyСleanerClass(unpack(enemyСleanerTable))
 
 return  enClassСleaner

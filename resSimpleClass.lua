@@ -83,7 +83,7 @@ resClass = Class {
             if (kek) then
                 for i = #kek, 1, -1 do
                     if (kek[i] and en[kek[i]] and res[j] and ((en[kek[i]].tip == 1) or (en[kek[i]].tip == 5) )) then
-                        if (en[kek[i]].dash~=en[kek[i]].dashTimer and  en[kek[i]].tip == 5 and math.abs(en[kek[i]].x - res[j].x)<300*k and math.abs(en[kek[i]].y - res[j].y)<300*k2 and  (math.pow((en[kek[i]].x - res[j].x),2) + math.pow((en[kek[i]].y - res[j].y),2))<=math.pow((300*k),2) ) then 
+                        if (en[kek[i]].dash~=en[kek[i]].dashTimer and  en[kek[i]].tip == 5 and math.abs(en[kek[i]].x - res[j].x)<200*k and math.abs(en[kek[i]].y - res[j].y)<200*k2 and  (math.pow((en[kek[i]].x - res[j].x),2) + math.pow((en[kek[i]].y - res[j].y),2))<=math.pow((200*k),2) ) then 
                             local angleD = math.atan2(res[j].x-en[kek[i]].x,res[j].y-en[kek[i]].y)
                             local flagresZone = false
                             if (angleD/math.abs(angleD)==en[kek[i]].angleBody/math.abs(en[kek[i]].angleBody))then
@@ -205,25 +205,9 @@ resClass = Class {
     end;
     
     border = function(self,i)
-        if ( self.x > screenWidth*2) then 
-            self.ax = -self.ax
-            self.x =screenWidth*2 - 0.1*k
-        end
-        if ( self.x <  -screenWidth) then 
-            self.ax = -self.ax
-            self.x = -screenWidth + 0.1*k
-        end
-        if ( self.y < -screenHeight) then 
-            self.ay = -self.ay
-            self.y = -screenHeight+0.1*k2
-        end
-        if ( self.y > screenHeight*2) then 
-            self.ay = -self.ay
-            self.y = screenHeight*2 - 0.1*k2
-        end
-        if ( self.x > screenWidth*2 or self.x < -screenWidth or self.y < -screenHeight or  self.y > screenHeight*2 ) then
-            table.remove(obj,i)
-        end    
+        if ( self.x > borderWidth*2+4*k or self.x < -borderWidth-4*k or self.y < -borderHeight-4*k or  self.y > borderHeight*2+4*k ) then
+            table.remove(res,i)
+        end 
     end;
 }
 
