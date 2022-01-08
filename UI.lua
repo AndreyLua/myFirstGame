@@ -23,22 +23,42 @@ function bodyButton(x,y,flag,dopLight)
     end
 end
 
-function bodyButtonDirect(x,y,flag,direct)
-    if ( direct == 'left') then
-        if (flag) then 
-            UIBatch:setColor(1,1,1,0.6)
-            UIBatch:add(UIQuads.butDirect,x,y,-math.pi/4-math.pi/2,k/3,k2/3,90,160)
-            UIBatch:setColor(1,1,1,1) 
+function bodyButtonDirect(x,y,flag,direct,angle)
+    if ( angle == nil) then 
+        if ( direct == 'left') then
+            if (flag) then 
+                UIBatch:setColor(1,1,1,0.6)
+                UIBatch:add(UIQuads.butDirect,x,y,-math.pi/4-math.pi/2,k/3,k2/3,90,160)
+                UIBatch:setColor(1,1,1,1) 
+            else
+                UIBatch:add(UIQuads.butDirect,x,y,-math.pi/4-math.pi/2,k/3,k2/3,90,160)
+            end
         else
-            UIBatch:add(UIQuads.butDirect,x,y,-math.pi/4-math.pi/2,k/3,k2/3,90,160)
+            if (flag) then 
+                UIBatch:setColor(1,1,1,0.6)
+                UIBatch:add(UIQuads.butDirect,x,y,-math.pi/4-math.pi,k/3,k2/3,90,160)
+                UIBatch:setColor(1,1,1,1) 
+            else
+                UIBatch:add(UIQuads.butDirect,x,y,-math.pi/4-math.pi,k/3,k2/3,90,160)
+            end
         end
     else
-        if (flag) then 
-            UIBatch:setColor(1,1,1,0.6)
-            UIBatch:add(UIQuads.butDirect,x,y,-math.pi/4-math.pi,k/3,k2/3,90,160)
-            UIBatch:setColor(1,1,1,1) 
+        if ( direct == 'left') then
+            if (flag) then 
+                UIBatch:setColor(1,1,1,0.6)
+                UIBatch:add(UIQuads.butDirect,x,y,angle,k/3,k2/3,90,160)
+                UIBatch:setColor(1,1,1,1) 
+            else
+                UIBatch:add(UIQuads.butDirect,x,y,angle,k/3,k2/3,90,160)
+            end
         else
-            UIBatch:add(UIQuads.butDirect,x,y,-math.pi/4-math.pi,k/3,k2/3,90,160)
+            if (flag) then 
+                UIBatch:setColor(1,1,1,0.6)
+                UIBatch:add(UIQuads.butDirect,x,y,angle,k/3,k2/3,90,160)
+                UIBatch:setColor(1,1,1,1) 
+            else
+                UIBatch:add(UIQuads.butDirect,x,y,angle,k/3,k2/3,90,160)
+            end
         end
     end
 end

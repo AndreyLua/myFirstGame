@@ -83,19 +83,20 @@ function playerDraw(dt)
     local xDraw = screenWidth/2+20*k+(player.x-camera.x)
     local yDraw = screenHeight/2+20*k2+(player.y-camera.y)  
     playerSledDraw(screenWidth/2+20*k,screenHeight/2+20*k2,dt)
-    playerBatch:add(playerQuads.body,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7, 464/2, 384/2)
+    playerBatch:add(playerQuads[playerAbility.tip].body,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7, playerDrawPar[playerAbility.tip].bodyW/2, playerDrawPar[playerAbility.tip].bodyH/2)
     playerBatch:setColor( 1, 1,1,0.8 )
-    playerBatch:add(playerQuads.wings,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7,448/2, 256/2-40)
+    playerBatch:add(playerQuads[playerAbility.tip].wings,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7,playerDrawPar[playerAbility.tip].wingsW/2, playerDrawPar[playerAbility.tip].wingsH/2-playerDrawPar[playerAbility.tip].wingsX)
     local r ,g ,b = gradient(dt)
     playerBatch:setColor(r,g,b)
-    playerBatch:add(playerQuads.cristal,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7,80/2, 136/2-20)
+    playerBatch:add(playerQuads[playerAbility.tip].cristal,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7,playerDrawPar[playerAbility.tip].cristalW/2, playerDrawPar[playerAbility.tip].cristalH/2-playerDrawPar[playerAbility.tip].cristalX)
     playerBatch:setColor(1,1,1,1)
-    local clow1X =xDraw +26*k2*math.sin(controler.angle+0.17219081452294)
-    local clow1Y =yDraw +26*k2*math.cos(controler.angle+0.17219081452294)
-    local clow2X =xDraw +26*k2*math.sin(controler.angle-0.17219081452294)
-    local clow2Y =yDraw+26*k2*math.cos(controler.angle-0.17219081452294)
-    playerBatch:add(playerQuads.clow1,clow1X,clow1Y,-controler.angle+math.pi+player.clowR,k/7,k2/7,176, 80)
-    playerBatch:add(playerQuads.clow2,clow2X,clow2Y,-controler.angle+math.pi-player.clowR,k/7,k2/7,16, 80)
+    local clow1X =xDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle+playerDrawPar[playerAbility.tip].clowR)
+    local clow1Y =yDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.cos(controler.angle+playerDrawPar[playerAbility.tip].clowR)
+    local clow2X =xDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle-playerDrawPar[playerAbility.tip].clowR)
+    local clow2Y =yDraw+playerDrawPar[playerAbility.tip].clowX*k2*math.cos(controler.angle-playerDrawPar[playerAbility.tip].clowR)
+    
+    playerBatch:add(playerQuads[playerAbility.tip].clow1,clow1X,clow1Y,-controler.angle+math.pi+player.clowR,k/7,k2/7,playerDrawPar[playerAbility.tip].clowW1, playerDrawPar[playerAbility.tip].clowH)
+    playerBatch:add(playerQuads[playerAbility.tip].clow2,clow2X,clow2Y,-controler.angle+math.pi-player.clowR,k/7,k2/7,playerDrawPar[playerAbility.tip].clowW2, playerDrawPar[playerAbility.tip].clowH)
 end
 
 function playerSledDraw(x,y,dt)
@@ -116,11 +117,10 @@ function playerSledDraw(x,y,dt)
     for i = 1,#playerSledi do
         local sled = playerSledi[i]
         local radius =sled.r*i
-        local tailW,tailH = playerQuads.tail:getTextureDimensions()
         sled.x = sled.x+200*sled.ax*dt
         sled.y = sled.y+200*sled.ay*dt
         playerBatch:setColor( 0.1*i, 0.1*i, 0.1*i )
-        playerBatch:add(playerQuads.tail,sled.x+(player.x-camera.x),sled.y+(player.y-camera.y),sled.angle,k/7*radius,k2/7*radius,48,60)
+        playerBatch:add(playerQuads[playerAbility.tip].tail,sled.x+(player.x-camera.x),sled.y+(player.y-camera.y),sled.angle,k/7*radius,k2/7*radius,playerDrawPar[playerAbility.tip].tailW/2,playerDrawPar[playerAbility.tip].tailH/2)
     end
     if ( #playerSledi>10) then
         table.remove(playerSledi,1)

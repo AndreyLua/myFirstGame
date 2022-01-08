@@ -61,12 +61,30 @@ skillQuads = {
 }
 
 playerQuads = {
+{
   body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),
   clow1 = love.graphics.newQuad(465,  0,  200, 152, playerSet:getDimensions()),
   clow2 = love.graphics.newQuad(665,  0,  200, 152, playerSet:getDimensions()),
   tail = love.graphics.newQuad(867,  0,  96, 120,playerSet:getDimensions()),
   cristal = love.graphics.newQuad(942,  173,  80, 136,playerSet:getDimensions()),
   wings = love.graphics.newQuad(465,  153,  448, 256,playerSet:getDimensions()),
+},
+{
+  body = love.graphics.newQuad(0,  410,  472, 384, playerSet:getDimensions()),
+  clow1 = love.graphics.newQuad(473,  410,  192, 144, playerSet:getDimensions()),
+  clow2 = love.graphics.newQuad(666,  410,  192, 144, playerSet:getDimensions()),
+  tail = love.graphics.newQuad(924,  540,  99, 120,playerSet:getDimensions()),
+  cristal = love.graphics.newQuad(929,  427,  80, 112,playerSet:getDimensions()),
+  wings = love.graphics.newQuad(473,  555,  432, 240,playerSet:getDimensions()),
+},
+{
+  body = love.graphics.newQuad(0, 795,  480, 384, playerSet:getDimensions()),
+  clow1 = love.graphics.newQuad(534,  814,  184, 144, playerSet:getDimensions()),
+  clow2 = love.graphics.newQuad(719,  814,  184, 144, playerSet:getDimensions()),
+  tail = love.graphics.newQuad(128,  1180,  99, 120,playerSet:getDimensions()),
+  cristal = love.graphics.newQuad(0,  1180,  128, 112,playerSet:getDimensions()),
+  wings = love.graphics.newQuad(481,  959,  480, 264,playerSet:getDimensions()),
+}
 }
 enQuads = {
   -----------------------------------------------------------------------------
@@ -205,6 +223,7 @@ wavesFunction = require "wavesFunction"
 pause = require "pause" 
 skills = require "skills" 
 convert = require "convert"
+character = require "character"
 settings = require "settings" 
 effects = require "effects" 
 system = require "system" 
@@ -228,22 +247,73 @@ mouse = {
   y=0
 }
 -------------------------------------------------------------------
-allSkills = {
-}
+allSkills = {}
 --######################COMMON###########################################
 allSkills[1] = skillQuads.hp
 allSkills[2] = skillQuads.energy
 allSkills[3] = skillQuads.meleeDef
 allSkills[4] = skillQuads.rangedDef
 allSkills[5] = skillQuads.atack
-
 -------------------------------------------------------------------
 
 
-
-
+  
+playerDrawPar = {
+    {
+      bodyW  = 464, 
+      bodyH  = 384, 
+      clowW1 = 176,
+      clowW2 = 16,
+      clowX = 26,
+      clowH = 80,
+      clowR = 0.17219081452294,
+      tailW = 96,
+      tailH = 120,
+      cristalW = 80,
+      cristalH = 136,
+      wingsW = 448,
+      wingsH = 256,
+      wingsX = 40,
+      cristalX = 20,
+    },
+    {
+      bodyW  = 472, 
+      bodyH  = 384, 
+      clowW1 = 152,
+      clowW2 = 40,
+      clowR = 0.28219081452294,
+      clowX = 23,
+      clowH = 96,
+      tailW = 99,
+      tailH = 120,
+      cristalW = 74,
+      cristalH = 112,
+      wingsW = 432,
+      wingsH = 240,
+      wingsX = 40,
+      cristalX = 24,
+    },
+    {
+      bodyW  = 480, 
+      bodyH  = 384, 
+      clowW1 = 184,
+      clowW2 = 0,
+      clowH = 131,
+      clowX = 17,
+      clowR = 0.17219081452294,
+      tailW = 99,
+      tailH = 120,
+      cristalW = 128,
+      cristalH = 112,
+      wingsW = 480,
+      wingsH = 264,
+      wingsX =44,
+      cristalX = 55,
+    }, 
+}
 
 playerAbility = {
+    tip =2 , 
     mass =200,
     radiusCollect = 100,
     damage = 1,

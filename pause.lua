@@ -74,7 +74,7 @@ function pause:update(dt)
             gamestate.switch(convert)
         end
         if (but5 == true and (mouse.x >difButton*8+60*k2*2+30*k2-(60*k)/2) and (mouse.x <difButton*8+60*k2*2+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-            gamestate.switch(s)
+            gamestate.switch(character)
         end
         if (but3 == true and  (mouse.x >difButton*9+60*k2*3+30*k2-(60*k)/2) and (mouse.x <difButton*9+60*k2*3+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
             gamestate.switch(settings)
