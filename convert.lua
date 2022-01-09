@@ -37,7 +37,8 @@ local flagButton1 = false
 local flagButton2 = false
 local countReward = 0
 local flagRewardMenu = false 
-local rewardMoney  = 1000 
+local rewardMoney  = 0
+local rewardSkill  = 0
 local rewardSlotScale = 0 
 function convert:update(dt)
     explUpdate2(dt)
@@ -108,6 +109,10 @@ function convert:update(dt)
         end
         if (mouse.x > screenWidth/2+200*k-k2/4*120 and  mouse.x <screenWidth/2+200*k+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagRewardMenu == true and  flagButton2 == true ) then
             flagRewardMenu = false
+            score = score + rewardMoney
+            table.insert(playerSkills,{img = allSkills[1],lvl  = 0 } ) 
+            rewardMoney = 0 
+            rewardSkill = 0
         end
         flagButton1 = false
         flagButton2 = false
@@ -185,7 +190,11 @@ love.graphics.print(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%',screenWidth
 love.graphics.setColor(1,1,1,1) 
 
 if (flagRewardMenu == true) then 
-    rewardSlot(nil,screenWidth/2,screenHeight/2,rewardSlotScale,10)
+    if (rewardSkill == 0) then 
+        rewardSlot(nil,screenWidth/2,screenHeight/2,rewardSlotScale,rewardMoney)
+    else
+        rewardSlot(allSkills[rewardSkill],screenWidth/2,screenHeight/2,rewardSlotScale,rewardMoney)
+    end
     bodyButton(screenWidth/2+200*k,screenHeight/2,flagButton2)  
 end
 
@@ -198,7 +207,9 @@ if (flagRewardMenu == true) then
     love.graphics.setColor(1,1,1,1) 
     textButton("Ok",screenWidth/2+200*k,screenHeight/2,flagButton2)  
     love.graphics.setColor(0.125,0.251,0.302,1) 
-    textButton(rewardMoney,screenWidth/2,screenHeight/2,false,1.6*rewardSlotScale)  
+    if ( rewardMoney > 0 and rewardSkill == 0) then 
+        textButton(rewardMoney,screenWidth/2,screenHeight/2,false,1.6*rewardSlotScale)  
+    end
 end
 
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
@@ -290,7 +301,7 @@ function text(x,y,scale)
 end
 
 function particlSpawn(x,y,kol)
-    for kek =0, kol do
+    for kek =1, kol do
         local Color1,Color2,Color3  = particlColor() 
         local e = {
         side = math.random(1,2), --- new
@@ -469,7 +480,19 @@ function giveReward(count)
         if (math.ceil(colbaPar/1.4)>=60) then
          -- normal  reward 
         else
-         -- small reward 
+            if ( math.random(1,100) > 70) then 
+                rewardSkill  = math.random(1,7) 
+            else
+                if ( math.random(1,100) > 80) then
+                    rewardMoney  = count* scoreForParticle*0.7
+                else
+                    if ( math.random(1,100) > 50) then
+                        rewardMoney  = count* scoreForParticle*0.5 
+                    else
+                        rewardMoney  = 0
+                    end
+                end
+            end
         end
     end
 end

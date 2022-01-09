@@ -70,12 +70,12 @@ playerQuads = {
   wings = love.graphics.newQuad(465,  153,  448, 256,playerSet:getDimensions()),
 },
 {
-  body = love.graphics.newQuad(0,  410,  472, 384, playerSet:getDimensions()),
-  clow1 = love.graphics.newQuad(473,  410,  192, 144, playerSet:getDimensions()),
-  clow2 = love.graphics.newQuad(666,  410,  192, 144, playerSet:getDimensions()),
+  body = love.graphics.newQuad(0,  385,  480, 384, playerSet:getDimensions()),
+  clow1 = love.graphics.newQuad(473+15,  410,  192, 144, playerSet:getDimensions()),
+  clow2 = love.graphics.newQuad(666+15,  410,  192, 144, playerSet:getDimensions()),
   tail = love.graphics.newQuad(924,  540,  99, 120,playerSet:getDimensions()),
   cristal = love.graphics.newQuad(929,  427,  80, 112,playerSet:getDimensions()),
-  wings = love.graphics.newQuad(473,  555,  432, 240,playerSet:getDimensions()),
+  wings = love.graphics.newQuad(473+15,  555,  432, 240,playerSet:getDimensions()),
 },
 {
   body = love.graphics.newQuad(0, 795,  480, 384, playerSet:getDimensions()),
@@ -254,6 +254,8 @@ allSkills[2] = skillQuads.energy
 allSkills[3] = skillQuads.meleeDef
 allSkills[4] = skillQuads.rangedDef
 allSkills[5] = skillQuads.atack
+allSkills[6] = skillQuads.atack---------
+allSkills[7] = skillQuads.atack-----------
 -------------------------------------------------------------------
 
 
@@ -288,8 +290,8 @@ playerDrawPar = {
       tailH = 120,
       cristalW = 74,
       cristalH = 112,
-      wingsW = 432,
-      wingsH = 240,
+      wingsW = 424,
+      wingsH = 241,
       wingsX = 40,
       cristalX = 24,
     },
@@ -313,7 +315,7 @@ playerDrawPar = {
 }
 
 playerAbility = {
-    tip =2 , 
+    tip =3 , 
     mass =200,
     radiusCollect = 100,
     damage = 1,
@@ -356,7 +358,7 @@ gradientG = 0
 gradientB = 0 
 gradientI = 1
 
-scoreForParticle = 0
+scoreForParticle =10
 colbaPar =  0
 ----------------------------------
 
