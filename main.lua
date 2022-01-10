@@ -13,6 +13,7 @@ meteorSet = love.graphics.newImage("assets/meteorSet.png")
 enSet = love.graphics.newImage("assets/enSet.png")
 resSet = love.graphics.newImage("assets/resSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
+playerSet:setFilter("nearest")
 UISet = love.graphics.newImage("assets/UISet.png")
 skillSet = love.graphics.newImage("assets/skillSet.png")
 enBoomAnSet = love.graphics.newImage("assets/enBoomAn.png")
@@ -230,14 +231,18 @@ system = require "system"
 UI= require "UI"
 ----------------------------------
 -----------TIMERS-----------------
+---------------PLAYER-------------
 inv = Timer.new()
 hp1 = Timer.new()
 hp2 = Timer.new()
 hp3 = Timer.new()
 boost1 = Timer.new()
 boost2 = Timer.new()
+----------------------------------
 textT  =  Timer.new()
 wavetimer=  Timer.new()
+TimerObj = Timer.new()
+TimerEn = Timer.new()
 ----------------------------------
 -------------MASIIIIIIV-----------
 exp =  {}
@@ -315,7 +320,7 @@ playerDrawPar = {
 }
 
 playerAbility = {
-    tip =3 , 
+    tip =2 , 
     mass =200,
     radiusCollect = 100,
     damage = 1,
@@ -339,15 +344,7 @@ img =skillQuads.energy,
 playerSkills[3] ={
 img =skillQuads.atack,
 }
-playerSkills[4] ={
-img =skillQuads.meleeDef,
-}
-playerSkills[5] ={
-img =skillQuads.rangedDef,
-}
-playerSkills[6] ={
-img =skillQuads.vampir,
-}
+
 
 -------------CONST AND FLAGS------
 volume = 50

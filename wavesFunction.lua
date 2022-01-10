@@ -3,11 +3,16 @@ local wavesFunction = {}
 function wavesUpdate(dt)
     if ( colWave<=0) then
         numberWave = numberWave +1 
-        local Wave = waves[numberWave]
-        colWave =Wave[4] --- update
-        
+        waves[2]= waves[2]*(1+numberWave/10)
+        waves[1] =1+math.floor(numberWave/2)
+        if ( waves[1] > 5) then 
+            waves[1] = 5
+        end
+        colWave =waves[2]
+    
         wavesNextWave()
     end
+    
 end
 
 function wavesNextWave()

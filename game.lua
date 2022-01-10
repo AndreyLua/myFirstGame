@@ -22,16 +22,8 @@ waveflag = 0
 wavex = -250*k
 wavey = 0
 numberWave =1 
-colWave= 200
-waves = {
-  {100,20,0,200},
-  {100,100,0,25},
-  {100,30,0,15},
-  {100,50,0,20},
-  {100,70,0,25},
-  {100,50,20,20},
-  {100,100,100,25}
-}
+colWave= 100
+waves = {1,100}
 
 spped = 460
 flagsp = false
@@ -117,13 +109,12 @@ end
 
 
 function game:update(dt)
-  en  = {en[1]}
 --flaginv =true
---explUpdate2(dt)
+explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 --boost.long = 1000
-hp.long = 1000 
+--hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -239,24 +230,36 @@ end
 
 playerBoost(dt)
 
+
 if (#obj < 200) then
-    Timer.every(5, function()
+    TimerObj:every(5, function()
         for i=1,math.random(1,1) do
             local Geo  =math.random(1,4)
             allSpawn(obj,Geo)
+            if ( #obj >50) then
+                if ( math.random(1,100) >50) then
+                    allSpawn(en,Geo,6)
+                end
+            end
         end
-  
-        for i=1,math.random(1,2) do
-            local Geo  =math.random(1,4)
-            local Tip =math.random(1,5)
-            allSpawn(en,Geo,5)
-           -- wavesSpawnGroup(4)
-        end
-        Timer.clear() 
+        TimerObj:clear() 
     end)
-  
-    Timer.update(dt)
+end  
+if (#en < 50) then
+    TimerEn:every(math.random(5,8), function()
+        local Geo  =math.random(1,4)
+        local Tip =math.random(1,waves[1])
+        allSpawn(en,Geo,Tip)
+        if (math.random(1,100) > 90 and numberWave>=8 ) then   
+            wavesSpawnGroup(math.random(1,4))
+        end
+        TimerEn:clear() 
+    end)
 end
+
+TimerObj:update(dt)
+TimerEn:update(dt)
+
 playerCollWithObj(dt)
 playerCollWithEn(dt)
 playerDebaff(dt)
@@ -308,7 +311,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,6)
+        allSpawn(en,Geo,1)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -362,9 +365,6 @@ function  game:draw()
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(enBatch)
         love.graphics.setColor(1,0,0,1)
-        for i=1,#exp do
-            love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*20*k,exp[i].scale*20*k2,4*exp[i].scale*k)
-        end
     love.graphics.pop()
     love.graphics.setColor(1,1,1,1)
     playerDraw(dt)
@@ -382,7 +382,9 @@ function  game:draw()
         resAfterDie(dt)
     love.graphics.pop()
     love.graphics.setColor(1,1,1,1)
-    
+    for i=1,#exp do
+        love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*15*k,exp[i].scale*15*k2,4*exp[i].scale*k)
+    end
  
     local fontWidth = font:getWidth(tostring(score))
     love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
@@ -512,16 +514,16 @@ function allSpawn(mas,Geo,Tip)
             e:newBody(e.x, e.y)
             table.insert(mas,e)
         end
-        if ( Tip ==5 and numberCleaner <3 ) then 
-            numberCleaner = numberCleaner+1
-            local e = enemyСleaner:clone()
+        if ( Tip ==5) then 
+           local e = enemyInvader:clone()
             e.x = x 
             e.y = y 
             e:newBody(e.x, e.y)
             table.insert(mas,e)
         end
-        if ( Tip ==6) then 
-            local e = enemyInvader:clone()
+        if ( Tip ==6 and numberCleaner <3 ) then 
+             numberCleaner = numberCleaner+1
+            local e = enemyСleaner:clone()
             e.x = x 
             e.y = y 
             e:newBody(e.x, e.y)

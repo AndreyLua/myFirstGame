@@ -104,14 +104,14 @@ function explUpdate2(dt)
             exp[i].y= exp[i].y+exp[i].ay*dt*k2
             if (  exp[i].flag ==false) then 
                 if ( exp[i].ax > 0 ) then
-                    exp[i].ax  = exp[i].ax - 50*dt*k
+                    exp[i].ax  = exp[i].ax -70*dt*k
                 else
-                    exp[i].ax  = exp[i].ax + 50*dt*k
+                    exp[i].ax  = exp[i].ax + 70*dt*k
                 end
                 if ( exp[i].ay > 0 ) then
-                    exp[i].ay  = exp[i].ay - 50*dt*k2
+                    exp[i].ay  = exp[i].ay -70*dt*k2
                 else
-                    exp[i].ay  = exp[i].ay + 50*dt*k2
+                    exp[i].ay  = exp[i].ay + 70*dt*k2
                 end
             end
             if ( (exp[i].ay<3*k2 and  exp[i].ay>-3*k2) or (exp[i].ax<3*k and  exp[i].ax>-3*k)) then
@@ -170,8 +170,8 @@ function expl(x,y,kol)
         y =  y,  
         xx  = x, 
         yy =  y,
-        ax  =math.random(-1.72*k*40,1.73*k*40), 
-        ay = math.random(-1.73*k*40,1.73*k*40), 
+        ax  =math.random(-1.72*k*30,1.73*k*30), 
+        ay = math.random(-1.73*k*30,1.73*k*30), 
         scale =0.15
         }
     table.insert(exp,e)

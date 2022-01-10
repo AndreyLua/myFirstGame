@@ -27,10 +27,11 @@ enemyShooterTable = {
     {}, -- traces
     0,-- angleWing
     0,-- angleWingFlag
+    5,--cost
 }
 
 enemyShooterClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag,cost)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -57,6 +58,7 @@ enemyShooterClass = Class{
         self.health = health
         self.healthM = healthM
         self.traces = traces
+        self.cost = cost
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyShooterTable[1]*k, enemyShooterTable[2]*k)
@@ -385,8 +387,11 @@ enemyShooterClass = Class{
                 ox = 16,
                 oy = 48
             }
+            expl(54*k,screenHeight/2-(colWave*250*k2/waves[2])/2,10)
+            expl(54*k,screenHeight/2+(colWave*250*k2/waves[2])/2,10)
+            colWave =  colWave - en[i].cost
+            
             table.insert(enAfterDieTex,enDrawDie5)
-         --   colWave =  colWave - 5
             table.remove(en,i)
         end  
     end;

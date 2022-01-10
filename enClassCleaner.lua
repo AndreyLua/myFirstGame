@@ -31,10 +31,11 @@ enemyСleanerTable = {
     0,--angleWingFlag
     0,--numberTarget ( targetX ) 
     screenWidth, --targetY
+    5,--cost
 }
 
 enemyСleanerClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag,targetX,targetY)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag,targetX,targetY,cost)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -65,6 +66,7 @@ enemyСleanerClass = Class{
         self.angleWingFlag = angleWingFlag
         self.targetX = targetX
         self.targetY = targetY
+        self.cost = cost
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyСleanerTable[1]*k, enemyСleanerTable[2]*k)
@@ -399,7 +401,9 @@ enemyСleanerClass = Class{
                 oy = 21
             }
             table.insert(enAfterDieTex,enDrawDie3)
-            
+            expl(54*k,screenHeight/2-(colWave*250*k2/waves[2])/2,10)
+            expl(54*k,screenHeight/2+(colWave*250*k2/waves[2])/2,10)
+            colWave =  colWave - en[i].cost
             table.remove(en,i)
         end  
     end;

@@ -38,10 +38,11 @@ enemyMeleeTable = {
     screenWidth, --targetY
     90, -- targetDestroy
     90, --targetDestroyTimer
+    5,--cost
 }
 
 enemyMeleeClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,climbFlag,climbAtack,climbAtackTimer,meleeAtack,meleeAtackTimer,dopAngle,target,targetX,targetY,targetDestroy,targetDestroyTimer)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,climbFlag,climbAtack,climbAtackTimer,meleeAtack,meleeAtackTimer,dopAngle,target,targetX,targetY,targetDestroy,targetDestroyTimer,cost)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -79,6 +80,7 @@ enemyMeleeClass = Class{
         self.targetY = targetY
         self.targetDestroy = targetDestroy
         self.targetDestroyTimer = targetDestroyTimer
+        self.cost = cost
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyMeleeTable[1]*k, enemyMeleeTable[2]*k)
@@ -434,6 +436,10 @@ enemyMeleeClass = Class{
                 ox = 36,
                 oy = 44
             }
+            expl(54*k,screenHeight/2-(colWave*250*k2/waves[2])/2,10)
+            expl(54*k,screenHeight/2+(colWave*250*k2/waves[2])/2,10)
+            colWave =  colWave - en[i].cost
+            
             table.insert(enAfterDieTex,enDrawDie3)
             table.remove(en,i)
         end  

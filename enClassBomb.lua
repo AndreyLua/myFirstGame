@@ -30,10 +30,11 @@ enemyBombTable = {
     3,--preparTimer
     3,--animat
     3,--animatTimer
+    10,--cost
 }
 
 enemyBombClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,flagBomb,prepar,preparTimer,animat,animatTimer)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,flagBomb,prepar,preparTimer,animat,animatTimer,cost)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -63,6 +64,7 @@ enemyBombClass = Class{
         self.health = health
         self.healthM = healthM
         self.traces = traces
+        self.cost = cost
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyBombTable[1]*k, enemyBombTable[2]*k)
@@ -437,6 +439,10 @@ enemyBombClass = Class{
               ox = 29.5, 
               oy = 43 ,
             }
+            expl(54*k,screenHeight/2-(colWave*250*k2/waves[2])/2,10)
+            expl(54*k,screenHeight/2+(colWave*250*k2/waves[2])/2,10)
+            colWave =  colWave - en[i].cost
+            
             table.insert(enAfterDieTex,enDrawDie3)
             table.remove(en,i)
         else

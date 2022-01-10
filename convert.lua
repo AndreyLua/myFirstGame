@@ -477,7 +477,7 @@ function giveReward(count)
     if ( count == 140) then 
       ---- big reward 
     else
-        if (math.ceil(colbaPar/1.4)>=60) then
+        if (math.ceil(count/1.4)>=60) then
          -- normal  reward 
         else
             if ( math.random(1,100) > 70) then 

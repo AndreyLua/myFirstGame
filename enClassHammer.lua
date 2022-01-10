@@ -27,10 +27,11 @@ enemyHammerTable = {
     3, --health
     3, --healthM
     {}, -- traces
+    4,--cost
 }
 
 enemyHammerClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,dash,dashTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,cost)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -57,6 +58,7 @@ enemyHammerClass = Class{
         self.health = health
         self.healthM = healthM
         self.traces = traces
+        self.cost = cost
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyHammerTable[1]*k, enemyHammerTable[2]*k)
@@ -302,6 +304,9 @@ enemyHammerClass = Class{
               ox = 125,
               oy = 95.5
             }
+            expl(54*k,screenHeight/2-(colWave*250*k2/waves[2])/2,10)
+            expl(54*k,screenHeight/2+(colWave*250*k2/waves[2])/2,10)
+            colWave =  colWave - en[i].cost
             table.insert(enAfterDieTex,enDrawDie)
             table.remove(en,i)
         end  

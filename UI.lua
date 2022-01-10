@@ -96,6 +96,7 @@ function slot(img,x,y,ox,oy,scale,light)
     if ( light == nil ) then
         light = 1 
     end
+
     UIBatch:setColor(light,light,light,light)
     skillBatch:setColor(light,light,light,light)
     if (img) then 
@@ -200,9 +201,8 @@ function exit(x,y)
 end
 
 function lineW()
-    local Wave = waves[numberWave]
     love.graphics.setColor(0.431,0.545,0.573)
-    love.graphics.rectangle("line",50*k,screenHeight/2-(colWave*250*k2/Wave[4])/2,8*k,colWave*250*k2/Wave[4])
+    love.graphics.rectangle("line",50*k,screenHeight/2-(colWave*250*k2/waves[2])/2,8*k,colWave*250*k2/waves[2])
     love.graphics.setColor(1,1,1,1)
 end 
 
