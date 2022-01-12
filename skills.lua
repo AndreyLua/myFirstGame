@@ -12,7 +12,6 @@ local texti = 0
 local textL = ""
 local textK = 0 
 
-local test = love.graphics.newImage("assets/1.jpg")
 
 local textMas = {
     'Increasing the amount of health',
