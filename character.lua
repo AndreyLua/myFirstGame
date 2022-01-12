@@ -48,7 +48,6 @@ end
 function playerDrawCharacter(dt)
     local xDraw = screenWidth/2
     local yDraw = screenHeight/2
-    
     playerBatch:setColor(1,1,1,1)
     local clow1X =xDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(-math.pi/2+playerDrawPar[playerAbility.tip].clowR)*7/3
     local clow1Y =yDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.cos(-math.pi/2+playerDrawPar[playerAbility.tip].clowR)*7/3
@@ -67,25 +66,12 @@ function playerDrawCharacter(dt)
 end
 function playerSledDrawCharacter(x,y,dt)
  --  player.body:draw('line')
-    local playerSled = {
-        angle =math.pi/2,
-        ax =2*k*1*7/3 ,
-        ay =0,
-        x = x,
-        y = y, 
-        r = 0.2,
-    }
-    table.insert(playerSledi,playerSled)
-    for i = 1,#playerSledi do
-        local sled = playerSledi[i]
-        local radius =sled.r*i
-        sled.x = sled.x+200*sled.ax*dt
+    for i = 1,10 do
+        local radius =0.2*i
         playerBatch:setColor( 0.1*i, 0.1*i, 0.1*i )
-        playerBatch:add(playerQuads[playerAbility.tip].tail,sled.x,sled.y,math.pi/2,k/3*radius,k2/3*radius,playerDrawPar[playerAbility.tip].tailW/2,playerDrawPar[playerAbility.tip].tailH/2)
+        playerBatch:add(playerQuads[playerAbility.tip].tail,x+16*(10-i)*k,y,math.pi/2,k/3*radius,k2/3*radius,playerDrawPar[playerAbility.tip].tailW/2,playerDrawPar[playerAbility.tip].tailH/2)
     end
-    if ( #playerSledi>10) then
-        table.remove(playerSledi,1)
-    end
+   
 end
 
 return character

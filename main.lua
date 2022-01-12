@@ -49,6 +49,7 @@ UIQuads = {
   tableSkill = love.graphics.newQuad(482,  0, 320, 320, UISet:getDimensions()),
   tableSkillDestr = love.graphics.newQuad(482,  321, 320, 320, UISet:getDimensions()),
   butDirect = love.graphics.newQuad(803,  0, 180, 320, UISet:getDimensions()),
+  textPanel = love.graphics.newQuad(0,  889, 1000, 320, UISet:getDimensions()), 
 }
 
 skillQuads = { 
@@ -58,7 +59,6 @@ skillQuads = {
   meleeDef = love.graphics.newQuad(0,  640,  320, 320, skillSet:getDimensions()),
   rangedDef = love.graphics.newQuad(320,  640,  320, 320, skillSet:getDimensions()),
   vampir = love.graphics.newQuad(0,  960,  320, 320, skillSet:getDimensions()),
-  
 }
 
 playerQuads = {
@@ -320,7 +320,7 @@ playerDrawPar = {
 }
 
 playerAbility = {
-    tip =2 , 
+    tip =3 , 
     mass =200,
     radiusCollect = 100,
     damage = 1,
@@ -336,13 +336,18 @@ playerAbility = {
 playerSkills = {}
 playerSkills[1] ={
 img =skillQuads.hp,
-lvl = 0,
+lvl = 1,
+numb = 1 ,
 }
 playerSkills[2] ={
 img =skillQuads.energy,
+lvl = 1,
+numb = 2 ,
 }
 playerSkills[3] ={
 img =skillQuads.atack,
+lvl = 1,
+numb = 5 ,
 }
 
 
@@ -355,7 +360,7 @@ gradientG = 0
 gradientB = 0 
 gradientI = 1
 
-scoreForParticle =10
+scoreForParticle =0
 colbaPar =  0
 ----------------------------------
 

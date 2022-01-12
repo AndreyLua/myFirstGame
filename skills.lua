@@ -6,7 +6,31 @@ local masSkill = {}
 local mousePosX = 0 
 local mousePosY = 0 
 local speedR = 0 
-local xR = 0 
+local xR = -math.pi/6
+
+local texti = 0 
+local textL = ""
+local textK = 0 
+
+local test = love.graphics.newImage("assets/1.jpg")
+
+local textMas = {
+    'Increasing the amount of health',
+    'Increasing the amount of energy',
+    'Increased resistance to melee attacks',
+    'Increased resistance to range attacks',
+    'Increased attack power',
+    'Speed increase',
+    'Increasing the resource collection radius',
+}
+local difButton = (screenWidth-35*k-0.4*1.2*320*k-60*k-0.196*1.2*320*k-320*k/3)
+
+local xTextPanel = (35*k)+0.2*difButton+(160/3*k)
+local xBigSlot = (xTextPanel+ 160/3*k)+0.2*difButton+(0.4*1.2*160*k)
+local xSmallSlot =(0.4*1.2*160*k)+0.2*difButton+(0.196*1.2*160*k)
+local xButton = xBigSlot+xSmallSlot+(0.196*1.2*160*k)+0.2*difButton+(30*k)
+
+
 function skills:update(dt)
     mouse.x,mouse.y=love.mouse.getPosition()
     if love.mouse.isDown(1)  then
@@ -14,10 +38,11 @@ function skills:update(dt)
             mousePosX = mouse.x
             mousePosY = mouse.y
         end 
-        if (  mouse.x > screenWidth/2.2-math.sin(-math.pi/1.4)*300*k-k2/3*160 and  mouse.x <screenWidth/2.2-math.sin(-math.pi/1.4)*300*k+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3) then
+   
+        if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3) then
             but2 = true
         end
-        if (  mouse.x > screenWidth/2.2-math.sin(-math.pi/3.5)*300*k-k2/3*160 and  mouse.x <screenWidth/2.2-math.sin(-math.pi/3.5)*300*k+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*300*k-90*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*300*k+160*k/3) then
+        if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*300*k-90*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*300*k+160*k/3) then
             but3 = true
         end
         flagtouch3 =true
@@ -26,14 +51,23 @@ function skills:update(dt)
             exp = {}
             gamestate.switch(game)
         end 
-        if (  mouse.x > screenWidth/2.2-math.sin(-math.pi/1.4)*300*k-k2/3*160 and  mouse.x <screenWidth/2.2-math.sin(-math.pi/1.4)*300*k+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3 and but2 == true) then
+        if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3 and but2 == true) then
             speedR =2.2
+            texti = 0 
+            textL = ""
+            textK = 0 
         end
-        if (  mouse.x > screenWidth/2.2-math.sin(-math.pi/3.5)*300*k-k2/3*160 and  mouse.x <screenWidth/2.2-math.sin(-math.pi/3.5)*300*k+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*300*k-90*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*300*k+160*k/3 and but3 == true ) then
+        if ( mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*300*k-90*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*300*k+160*k/3 and but3 == true ) then
             speedR =-2.2
+            texti = 0 
+            textL = ""
+            textK = 0 
         end
         
         if (flagtouch3 == true and  math.abs( mouse.y - mousePosY ) > 40*k and mouse.x > screenWidth/2.2 and  mouse.x < screenWidth/2.2 + 250*k   ) then 
+            texti = 0 
+            textL = ""
+            textK = 0 
             if (  mouse.y >  mousePosY) then 
                 speedR = speedR- 10*math.abs( mouse.y - mousePosY )/screenHeight
             else
@@ -48,17 +82,32 @@ function skills:update(dt)
         but1 = false
         flagtouch3 =false
     end
+    local indexR2 = xR / (math.pi/6)
+    if ( xR%(math.pi/6) > math.pi/12) then
+        indexR2 = math.ceil(xR / (math.pi/6))
+    else
+        indexR2 = math.floor(xR / (math.pi/6))
+    end
+    if ( playerSkills[indexR2+4]) then 
+        textUpdate(textMas[playerSkills[indexR2+4].numb],0.03,dt) 
+    else
+        texti = 0 
+        textL = ""
+        textK = 0 
+    end
 end
 
 function skills:draw()
 local dt = love.timer.getDelta()
-xR = xR+ speedR*dt
 if ( speedR > 0.4) then
     speedR = speedR -5*dt
 else
     if ( (xR / (math.pi/6))%1   <0.06 and math.abs(speedR)< 1.5) then
         speedR = 0
-      --  print((xR-(xR%(math.pi/6))) / (math.pi/6)) 
+    else
+    
+            xR = xR+ speedR*dt
+     
     end
 end
 if ( speedR < -0.4) then
@@ -66,15 +115,18 @@ if ( speedR < -0.4) then
 else
     if ( (xR / (math.pi/6))%1   <0.06 and math.abs(speedR)< 1.5) then
         speedR = 0
-      --  print((xR-(xR%(math.pi/6))) / (math.pi/6)) 
+    else
+      
+            xR = xR+ speedR*dt
+      
     end
 end
-if ( xR < -math.pi/2) then
-    xR = -math.pi/2
+if ( xR <= -math.pi/6*3+0.03) then
+    xR = -math.pi/6*3+0.03
     speedR = 0 
 end
-if ( xR >math.pi*2.5+math.pi/6) then
-    xR =math.pi*2.5+math.pi/6
+if ( xR >=math.pi*2.5+math.pi/6-0.03) then
+    xR =math.pi*2.5+math.pi/6-0.03
     speedR = 0 
 end
 
@@ -84,6 +136,9 @@ love.graphics.setColor(1,1,1,1)
 love.graphics.draw(fon1,0,0,0,k,k2)
 love.graphics.draw(fon2,0,0,0,k,k2)
 love.graphics.draw(fon3,0,0,0,k,k2)
+
+love.graphics.setColor(1,0,1,1)
+
 exit(0,0)
 sc(0,screenHeight/2)
 
@@ -94,11 +149,10 @@ else
     indexR = math.floor(xR / (math.pi/6))
 end
 if ( playerSkills[indexR+4]) then 
-    slot(playerSkills[indexR+4].img,screenWidth/2.2,screenHeight/2,160,160,0.4) 
+    slot(playerSkills[indexR+4].img,xBigSlot,screenHeight/2,160,160,0.4) 
 else
-    slot(nil,screenWidth/2.2,screenHeight/2,160,160,0.4)   
+    slot(nil,xBigSlot,screenHeight/2,160,160,0.4)   
 end
-
 for i = 1 , 20 do 
     local angle = -i*math.pi/6+math.pi/6+ xR
     local light = 0.7
@@ -108,29 +162,32 @@ for i = 1 , 20 do
     if ( angle > math.pi/6 ) then
         angle = math.pi/6
     end 
-    local scale = 0.05
+    local scale =0
     if ( angle>= -math.pi /2 and  angle < 0 ) then
-          scale = scale+math.abs(angle)/10
+          scale = scale+math.abs(angle)/8
           light = light+math.abs(angle)/2
     else
-          scale = (scale+math.abs(math.pi/2)/10) - math.abs(angle+math.pi/2)/10
+          scale = (scale+math.abs(math.pi/2)/8) - math.abs(angle+math.pi/2)/8
           light = (light+math.abs(math.pi/2)/2) - math.abs(angle+math.pi/2)/2
     end 
     if ( scale <0) then
         scale = 0 
     end
+  
     if (playerSkills[i]) then 
-        slot(playerSkills[i].img,screenWidth/2.2-math.sin(angle)*160*k	,screenHeight/2- math.cos(angle)*160*k,160,160,scale,light) 
+        slot(playerSkills[i].img,(xBigSlot)-math.sin(angle)*xSmallSlot,screenHeight/2- math.cos(angle)*180*k,160,160,scale*1.2,light) 
     else
-        slot(nil,screenWidth/2.2-math.sin(angle)*160*k	,screenHeight/2- math.cos(angle)*160*k,160,160,scale,light) 
+        slot(nil,(xBigSlot)-math.sin(angle)*xSmallSlot,screenHeight/2- math.cos(angle)*180*k,160,160,scale*1.2,light) 
     end
 end
-bodyButtonDirect(screenWidth/2.2-math.sin(-math.pi/1.4)*300*k,screenHeight/2-math.cos(-math.pi/1.4)*300*k,but2,'left')
-bodyButtonDirect(screenWidth/2.2-math.sin(-math.pi/3.5)*300*k,screenHeight/2-math.cos(-math.pi/3.5)*300*k,but3,'right')
-bodyButton(screenWidth/2.2-math.sin(-math.pi/2)*310*k,screenHeight/2-math.cos(-math.pi/2)*310*k,but1)
+bodyTextPanel(xTextPanel,screenHeight/2)
+bodyButtonDirect((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/1.4)*300*k,but2,'left')
+bodyButtonDirect((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/3.5)*300*k,but3,'right')
+
+bodyButton(xButton,screenHeight/2-math.cos(-math.pi/2)*310*k,but1)
 love.graphics.draw(UIBatch)
 love.graphics.draw(skillBatch)
-textButton("Update",screenWidth/2.2-math.sin(-math.pi/2)*310*k,screenHeight/2-math.cos(-math.pi/2)*310*k,but1,0.9)
+textButton("Update",xButton,screenHeight/2-math.cos(-math.pi/2)*310*k,but1,0.9)
 --love.graphics.circle('line',screenWidth/2,screenHeight/2,220)
 
 local fontWidth = font:getWidth(tostring(score))
@@ -138,10 +195,43 @@ love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/
 
 love.graphics.setColor(1,1,1,1) 
 
+if ( playerSkills[indexR+4]) then 
+    text(xTextPanel-(160/3*k)+10*k,screenHeight/2+150*k,0.5)
+    local fontWidth = font:getWidth(tostring(playerSkills[indexR+4].lvl))
+    love.graphics.setColor(0,0,0,0.5) 
+    xBigSlot = (xTextPanel+ 160/3*k)+0.2*difButton+(0.4*1.2*160*k)
+    love.graphics.rectangle("fill",xBigSlot-(0.4*1.2*160*k)+14*k,screenHeight/2-160*k*0.4*1.2+14*k,15*k2,fontWidth*k2/2)
+    love.graphics.setColor(1,1,1,1) 
+    love.graphics.print(tostring(playerSkills[indexR+4].lvl),xBigSlot-(0.4*1.2*160*k)+10*k,screenHeight/2-160*k*0.4*1.2+fontWidth*k2/2+14*k,-math.pi/2,k/2,k2/2)
+end
 
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 end
 
+function textUpdate(text,speed,dt) 
+    if (texti<=#text) then 
+        textT:update(dt)
+        textT:every(speed, function()
+            texti = texti+1
+            textK = textK+1
+            local textkek = "" 
+            if (textL:sub(#textL,#textL)=="_") then
+                textL = textL:sub(0,#textL-1)
+            end
+            textkek = text:sub(texti,texti)
+            if ( textK>7 and text:sub(texti,texti) == " ") then
+               textK = 0 
+               textkek =textkek.."\n"
+            end
+            textL = textL..textkek.."_"
+            textT:clear()
+        end)
+    end
+end
 
+function text(x,y,scale)
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.print(textL,x,y,-3.14/2,scale*k,scale*k)
+end
 
 return skills

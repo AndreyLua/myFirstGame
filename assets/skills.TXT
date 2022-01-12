@@ -1,0 +1,16 @@
+------------COMMON-------------------------------------
+1) increasing the amount of health
+2) increasing the amount of energy
+3) increased resistance to melee attacks
+4) increased resistance to range attacks
+5) increased attack power
+6) speed increase
+7) increasing the resource collection radius
+-------------------------------------------------------
+8)
+9)
+10)
+11)
+12)
+13)
+14)

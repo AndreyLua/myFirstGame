@@ -40,6 +40,7 @@ local flagRewardMenu = false
 local rewardMoney  = 0
 local rewardSkill  = 0
 local rewardSlotScale = 0 
+
 function convert:update(dt)
     explUpdate2(dt)
     particlRegulS = {}
@@ -110,7 +111,24 @@ function convert:update(dt)
         if (mouse.x > screenWidth/2+200*k-k2/4*120 and  mouse.x <screenWidth/2+200*k+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagRewardMenu == true and  flagButton2 == true ) then
             flagRewardMenu = false
             score = score + rewardMoney
-            table.insert(playerSkills,{img = allSkills[1],lvl  = 0 } ) 
+            if ( rewardSkill ~= 0) then 
+                local flagPlHave = false
+                
+                for i =1, #playerSkills do 
+                    local masSkill = playerSkills[i] 
+                    if (flagPlHave ==false and  masSkill.img == allSkills[rewardSkill] ) then 
+                        flagPlHave = true
+                        rewardSkill = i 
+                        break
+                    end
+                end
+                
+                if ( flagPlHave) then 
+                    playerSkills[rewardSkill].lvl = playerSkills[rewardSkill].lvl + 1
+                else
+                    table.insert(playerSkills,{img = allSkills[rewardSkill],lvl  = 1,numb = rewardSkill  } ) 
+                end
+            end
             rewardMoney = 0 
             rewardSkill = 0
         end
@@ -129,7 +147,7 @@ function convert:update(dt)
 
       
     --if ( tip~= 0 ) then 
-       -- textUpdate(textMas[tip],0.1,dt) 
+    
     --end
 end
 
@@ -218,29 +236,8 @@ for i=1,#exp do
     love.graphics.setColor(exp[i].color1,exp[i].color2,exp[i].color3,1) 
     love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*20*k,exp[i].scale*20*k2,4*exp[i].scale*k)
 end
---text(screenWidth/2.2,screenHeight/2+screenHeight/2.7,0.5)
 end
 
-function textUpdate(text,speed,dt) 
-    if (texti<=#text) then 
-        textT:update(dt)
-        textT:every(speed, function()
-            texti = texti+1
-            textK = textK+1
-            local textkek = "" 
-            if (textL:sub(#textL,#textL)=="_") then
-                textL = textL:sub(0,#textL-1)
-            end
-            textkek = text:sub(texti,texti)
-            if ( textK>7 and text:sub(texti,texti) == " ") then
-               textK = 0 
-               textkek =textkek.."\n"
-            end
-            textL = textL..textkek.."_"
-            textT:clear()
-        end)
-    end
-end
 function particlCollWithparticl(index,j,dt)
     if ( particlRegulS[index]) then 
         local kek = particlRegulS[index]
@@ -295,10 +292,6 @@ function particlCollWithparticl(index,j,dt)
     end
 end 
  
-function text(x,y,scale)
-    love.graphics.setColor(0.0039*200,0.0039*150,0)
-    love.graphics.print(textL,x,y,-3.14/2,scale,scale)
-end
 
 function particlSpawn(x,y,kol)
     for kek =1, kol do

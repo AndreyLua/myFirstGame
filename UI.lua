@@ -23,6 +23,10 @@ function bodyButton(x,y,flag,dopLight)
     end
 end
 
+function bodyTextPanel(x,y)
+    UIBatch:add(UIQuads.textPanel,x,y,-math.pi/2,k/3,k2/3,500,160)
+end
+
 function bodyButtonDirect(x,y,flag,direct,angle)
     if ( angle == nil) then 
         if ( direct == 'left') then
