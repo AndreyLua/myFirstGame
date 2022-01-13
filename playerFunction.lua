@@ -142,6 +142,19 @@ function playerCollWithObj(dt)
     objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1,dt)
 end
 
+function enAtackPlayer(dmg,tip)
+    dmg = dmg- playerSkillParametrs.hpK*dmg
+    if ( tip=='m') then
+        hp.long = hp.long - dmg*(1-playerSkillParametrs.meleeDefK)
+    end
+    if ( tip=='e') then
+        hp.long = hp.long - dmg
+    end
+     if ( tip=='r') then
+        hp.long = hp.long - dmg*(1-playerSkillParametrs.rangeDefK)
+    end
+end
+
 function playerCollWithEn(dt)
     local playerIndex =math.floor((player.x-40*k)/(80*k)) + math.floor((player.y-40*k2)/(80*k2))*math.floor((screenWidth/(80*k))+1) 
     enCollWithPlayerInRegularS(playerIndex,dt)

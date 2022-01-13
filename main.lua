@@ -52,12 +52,23 @@ UIQuads = {
   textPanel = love.graphics.newQuad(0,  889, 1000, 320, UISet:getDimensions()), 
 }
 
-skillQuads = { 
+skillQuads = {
+  
   hp = love.graphics.newQuad(0,  0,  320, 320, skillSet:getDimensions()),
   energy = love.graphics.newQuad(320,  0,  320, 320, skillSet:getDimensions()),  
   atack = love.graphics.newQuad(640,  0,  320, 320, skillSet:getDimensions()),
   meleeDef = love.graphics.newQuad(0,  640,  320, 320, skillSet:getDimensions()),
-  rangedDef = love.graphics.newQuad(320,  640,  320, 320, skillSet:getDimensions()),
+  rangeDef = love.graphics.newQuad(320,  640,  320, 320, skillSet:getDimensions()),
+  
+  collectRange = love.graphics.newQuad(960, 0,  320, 320, skillSet:getDimensions()),
+  speed = love.graphics.newQuad(0, 320,  320, 320, skillSet:getDimensions()),
+  spikeArmor =  love.graphics.newQuad(640, 640,  320, 320, skillSet:getDimensions()),
+  
+  waveAtack =  love.graphics.newQuad(960, 320,  320, 320, skillSet:getDimensions()),
+  bloodAtack =  love.graphics.newQuad(640, 320,  320, 320, skillSet:getDimensions()),
+  sealAtack =  love.graphics.newQuad(320, 320,  320, 320, skillSet:getDimensions()),
+  
+  swapHpAndEn= love.graphics.newQuad(320,  960,  320, 320, skillSet:getDimensions()), 
   vampir = love.graphics.newQuad(0,  960,  320, 320, skillSet:getDimensions()),
 }
 
@@ -257,13 +268,17 @@ allSkills = {}
 allSkills[1] = skillQuads.hp
 allSkills[2] = skillQuads.energy
 allSkills[3] = skillQuads.meleeDef
-allSkills[4] = skillQuads.rangedDef
+allSkills[4] = skillQuads.rangeDef
 allSkills[5] = skillQuads.atack
-allSkills[6] = skillQuads.atack---------
-allSkills[7] = skillQuads.atack-----------
+allSkills[6] = skillQuads.speed
+allSkills[7] = skillQuads.collectRange
 -------------------------------------------------------------------
-
-
+--########################RARE###########################################
+allSkills[8] = skillQuads.waveAtack
+allSkills[9] = skillQuads.bloodAtack
+allSkills[10] = skillQuads.sealAtack
+allSkills[11] = skillQuads.spikeArmor
+-------------------------------------------------------------------
   
 playerDrawPar = {
     {
@@ -318,9 +333,8 @@ playerDrawPar = {
       cristalX = 55,
     }, 
 }
-
-playerAbility = {
-    tip =3 , 
+playerStaticParametrs = {
+    tip =1 , 
     mass =200,
     radiusCollect = 100,
     damage = 1,
@@ -333,6 +347,32 @@ playerAbility = {
     boostRegen = 100,
     boostWaste = 150,
 }
+playerAbility = {
+    tip =playerStaticParametrs.tip, 
+    mass =playerStaticParametrs.mass,
+    radiusCollect =playerStaticParametrs.radiusCollect,
+    damage = playerStaticParametrs.damage,
+    invTimer = playerStaticParametrs.invTimer,
+    maxSpeed = playerStaticParametrs.maxSpeed,
+    speed = playerStaticParametrs.speed,
+    speedA  = playerStaticParametrs.speedA,
+    debaffStrenght =playerStaticParametrs.debaffStrenght,
+    scaleBody = playerStaticParametrs.scaleBody,
+    boostRegen = playerStaticParametrs.boostRegen,
+    boostWaste = playerStaticParametrs.boostWaste,
+}
+playerSkillParametrs = {
+    hpK = 0,
+    enK = 1,
+    meleeDefK = 0,
+    rangeDefK = 0,
+    damageK = 1,
+    speedK = 1,
+    collectRangeK = 1,
+}
+
+
+
 playerSkills = {}
 playerSkills[1] ={
 img =skillQuads.hp,

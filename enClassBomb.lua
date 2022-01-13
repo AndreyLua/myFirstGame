@@ -124,7 +124,7 @@ enemyBombClass = Class{
             self.w = 100
             if (player.a ==0 and  (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= self.w*k+playerAbility.scaleBody*k ) then
                 flaginv = false 
-                hp.long = hp.long - self.damage
+                enAtackPlayer(self.damage,'e')
             end
         end
         if ( self.atack < 0) then

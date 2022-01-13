@@ -18,7 +18,7 @@ enemyHammerTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    5,  -- damage
+    80,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
@@ -274,7 +274,8 @@ enemyHammerClass = Class{
         if ( a == 0 ) then
             if (self.invTimer == self.timer and self.dash~=self.dashTimer) then
                 flaginv = false 
-                hp.long = hp.long - self.damage
+                self.dash=self.dashTimer
+                enAtackPlayer(self.damage,'m')
             end 
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then

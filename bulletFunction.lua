@@ -79,8 +79,7 @@ end
         else
             if ((math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)) < math.pow(playerAbility.scaleBody*k,2)) then
                 flaginv = false 
-                hp.long = hp.long -enemyBullets[i].damage
-                hp.long3  = hp.long
+                enAtackPlayer(enemyBullets[i].damage,'r')
                 table.remove(enemyBullets,i)
             end
         end      

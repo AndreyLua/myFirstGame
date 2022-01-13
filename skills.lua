@@ -206,7 +206,15 @@ end
 
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 end
-
+function lvlParametrs()
+    for i =1, #playerSkills do 
+        local masSkill = playerSkills[i] 
+        if (masSkill.numb == 1 ) then 
+            playerSkillParametrs.hpK =    ??
+        end
+    end
+  
+end
 function textUpdate(text,speed,dt) 
     if (texti<=#text) then 
         textT:update(dt)
@@ -218,7 +226,7 @@ function textUpdate(text,speed,dt)
                 textL = textL:sub(0,#textL-1)
             end
             textkek = text:sub(texti,texti)
-            if ( textK>7 and text:sub(texti,texti) == " ") then
+            if ( textK>11 and text:sub(texti,texti) == " ") then
                textK = 0 
                textkek =textkek.."\n"
             end
