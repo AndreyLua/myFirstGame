@@ -128,6 +128,7 @@ function convert:update(dt)
                 else
                     table.insert(playerSkills,{img = allSkills[rewardSkill],lvl  = 1,numb = rewardSkill  } ) 
                 end
+                lvlParametrs()
             end
             rewardMoney = 0 
             rewardSkill = 0

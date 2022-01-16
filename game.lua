@@ -68,6 +68,8 @@ boost = {
 }
 
 player = {
+    li = 0,
+    liTimer = 20,
     debaffStrenght =1,
     body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,playerAbility.scaleBody*k),
     invis = 10,
@@ -102,16 +104,32 @@ bulletRegulS  = {}
 enemyBullets = {} 
 playerSledi = {} 
 
+masli= {} 
+masliDr = {}
+masliDr2 = {}
+lii = 0 
+
+lvlParametrs()
 end
 
 
 function game:update(dt)
+  
+if ( love.mouse.isDown(1) )then
+  --  lii = light(screenWidth/2+20*k+(player.x-camera.x),screenHeight/2+20*k2+(player.y-camera.y)  ,mouse.x,mouse.y,3)
+  --  table.insert(masli,lii)
+   -- if ( #masli >3) then
+   --     table.remove(masli,1)
+   -- end
+end
+masliDr = {}
+
 --flaginv =true
 explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
---boost.long = 1000
---hp.long = 1000 
+boost.long = 1000
+hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -308,7 +326,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,3)
+        allSpawn(en,Geo,4)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -369,15 +387,68 @@ function  game:draw()
         love.graphics.setColor(1,0.7,0.7,1)
     end
     love.graphics.draw(playerBatch)
+    playerBatch:clear()
+    playerDrawCristal()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(enBatchDop)
     love.graphics.push()
         love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
         Health_Boost()
+        love.graphics.setColor(0.4,1,1,1)
+        if ( masliDr and #masliDr > 2  )then 
+            love.graphics.setLineWidth( 4*k )
+            love.graphics.line( masliDr ) 
+        end
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(boomBatch)
         resAfterDie(dt)
     love.graphics.pop()
+    love.graphics.push()
+        love.graphics.translate(screenWidth/2+20*k+(player.x-camera.x),screenHeight/2+20*k2+(player.y-camera.y))
+        love.graphics.rotate(-controler.angle)
+        if ( masliDr2 )then 
+            for i = 1, #masliDr2 do
+              if ( i == 1 or i == 2 ) then
+                  love.graphics.setColor(0.4,1,1,player.li/18-0.2)
+                  love.graphics.setLineWidth( 4*k )
+                  love.graphics.line(unpack(masliDr2[i]) )
+                  love.graphics.setColor(0.8,1,1,player.li/18)
+                  love.graphics.setLineWidth( 2.5*k )
+                  love.graphics.line(unpack(masliDr2[i]) )
+              end
+              if ( i == 3 or i == 4 ) then 
+                  love.graphics.setColor(0.4,1,1,player.li/20-0.2)
+                  love.graphics.setLineWidth( 3*k )
+                  love.graphics.line(unpack(masliDr2[i]) )
+                  love.graphics.setColor(0.8,1,1,player.li/20)
+                  love.graphics.setLineWidth( 1.7*k )
+                  love.graphics.line(unpack(masliDr2[i]) )
+              end
+              if ( i == 5 or i == 6 ) then 
+                  love.graphics.setColor(0.4,1,1,player.li/18-0.2)
+                  love.graphics.setLineWidth( 4*k )
+                  love.graphics.line(unpack(masliDr2[i]) ) 
+                  love.graphics.setColor(0.8,1,1,player.li/18)
+                  love.graphics.setLineWidth( 2.5*k )
+                  love.graphics.line(unpack(masliDr2[i]) )   
+              end
+              if ( i ==7 or i == 8 ) then 
+                  love.graphics.setColor(0.4,1,1,player.li/20-0.2)
+                  love.graphics.setLineWidth( 3*k )
+                  love.graphics.line(unpack(masliDr2[i]) )   
+                  love.graphics.setColor(0.8,1,1,player.li/20)
+                  love.graphics.setLineWidth( 1.7*k )
+                  love.graphics.line(unpack(masliDr2[i]) )   
+              end
+              --  love.graphics.line(unpack(masliDr2[i]) )   
+            end
+        end
+    love.graphics.pop()
+   -- if ( player.a == 1 ) then
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.draw(playerBatch)
+  --  end
+    
     love.graphics.setColor(1,1,1,1)
     for i=1,#exp do
         love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*15*k,exp[i].scale*15*k2,4*exp[i].scale*k)
@@ -402,14 +473,13 @@ function  game:draw()
     else
         love.graphics.draw(kek,0,0,0,sx,sy)
     end
-    
+   
     love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
     love.graphics.print("EN: "..tostring(#en), 100, 40,0,k/2,k2/2)
     local stat  =  love.graphics.getStats()
     love.graphics.print("Stat  "..tostring(stat.drawcalls), 100, 70,0,k/2,k2/2)
     love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
     love.graphics.print("RES: "..tostring(#res), 100, 150,0,k/2,k2/2)
-    
     vect = {}
 end
                

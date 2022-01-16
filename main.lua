@@ -250,7 +250,6 @@ hp3 = Timer.new()
 boost1 = Timer.new()
 boost2 = Timer.new()
 ----------------------------------
-textT  =  Timer.new()
 wavetimer=  Timer.new()
 TimerObj = Timer.new()
 TimerEn = Timer.new()
@@ -346,6 +345,7 @@ playerStaticParametrs = {
     scaleBody = 35,
     boostRegen = 100,
     boostWaste = 150,
+    boostWasteEnHit = 10,
 }
 playerAbility = {
     tip =playerStaticParametrs.tip, 
@@ -360,15 +360,16 @@ playerAbility = {
     scaleBody = playerStaticParametrs.scaleBody,
     boostRegen = playerStaticParametrs.boostRegen,
     boostWaste = playerStaticParametrs.boostWaste,
+    boostWasteEnHit = playerStaticParametrs.boostWasteEnHit,
 }
 playerSkillParametrs = {
     hpK = 0,
-    enK = 1,
+    enK = 0,
     meleeDefK = 0,
     rangeDefK = 0,
-    damageK = 1,
-    speedK = 1,
-    collectRangeK = 1,
+    damageK = 0,
+    speedK = 0,
+    collectRangeK = 0,
 }
 
 
@@ -384,12 +385,26 @@ img =skillQuads.energy,
 lvl = 1,
 numb = 2 ,
 }
+playerSkills[4] ={
+img =skillQuads.meleeDef,------
+lvl = 1,
+numb = 3 ,
+}
+playerSkills[5] ={
+img =skillQuads.rangeDef,------
+lvl = 1,
+numb = 4 ,
+}
 playerSkills[3] ={
 img =skillQuads.atack,
 lvl = 1,
 numb = 5 ,
 }
-
+playerSkills[6] ={
+img =skillQuads.speed,
+lvl = 1,
+numb = 6 ,
+}
 
 -------------CONST AND FLAGS------
 volume = 50

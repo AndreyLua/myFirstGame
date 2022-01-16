@@ -167,7 +167,7 @@ function playerBoost(dt)
     end
     
     if ( player.a==1) then
-        boost.long = boost.long -playerAbility.boostWaste*dt
+        boost.long = boost.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*dt
     else
         boost.long = boost.long + playerAbility.boostRegen *dt
     end

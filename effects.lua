@@ -1,100 +1,63 @@
 local effects = {}
 
 
-
-
-
-
 function light(x1,y1,x2,y2,i)
-    --[[
-  if ( love.mouse.isDown(1) )then
-    lightTimer:update(dt)
-    lightTimer:every(0.01, function()  
-    lii = light(screenWidth/1.3,screenHeight/1.6,mouse.x,mouse.y,3)
-    table.insert(masli,lii)
-    lightTimer:clear()
-  end)
-if ( #masli >3) then
-  table.remove(masli,1)
-  end
-end
-]]--
-local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-if ( length < screenHeight/1.7 and length > 30*k ) then 
-local m = {x1,y1}
-local x =0
-local y = 0
-local aye = 0
-if ( length < screenHeight/4) then 
-  aye = 4
-else
-  aye = 8
-end
-local ran =math.random(-length/aye,length/aye)
-local angle =3.14-math.atan2((x2-x1),(y2-y1))
-x =x1+(x2-x1)/2+math.cos(angle)*ran
-y =y1+(y2-y1)/2+math.sin(angle)*ran
------------------------------------
+    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
+    if ( length > 1*k ) then 
+        local m = {x1,y1}
+        local x =0
+        local y = 0
+        local aye = 4
+        
+        local ran =math.random(-length/aye,length/aye)
+        local angle =3.14-math.atan2((x2-x1),(y2-y1))
+        x =x1+(x2-x1)/2+math.cos(angle)*ran
+        y =y1+(y2-y1)/2+math.sin(angle)*ran
 
-local m1 = pol(x1,y1,x,y,i)
-for  i=1,#m1 do
-  table.insert(m,m1[i])
-  end
+        local m1 = pol(x1,y1,x,y,i)
+        for  i=1,#m1 do
+            table.insert(m,m1[i])
+        end
 
------------------
-table.insert(m,x)
-table.insert(m,y)
------------------
-m1 = pol(x,y,x2,y2,i)
-for  i=1,#m1 do
-  table.insert(m,m1[i])
-  end
-
-table.insert(m,x2)
-table.insert(m,y2)
-
-return m
-else
-table.remove(masli,#masli)
-table.remove(masli,#masli)
-table.remove(masli,#masli)
-end
+        table.insert(m,x)
+        table.insert(m,y)
+        m1 = pol(x,y,x2,y2,i)
+        for  i=1,#m1 do
+            table.insert(m,m1[i])
+        end
+        table.insert(m,x2)
+        table.insert(m,y2)
+        return m
+    else
+        table.remove(masli,#masli)
+        table.remove(masli,#masli)
+        table.remove(masli,#masli)
+    end
 end
 function pol(x1,y1,x2,y2,i) 
-  local aye = 0
-if (math.sqrt((mouse.x-screenWidth/1.3)*(mouse.x-screenWidth/1.3)+(mouse.y-screenHeight/1.6)*(mouse.y-screenHeight/1.6)) > screenHeight/4) then  
-    aye = 8
-  else
-    aye = 5
-end
-local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-local ran =math.random(-length/aye,length/aye)
-local angle =3.14-math.atan2((x2-x1),(y2-y1))
-local x =x1+(x2-x1)/2+math.cos(angle)*ran
-local y =y1+(y2-y1)/2+math.sin(angle)*ran
-local m1 = {}
-if ( i>0 and i~=0 ) then
-  
-local m2 = pol(x1,y1,x,y,i-1)
-
-
-for  i=1,#m2 do
-  table.insert(m1,m2[i])
-
-end
-
-end
-table.insert(m1,x)
-table.insert(m1,y)
-if ( i>0) then
-  
-local m3 = pol(x,y,x2,y2,i-1)
-for  i=1,#m3 do
-  table.insert(m1,m3[i])
-end
- 
-end
-return m1
+    local aye = 5
+   
+    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
+    local ran =math.random(-length/aye,length/aye)
+    local angle =3.14-math.atan2((x2-x1),(y2-y1))
+    local x =x1+(x2-x1)/2+math.cos(angle)*ran
+    local y =y1+(y2-y1)/2+math.sin(angle)*ran
+    local m1 = {}
+   -- if ( i>0 and i~=0 ) then
+    --    local m2 = pol(x1,y1,x,y,i-1)
+    ----    for  i=1,#m2 do
+    --        table.insert(m1,m2[i])
+   --     end
+   -- end
+    table.insert(m1,x)
+    table.insert(m1,y)
+  --  if ( i>0) then
+    --    local m3 = pol(x,y,x2,y2,i-1)
+   --     for  i=1,#m3 do
+   --         table.insert(m1,m3[i])
+   --     end
+  --  end
+    return m1
 end
 
 function explUpdate2(dt)

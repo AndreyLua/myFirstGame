@@ -119,7 +119,6 @@ enemyСleanerClass = Class{
         end
     end;
     angleBodyTr = function(self,angle,dt)
-
         if ( self.angleBody == 0) then
             self.angleBody=0.00000001
         end
@@ -230,31 +229,27 @@ enemyСleanerClass = Class{
         local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
         if ( self.targetX > 0 and obj[self.targetX] ) then
             anglePlayerEn = math.atan2(obj[self.targetX].x-self.x,obj[self.targetX].y-self.y)
-            
-        if (self.dash and self.dash==self.dashTimer) then
-            self.angleBodyTr(self,anglePlayerEn,dt)
-            self.angleMouthTr(self,dt)
-            self.angleWingTr(self,dt)
-            self.ax=self.ax+80*k*math.sin(self.angleBody)*dt
-            self.ay=self.ay+80*k2*math.cos(self.angleBody)*dt
-            self.x= self.x+self.ax*dt*5
-            self.y= self.y+self.ay*dt*5 --- нормальное движение
-            
-          
-            if (  self.ax >22*k) then
-                self.ax=22*k
-            end
-            if (  self.ax <-22*k) then
-                self.ax=-22*k
-            end
-            if (  self.ay >22*k2) then
-                self.ay=22*k2
-            end
-            if (  self.ay <-22*k2) then
-               self.ay=-22*k2
-            end
-    
-        else
+            if (self.dash and self.dash==self.dashTimer) then
+                self.angleBodyTr(self,anglePlayerEn,dt)
+                self.angleMouthTr(self,dt)
+                self.angleWingTr(self,dt)
+                self.ax=self.ax+80*k*math.sin(self.angleBody)*dt
+                self.ay=self.ay+80*k2*math.cos(self.angleBody)*dt
+                self.x= self.x+self.ax*dt*5
+                self.y= self.y+self.ay*dt*5 --- нормальное движение
+                if (  self.ax >22*k) then
+                    self.ax=22*k
+                end
+                if (  self.ax <-22*k) then
+                    self.ax=-22*k
+                end
+                if (  self.ay >22*k2) then
+                    self.ay=22*k2
+                end
+                if (  self.ay <-22*k2) then
+                   self.ay=-22*k2
+                end
+            else
                 self.angleBodyTr(self,anglePlayerEn,dt)
                 self.angleMouthTr(self,dt)
                 self.angleWingTr(self,dt)
@@ -262,8 +257,7 @@ enemyСleanerClass = Class{
                 self.ay = self.ay/1.5
                 self.x= self.x+self.ax*dt*5
                 self.y= self.y+self.ay*dt*5 --- нормальное движение
-            
-          end
+            end
         else   
             self.angleBodyTr(self,anglePlayerEn,dt)
             self.angleMouthTr(self,dt)
@@ -343,8 +337,8 @@ enemyСleanerClass = Class{
         if ( a == 0 ) then
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
+                playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
-                self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
                 spawnResHitEn(i)

@@ -297,8 +297,8 @@ enemyShooterClass = Class{
           
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
+                playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
-                self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
                 spawnResHitEn(i)

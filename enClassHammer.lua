@@ -194,8 +194,8 @@ enemyHammerClass = Class{
         if (self.dash and self.dash==self.dashTimer) then
             self.angleBodyTr(self,anglePlayerEn,dt)
             self.angleMouthTr(self,dt)
-            self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
-            self.ay=self.ay+80*k2*math.cos(anglePlayerEn)*dt
+            self.ax=self.ax+80*k*math.sin(self.angleBody)*dt
+            self.ay=self.ay+80*k2*math.cos(self.angleBody)*dt
             self.x= self.x+self.ax*dt*7
             self.y= self.y+self.ay*dt*7 --- нормальное движение
             self.x= self.x+math.sin(self.y/20)*dt*30
@@ -211,10 +211,6 @@ enemyHammerClass = Class{
             end
             if (  self.ay <-22*k2) then
                 self.ay=-22*k2
-            end
-            if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
-                self.ax = 0
-                self.ay = 0 
             end
         else
             self.x= self.x+math.sin(self.angleBody)*dt*400*k -- движение противника ускорение
@@ -279,9 +275,9 @@ enemyHammerClass = Class{
             end 
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
+                playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
                 self.dash = self.dashTimer
-                self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
                 spawnResHitEn(i)

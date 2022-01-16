@@ -24,8 +24,8 @@ enemyMeleeTable = {
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    3, --health
-    3, --healthM
+    30, --health
+    30, --healthM
     {}, -- traces
     0, --climbFlag
     100, -- climbAtack
@@ -168,25 +168,25 @@ enemyMeleeClass = Class{
         if ( angle == 0) then
             angle=0.00000001
         end
-        if ((math.abs(angle) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(angle) -  math.abs(self.angleBody)) <  -2.01*dt ) then
+        if ((angle -  self.angleBody > 2.1*dt) or (angle -  self.angleBody) <  -2.1*dt ) then
             if (angle/math.abs(angle)==self.angleBody/math.abs(self.angleBody))then
                 if ( angle>self.angleBody) then
-                    self.angleBody = self.angleBody+4*dt
+                    self.angleBody = self.angleBody+5*dt
                 else 
-                    self.angleBody = self.angleBody-4*dt
+                    self.angleBody = self.angleBody-5*dt
                 end
             else
                 if (math.abs(angle)+math.abs(self.angleBody)> 2*math.pi - math.abs(angle)-math.abs(self.angleBody)) then
                     if (self.angleBody>0) then 
-                        self.angleBody = self.angleBody+4*dt
+                        self.angleBody = self.angleBody+5*dt
                     else
-                        self.angleBody = self.angleBody-4*dt
+                        self.angleBody = self.angleBody-5*dt
                     end
                 else 
                     if (self.angleBody>0) then 
-                        self.angleBody = self.angleBody-4*dt
+                        self.angleBody = self.angleBody-5*dt
                     else
-                        self.angleBody = self.angleBody+4*dt
+                        self.angleBody = self.angleBody+5*dt
                     end
                 end
             end
@@ -266,10 +266,15 @@ enemyMeleeClass = Class{
         if (self.dash and self.dash==self.dashTimer ) then
             self.angleBodyTr(self,anglePlayerEn,dt)
             self.angleMouthTr(self,dt)
-            self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
-            self.ay=self.ay+80*k2*math.cos(anglePlayerEn)*dt
-            self.x= self.x+self.ax*dt*7
-            self.y= self.y+self.ay*dt*7 --- нормальное движение
+            self.ax=self.ax+80*k*math.sin(self.angleBody)*dt
+            self.ay=self.ay+80*k2*math.cos(self.angleBody)*dt
+            if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
+                self.x= self.x+self.ax*dt*5
+                self.y= self.y+self.ay*dt*5
+            else
+                self.x= self.x+self.ax*dt*7
+                self.y= self.y+self.ay*dt*7
+            end
             self.x= self.x+math.sin(self.y/20)*dt*30
             self.y= self.y+math.cos(self.x/20)*dt*30
             if (  self.ax >22*k) then
@@ -283,10 +288,6 @@ enemyMeleeClass = Class{
             end
             if (  self.ay <-22*k2) then
                 self.ay=-22*k2
-            end
-            if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) >2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
-                self.ax = 0
-                self.ay = 0 
             end
         else
             
@@ -305,8 +306,8 @@ enemyMeleeClass = Class{
         else
             self.ay =self.ay+50*dt
         end
-        self.x= self.x-self.ax*dt*3
-        self.y= self.y-self.ay*dt*3   
+        self.x= self.x-self.ax*dt*3----
+        self.y= self.y-self.ay*dt*3---
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
@@ -372,12 +373,11 @@ enemyMeleeClass = Class{
             end
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
-                boost.long = boost.long -playerAbility.boostWaste*10*dt
+                playerAtackEn(self,dt)
                 self.climbFlag = 0
                 self.climbAtack = self.climbAtackTimer
                 self.timer =  self.invTimer-0.001
                 self.dash = self.dashTimer
-                self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
                 spawnResHitEn(i)

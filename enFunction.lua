@@ -4,7 +4,7 @@ function enCollWithPlayerInRegularS(index,dt)
      if ( enRegulS[index]) then 
         local kek = enRegulS[index]
         for i = #kek, 1, -1 do
-            if (en[kek[i]] and en[kek[i]].body and en[kek[i]].invTimer==en[kek[i]].timer and math.abs(en[kek[i]].x - (player.x))<playerAbility.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k and math.abs(en[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+math.max(en[kek[i]].w,en[kek[i]].h)/2*k2  and  (math.pow((en[kek[i]].x - (player.x)),2) + math.pow((en[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k),2))  then
+            if (en[kek[i]] and en[kek[i]].body and en[kek[i]].timer == en[kek[i]].invTimer and  math.abs(en[kek[i]].x - (player.x))<playerAbility.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k and math.abs(en[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+math.max(en[kek[i]].w,en[kek[i]].h)/2*k2  and  (math.pow((en[kek[i]].x - (player.x)),2) + math.pow((en[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k),2))  then
                 local collisFlag, intVectorX ,intVectorY = player.body:collidesWith(en[kek[i]].body)
                 if (collisFlag) then
                     enCollWithPlayerResult(kek[i],dt,intVectorX ,intVectorY,player.a,en[kek[i]].tip)
@@ -16,8 +16,8 @@ end
 
 function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip)
     if ((intVectorX*intVectorX+intVectorY*intVectorY>=math.pow(0.05*math.max(en[i].w,en[i].h)*k,2))) then
-        en[i].ax = 0 
-        en[i].ay = 0 
+   --     en[i].ax = 0
+     --   en[i].ay =0
         en[i].x  = en[i].x -intVectorX*dt*10
         en[i].y = en[i].y - intVectorY*dt*10
     end
@@ -92,7 +92,6 @@ function enCollWithobjInRegularS(index,j,dt)
             for i = #kek, 1, -1 do
                 if (kek[i] and obj[kek[i]] and en[j]) then
                     local objScale = obj[kek[i]].collScale/2
-                   
                     ---------------------------------------------
                     if ( (en[j] and en[j].tip == 1 and en[j].targetDestroy ==en[j].targetDestroyTimer) or ( en[j] and en[j].tip == 5)  ) then
                         if ( en[j].targetY > (math.pow((obj[kek[i]].x - en[j].x),2) + math.pow((obj[kek[i]].y - en[j].y),2)) and obj[kek[i]].f ) then

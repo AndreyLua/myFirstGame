@@ -70,12 +70,14 @@ function playerMove(dt)
             player.ay = player.ay+10*dt*k2
         end
     end
+    playerLiTimerUpdate(dt)
     if ( player.a==1) then
-        player.x = player.x + player.ax*dt*playerAbility.speedA*k*player.debaffStrenght
-        player.y = player.y + player.ay*dt*playerAbility.speedA*k2*player.debaffStrenght
+       --- playerLiTimerUpdate(dt)
+        player.x = player.x + player.ax*dt*playerAbility.speedA*k*player.debaffStrenght*playerSkillParametrs.speedK
+        player.y = player.y + player.ay*dt*playerAbility.speedA*k2*player.debaffStrenght*playerSkillParametrs.speedK
     else
-        player.x = player.x + player.ax*dt*playerAbility.speed*k*player.debaffStrenght
-        player.y = player.y + player.ay*dt*playerAbility.speed*k2*player.debaffStrenght
+        player.x = player.x + player.ax*dt*playerAbility.speed*k*player.debaffStrenght*playerSkillParametrs.speedK
+        player.y = player.y + player.ay*dt*playerAbility.speed*k2*player.debaffStrenght*playerSkillParametrs.speedK
     end
 end
 
@@ -89,16 +91,42 @@ function playerDraw(dt)
     local r ,g ,b = gradient(dt)
     playerBatch:setColor(r,g,b)
     playerBatch:add(playerQuads[playerAbility.tip].cristal,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7,playerDrawPar[playerAbility.tip].cristalW/2, playerDrawPar[playerAbility.tip].cristalH/2-playerDrawPar[playerAbility.tip].cristalX)
+   
     playerBatch:setColor(1,1,1,1)
     local clow1X =xDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle+playerDrawPar[playerAbility.tip].clowR)
     local clow1Y =yDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.cos(controler.angle+playerDrawPar[playerAbility.tip].clowR)
     local clow2X =xDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle-playerDrawPar[playerAbility.tip].clowR)
     local clow2Y =yDraw+playerDrawPar[playerAbility.tip].clowX*k2*math.cos(controler.angle-playerDrawPar[playerAbility.tip].clowR)
-    
+   if ( player.li == player.liTimer) then 
+        player.li = player.liTimer - 0.00001
+        masliDr2  ={}
+        lii = light(0,0,0+20*k*math.sin(0-math.pi/3.5),0+20*k*math.cos(0-math.pi/3.5),1)
+        table.insert(masliDr2,lii)
+        lii = light(0,0,0+20*k*math.sin(0-math.pi/3.5+math.pi/1.75),0+20*k*math.cos(0-math.pi/3.5+math.pi/1.75),1)
+        table.insert(masliDr2,lii)
+        lii = light(0+20*k*math.sin(0-math.pi/3.5),0+20*k*math.cos(0-math.pi/3.5),0+35*k*math.sin(0-math.pi/2.9),0+35*k*math.cos(0-math.pi/2.9),1)
+        table.insert(masliDr2,lii)
+        lii = light(0+20*k*math.sin(0-math.pi/3.5+math.pi/1.75),0+20*k*math.cos(0-math.pi/3.5+math.pi/1.75),0+35*k*math.sin(0-math.pi/3.5+math.pi/1.55),0+35*k*math.cos(0-math.pi/3.5+math.pi/1.55),1)
+        table.insert(masliDr2,lii)
+        ------------------------
+        lii = light(0,0,0+22*k*math.sin(0-math.pi/1.2),0+22*k*math.cos(0-math.pi/1.2),1)
+        table.insert(masliDr2,lii)
+        lii = light(0,0,0+22*k*math.sin(0-math.pi/1.2-math.pi/3),0+22*k*math.cos(0-math.pi/1.2-math.pi/3),1)
+       table.insert(masliDr2,lii)
+        lii = light(0+22*k*math.sin(0-math.pi/1.2),0+22*k*math.cos(0-math.pi/1.2),0+30*k*math.sin(0-math.pi/1.25),0+30*k*math.cos(0-math.pi/1.25),1)
+        table.insert(masliDr2,lii)
+        lii = light(0+22*k*math.sin(0-math.pi/1.2-math.pi/3),0+22*k*math.cos(0-math.pi/1.2-math.pi/3),0+30*k*math.sin(0-math.pi/1.2-math.pi/2.8),0+30*k*math.cos(0-math.pi/1.2-math.pi/2.8),1)
+        table.insert(masliDr2,lii)
+      end
     playerBatch:add(playerQuads[playerAbility.tip].clow1,clow1X,clow1Y,-controler.angle+math.pi+player.clowR,k/7,k2/7,playerDrawPar[playerAbility.tip].clowW1, playerDrawPar[playerAbility.tip].clowH)
     playerBatch:add(playerQuads[playerAbility.tip].clow2,clow2X,clow2Y,-controler.angle+math.pi-player.clowR,k/7,k2/7,playerDrawPar[playerAbility.tip].clowW2, playerDrawPar[playerAbility.tip].clowH)
 end
-
+function playerDrawCristal()
+    local xDraw = screenWidth/2+20*k+(player.x-camera.x)
+    local yDraw = screenHeight/2+20*k2+(player.y-camera.y)  
+    playerBatch:setColor(1,1,1,1)
+    playerBatch:add(playerQuads[playerAbility.tip].cristal,xDraw,yDraw,-controler.angle+math.pi,k/(7-player.li/10),k2/(7-player.li/10),playerDrawPar[playerAbility.tip].cristalW/2, playerDrawPar[playerAbility.tip].cristalH/2-playerDrawPar[playerAbility.tip].cristalX)  
+end
 function playerSledDraw(x,y,dt)
  --  player.body:draw('line')
     love.graphics.circle('fill',controler.x0,controler.y0,10*k)
@@ -155,6 +183,15 @@ function enAtackPlayer(dmg,tip)
     end
 end
 
+function playerAtackEn(self,dt)
+    boost.long = boost.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*playerAbility.boostWasteEnHit*dt
+    self.health  =  self.health - playerAbility.damage*playerSkillParametrs.damageK
+    lii = light(player.x,player.y,self.x,self.y,3)
+    masli[1] = lii
+
+    masliDr = masli[1]
+end
+
 function playerCollWithEn(dt)
     local playerIndex =math.floor((player.x-40*k)/(80*k)) + math.floor((player.y-40*k2)/(80*k2))*math.floor((screenWidth/(80*k))+1) 
     enCollWithPlayerInRegularS(playerIndex,dt)
@@ -204,7 +241,23 @@ function playerClowR(dt)
         end
     end
 end
-
+function playerLiTimerUpdate(dt)
+    if ( player.a == 1 ) then
+        if (player.li < 0) then
+            player.li = player.liTimer
+        end
+        if ( player.li < player.liTimer) then 
+            player.li = player.li - 40 * dt
+        end
+    else
+        if ( player.li < player.liTimer) then 
+            player.li = player.li - 40 * dt
+            if ( player.li < 0) then
+                player.li = 0 
+            end
+        end
+    end
+end
 function playerDebaff(dt)
     if (player.debaffStrenght < 1) then
         local time = 3 

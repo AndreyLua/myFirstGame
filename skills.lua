@@ -81,19 +81,8 @@ function skills:update(dt)
         but1 = false
         flagtouch3 =false
     end
-    local indexR2 = xR / (math.pi/6)
-    if ( xR%(math.pi/6) > math.pi/12) then
-        indexR2 = math.ceil(xR / (math.pi/6))
-    else
-        indexR2 = math.floor(xR / (math.pi/6))
-    end
-    if ( playerSkills[indexR2+4]) then 
-        textUpdate(textMas[playerSkills[indexR2+4].numb],0.03,dt) 
-    else
-        texti = 0 
-        textL = ""
-        textK = 0 
-    end
+  
+   
 end
 
 function skills:draw()
@@ -148,10 +137,24 @@ else
     indexR = math.floor(xR / (math.pi/6))
 end
 if ( playerSkills[indexR+4]) then 
+    if ( speedR == 0 ) then 
+        textUpdate(textMas[playerSkills[indexR+4].numb],1,dt) 
+    else
+        texti = 0 
+        textL = ""
+        textK = 0 
+    end
+    
     slot(playerSkills[indexR+4].img,xBigSlot,screenHeight/2,160,160,0.4) 
 else
+    texti = 0 
+    textL = ""
+    textK = 0 
+  
     slot(nil,xBigSlot,screenHeight/2,160,160,0.4)   
 end
+
+
 for i = 1 , 20 do 
     local angle = -i*math.pi/6+math.pi/6+ xR
     local light = 0.7
@@ -195,44 +198,76 @@ love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/
 love.graphics.setColor(1,1,1,1) 
 
 if ( playerSkills[indexR+4]) then 
-    text(xTextPanel-(160/3*k)+10*k,screenHeight/2+150*k,0.5)
+    text(xTextPanel-(160/3*k)+20*k,screenHeight/2+140*k,0.45)
+    textPar(playerSkills[indexR+4].numb,xTextPanel-(160/3*k)+20*k,screenHeight/2-70*k,0.45)
     local fontWidth = font:getWidth(tostring(playerSkills[indexR+4].lvl))
     love.graphics.setColor(0,0,0,0.5) 
     xBigSlot = (xTextPanel+ 160/3*k)+0.2*difButton+(0.4*1.2*160*k)
-    love.graphics.rectangle("fill",xBigSlot-(0.4*1.2*160*k)+14*k,screenHeight/2-160*k*0.4*1.2+14*k,15*k2,fontWidth*k2/2)
+  --  love.graphics.rectangle("fill",xBigSlot-(0.4*1.2*160*k)+12*k,screenHeight/2-160*k*0.4*1.2+12*k,17*k2,fontWidth*k2/2+2*k2)
     love.graphics.setColor(1,1,1,1) 
     love.graphics.print(tostring(playerSkills[indexR+4].lvl),xBigSlot-(0.4*1.2*160*k)+10*k,screenHeight/2-160*k*0.4*1.2+fontWidth*k2/2+14*k,-math.pi/2,k/2,k2/2)
 end
-
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 end
 function lvlParametrs()
     for i =1, #playerSkills do 
         local masSkill = playerSkills[i] 
         if (masSkill.numb == 1 ) then 
-            playerSkillParametrs.hpK =    ??
+            playerSkillParametrs.hpK =0.3*math.log10(masSkill.lvl)
+        end
+        if (masSkill.numb == 2 ) then 
+            playerSkillParametrs.enK =0.3*math.log10(masSkill.lvl)
+        end
+        if (masSkill.numb == 3 ) then 
+            playerSkillParametrs.meleeDefK=0.3*math.log10(masSkill.lvl)
+        end
+        if (masSkill.numb == 4 ) then 
+            playerSkillParametrs.meleeRangeK=0.3*math.log10(masSkill.lvl)
+        end
+        if (masSkill.numb == 5 ) then 
+            playerSkillParametrs.damageK =1+0.5*math.log(masSkill.lvl,2)
+        end
+        if (masSkill.numb == 6 ) then 
+            playerSkillParametrs.speedK =1+0.1*math.log(masSkill.lvl,2)
         end
     end
-  
 end
+
+function textPar(i,x,y,scale) 
+    if (i == 1 ) then 
+        love.graphics.print("HP "..tostring(math.ceil(100/(1-playerSkillParametrs.hpK))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
+    if (i == 2 ) then 
+        love.graphics.print("EN "..tostring(math.ceil(100/(1-playerSkillParametrs.enK))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
+    if (i == 3 ) then 
+        love.graphics.print("RES "..tostring(math.ceil(100*(playerSkillParametrs.meleeDefK))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
+    if (i == 4 ) then 
+        love.graphics.print("RES "..tostring(math.ceil(100*(playerSkillParametrs.rangeDefK))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
+    if (i == 5 ) then 
+        love.graphics.print("AT "..tostring(math.ceil(100*(playerSkillParametrs.damageK))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
+     if (i == 6 ) then 
+        love.graphics.print("SP "..tostring(math.ceil(100*(playerSkillParametrs.speedK))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
+end
+
 function textUpdate(text,speed,dt) 
     if (texti<=#text) then 
-        textT:update(dt)
-        textT:every(speed, function()
-            texti = texti+1
-            textK = textK+1
-            local textkek = "" 
-            if (textL:sub(#textL,#textL)=="_") then
-                textL = textL:sub(0,#textL-1)
-            end
-            textkek = text:sub(texti,texti)
-            if ( textK>11 and text:sub(texti,texti) == " ") then
-               textK = 0 
-               textkek =textkek.."\n"
-            end
-            textL = textL..textkek.."_"
-            textT:clear()
-        end)
+        texti = texti+1
+        textK = textK+1
+        local textkek = "" 
+        if (textL:sub(#textL,#textL)=="_") then
+            textL = textL:sub(0,#textL-1)
+        end
+        textkek = text:sub(texti,texti)
+        if ( textK>11 and text:sub(texti,texti) == " ") then
+            textK = 0 
+            textkek =textkek.."\n"
+        end
+        textL = textL..textkek.."_"
     end
 end
 

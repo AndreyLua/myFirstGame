@@ -375,10 +375,8 @@ enemyBombClass = Class{
             
         else
             if ( self.invTimer and  self.invTimer ==self.timer) then
-               -- self.prepar  = self.preparTimer
-                --self.atack  = self.atackTimer
+                playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
-                self.health  =  self.health - playerAbility.damage
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
                 spawnResHitEn(i)
