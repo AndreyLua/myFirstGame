@@ -3,60 +3,156 @@ local effects = {}
 
 function light(x1,y1,x2,y2,i)
     local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-    if ( length > 1*k ) then 
-        local m = {x1,y1}
-        local x =0
-        local y = 0
-        local aye = 4
-        
-        local ran =math.random(-length/aye,length/aye)
-        local angle =3.14-math.atan2((x2-x1),(y2-y1))
-        x =x1+(x2-x1)/2+math.cos(angle)*ran
-        y =y1+(y2-y1)/2+math.sin(angle)*ran
-
-        local m1 = pol(x1,y1,x,y,i)
-        for  i=1,#m1 do
-            table.insert(m,m1[i])
-        end
-
-        table.insert(m,x)
-        table.insert(m,y)
-        m1 = pol(x,y,x2,y2,i)
-        for  i=1,#m1 do
-            table.insert(m,m1[i])
-        end
-        table.insert(m,x2)
-        table.insert(m,y2)
-        return m
-    else
-        table.remove(masli,#masli)
-        table.remove(masli,#masli)
-        table.remove(masli,#masli)
+    if ( length > 10*k) then 
+    local m = {x1,y1}
+    local masKof = {}
+    local x =0
+    local y = 0
+    local aye = 4 -- ширина разброса 
+    local ran =math.random(-length/aye,length/aye)
+    table.insert(masKof,ran)
+    local angle =3.14-math.atan2((x2-x1),(y2-y1))
+    x =x1+(x2-x1)/2+math.cos(angle)*ran
+    y =y1+(y2-y1)/2+math.sin(angle)*ran
+    local m1,m2 = pol(x1,y1,x,y,i)
+    for  i=1,#m1 do
+        table.insert(m,m1[i])
+    end
+    for  i=1,#m2 do
+        table.insert(masKof,m2[i])
+    end
+    table.insert(m,x)
+    table.insert(m,y)
+    m1,m2 = pol(x,y,x2,y2,i)
+    for  i=1,#m1 do
+        table.insert(m,m1[i])
+    end
+    for  i=1,#m2 do
+        table.insert(masKof,m2[i])
+    end
+    table.insert(m,x2)
+    table.insert(m,y2)
+    return m,masKof
     end
 end
 function pol(x1,y1,x2,y2,i) 
-    local aye = 5
-   
+    local aye = 5 -- ширина разброса 
+    local masKofPol = {}
+    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
+    local ran =math.random(-length/aye,length/aye)
+    table.insert(masKofPol,ran)
+    local angle =3.14-math.atan2((x2-x1),(y2-y1))
+    local x =x1+(x2-x1)/2+math.cos(angle)*ran
+    local y =y1+(y2-y1)/2+math.sin(angle)*ran
+    local m1 = {}
+    if ( i>0 and i~=0 ) then
+        local m2,m3 = pol(x1,y1,x,y,i-1)
+        for  i=1,#m2 do
+            table.insert(m1,m2[i])
+        end
+        for  i=1,#m3 do
+            table.insert(masKofPol,m3[i])
+        end
+    end
+    table.insert(m1,x)
+    table.insert(m1,y)
+    if ( i>0) then
+        local m2,m3 = pol(x,y,x2,y2,i-1)
+        for  i=1,#m2 do
+            table.insert(m1,m2[i])
+        end
+        for  i=1,#m3 do
+            table.insert(masKofPol,m3[i])
+        end
+    end
+    return m1,masKofPol
+end
+
+function light2(x1,y1,x2,y2,i)
+    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
+    local m = {x1,y1}
+    local x =0
+    local y = 0
+    local aye = 4 -- ширина разброса 
+    local ran =math.random(-length/aye,length/aye)
+    local angle =3.14-math.atan2((x2-x1),(y2-y1))
+    x =x1+(x2-x1)/2+math.cos(angle)*ran
+    y =y1+(y2-y1)/2+math.sin(angle)*ran
+    local m1 = pol2(x1,y1,x,y,i)
+    for  i=1,#m1 do
+        table.insert(m,m1[i])
+    end
+    table.insert(m,x)
+    table.insert(m,y)
+    m1 = pol2(x,y,x2,y2,i)
+    for  i=1,#m1 do
+        table.insert(m,m1[i])
+    end
+    table.insert(m,x2)
+    table.insert(m,y2)
+    return m
+end
+
+function pol2(x1,y1,x2,y2,i) 
+    local aye = 5 -- ширина разброса 
     local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
     local ran =math.random(-length/aye,length/aye)
     local angle =3.14-math.atan2((x2-x1),(y2-y1))
     local x =x1+(x2-x1)/2+math.cos(angle)*ran
     local y =y1+(y2-y1)/2+math.sin(angle)*ran
     local m1 = {}
-   -- if ( i>0 and i~=0 ) then
-    --    local m2 = pol(x1,y1,x,y,i-1)
-    ----    for  i=1,#m2 do
-    --        table.insert(m1,m2[i])
-   --     end
-   -- end
     table.insert(m1,x)
     table.insert(m1,y)
-  --  if ( i>0) then
-    --    local m3 = pol(x,y,x2,y2,i-1)
-   --     for  i=1,#m3 do
-   --         table.insert(m1,m3[i])
-   --     end
-  --  end
+    return m1
+end
+
+function lightDesh(x1,y1,x2,y2,i,mas)
+    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
+    local m = {x1,y1}
+    local aye = 4 -- ширина разброса 
+    local ran =mas[1]
+    local angle =3.14-math.atan2((x2-x1),(y2-y1))
+    local x =x1+(x2-x1)/2+math.cos(angle)*ran
+    local y =y1+(y2-y1)/2+math.sin(angle)*ran
+    local m1= polDesh(x1,y1,x,y,i,2,mas)
+    for  i=1,#m1 do
+        table.insert(m,m1[i])
+    end
+    table.insert(m,x)
+    table.insert(m,y)
+    m1 = polDesh(x,y,x2,y2,i,2+#m1/2,mas)
+    for  i=1,#m1 do
+        table.insert(m,m1[i])
+    end
+    table.insert(m,x2)
+    table.insert(m,y2)
+    return m
+end
+
+function polDesh(x1,y1,x2,y2,i,masI,mas) 
+    local aye = 5 -- ширина разброса 
+    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
+    local ran =mas[masI]
+    local angle =3.14-math.atan2((x2-x1),(y2-y1))
+    local x =x1+(x2-x1)/2+math.cos(angle)*ran
+    local y =y1+(y2-y1)/2+math.sin(angle)*ran
+    local m1 = {}
+    local m2 = {}
+    local m3 = {}
+    if ( i>0 and i~=0 ) then
+        m2 = polDesh(x1,y1,x,y,i-1,masI+1,mas)
+        for  i=1,#m2 do
+            table.insert(m1,m2[i])
+        end
+    end
+    table.insert(m1,x)
+    table.insert(m1,y)
+    if ( i>0) then
+        m3 = polDesh(x,y,x2,y2,i-1,masI+1+#m2/2,mas)
+        for  i=1,#m2 do
+            table.insert(m1,m3[i])
+        end
+    end
     return m1
 end
 
