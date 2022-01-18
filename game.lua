@@ -398,72 +398,72 @@ function  game:draw()
             for i = 1, #masliDr2 do
               if ( playerLiRan[1] == 1 ) then 
               if ( i == 1 ) then
-                  love.graphics.setColor(0.4,1,1,player.li/18-0.2)
+                  love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
                   love.graphics.setLineWidth( 3*k )
                   love.graphics.line(unpack(masliDr2[i]) )
-                  love.graphics.setColor(0.8,1,1,player.li/18)
+                  love.graphics.setColor(0.8,0.8,0.8,player.li/18)
                   love.graphics.setLineWidth( 2*k )
                   love.graphics.line(unpack(masliDr2[i]) )
               end
               if ( i == 3  ) then 
-                  love.graphics.setColor(0.4,1,1,player.li/20-0.2)
+                  love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
                   love.graphics.setLineWidth( 2*k )
                   love.graphics.line(unpack(masliDr2[i]) )
-                  love.graphics.setColor(0.8,1,1,player.li/20)
+                  love.graphics.setColor(0.8,0.8,0.8,player.li/20)
                   love.graphics.setLineWidth( 1*k )
                   love.graphics.line(unpack(masliDr2[i]) )
               end
             end
               if (playerLiRan[2] == 1 ) then 
               if ( i == 2 ) then
-                  love.graphics.setColor(0.4,1,1,player.li/18-0.2)
+                  love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
                   love.graphics.setLineWidth( 3*k )
                   love.graphics.line(unpack(masliDr2[i]) )
-                  love.graphics.setColor(0.8,1,1,player.li/18)
+                  love.graphics.setColor(0.8,0.8,0.8,player.li/18)
                   love.graphics.setLineWidth( 2*k )
                   love.graphics.line(unpack(masliDr2[i]) )
               end
               if ( i == 4  ) then 
-                  love.graphics.setColor(0.4,1,1,player.li/20-0.2)
+                  love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
                   love.graphics.setLineWidth( 2*k )
                   love.graphics.line(unpack(masliDr2[i]) )
-                  love.graphics.setColor(0.8,1,1,player.li/20)
+                  love.graphics.setColor(0.8,0.8,0.8,player.li/20)
                   love.graphics.setLineWidth( 1*k )
                   love.graphics.line(unpack(masliDr2[i]) )
               end
             end
               if ( playerLiRan[3] == 1 ) then 
               if ( i == 5) then 
-                  love.graphics.setColor(0.4,1,1,player.li/18-0.2)
+                  love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
                   love.graphics.setLineWidth( 3*k )
                   love.graphics.line(unpack(masliDr2[i]) ) 
-                  love.graphics.setColor(0.8,1,1,player.li/18)
+                  love.graphics.setColor(0.8,0.8,0.8,player.li/18)
                   love.graphics.setLineWidth( 2*k )
                   love.graphics.line(unpack(masliDr2[i]) )   
               end
               if ( i ==7) then 
-                  love.graphics.setColor(0.4,1,1,player.li/20-0.2)
+                  love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
                   love.graphics.setLineWidth( 2*k )
                   love.graphics.line(unpack(masliDr2[i]) )   
-                  love.graphics.setColor(0.8,1,1,player.li/20)
+                  love.graphics.setColor(0.8,0.8,0.8,player.li/20)
                   love.graphics.setLineWidth( 1*k )
                   love.graphics.line(unpack(masliDr2[i]) )   
               end
             end
               if ( playerLiRan[4] == 1 ) then 
               if ( i == 6) then 
-                  love.graphics.setColor(0.4,1,1,player.li/18-0.2)
+                  love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
                   love.graphics.setLineWidth( 3*k )
                   love.graphics.line(unpack(masliDr2[i]) ) 
-                  love.graphics.setColor(0.8,1,1,player.li/18)
+                  love.graphics.setColor(0.8,0.8,0.8,player.li/18)
                   love.graphics.setLineWidth( 2*k )
                   love.graphics.line(unpack(masliDr2[i]) )   
               end
               if ( i ==8) then 
-                  love.graphics.setColor(0.4,1,1,player.li/20-0.2)
+                  love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
                   love.graphics.setLineWidth( 2*k )
                   love.graphics.line(unpack(masliDr2[i]) )   
-                  love.graphics.setColor(0.8,1,1,player.li/20)
+                  love.graphics.setColor(0.8,0.8,0.8,player.li/20)
                   love.graphics.setLineWidth( 1*k )
                   love.graphics.line(unpack(masliDr2[i]) )   
               end

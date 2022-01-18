@@ -186,26 +186,27 @@ end
 function playerAtackEn(self,dt)
     boost.long = boost.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*playerAbility.boostWasteEnHit*dt
     self.health  =  self.health - playerAbility.damage*playerSkillParametrs.damageK
-    table.insert(masli,{table = self, timer = 10,draw = nil})
+    table.insert(masli,{table = self, timer = 10,xD=nil,yD = nil,drawKoff = nil})
 end
 function playerLiDraw(dt)
     for i =#masli, 1, -1 do
         if ( masli[i].timer > 0 ) then 
             if ( masli[i] and masli[i].table) then
-                if ( masli[i].draw == nil) then
-                    masli[i].draw,masli[i].drawKoff = light(player.x,player.y,masli[i].table.x,masli[i].table.y,2)
-                    --print(unpack(masli[i].drawKoff))
+                if ( masli[i].drawKoff == nil) then
+                    masli[i].drawKoff = light(player.x,player.y,masli[i].table.x,masli[i].table.y,2)
+                    masli[i].xD = math.random(-10*k,10*k)
+                    masli[i].yD = math.random(-10*k,10*k)
                 end
                 local lii = false
-                if ( masli[i].draw ~= nil ) then 
-                    lii = lightDesh(player.x,player.y,masli[i].table.x,masli[i].table.y,2,masli[i].drawKoff)
+                if ( masli[i].drawKoff ~= nil and masli[i].drawKoff~= {} ) then 
+                    lii = light2(player.x,player.y,masli[i].table.x+masli[i].xD,masli[i].table.y+masli[i].yD,2)
                 end
                 if (lii ) then 
                     love.graphics.setColor(0.4,1,1,1)
-                    love.graphics.setLineWidth( 2*k )
+                    love.graphics.setLineWidth( 4*k )
                     love.graphics.line(lii)
                     love.graphics.setColor(0.8,1,1,1)
-                    love.graphics.setLineWidth( 1*k )
+                    love.graphics.setLineWidth( 3*k )
                     love.graphics.line(lii)
                     masli[i].timer =  masli[i].timer - 80*dt 
                 end

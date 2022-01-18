@@ -3,12 +3,11 @@ local effects = {}
 
 function light(x1,y1,x2,y2,i)
     local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-    if ( length > 10*k) then 
     local m = {x1,y1}
     local masKof = {}
     local x =0
     local y = 0
-    local aye = 4 -- ширина разброса 
+    local aye = 5 -- ширина разброса 
     local ran =math.random(-length/aye,length/aye)
     table.insert(masKof,ran)
     local angle =3.14-math.atan2((x2-x1),(y2-y1))
@@ -32,8 +31,7 @@ function light(x1,y1,x2,y2,i)
     end
     table.insert(m,x2)
     table.insert(m,y2)
-    return m,masKof
-    end
+    return masKof
 end
 function pol(x1,y1,x2,y2,i) 
     local aye = 5 -- ширина разброса 
@@ -54,6 +52,7 @@ function pol(x1,y1,x2,y2,i)
             table.insert(masKofPol,m3[i])
         end
     end
+ 
     table.insert(m1,x)
     table.insert(m1,y)
     if ( i>0) then
