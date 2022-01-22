@@ -372,7 +372,7 @@ enemyMeleeClass = Class{
                 enAtackPlayer(self.damage,'m')
             end
         else
-            if ( self.invTimer and  self.invTimer ==self.timer) then
+            if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
                 playerAtackEn(self,dt)
                 self.climbFlag = 0
                 self.climbAtack = self.climbAtackTimer
@@ -381,6 +381,11 @@ enemyMeleeClass = Class{
                 self.ax =self.ax - player.ax
                 self.ay =self.ay -  player.ay
                 spawnResHitEn(i)
+            end  
+            if (self.invTimer and  self.invTimer ==self.timer) then
+                self.climbFlag = 0
+                self.climbAtack = self.climbAtackTimer
+                self.dash = self.dashTimer
             end  
         end
     end;

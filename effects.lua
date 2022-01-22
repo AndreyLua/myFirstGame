@@ -9,62 +9,53 @@ function light(x1,y1,x2,y2,i)
     local y = 0
     local aye = 5 -- ширина разброса 
     local ran =math.random(-length/aye,length/aye)
-    table.insert(masKof,ran)
     local angle =3.14-math.atan2((x2-x1),(y2-y1))
     x =x1+(x2-x1)/2+math.cos(angle)*ran
     y =y1+(y2-y1)/2+math.sin(angle)*ran
-    local m1,m2 = pol(x1,y1,x,y,i)
+    local m1 = pol(x1,y1,x,y,i)
     for  i=1,#m1 do
         table.insert(m,m1[i])
-    end
-    for  i=1,#m2 do
-        table.insert(masKof,m2[i])
     end
     table.insert(m,x)
     table.insert(m,y)
-    m1,m2 = pol(x,y,x2,y2,i)
+    m1 = pol(x,y,x2,y2,i)
     for  i=1,#m1 do
         table.insert(m,m1[i])
     end
-    for  i=1,#m2 do
-        table.insert(masKof,m2[i])
-    end
     table.insert(m,x2)
     table.insert(m,y2)
-    return masKof
+    return m
 end
 function pol(x1,y1,x2,y2,i) 
     local aye = 5 -- ширина разброса 
     local masKofPol = {}
     local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
     local ran =math.random(-length/aye,length/aye)
-    table.insert(masKofPol,ran)
     local angle =3.14-math.atan2((x2-x1),(y2-y1))
     local x =x1+(x2-x1)/2+math.cos(angle)*ran
     local y =y1+(y2-y1)/2+math.sin(angle)*ran
     local m1 = {}
     if ( i>0 and i~=0 ) then
-        local m2,m3 = pol(x1,y1,x,y,i-1)
+        local m2 = pol(x1,y1,x,y,i-1)
         for  i=1,#m2 do
             table.insert(m1,m2[i])
         end
-        for  i=1,#m3 do
-            table.insert(masKofPol,m3[i])
-        end
     end
- 
     table.insert(m1,x)
     table.insert(m1,y)
     if ( i>0) then
-        local m2,m3 = pol(x,y,x2,y2,i-1)
+        local m2 = light(x,y,x2,y2,i-1)
         for  i=1,#m2 do
             table.insert(m1,m2[i])
         end
-        for  i=1,#m3 do
-            table.insert(masKofPol,m3[i])
+    end
+    if ( i>0) then
+        local m2 = pol(x,y,x2,y2,i-1)
+        for  i=1,#m2 do
+            table.insert(m1,m2[i])
         end
     end
-    return m1,masKofPol
+    return m1
 end
 
 function light2(x1,y1,x2,y2,i)
@@ -155,6 +146,62 @@ function polDesh(x1,y1,x2,y2,i,masI,mas)
     return m1
 end
 
+function light22(x1,y1,x2,y2,kkk)
+    local segments = {{{x1,y1},{x2,y2}}}
+    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
+    if ( length < 100*k) then 
+    local offset =length/5
+    for i=1,kkk do
+        for j =1,#segments do
+            local segment = segments[j]
+            local beginSegm = segment[1]
+            local endSegm = segment[2]
+            local ran =offset
+            if ( math.random(1,2) == 1 ) then 
+                ran = -ran 
+            end
+            local angle =math.pi-math.atan2((endSegm[1] -beginSegm[1]),(endSegm[2] -beginSegm[2]))
+            local midX  =(beginSegm[1]+endSegm[1])/2+math.cos(angle)*ran
+            local midY  =(beginSegm[2]+endSegm[2])/2+math.sin(angle)*ran
+            if ( math.random(1,3) == 1  )then 
+                local lengthDopPoint = math.sqrt((midX-beginSegm[1])*(midX-beginSegm[1])+(midY-beginSegm[2])*(midY-beginSegm[2]))
+                local dopAngle = -math.atan2((endSegm[1]-beginSegm[1]),(endSegm[2]-beginSegm[2]))
+                local dopPointX = midX+math.cos(dopAngle+math.pi/2-math.random()*1.2*math.random(-1,1))*lengthDopPoint*0.7
+                local dopPointY = midY+math.sin(dopAngle+math.pi/2-math.random()*1.2*math.random(-1,1))*lengthDopPoint*0.7
+                table.insert(segments,{{midX,midY},{dopPointX,dopPointY}})
+            end
+            table.remove(segments,j)
+            table.insert(segments,{{beginSegm[1],beginSegm[2]},{midX,midY}})
+            table.insert(segments,{{midX,midY},{endSegm[1],endSegm[2]}})
+        end
+        offset = offset/2
+    end
+    return segments
+     end
+end
+
+function light22Draw(mas) 
+    if ( mas~=nil) then 
+        for i = 1 , #mas do
+            local vert = {}
+            local mouth =  mas[i]
+            local versh = mouth[1]
+            local versh2 = mouth[2]
+            table.insert(vert,versh[1])
+            table.insert(vert,versh[2])
+            table.insert(vert,versh2[1])
+            table.insert(vert,versh2[2])
+            love.graphics.setColor(0.4,1,1,1)
+            love.graphics.setLineWidth( 2*k )
+            love.graphics.line(vert)
+            love.graphics.setColor(0.8,1,1,1)
+            love.graphics.setLineWidth( 1*k )
+            love.graphics.line(vert)
+        end
+    end
+end
+
+
 function explUpdate2(dt)
     for i =1, #exp do
         if( exp[i]) then
@@ -235,6 +282,53 @@ function expl(x,y,kol)
     table.insert(exp,e)
     end
 end
+
+
+function newWaveEffect(x,y)
+    local waveEff =
+    {
+      x =x ,
+      y =y, 
+      r = 1*k,
+      timer =  10,
+      count =3,
+    }
+    table.insert(waveEffects,waveEff)
+    for i = 1, math.random(1,3) do
+        waveEff =
+        {
+          x =x+math.random(-50,50)*k ,
+          y =y+math.random(-50,50)*k , 
+          r = 0.1*k,
+          timer =  5,
+          count =3,
+        }
+        table.insert(waveEffects,waveEff)
+    end
+end
+function waveEffect(dt)
+    for i = #waveEffects,1, -1 do
+        if ( waveEffects[i].timer > 0 ) then 
+            love.graphics.setColor(0.6,1,1,waveEffects[i].timer/8)
+            love.graphics.circle('line',waveEffects[i].x,waveEffects[i].y,waveEffects[i].r/2*waveEffects[i].count)
+            love.graphics.circle('line',waveEffects[i].x,waveEffects[i].y,waveEffects[i].r/1.5*waveEffects[i].count)
+            love.graphics.circle('line',waveEffects[i].x,waveEffects[i].y,waveEffects[i].r/1.2*waveEffects[i].count)
+            love.graphics.circle('line',waveEffects[i].x,waveEffects[i].y,waveEffects[i].r*waveEffects[i].count)
+            waveEffects[i].r = waveEffects[i].r + 30*k* dt
+            waveEffects[i].timer  = waveEffects[i].timer - 30*dt
+        else
+           if (waveEffects[i].count >1 ) then
+                waveEffects[i].count = waveEffects[i].count - 1 
+                waveEffects[i].r = 0 *k 
+                waveEffects[i].timer = 10
+            else
+                table.remove(waveEffects,i)  
+            end
+        end
+    end
+end
+
+
 function gradient(dt)
     if (gradientI == 1 ) then
         gradientOp1(dt)

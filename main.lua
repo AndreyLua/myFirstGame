@@ -53,7 +53,6 @@ UIQuads = {
 }
 
 skillQuads = {
-  
   hp = love.graphics.newQuad(0,  0,  320, 320, skillSet:getDimensions()),
   energy = love.graphics.newQuad(320,  0,  320, 320, skillSet:getDimensions()),  
   atack = love.graphics.newQuad(640,  0,  320, 320, skillSet:getDimensions()),
@@ -264,21 +263,25 @@ mouse = {
 -------------------------------------------------------------------
 allSkills = {}
 --######################COMMON###########################################
-allSkills[1] = skillQuads.hp
-allSkills[2] = skillQuads.energy
-allSkills[3] = skillQuads.meleeDef
-allSkills[4] = skillQuads.rangeDef
-allSkills[5] = skillQuads.atack
-allSkills[6] = skillQuads.speed
-allSkills[7] = skillQuads.collectRange
+allSkills[1] = skillQuads.hp       -- minComplete
+allSkills[2] = skillQuads.energy   -- minComplete
+allSkills[3] = skillQuads.meleeDef -- minComplete
+allSkills[4] = skillQuads.rangeDef -- minComplete
+allSkills[5] = skillQuads.atack    -- minComplete
+allSkills[6] = skillQuads.speed    -- minComplete
+allSkills[7] = skillQuads.collectRange-- minComplete
 -------------------------------------------------------------------
 --########################RARE###########################################
-allSkills[8] = skillQuads.waveAtack
+allSkills[8] = skillQuads.waveAtack  
 allSkills[9] = skillQuads.bloodAtack
 allSkills[10] = skillQuads.sealAtack
 allSkills[11] = skillQuads.spikeArmor
 -------------------------------------------------------------------
-  
+--########################LEGEND###########################################
+--allSkills[12] = skillQuads.sealAtack --- new res nothing 
+allSkills[13] = skillQuads.swapHpAndEn
+allSkills[14] = skillQuads.vampir
+-------------------------------------------------------------------
 playerDrawPar = {
     {
       bodyW  = 464, 
@@ -372,8 +375,6 @@ playerSkillParametrs = {
     collectRangeK = 0,
 }
 
-
-
 playerSkills = {}
 playerSkills[1] ={
 img =skillQuads.hp,
@@ -404,6 +405,11 @@ playerSkills[6] ={
 img =skillQuads.speed,
 lvl = 1,
 numb = 6 ,
+}
+playerSkills[7] ={
+img =skillQuads.collectRange,
+lvl = 1,
+numb = 7 ,
 }
 
 -------------CONST AND FLAGS------

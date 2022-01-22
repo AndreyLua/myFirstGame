@@ -72,7 +72,6 @@ function playerMove(dt)
     end
     playerLiTimerUpdate(dt)
     if ( player.a==1) then
-       --- playerLiTimerUpdate(dt)
         player.x = player.x + player.ax*dt*playerAbility.speedA*k*player.debaffStrenght*playerSkillParametrs.speedK
         player.y = player.y + player.ay*dt*playerAbility.speedA*k2*player.debaffStrenght*playerSkillParametrs.speedK
     else
@@ -97,27 +96,6 @@ function playerDraw(dt)
     local clow1Y =yDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.cos(controler.angle+playerDrawPar[playerAbility.tip].clowR)
     local clow2X =xDraw +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle-playerDrawPar[playerAbility.tip].clowR)
     local clow2Y =yDraw+playerDrawPar[playerAbility.tip].clowX*k2*math.cos(controler.angle-playerDrawPar[playerAbility.tip].clowR)
-   if ( player.li == player.liTimer) then 
-        player.li = player.liTimer - 0.00001
-        masliDr2  ={}
-        lii = light2(0,0,0+20*k*math.sin(0-math.pi/3.5),0+20*k*math.cos(0-math.pi/3.5),1)
-        table.insert(masliDr2,lii)
-        lii = light2(0,0,0+20*k*math.sin(0-math.pi/3.5+math.pi/1.75),0+20*k*math.cos(0-math.pi/3.5+math.pi/1.75),1)
-        table.insert(masliDr2,lii)
-        lii = light2(0+20*k*math.sin(0-math.pi/3.5),0+20*k*math.cos(0-math.pi/3.5),0+35*k*math.sin(0-math.pi/2.9),0+35*k*math.cos(0-math.pi/2.9),1)
-        table.insert(masliDr2,lii)
-        lii = light2(0+20*k*math.sin(0-math.pi/3.5+math.pi/1.75),0+20*k*math.cos(0-math.pi/3.5+math.pi/1.75),0+35*k*math.sin(0-math.pi/3.5+math.pi/1.55),0+35*k*math.cos(0-math.pi/3.5+math.pi/1.55),1)
-        table.insert(masliDr2,lii)
-        ------------------------
-        lii = light2(0,0,0+22*k*math.sin(0-math.pi/1.2),0+22*k*math.cos(0-math.pi/1.2),1)
-        table.insert(masliDr2,lii)
-        lii = light2(0,0,0+22*k*math.sin(0-math.pi/1.2-math.pi/3),0+22*k*math.cos(0-math.pi/1.2-math.pi/3),1)
-       table.insert(masliDr2,lii)
-        lii = light2(0+22*k*math.sin(0-math.pi/1.2),0+22*k*math.cos(0-math.pi/1.2),0+30*k*math.sin(0-math.pi/1.25),0+30*k*math.cos(0-math.pi/1.25),1)
-        table.insert(masliDr2,lii)
-        lii = light2(0+22*k*math.sin(0-math.pi/1.2-math.pi/3),0+22*k*math.cos(0-math.pi/1.2-math.pi/3),0+30*k*math.sin(0-math.pi/1.2-math.pi/2.8),0+30*k*math.cos(0-math.pi/1.2-math.pi/2.8),1)
-        table.insert(masliDr2,lii)
-      end
     playerBatch:add(playerQuads[playerAbility.tip].clow1,clow1X,clow1Y,-controler.angle+math.pi+player.clowR,k/7,k2/7,playerDrawPar[playerAbility.tip].clowW1, playerDrawPar[playerAbility.tip].clowH)
     playerBatch:add(playerQuads[playerAbility.tip].clow2,clow2X,clow2Y,-controler.angle+math.pi-player.clowR,k/7,k2/7,playerDrawPar[playerAbility.tip].clowW2, playerDrawPar[playerAbility.tip].clowH)
 end
@@ -184,38 +162,145 @@ function enAtackPlayer(dmg,tip)
 end
 
 function playerAtackEn(self,dt)
-    boost.long = boost.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*playerAbility.boostWasteEnHit*dt
+    boost.long = boost.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*     playerAbility.boostWasteEnHit*dt
     self.health  =  self.health - playerAbility.damage*playerSkillParametrs.damageK
-    table.insert(masli,{table = self, timer = 10,xD=nil,yD = nil,drawKoff = nil})
+    newWaveEffect(self.x,self.y)
+    -- table.insert(masli,{table = self, timer = 10,flag = nil})
 end
-function playerLiDraw(dt)
-    for i =#masli, 1, -1 do
-        if ( masli[i].timer > 0 ) then 
-            if ( masli[i] and masli[i].table) then
-                if ( masli[i].drawKoff == nil) then
-                    masli[i].drawKoff = light(player.x,player.y,masli[i].table.x,masli[i].table.y,2)
-                    masli[i].xD = math.random(-10*k,10*k)
-                    masli[i].yD = math.random(-10*k,10*k)
-                end
-                local lii = false
-                if ( masli[i].drawKoff ~= nil and masli[i].drawKoff~= {} ) then 
-                    lii = light2(player.x,player.y,masli[i].table.x+masli[i].xD,masli[i].table.y+masli[i].yD,2)
-                end
-                if (lii ) then 
-                    love.graphics.setColor(0.4,1,1,1)
-                    love.graphics.setLineWidth( 4*k )
-                    love.graphics.line(lii)
-                    love.graphics.setColor(0.8,1,1,1)
+
+function playerFrontAtack(i) 
+    local flagAt = false
+    local anglePlEn =  math.atan2(en[i].x -player.x, en[i].y - player.y) 
+    if (anglePlEn/math.abs(anglePlEn)==controler.angle/math.abs(controler.angle))then
+        if (math.abs(math.abs(anglePlEn) - math.abs(controler.angle)) <  math.pi/4) then 
+            flagAt = true
+        end
+    else
+        if (math.abs(anglePlEn)+math.abs(controler.angle)> 2*math.pi - math.abs(anglePlEn)-math.abs(controler.angle)) then
+            if ((2*math.pi - math.abs(anglePlEn)-math.abs(controler.angle)) <  math.pi/4) then 
+                flagAt = true
+            end
+        else 
+            if ((math.abs(anglePlEn)+math.abs(controler.angle)) <  math.pi/4) then 
+                flagAt = true
+            end
+        end
+    end
+    return flagAt
+end
+
+function playerLiInBodyDraw()
+    if ( player.li == player.liTimer) then 
+        player.li = player.liTimer - 0.00001
+        masliDr2  ={}
+        lii = light2(0,0,0+20*k*math.sin(0-math.pi/3.5),0+20*k*math.cos(0-math.pi/3.5),1)
+        table.insert(masliDr2,lii)
+        lii = light2(0,0,0+20*k*math.sin(0-math.pi/3.5+math.pi/1.75),0+20*k*math.cos(0-math.pi/3.5+math.pi/1.75),1)
+        table.insert(masliDr2,lii)
+        lii = light2(0+20*k*math.sin(0-math.pi/3.5),0+20*k*math.cos(0-math.pi/3.5),0+35*k*math.sin(0-math.pi/2.9),0+35*k*math.cos(0-math.pi/2.9),1)
+        table.insert(masliDr2,lii)
+        lii = light2(0+20*k*math.sin(0-math.pi/3.5+math.pi/1.75),0+20*k*math.cos(0-math.pi/3.5+math.pi/1.75),0+35*k*math.sin(0-math.pi/3.5+math.pi/1.55),0+35*k*math.cos(0-math.pi/3.5+math.pi/1.55),1)
+        table.insert(masliDr2,lii)
+        ------------------------
+        lii = light2(0,0,0+22*k*math.sin(0-math.pi/1.2),0+22*k*math.cos(0-math.pi/1.2),1)
+        table.insert(masliDr2,lii)
+        lii = light2(0,0,0+22*k*math.sin(0-math.pi/1.2-math.pi/3),0+22*k*math.cos(0-math.pi/1.2-math.pi/3),1)
+        table.insert(masliDr2,lii)
+        lii = light2(0+22*k*math.sin(0-math.pi/1.2),0+22*k*math.cos(0-math.pi/1.2),0+30*k*math.sin(0-math.pi/1.25),0+30*k*math.cos(0-math.pi/1.25),1)
+        table.insert(masliDr2,lii)
+        lii = light2(0+22*k*math.sin(0-math.pi/1.2-math.pi/3),0+22*k*math.cos(0-math.pi/1.2-math.pi/3),0+30*k*math.sin(0-math.pi/1.2-math.pi/2.8),0+30*k*math.cos(0-math.pi/1.2-math.pi/2.8),1)
+        table.insert(masliDr2,lii)
+    end
+    if ( masliDr2 and (player.a == 1 or player.li>0) )then 
+        for i = 1, #masliDr2 do
+            if ( playerLiRan[1] == 1 ) then 
+                if ( i == 1 ) then
+                    love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
                     love.graphics.setLineWidth( 3*k )
-                    love.graphics.line(lii)
-                    masli[i].timer =  masli[i].timer - 80*dt 
+                    love.graphics.line(unpack(masliDr2[i]) )
+                    love.graphics.setColor(0.8,0.8,0.8,player.li/18)
+                    love.graphics.setLineWidth( 2*k )
+                    love.graphics.line(unpack(masliDr2[i]) )
+                end
+                if ( i == 3  ) then 
+                    love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
+                    love.graphics.setLineWidth( 2*k )
+                    love.graphics.line(unpack(masliDr2[i]) )
+                    love.graphics.setColor(0.8,0.8,0.8,player.li/20)
+                    love.graphics.setLineWidth( 1*k )
+                    love.graphics.line(unpack(masliDr2[i]) )
                 end
             end
-        else
-            table.remove(masli,i)
+            if (playerLiRan[2] == 1 ) then 
+                if ( i == 2 ) then
+                    love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
+                    love.graphics.setLineWidth( 3*k )
+                    love.graphics.line(unpack(masliDr2[i]) )
+                    love.graphics.setColor(0.8,0.8,0.8,player.li/18)
+                    love.graphics.setLineWidth( 2*k )
+                    love.graphics.line(unpack(masliDr2[i]) )
+                end
+                if ( i == 4  ) then 
+                    love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
+                    love.graphics.setLineWidth( 2*k )
+                    love.graphics.line(unpack(masliDr2[i]) )
+                    love.graphics.setColor(0.8,0.8,0.8,player.li/20)
+                    love.graphics.setLineWidth( 1*k )
+                    love.graphics.line(unpack(masliDr2[i]) )
+                end
+            end
+            if ( playerLiRan[3] == 1 ) then 
+                if ( i == 5) then 
+                    love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
+                    love.graphics.setLineWidth( 3*k )
+                    love.graphics.line(unpack(masliDr2[i]) ) 
+                    love.graphics.setColor(0.8,0.8,0.8,player.li/18)
+                    love.graphics.setLineWidth( 2*k )
+                    love.graphics.line(unpack(masliDr2[i]) )   
+                end
+                if ( i ==7) then 
+                    love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
+                    love.graphics.setLineWidth( 2*k )
+                    love.graphics.line(unpack(masliDr2[i]) )   
+                    love.graphics.setColor(0.8,0.8,0.8,player.li/20)
+                    love.graphics.setLineWidth( 1*k )
+                    love.graphics.line(unpack(masliDr2[i]) )   
+                end
+            end
+            if ( playerLiRan[4] == 1 ) then 
+                if ( i == 6) then 
+                    love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
+                    love.graphics.setLineWidth( 3*k )
+                    love.graphics.line(unpack(masliDr2[i]) ) 
+                    love.graphics.setColor(0.8,0.8,0.8,player.li/18)
+                    love.graphics.setLineWidth( 2*k )
+                    love.graphics.line(unpack(masliDr2[i]) )   
+                end
+                if ( i ==8) then 
+                    love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
+                    love.graphics.setLineWidth( 2*k )
+                    love.graphics.line(unpack(masliDr2[i]) )   
+                    love.graphics.setColor(0.8,0.8,0.8,player.li/20)
+                    love.graphics.setLineWidth( 1*k )
+                    love.graphics.line(unpack(masliDr2[i]) )   
+                end
+            end
+            love.graphics.line(unpack(masliDr2[i]) )   
         end
     end
 end
+
+function playerLiDraw(dt)
+   -- if ( player.li == player.liTimer) then 
+    --    player.li = player.liTimer - 0.00001
+    if ( player.a == 1 ) then 
+        light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle+math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle+math.pi/4)+math.random(-2,2)*k,4))
+        light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle-math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle-math.pi/4)+math.random(-2,2)*k,4))
+    end
+   -- end
+end
+
+
 function playerCollWithEn(dt)
     local playerIndex =math.floor((player.x-40*k)/(80*k)) + math.floor((player.y-40*k2)/(80*k2))*math.floor((screenWidth/(80*k))+1) 
     enCollWithPlayerInRegularS(playerIndex,dt)
@@ -272,11 +357,11 @@ function playerLiTimerUpdate(dt)
             playerLiRan ={math.random(1,2),math.random(1,2),math.random(1,2),math.random(1,2)}
         end
         if ( player.li < player.liTimer) then 
-            player.li = player.li - 60 * dt
+            player.li = player.li - 100 * dt
         end
     else
         if ( player.li < player.liTimer) then 
-            player.li = player.li - 60 * dt
+            player.li = player.li - 100 * dt
             if ( player.li < 0) then
                 player.li = 0 
             end

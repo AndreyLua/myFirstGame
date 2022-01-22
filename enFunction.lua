@@ -16,8 +16,6 @@ end
 
 function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip)
     if ((intVectorX*intVectorX+intVectorY*intVectorY>=math.pow(0.05*math.max(en[i].w,en[i].h)*k,2))) then
-   --     en[i].ax = 0
-     --   en[i].ay =0
         en[i].x  = en[i].x -intVectorX*dt*10
         en[i].y = en[i].y - intVectorY*dt*10
     end

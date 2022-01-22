@@ -1,6 +1,10 @@
 local game = {} 
 
 function game:init()
+  
+--effect  
+ waveEffects = {} 
+  --effect
 numberCleaner = 0 
 -------------BODY------
 ----------------------------------
@@ -114,7 +118,6 @@ end
 
 
 function game:update(dt)
-
 --flaginv =true
 explUpdate2(dt)
 objRegulS = {}
@@ -317,7 +320,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,4)
+        allSpawn(en,Geo,math.random(1,6))
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -379,104 +382,27 @@ function  game:draw()
     end
     love.graphics.draw(playerBatch)
     playerBatch:clear()
-    playerDrawCristal()
+  --  playerDrawCristal()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(enBatchDop)
     love.graphics.push()
         love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
         Health_Boost()
-        love.graphics.setColor(0.4,1,1,1)
-        playerLiDraw(dt)
         love.graphics.setColor(1,1,1,1)
+        playerLiDraw(dt)
         love.graphics.draw(boomBatch)
         resAfterDie(dt)
+         waveEffect(dt)
+    
     love.graphics.pop()
-    love.graphics.push()
-        love.graphics.translate(screenWidth/2+20*k+(player.x-camera.x),screenHeight/2+20*k2+(player.y-camera.y))
-        love.graphics.rotate(-controler.angle)
-        if ( masliDr2 )then 
-            for i = 1, #masliDr2 do
-              if ( playerLiRan[1] == 1 ) then 
-              if ( i == 1 ) then
-                  love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
-                  love.graphics.setLineWidth( 3*k )
-                  love.graphics.line(unpack(masliDr2[i]) )
-                  love.graphics.setColor(0.8,0.8,0.8,player.li/18)
-                  love.graphics.setLineWidth( 2*k )
-                  love.graphics.line(unpack(masliDr2[i]) )
-              end
-              if ( i == 3  ) then 
-                  love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
-                  love.graphics.setLineWidth( 2*k )
-                  love.graphics.line(unpack(masliDr2[i]) )
-                  love.graphics.setColor(0.8,0.8,0.8,player.li/20)
-                  love.graphics.setLineWidth( 1*k )
-                  love.graphics.line(unpack(masliDr2[i]) )
-              end
-            end
-              if (playerLiRan[2] == 1 ) then 
-              if ( i == 2 ) then
-                  love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
-                  love.graphics.setLineWidth( 3*k )
-                  love.graphics.line(unpack(masliDr2[i]) )
-                  love.graphics.setColor(0.8,0.8,0.8,player.li/18)
-                  love.graphics.setLineWidth( 2*k )
-                  love.graphics.line(unpack(masliDr2[i]) )
-              end
-              if ( i == 4  ) then 
-                  love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
-                  love.graphics.setLineWidth( 2*k )
-                  love.graphics.line(unpack(masliDr2[i]) )
-                  love.graphics.setColor(0.8,0.8,0.8,player.li/20)
-                  love.graphics.setLineWidth( 1*k )
-                  love.graphics.line(unpack(masliDr2[i]) )
-              end
-            end
-              if ( playerLiRan[3] == 1 ) then 
-              if ( i == 5) then 
-                  love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
-                  love.graphics.setLineWidth( 3*k )
-                  love.graphics.line(unpack(masliDr2[i]) ) 
-                  love.graphics.setColor(0.8,0.8,0.8,player.li/18)
-                  love.graphics.setLineWidth( 2*k )
-                  love.graphics.line(unpack(masliDr2[i]) )   
-              end
-              if ( i ==7) then 
-                  love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
-                  love.graphics.setLineWidth( 2*k )
-                  love.graphics.line(unpack(masliDr2[i]) )   
-                  love.graphics.setColor(0.8,0.8,0.8,player.li/20)
-                  love.graphics.setLineWidth( 1*k )
-                  love.graphics.line(unpack(masliDr2[i]) )   
-              end
-            end
-              if ( playerLiRan[4] == 1 ) then 
-              if ( i == 6) then 
-                  love.graphics.setColor(0.4,0.8,0.8,player.li/18-0.2)
-                  love.graphics.setLineWidth( 3*k )
-                  love.graphics.line(unpack(masliDr2[i]) ) 
-                  love.graphics.setColor(0.8,0.8,0.8,player.li/18)
-                  love.graphics.setLineWidth( 2*k )
-                  love.graphics.line(unpack(masliDr2[i]) )   
-              end
-              if ( i ==8) then 
-                  love.graphics.setColor(0.4,0.8,0.8,player.li/20-0.2)
-                  love.graphics.setLineWidth( 2*k )
-                  love.graphics.line(unpack(masliDr2[i]) )   
-                  love.graphics.setColor(0.8,0.8,0.8,player.li/20)
-                  love.graphics.setLineWidth( 1*k )
-                  love.graphics.line(unpack(masliDr2[i]) )   
-              end
-            end
-              --  love.graphics.line(unpack(masliDr2[i]) )   
-            end
-        end
-    love.graphics.pop()
+  --  love.graphics.push()
+   --     love.graphics.translate(screenWidth/2+20*k+(player.x-camera.x),screenHeight/2+20*k2+(player.y-camera.y))
+   --     love.graphics.rotate(-controler.angle)
+       -- playerLiInBodyDraw()
+   -- love.graphics.pop()
 
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(playerBatch)
- 
-    
     love.graphics.setColor(1,1,1,1)
     for i=1,#exp do
         love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*15*k,exp[i].scale*15*k2,4*exp[i].scale*k)
@@ -501,7 +427,6 @@ function  game:draw()
     else
         love.graphics.draw(kek,0,0,0,sx,sy)
     end
-   
     love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
     love.graphics.print("EN: "..tostring(#en), 100, 40,0,k/2,k2/2)
     local stat  =  love.graphics.getStats()

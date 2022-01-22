@@ -296,7 +296,7 @@ enemyShooterClass = Class{
         if ( a == 0 ) then
           
         else
-            if ( self.invTimer and  self.invTimer ==self.timer) then
+            if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
                 playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
                 self.ax =self.ax - player.ax

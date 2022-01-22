@@ -222,13 +222,16 @@ function lvlParametrs()
             playerSkillParametrs.meleeDefK=0.3*math.log10(masSkill.lvl)
         end
         if (masSkill.numb == 4 ) then 
-            playerSkillParametrs.meleeRangeK=0.3*math.log10(masSkill.lvl)
+            playerSkillParametrs.rangeDefK=0.3*math.log10(masSkill.lvl)
         end
         if (masSkill.numb == 5 ) then 
             playerSkillParametrs.damageK =1+0.5*math.log(masSkill.lvl,2)
         end
         if (masSkill.numb == 6 ) then 
             playerSkillParametrs.speedK =1+0.1*math.log(masSkill.lvl,2)
+        end
+        if (masSkill.numb == 7 ) then 
+            playerSkillParametrs.collectRangeK =1+0.1*math.log(masSkill.lvl,2)
         end
     end
 end
@@ -249,8 +252,11 @@ function textPar(i,x,y,scale)
     if (i == 5 ) then 
         love.graphics.print("AT "..tostring(math.ceil(100*(playerSkillParametrs.damageK))).."%",x,y,-3.14/2,scale*k,scale*k)
     end
-     if (i == 6 ) then 
+    if (i == 6 ) then 
         love.graphics.print("SP "..tostring(math.ceil(100*(playerSkillParametrs.speedK))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
+    if (i == 7 ) then 
+        love.graphics.print("RAN "..tostring(math.ceil(100*(playerSkillParametrs.collectRangeK))).."%",x,y,-3.14/2,scale*k,scale*k)
     end
 end
 

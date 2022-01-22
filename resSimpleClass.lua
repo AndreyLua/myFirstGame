@@ -59,7 +59,7 @@ resClass = Class {
     end;
     GravityWithPlayer = function(self)
         if ( player.a==0  ) then 
-             if (self.timer == self.invTimer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) < playerAbility.radiusCollect*k) then
+             if (self.timer == self.invTimer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) < playerAbility.radiusCollect*k*playerSkillParametrs.collectRangeK) then
                 local x1 = (player.x)-self.x+1*k
                 local y1 = (player.y)-self.y+1*k2          
                 local ugol = math.atan2(x1,y1)

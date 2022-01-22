@@ -24,8 +24,8 @@ enemyHammerTable = {
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    300, --health
-    300, --healthM
+    3, --health
+    3, --healthM
     {}, -- traces
     4,--cost
 }
@@ -233,7 +233,7 @@ enemyHammerClass = Class{
     end;
     draw =  function(self,i)
         if ( self.invTimer and self.invTimer ~= self.timer) then
-            enBatch:setColor(1,0.5,0.5,1)
+            enBatch:setColor(1,0.2,0.2,0.8)
             enBatch:add(enQuads.bodyHammer,self.x,self.y,-self.angleBody+math.pi,k/8,k2/8,125, 95.5)
          --   self.body:draw('fill')
         else
@@ -262,7 +262,11 @@ enemyHammerClass = Class{
             local radius =trace.r/8*i
             trace.x = trace.x+70*trace.ax*dt
             trace.y = trace.y+70*trace.ay*dt
-            love.graphics.setColor(0.75/7*i,0.34/7*i,0.08/7*i) 
+            if ( self.invTimer and self.invTimer ~= self.timer) then
+                love.graphics.setColor(0.75/7*i,0.34/7*i,0.08/7*i,0.8) 
+            else
+                love.graphics.setColor(0.75/7*i,0.34/7*i,0.08/7*i,1) 
+            end
             love.graphics.circle("fill",self.x+ trace.x,self.y + trace.y,radius)
         end
     end;
@@ -274,7 +278,7 @@ enemyHammerClass = Class{
                 enAtackPlayer(self.damage,'m')
             end 
         else
-            if ( self.invTimer and  self.invTimer ==self.timer) then
+            if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
                 playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
                 self.dash = self.dashTimer
