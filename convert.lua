@@ -137,19 +137,6 @@ function convert:update(dt)
         flagButton2 = false
         flagtouch3 =false
     end
-
-        --if (  mouse.x > screenWidth/3-75*k/1.4 and  mouse.x <screenWidth/3+75*k/1.4 and mouse.y > screenHeight/5*4-75*k2/1.4 and  mouse.y <screenHeight/5*4+75*k2/1.4 and flagtouch3 == true) then
-          
-         --   texti = -1
-         --   textL = ""
-         --   textK = 0     
-         --   tip = slots[2]
-       -- end
-
-      
-    --if ( tip~= 0 ) then 
-    
-    --end
 end
 
 function convert:draw()
@@ -472,27 +459,45 @@ end
 function giveReward(count)
     flagRewardMenu = true 
     if ( count == 140) then 
-      ---- big reward 
+        if ( math.random(1,100) > 80) then 
+            rewardSkill  = math.random(12,14) 
+        else
+            normalReward(count)
+        end
     else
         if (math.ceil(count/1.4)>=60) then
-         -- normal  reward 
+            normalReward(count)
         else
-            if ( math.random(1,100) > 70) then 
-                rewardSkill  = math.random(1,7) 
-            else
-                if ( math.random(1,100) > 80) then
-                    rewardMoney  = count* scoreForParticle*0.7
-                else
-                    if ( math.random(1,100) > 50) then
-                        rewardMoney  = count* scoreForParticle*0.5 
-                    else
-                        rewardMoney  = 0
-                    end
-                end
-            end
+            smallReward(count)
         end
     end
 end
+
+function normalReward(count)
+    if ( math.random(1,100) > 70) then 
+        rewardSkill  = math.random(8,11) 
+    else
+        smallReward(count)
+    end
+end
+
+
+function smallReward(count)
+    if ( math.random(1,100) > 70) then 
+        rewardSkill  = math.random(1,7) 
+    else
+        if ( math.random(1,100) > 80) then
+            rewardMoney  = count* scoreForParticle*0.7
+        else
+            if ( math.random(1,100) > 50) then
+                rewardMoney  = count* scoreForParticle*0.5 
+            else
+                rewardMoney  = 0
+            end
+        end
+    end 
+end
+
 function convert:keypressed(key, code)
     if key == "escape" then
         gamestate.switch(game)

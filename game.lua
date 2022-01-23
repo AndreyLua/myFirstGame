@@ -4,6 +4,8 @@ function game:init()
   
 --effect  
  waveEffects = {} 
+ bloodEffects = {} 
+ bloodPart = {}
   --effect
 numberCleaner = 0 
 -------------BODY------
@@ -353,6 +355,7 @@ function  game:draw()
     love.graphics.push()
         love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
         --love.graphics.rectangle('line',-borderWidth,-borderHeight,borderWidth*3,borderHeight*3,k,k2)
+        bloodEffect(dt)
         allDraw(dt)
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(enBatchAfterDie)
@@ -392,7 +395,8 @@ function  game:draw()
         playerLiDraw(dt)
         love.graphics.draw(boomBatch)
         resAfterDie(dt)
-         waveEffect(dt)
+        waveEffect(dt)
+      
     
     love.graphics.pop()
   --  love.graphics.push()

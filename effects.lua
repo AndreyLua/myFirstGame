@@ -328,6 +328,72 @@ function waveEffect(dt)
     end
 end
 
+function newBloodEffect(self)
+    if ( self~= nil) then 
+        local bloodEff  ={
+            en = self,
+            timer = 10,
+            timerTick = 10,
+        }
+    table.insert(bloodEffects,bloodEff)
+    end
+end
+
+function bloodEffect(dt)
+    for i = #bloodEffects,1, -1 do
+        if ( bloodEffects[i].timer > 0 and  bloodEffects[i].en ~=nil ) then 
+            if ( bloodEffects[i].timerTick == 10 and bloodEffects[i].en.health >0) then 
+                bloodPartSpawn(bloodEffects[i].en,7)
+                bloodEffects[i].en.health = bloodEffects[i].en.health - 0*dt -- damage
+            end
+            bloodEffects[i].timerTick = bloodEffects[i].timerTick - 200*dt
+            bloodEffects[i].timer =bloodEffects[i].timer - 5 * dt
+            if ( bloodEffects[i].timerTick < 0 ) then 
+                bloodEffects[i].timerTick = 10
+            end
+        else
+            table.remove(bloodEffects,i)
+        end
+    end
+    love.graphics.setColor(0.8,0,0,1) 
+    for i = #bloodPart,1, -1 do
+        if ( bloodPart[i] and  bloodPart[i].x~=nil) then 
+            bloodPart[i].x= bloodPart[i].x+bloodPart[i].ax*dt*k
+            bloodPart[i].y= bloodPart[i].y+bloodPart[i].ay*dt*k2
+            if ( bloodPart[i].ax > 0 ) then
+                bloodPart[i].ax  = bloodPart[i].ax -70*dt*k
+            else
+                bloodPart[i].ax  = bloodPart[i].ax + 70*dt*k
+            end
+            if ( bloodPart[i].ay > 0 ) then
+                bloodPart[i].ay  = bloodPart[i].ay -70*dt*k2
+            else
+                bloodPart[i].ay  = bloodPart[i].ay + 70*dt*k2
+            end
+            love.graphics.rectangle("fill",bloodPart[i].x,bloodPart[i].y,bloodPart[i].scale*5*k,bloodPart[i].scale*5*k2,4)
+            if ( (bloodPart[i].ay<3*k2 and  bloodPart[i].ay>-3*k2) or (bloodPart[i].ax<3*k and  bloodPart[i].ax>-3*k)) then
+                table.remove(bloodPart,i)
+            end
+        else
+            table.remove(bloodPart,i)
+        end
+    end
+end
+
+
+function bloodPartSpawn(self,kol)
+    for kek =1, kol do
+        local e = {
+        x  = self.x, 
+        y =  self.y,  
+        ax  =math.random(-1.72*k*30,1.73*k*30), 
+        ay = math.random(-1.73*k*30,1.73*k*30), 
+        scale =math.random()
+        }
+        table.insert(bloodPart,e)
+    end
+end
+
 
 function gradient(dt)
     if (gradientI == 1 ) then

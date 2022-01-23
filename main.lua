@@ -18,6 +18,10 @@ UISet = love.graphics.newImage("assets/UISet.png")
 skillSet = love.graphics.newImage("assets/skillSet.png")
 enBoomAnSet = love.graphics.newImage("assets/enBoomAn.png")
 
+fon1 =love.graphics.newImage("assets/fons/fon1.png") 
+fon2 =love.graphics.newImage("assets/fons/fon2.png") 
+fon3 =love.graphics.newImage("assets/fons/fon3.png") 
+
 ---------------------------------------------------
 boomBatch =  love.graphics.newSpriteBatch(enBoomAnSet)
 UIBatch = love.graphics.newSpriteBatch(UISet)
@@ -157,7 +161,6 @@ tableMeteorsPar ={
     collW = 74.1949,
     collH = 76.6984,
   },
-  ------------------------------------
    {
     texX =0/meteorSetW,
     texY =0,
@@ -168,7 +171,6 @@ tableMeteorsPar ={
     collW = 83.3422,
     collH = 100.5714,
   },
-  ----------------------------
    {
     texX =1254/meteorSetW,
     texY =0,
@@ -189,7 +191,6 @@ tableMeteorsPar ={
     collW = 40.14657,
     collH = 32.50793,
   }
-  -------------------
 }
 
 vect = {}
@@ -202,13 +203,11 @@ for i= 1, lenVect do
     }
     table.insert(vect,texCordi)
 end
-kekKK= 0 
+
+kekKK= 0 --delete
+
 meshMeteors = love.graphics.newMesh(vect, "triangles")
 meshMeteors:setTexture(meteorSet)
-
-fon1 =love.graphics.newImage("assets/fons/fon1.png") 
-fon2 =love.graphics.newImage("assets/fons/fon2.png") 
-fon3 =love.graphics.newImage("assets/fons/fon3.png") 
 
 screenWidth = love.graphics.getWidth()
 screenHeight = love.graphics.getHeight()
@@ -256,6 +255,8 @@ TimerEn = Timer.new()
 -------------MASIIIIIIV-----------
 exp =  {}
 particl =  {}
+
+
 mouse = {
   x=0,
   y=0
@@ -366,16 +367,43 @@ playerAbility = {
     boostWasteEnHit = playerStaticParametrs.boostWasteEnHit,
 }
 playerSkillParametrs = {
-    hpK = 0,
-    enK = 0,
-    meleeDefK = 0,
-    rangeDefK = 0,
-    damageK = 0,
-    speedK = 0,
-    collectRangeK = 0,
+    hpK = 0, -- common1
+    enK = 0, -- common2
+    meleeDefK = 0, -- common3
+    rangeDefK = 0, -- common4
+    damageK = 0, -- common5
+    speedK = 0, -- common6
+    collectRangeK = 0, -- common7
+    
+    waveAt = 0.2, -- rare8
+    bloodAt = 0.2, -- rare9
+    sealAt = 0.2, -- rare10
+    spike = 0, -- rare11
+}
+skillCostUpgrade = {
+100,-- common1
+100,-- common2
+100,-- common3
+100,-- common4
+100,-- common5
+100,-- common6
+100,-- common7
+100,-- rare8
+100,-- rare9
+100,-- rare10
+100,-- rare11
+100,-- legend12
+100,-- legend13
+100,-- legend14
 }
 
+
+
+
+
+
 playerSkills = {}
+
 playerSkills[1] ={
 img =skillQuads.hp,
 lvl = 1,
@@ -383,27 +411,27 @@ numb = 1 ,
 }
 playerSkills[2] ={
 img =skillQuads.energy,
-lvl = 1,
+lvl = 2,
 numb = 2 ,
 }
 playerSkills[4] ={
 img =skillQuads.meleeDef,------
-lvl = 1,
+lvl = 3,
 numb = 3 ,
 }
 playerSkills[5] ={
 img =skillQuads.rangeDef,------
-lvl = 1,
+lvl = 4,
 numb = 4 ,
 }
 playerSkills[3] ={
 img =skillQuads.atack,
-lvl = 1,
+lvl = 5,
 numb = 5 ,
 }
 playerSkills[6] ={
 img =skillQuads.speed,
-lvl = 1,
+lvl = 5,
 numb = 6 ,
 }
 playerSkills[7] ={

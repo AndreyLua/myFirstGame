@@ -164,8 +164,9 @@ end
 function playerAtackEn(self,dt)
     boost.long = boost.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*     playerAbility.boostWasteEnHit*dt
     self.health  =  self.health - playerAbility.damage*playerSkillParametrs.damageK
-    newWaveEffect(self.x,self.y)
-    -- table.insert(masli,{table = self, timer = 10,flag = nil})
+ ---   newWaveEffect(self.x,self.y)
+    newBloodEffect(self)
+  -- table.insert(masli,{table = self, timer = 10,flag = nil})
 end
 
 function playerFrontAtack(i) 
@@ -294,8 +295,8 @@ function playerLiDraw(dt)
    -- if ( player.li == player.liTimer) then 
     --    player.li = player.liTimer - 0.00001
     if ( player.a == 1 ) then 
-        light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle+math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle+math.pi/4)+math.random(-2,2)*k,4))
-        light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle-math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle-math.pi/4)+math.random(-2,2)*k,4))
+   --    light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle+math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle+math.pi/4)+math.random(-2,2)*k,4))
+  --     light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle-math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle-math.pi/4)+math.random(-2,2)*k,4))
     end
    -- end
 end

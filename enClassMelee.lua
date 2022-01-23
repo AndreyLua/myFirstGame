@@ -24,8 +24,8 @@ enemyMeleeTable = {
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    30, --health
-    30, --healthM
+    3, --health
+    3, --healthM
     {}, -- traces
     0, --climbFlag
     100, -- climbAtack
