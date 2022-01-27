@@ -36,7 +36,7 @@ enemyMeleeTable = {
     "player", --target
     0 , --targetX
     screenWidth, --targetY
-    90, -- targetDestroy
+    0, -- targetDestroy
     90, --targetDestroyTimer
     5,--cost
 }

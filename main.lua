@@ -401,6 +401,10 @@ skillCostUpgrade = {
 
 
 
+playerSet = {}
+playerSet[1] =true
+playerSet[2] =false
+playerSet[3] =false
 
 playerSkills = {}
 
@@ -411,27 +415,27 @@ numb = 1 ,
 }
 playerSkills[2] ={
 img =skillQuads.energy,
-lvl = 2,
+lvl = 1,
 numb = 2 ,
 }
 playerSkills[4] ={
 img =skillQuads.meleeDef,------
-lvl = 3,
+lvl = 1,
 numb = 3 ,
 }
 playerSkills[5] ={
 img =skillQuads.rangeDef,------
-lvl = 4,
+lvl = 1,
 numb = 4 ,
 }
 playerSkills[3] ={
 img =skillQuads.atack,
-lvl = 5,
+lvl = 1,
 numb = 5 ,
 }
 playerSkills[6] ={
 img =skillQuads.speed,
-lvl = 5,
+lvl = 1,
 numb = 6 ,
 }
 playerSkills[7] ={
@@ -439,7 +443,26 @@ img =skillQuads.collectRange,
 lvl = 1,
 numb = 7 ,
 }
-
+playerSkills[8] ={
+img =skillQuads.waveAtack,
+lvl = 10,
+numb = 8 ,
+}
+playerSkills[9] ={
+img =skillQuads.bloodAtack,
+lvl = 10,
+numb = 9 ,
+}
+playerSkills[10] ={
+img =skillQuads.sealAtack,
+lvl = 10,
+numb = 10 ,
+}
+playerSkills[11] ={
+img =skillQuads.spikeArmor,
+lvl = 10,
+numb = 11 ,
+}
 -------------CONST AND FLAGS------
 volume = 50
 sens = 50

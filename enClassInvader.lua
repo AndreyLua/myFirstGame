@@ -8,7 +8,7 @@ enemyInvaderTable = {
     0,  --timer
     20, -- invTimer
     0, -- atack
-    60, --atackTimer
+    80, --atackTimer
     0.216, --color1 
     0.224, --color2
     0.314, --color3
@@ -28,10 +28,12 @@ enemyInvaderTable = {
     0,-- angleWing
     0,-- angleWingFlag
     10,--cost
+    20, -- charge
+    20, --chargeTimer
 }
 
 enemyInvaderClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag,cost)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag,cost,charge,chargeTimer)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -59,6 +61,8 @@ enemyInvaderClass = Class{
         self.healthM = healthM
         self.traces = traces
         self.cost = cost
+        self.charge = charge
+        self.chargeTimer = chargeTimer
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyInvaderTable[1]*k, enemyInvaderTable[2]*k)
@@ -92,9 +96,12 @@ enemyInvaderClass = Class{
     end;
     atackStart = function(self)
         if (self.atack and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= 450*k ) then
-            self.atack = self.atackTimer-0.001
-            self.angleMouth = 1.5
-            enFire(player.x,player.y,self.x,self.y,self.angleBody,self.damage)
+            self.charge = self.chargeTimer-0.001
+            self.angleWingFlag = 1
+            if ( self.angleWing < -0.1) then 
+                self.atack = self.atackTimer-0.001
+                enPreFire(player.x,player.y,self.x,self.y,self.angleBody,self.damage,15)
+            end
         end
     end;
     atackTimerUpdate = function(self,dt)
@@ -103,6 +110,12 @@ enemyInvaderClass = Class{
         end
         if ( self.atack < 0) then
             self.atack  = self.atackTimer
+        end
+        if ( self.charge <  self.chargeTimer) then
+            self.charge  = self.charge  - 30*dt
+        end
+        if ( self.charge < 0) then
+            self.charge  = self.chargeTimer
         end
     end;
     angleBodyTr = function(self,angle,dt)
@@ -121,51 +134,41 @@ enemyInvaderClass = Class{
         if ((math.abs(angle) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(angle) -  math.abs(self.angleBody)) <  -2.01*dt ) then
             if (angle/math.abs(angle)==self.angleBody/math.abs(self.angleBody))then
                 if ( angle>self.angleBody) then
-                    self.angleBody = self.angleBody+4*dt
+                    self.angleBody = self.angleBody+3*dt
                 else 
-                    self.angleBody = self.angleBody-4*dt
+                    self.angleBody = self.angleBody-3*dt
                 end
             else
                 if (math.abs(angle)+math.abs(self.angleBody)> 2*math.pi - math.abs(angle)-math.abs(self.angleBody)) then
                     if (self.angleBody>0) then 
-                        self.angleBody = self.angleBody+4*dt
+                        self.angleBody = self.angleBody+3*dt
                     else
-                        self.angleBody = self.angleBody-4*dt
+                        self.angleBody = self.angleBody-3*dt
                     end
                 else 
                     if (self.angleBody>0) then 
-                        self.angleBody = self.angleBody-4*dt
+                        self.angleBody = self.angleBody-3*dt
                     else
-                        self.angleBody = self.angleBody+4*dt
+                        self.angleBody = self.angleBody+3*dt
                     end
                 end
             end
-        end
-    end;
-    angleMouthTr = function(self,dt)
-        if ( self.angleMouth> 1 ) then
-            self.angleMouthFlag = 1 
-        end
-        if ( self.angleMouth< 0 ) then
-            self.angleMouthFlag = 0 
-        end
-        if ( self.angleMouthFlag ==0) then
-            self.angleMouth  = self.angleMouth +1.1*dt
-        else
-            self.angleMouth  = self.angleMouth -1.1*dt
         end
     end;
     angleWingTr = function(self,dt)
         if ( self.angleWing> 0.6 ) then
             self.angleWingFlag = 0.6 
         end
-        if ( self.angleWing< 0 ) then
+        if ( self.angleWing< -0.1) then
             self.angleWingFlag = 0 
         end
+       
         if ( self.angleWingFlag ==0) then
-            self.angleWing  = self.angleWing +1.6*dt
+            if (self.charge == self.chargeTimer) then
+                self.angleWing  = self.angleWing +1.3*dt
+            end
         else
-            self.angleWing  = self.angleWing -1.6*dt
+            self.angleWing  = self.angleWing -1.3*dt
         end
     end;
     collWithEn =  function(self,IenRegulS,i,dt)
@@ -198,7 +201,6 @@ enemyInvaderClass = Class{
     moveNormal = function(self,dt)
         local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
         self.angleBodyTr(self,anglePlayerEn,dt)
-        self.angleMouthTr(self,dt)
         self.angleWingTr(self,dt)
         if ( (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) >= 400*k ) then
             self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
@@ -207,10 +209,12 @@ enemyInvaderClass = Class{
             self.ax = 0 
             self.ay = 0 
         end
-        self.x= self.x+self.ax*dt*5
-        self.y= self.y+self.ay*dt*5 --- нормальное движение
-        self.x= self.x+math.sin(self.y/20)*dt*70
-        self.y= self.y+math.cos(self.x/20)*dt*70
+        if not ( self.angleWing < -0.1) then ------------- "kfldkfldkf
+            self.x= self.x+self.ax*dt*5
+            self.y= self.y+self.ay*dt*5 --- нормальное движение
+            self.x= self.x+math.sin(self.y/20)*dt*70
+            self.y= self.y+math.cos(self.x/20)*dt*70
+        end
         if (  self.ax >22*k) then
             self.ax=22*k
         end
@@ -222,10 +226,6 @@ enemyInvaderClass = Class{
         end
         if (  self.ay <-22*k2) then
             self.ay=-22*k2
-        end
-        if ((math.abs(anglePlayerEn) -  math.abs(self.angleBody)) > 2.01*dt or (math.abs(anglePlayerEn) -  math.abs(self.angleBody)) <  -2.01*dt ) then
-            self.ax = 0
-            self.ay = 0 
         end
     end;
     moveWounded =  function(self,dt)
@@ -296,11 +296,6 @@ enemyInvaderClass = Class{
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
             spawnResKillEn(i)
-            local clow1X =self.x +10*k*math.sin(self.angleBody+math.pi/6)
-            local clow1Y =self.y +10*k2*math.cos(self.angleBody+math.pi/6)
-            local clow2X =self.x +10*k*math.sin(self.angleBody-math.pi/6)
-            local clow2Y =self.y +10*k2*math.cos(self.angleBody-math.pi/6)
-        
             local enDrawDie = {
                 timer = 4, 
                 quad = enQuads.bodyInvader,
@@ -310,12 +305,13 @@ enemyInvaderClass = Class{
                 ay = self.ay,
                 r = -self.angleBody+math.pi,
                 ra = math.random(-3,-1),
-                koff = k/8,
-                koff2 = k2/8,
-                ox = 60,
-                oy = 88
+                koff = k/9,
+                koff2 = k2/9,
+                ox = 112,
+                oy = 210
             }
             table.insert(enAfterDieTex,enDrawDie)
+        
             local enDrawDie2 = {
                 timer = 4, 
                 quad = enQuads.wing1Invader,
@@ -323,12 +319,12 @@ enemyInvaderClass = Class{
                 y = self.y,
                 ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
                 ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
-                r = -self.angleBody-math.pi+math.pi/10-self.angleWing,
+                r = -self.angleBody-math.pi+math.pi/25-self.angleWing,
                 ra = math.random(-2,-1),
-                koff = k/8,
-                koff2 = k2/8,
-                ox = 208,
-                oy = 64
+                koff = k/9,
+                koff2 = k2/9,
+                ox = 238+20,
+                oy =  224
             }
             table.insert(enAfterDieTex,enDrawDie2)
             local enDrawDie3 = {
@@ -338,12 +334,12 @@ enemyInvaderClass = Class{
                 y = self.y,
                 ax = self.ax/5+math.random(-1.5*k,1.5*k)*7,
                 ay = self.ay/5+math.random(-1.5*k,1.5*k)*7,
-                r = -self.angleBody-math.pi-math.pi/10-self.angleWing,
+                r = -self.angleBody-math.pi-math.pi/25-self.angleWing,
                 ra = math.random(1,2),
-                koff = k/8,
-                koff2 = k2/8,
-                ox = 16,
-                oy = 64
+                koff = k/9,
+                koff2 = k2/9,
+                ox = 14-20,
+                oy =  224
             }
             expl(54*k,screenHeight/2-(colWave*250*k2/waves[2])/2,10)
             expl(54*k,screenHeight/2+(colWave*250*k2/waves[2])/2,10)

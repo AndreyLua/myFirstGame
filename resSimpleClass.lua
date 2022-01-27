@@ -106,10 +106,7 @@ resClass = Class {
                                 res[j].ay=-2000*dt*k*math.cos(angleD)
                             end
                         end          
-                        
-                        
-                        
-                        
+  
                         
                         if (res[j] and math.abs(en[kek[i]].x - res[j].x)<12*k and math.abs(en[kek[i]].y - res[j].y)<12*k2 and  (math.pow((en[kek[i]].x - res[j].x),2) + math.pow((en[kek[i]].y - res[j].y),2))<=math.pow((12*k),2)) then
                             if ( en[kek[i]].tip == 1  )then 

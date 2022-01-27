@@ -27,7 +27,7 @@ function bodyTextPanel(x,y)
     UIBatch:add(UIQuads.textPanel,x,y,-math.pi/2,k/3,k2/3,500,160)
 end
 
-function bodyButtonDirect(x,y,flag,direct,angle)
+function bodyButtonDirect(x,y,flag,direct,angle,scale)
     if ( angle == nil) then 
         if ( direct == 'left') then
             if (flag) then 
@@ -50,18 +50,18 @@ function bodyButtonDirect(x,y,flag,direct,angle)
         if ( direct == 'left') then
             if (flag) then 
                 UIBatch:setColor(1,1,1,0.6)
-                UIBatch:add(UIQuads.butDirect,x,y,angle,k/3,k2/3,90,160)
+                UIBatch:add(UIQuads.butDirect,x,y,angle,k/4,k2/4,90,160)
                 UIBatch:setColor(1,1,1,1) 
             else
-                UIBatch:add(UIQuads.butDirect,x,y,angle,k/3,k2/3,90,160)
+                UIBatch:add(UIQuads.butDirect,x,y,angle,k/4,k2/4,90,160)
             end
         else
             if (flag) then 
                 UIBatch:setColor(1,1,1,0.6)
-                UIBatch:add(UIQuads.butDirect,x,y,angle,k/3,k2/3,90,160)
+                UIBatch:add(UIQuads.butDirect,x,y,angle,k/4,k2/4,90,160)
                 UIBatch:setColor(1,1,1,1) 
             else
-                UIBatch:add(UIQuads.butDirect,x,y,angle,k/3,k2/3,90,160)
+                UIBatch:add(UIQuads.butDirect,x,y,angle,k/4,k2/4,90,160)
             end
         end
     end
@@ -81,9 +81,28 @@ function textButton(name,x,y,flag,scale)
         love.graphics.print(name, x-fontHeight/1.9*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
     end
 end
+
 function acceptBut(x,y,scale,flag) 
-    UIBatch:add(UIQuads.yes,x,y,-math.pi/2,k*scale,k2*scale,120,120)      
+    if (flag) then 
+        UIBatch:setColor(1,1,1,0.6)
+        UIBatch:add(UIQuads.yes,x,y,-math.pi/2,k*scale,k2*scale,120,120)    
+        UIBatch:setColor(1,1,1,1)
+    else
+        UIBatch:add(UIQuads.yes,x,y,-math.pi/2,k*scale,k2*scale,120,120)    
+    end
 end
+
+function rejectBut(x,y,scale,flag) 
+   if (flag) then 
+        UIBatch:setColor(1,1,1,0.6)
+        UIBatch:add(UIQuads.no,x,y,-math.pi/2,k*scale,k2*scale,120,120)  
+        UIBatch:setColor(1,1,1,1)
+    else
+        UIBatch:add(UIQuads.no,x,y,-math.pi/2,k*scale,k2*scale,120,120)    
+    end
+end
+
+
 function rewardSlot(img,x,y,scale,money)
     if (img) then 
         UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
@@ -112,6 +131,28 @@ function slot(img,x,y,ox,oy,scale,light)
     UIBatch:setColor(1,1,1,1)
     skillBatch:setColor(1,1,1,1)
 end
+
+function noRes(x,y,scale,par,dt,flag)
+    if (par~= nil and flag~=nil and par >= 0) then 
+        local fontWidth = font:getWidth('Need more resources')
+        love.graphics.setColor(1,1,1,par) 
+        love.graphics.print('Need more resources', x,y+fontWidth*k2*scale/2,-math.pi/2,k*scale,k2*scale)
+        love.graphics.setColor(1,1,1,1)
+        if ( par <=3 and flag ==true ) then
+            return par+1*dt, flag
+        else
+            if ( par > 2 and flag ==true ) then 
+                return par-1*dt,false
+            else
+                if (flag ==false and par >=0 ) then 
+                    return par-1*dt,false
+                end
+            end
+        end
+    end
+end
+
+
 
 function sc(x,y)
   love.graphics.setLineWidth(2)

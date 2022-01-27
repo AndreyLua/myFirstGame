@@ -6,7 +6,7 @@ function game:init()
  waveEffects = {} 
  bloodEffects = {} 
  bloodPart = {}
-  --effect
+--effect
 numberCleaner = 0 
 -------------BODY------
 ----------------------------------
@@ -97,7 +97,6 @@ camera = {
 }
 
 enBoomAnimat = {}
-
 removeEn = {}
 en = {}
 obj = {}
@@ -107,6 +106,7 @@ enRegulS  = {}
 enAfterDieTex = {} 
 resTraces = {}
 bulletRegulS  = {}
+waveRegulS = {}
 enemyBullets = {} 
 playerSledi = {} 
 
@@ -124,13 +124,13 @@ function game:update(dt)
 explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
+waveRegulS = {}
 boost.long = 1000
 hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
 flagtouch2 = false -- для выхода в состояние пауза
-
 wavesUpdate(dt)
 if not( player.x > borderWidth*2-screenWidth/2+20*k or  player.x < -borderWidth+screenWidth/2+20*k) then
     camera.x =camera.x+(player.x-camera.x)*dt*5*k
@@ -322,13 +322,13 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,math.random(1,6))
+        allSpawn(en,Geo,1)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
-      if love.keyboard.isDown('y') then
-     table.remove(obj,#obj)
-     end
+    if love.keyboard.isDown('y') then
+        table.remove(obj,#obj)
+    end
 end
 
 
@@ -355,6 +355,7 @@ function  game:draw()
     love.graphics.push()
         love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
         --love.graphics.rectangle('line',-borderWidth,-borderHeight,borderWidth*3,borderHeight*3,k,k2)
+        waveEffect(dt)
         bloodEffect(dt)
         allDraw(dt)
         love.graphics.setColor(1,1,1,1)
@@ -395,7 +396,7 @@ function  game:draw()
         playerLiDraw(dt)
         love.graphics.draw(boomBatch)
         resAfterDie(dt)
-        waveEffect(dt)
+      --  waveEffect(dt)
       
     
     love.graphics.pop()
@@ -615,8 +616,20 @@ function allDraw(dt)
         if (en[i] and en[i]:inScreen()) then
             local IenRegulS =en[i]:IndexInRegulS(80)
             en[i]:collWithEn(IenRegulS,i,dt)
+            ---------------------------
+            enCollWithWavesInRegularS(IenRegulS,i,dt)
+            enCollWithWavesInRegularS(IenRegulS-1,i,dt)
+            enCollWithWavesInRegularS(IenRegulS+1,i,dt)
+            enCollWithWavesInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1),i,dt)
+            enCollWithWavesInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1),i,dt)
+            enCollWithWavesInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
+            enCollWithWavesInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1)-1,i,dt)
+            enCollWithWavesInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)
+            enCollWithWavesInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1)-1,i,dt)
+            ----------------------------
             local IenRegulS2 =en[i]:IndexInRegulS(120)   
             en[i]:collWithObj(IenRegulS2,i,dt)
+            --------
             en[i]:traceDraw(dt)
             en[i]:draw(i)
         end

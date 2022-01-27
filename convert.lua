@@ -5,6 +5,9 @@ local particlRegulS = {}
 local flagColl =  false
 local colbaBody = HC.circle(screenWidth/1.7,screenHeight/2,80*k)
 local colbaFill = false
+
+local flagRes = -0.1
+local flagResBool = true
 -----------------------------------LEFT-----------------------------------
 local bodyL1 = HC.rectangle(0,0,25*k,30*k2)--2.1867155200084
 bodyL1:moveTo(screenWidth/1.7-math.sin(2.1867155200084)*108*k	,screenHeight/2- math.cos(2.1867155200084)*108*k)
@@ -87,6 +90,11 @@ function convert:update(dt)
                 else
                     particlSpawn(0,math.random(screenHeight/2+40*k2,screenHeight/2+90*k2),1)
                 end
+            else
+                if (flagRes == nil or  flagRes < 0) then 
+                    flagRes = 0
+                end
+                flagResBool = true
             end
         end
         if (  mouse.x > screenWidth/1.7+220*k-k2/4*120 and  mouse.x <screenWidth/1.7+220*k+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagRewardMenu == false) then
@@ -140,93 +148,89 @@ function convert:update(dt)
 end
 
 function convert:draw()
-local dt = love.timer.getDelta()
-UIBatch:clear()
-skillBatch:clear()
-love.graphics.setColor(1,1,1,1)
-love.graphics.draw(fon1,0,0,0,k,k2)
-love.graphics.draw(fon2,0,0,0,k,k2)
-love.graphics.draw(fon3,0,0,0,k,k2)
-exit(0,0)
-love.graphics.setColor(1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale)
-bodyButton(screenWidth/1.7+220*k,screenHeight/2,flagButton1,rewardSlotScale)
-love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
-love.graphics.draw(podst,screenWidth/1.7+95*k,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,200,150.5)
-
-
-for i=#particl,1, -1  do
-    local IparticlRegulS =math.floor((particl[i].x-10*k)/(20*k)) + math.floor((particl[i].y-10*k2)/(20*k2))*math.floor((screenWidth/(20*k))+1)
-    flagColl =  false
-    if (particl[i].flag == true  ) then 
-        particlCollWithparticl(IparticlRegulS,i,dt)
-        particlCollWithparticl(IparticlRegulS+1,i,dt)
-        particlCollWithparticl(IparticlRegulS+math.floor((screenWidth/(20*k))+1),i,dt) 
-        particlCollWithparticl(IparticlRegulS+math.floor((screenWidth/(20*k))+1)+1,i,dt)
-        particlCollWithparticl(IparticlRegulS-math.floor((screenWidth/(20*k))+1)+1,i,dt)
+    local dt = love.timer.getDelta()
+    UIBatch:clear()
+    skillBatch:clear()
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(fon1,0,0,0,k,k2)
+    love.graphics.draw(fon2,0,0,0,k,k2)
+    love.graphics.draw(fon3,0,0,0,k,k2)
+    exit(0,0)
+    love.graphics.setColor(1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale)
+    bodyButton(screenWidth/1.7+220*k,screenHeight/2,flagButton1,rewardSlotScale)
+    love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
+    love.graphics.draw(podst,screenWidth/1.7+95*k,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,200,150.5)
+    for i=#particl,1, -1  do
+        local IparticlRegulS =math.floor((particl[i].x-10*k)/(20*k)) + math.floor((particl[i].y-10*k2)/(20*k2))*math.floor((screenWidth/(20*k))+1)
+        flagColl =  false
+        if (particl[i].flag == true  ) then 
+            particlCollWithparticl(IparticlRegulS,i,dt)
+            particlCollWithparticl(IparticlRegulS+1,i,dt)
+            particlCollWithparticl(IparticlRegulS+math.floor((screenWidth/(20*k))+1),i,dt) 
+            particlCollWithparticl(IparticlRegulS+math.floor((screenWidth/(20*k))+1)+1,i,dt)
+            particlCollWithparticl(IparticlRegulS-math.floor((screenWidth/(20*k))+1)+1,i,dt)
+        end
+        particl[i].ax =particl[i].ax+ 60*dt
+        if ( particl[i].ay > 0.5*k ) then
+            particl[i].ay =particl[i].ay- 1
+        end
+        if ( particl[i].ay < -0.5*k ) then
+            particl[i].ay =particl[i].ay+ 1
+        end
+        love.graphics.setColor(particl[i].color1,particl[i].color2,particl[i].color3)
+        love.graphics.rectangle("fill",  particl[i].x,particl[i].y,13*k,13*k2,2)
+       -- particl[i].body:draw('fill')
     end
-    particl[i].ax =particl[i].ax+ 60*dt
-    if ( particl[i].ay > 0.5*k ) then
-        particl[i].ay =particl[i].ay- 1
+    love.graphics.setColor(1,1,1,0.6-rewardSlotScale)
+    love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
+    love.graphics.setColor(1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale)
+    textButton("Tap to fill",screenWidth/1.53,screenHeight/2,false,0.5)
+    love.graphics.setColor(0,0,0,1)
+    love.graphics.rectangle('fill',0,screenHeight/2-100*k2,35*k,200*k2)
+    love.graphics.setColor(1,1,1,0.6-rewardSlotScale)
+    sc(0,screenHeight/2)
+    local fontWidth = font:getWidth(tostring(score))
+    love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
+    if ( math.ceil(colbaPar/1.4)>= 30 ) then 
+        love.graphics.setColor(0.308,0.661,0.445,1) 
     end
-    if ( particl[i].ay < -0.5*k ) then
-        particl[i].ay =particl[i].ay+ 1
+    if ( math.ceil(colbaPar/1.4)>= 60 ) then 
+        love.graphics.setColor(0.6,0.3,0.6,1) 
     end
-    love.graphics.setColor(particl[i].color1,particl[i].color2,particl[i].color3)
-    love.graphics.rectangle("fill",  particl[i].x,particl[i].y,13*k,13*k2,2)
-   -- particl[i].body:draw('fill')
-end
-love.graphics.setColor(1,1,1,0.6-rewardSlotScale)
-love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
-love.graphics.setColor(1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale)
-textButton("Tap to fill",screenWidth/1.53,screenHeight/2,false,0.5)
-love.graphics.setColor(0,0,0,1)
-love.graphics.rectangle('fill',0,screenHeight/2-100*k2,35*k,200*k2)
-love.graphics.setColor(1,1,1,0.6-rewardSlotScale)
-sc(0,screenHeight/2)
-local fontWidth = font:getWidth(tostring(score))
-love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
-if ( math.ceil(colbaPar/1.4)>= 30 ) then 
-    love.graphics.setColor(0.308,0.661,0.445,1) 
-end
-if ( math.ceil(colbaPar/1.4)>= 60 ) then 
-    love.graphics.setColor(0.6,0.3,0.6,1) 
-end
-if ( math.ceil(colbaPar/1.4)== 100 ) then 
-    love.graphics.setColor(0.8,0.8,0.3,1) 
-end
-fontWidth = font:getWidth(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%')
-love.graphics.print(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%',screenWidth/1.7-250*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
-love.graphics.setColor(1,1,1,1) 
-
-if (flagRewardMenu == true) then 
-    if (rewardSkill == 0) then 
-        rewardSlot(nil,screenWidth/2,screenHeight/2,rewardSlotScale,rewardMoney)
-    else
-        rewardSlot(allSkills[rewardSkill],screenWidth/2,screenHeight/2,rewardSlotScale,rewardMoney)
+    if ( math.ceil(colbaPar/1.4)== 100 ) then 
+        love.graphics.setColor(0.8,0.8,0.3,1) 
     end
-    bodyButton(screenWidth/2+200*k,screenHeight/2,flagButton2)  
-end
-
-love.graphics.draw(UIBatch)
-love.graphics.draw(skillBatch) 
-
-love.graphics.setColor(1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale) 
-textButton("Convert",screenWidth/1.7+220*k,screenHeight/2,flagButton1)
-if (flagRewardMenu == true) then 
+    fontWidth = font:getWidth(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%')
+    love.graphics.print(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%',screenWidth/1.7-250*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
     love.graphics.setColor(1,1,1,1) 
-    textButton("Ok",screenWidth/2+200*k,screenHeight/2,flagButton2)  
-    love.graphics.setColor(0.125,0.251,0.302,1) 
-    if ( rewardMoney > 0 and rewardSkill == 0) then 
-        textButton(rewardMoney,screenWidth/2,screenHeight/2,false,1.6*rewardSlotScale)  
-    end
-end
 
-love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
-love.graphics.print("particl: "..tostring(#particl), 100, 70,0,k/2,k2/2)
-for i=1,#exp do
-    love.graphics.setColor(exp[i].color1,exp[i].color2,exp[i].color3,1) 
-    love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*20*k,exp[i].scale*20*k2,4*exp[i].scale*k)
-end
+    if (flagRewardMenu == true) then 
+        if (rewardSkill == 0) then 
+            rewardSlot(nil,screenWidth/2,screenHeight/2,rewardSlotScale,rewardMoney)
+        else
+            rewardSlot(allSkills[rewardSkill],screenWidth/2,screenHeight/2,rewardSlotScale,rewardMoney)
+        end
+        bodyButton(screenWidth/2+200*k,screenHeight/2,flagButton2)  
+    end
+    love.graphics.draw(UIBatch)
+    love.graphics.draw(skillBatch) 
+    love.graphics.setColor(1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale) 
+    textButton("Convert",screenWidth/1.7+220*k,screenHeight/2,flagButton1)
+    if (flagRewardMenu == true) then 
+        love.graphics.setColor(1,1,1,1) 
+        textButton("Ok",screenWidth/2+200*k,screenHeight/2,flagButton2)  
+        love.graphics.setColor(0.125,0.251,0.302,1) 
+        if ( rewardMoney > 0 and rewardSkill == 0) then 
+            textButton(rewardMoney,screenWidth/2,screenHeight/2,false,1.6*rewardSlotScale)  
+        end
+    end
+    love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
+    love.graphics.print("particl: "..tostring(#particl), 100, 70,0,k/2,k2/2)
+    for i=1,#exp do
+        love.graphics.setColor(exp[i].color1,exp[i].color2,exp[i].color3,1) 
+        love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*20*k,exp[i].scale*20*k2,4*exp[i].scale*k)
+    end
+    flagRes,flagResBool = noRes(100*k ,screenHeight/2,0.6,flagRes,dt,flagResBool)
 end
 
 function particlCollWithparticl(index,j,dt)

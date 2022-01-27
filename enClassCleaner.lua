@@ -170,11 +170,9 @@ enemyСleanerClass = Class{
     end;
     angleMouthTr = function(self,dt)
         if ( self.angleMouth> 1 ) then
-            --self.angleMouth = 0.1 
             self.angleMouthFlag = 1 
         end
         if ( self.angleMouth< 0 ) then
-          --self.angleMouth = 0 
             self.angleMouthFlag = 0 
         end
         if ( self.angleMouthFlag ==0) then

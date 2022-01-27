@@ -117,6 +117,11 @@ function enCollWithobjInRegularS(index,j,dt)
                                     en[j].y = en[j].y +  deepY*dt*10
                                 end
                             end
+                            if (en[j] and en[j].tip == 1 and en[j].climbFlag == 1 ) then
+                                en[j].climbFlag = 0   
+                                en[j].climbAtack = en[j].climbAtackTimer
+                                en[j].dash =  en[j].dashTimer
+                            end
                             if ( en[j] and en[j].tip == 1 and en[j].target =="obj" and en[j].atack == en[j].atackTimer ) then
                                 en[j].targetDestroy = en[j].targetDestroyTimer - 0.001
                                 obj[kek[i]].health = obj[kek[i]].health - 2
@@ -185,7 +190,6 @@ function enCollWithobjInRegularSCleaner(index,j,dt)
                                 end
                             end
                         end
-          
                         if (flagObjZone) then 
                             obj[kek[i]].ax=-7000*dt*k*math.sin(angleD)
                             obj[kek[i]].ay=-7000*dt*k*math.cos(angleD)
@@ -198,17 +202,60 @@ function enCollWithobjInRegularSCleaner(index,j,dt)
     end
 end
 
-function enFire(x,y,x2,y2,angleEn,damage)
+function enFire(x,y,x2,y2,angleEn,damage,scale)
+    if ( scale == nil) then
+        scale =2
+    end
     local ugol = math.atan2(x-x2,y-y2)
-    bullet = {
+    local bullet = {
         x = x2 + 10*k*math.sin(angleEn),
         y = y2 + 10*k2*math.cos(angleEn),
         ax = 22*k*math.sin(ugol),
         ay = 22*k2*math.cos(ugol),
-        damage = damage
+        damage = damage,
+        scale = scale
     }
     table.insert(enemyBullets,bullet)
 end
+
+function enPreFire(x,y,x2,y2,angleEn,damage,scale)
+    local ugol = math.atan2(x-x2,y-y2)
+    local bullet = {
+        pre = true,
+        x = x2 + scale*k*math.sin(angleEn),
+        y = y2 + scale*k2*math.cos(angleEn),
+        ax = 22*k*math.sin(ugol),
+        ay = 22*k2*math.cos(ugol),
+        damage = damage,
+        scale = 2,
+        normalScale = scale,
+    }
+    table.insert(enemyBullets,bullet)
+end
+
+function enCollWithWavesInRegularS(index,j,dt)
+    if ( waveRegulS[index]) then 
+        local kek = waveRegulS[index]
+        local enJScale = 0
+        if (kek) then
+            if ( en[j]) then
+                enJScale = math.max(en[j].w,en[j].h)/2
+            end
+            for i = #kek, 1, -1 do
+                if (kek[i] and waveEffects[kek[i]] and en[j]) then
+                    if (math.abs(waveEffects[kek[i]].x - en[j].x)<waveEffects[kek[i]].r*k+enJScale*k and math.abs(waveEffects[kek[i]].y - en[j].y)<waveEffects[kek[i]].r*k2+enJScale*k2 and  (math.pow((waveEffects[kek[i]].x - en[j].x),2) + math.pow((waveEffects[kek[i]].y - en[j].y),2))<=math.pow((waveEffects[kek[i]].r*k+enJScale*k),2)) then
+                        if (en[j].timer == en[j].invTimer ) then 
+                            en[j].health = en[j].health -  playerAbility.damage*playerSkillParametrs.damageK*playerSkillParametrs.waveAt
+                            en[j].timer = en[j].invTimer-0.0001
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+
 function enBoomAfterDieDraw(dt)
     for i = #enBoomAnimat, 1, -1 do
       enBoomAnimat[i].timer =  enBoomAnimat[i].timer -80*dt

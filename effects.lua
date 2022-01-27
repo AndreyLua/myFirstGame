@@ -325,6 +325,14 @@ function waveEffect(dt)
                 table.remove(waveEffects,i)  
             end
         end
+        if ( waveEffects[i]) then 
+            local IwaveRegulS =math.floor((waveEffects[i].x-40*k)/(80*k)) + math.floor((waveEffects[i].y-40*k2)/(80*k2))*math.floor((screenWidth/(80*k))+1)
+            if (objRegulS[IobjRegulS]) then
+                table.insert(waveRegulS[IwaveRegulS],i)
+            else
+                waveRegulS[IwaveRegulS] = {i}
+            end
+        end
     end
 end
 
@@ -344,7 +352,7 @@ function bloodEffect(dt)
         if ( bloodEffects[i].timer > 0 and  bloodEffects[i].en ~=nil ) then 
             if ( bloodEffects[i].timerTick == 10 and bloodEffects[i].en.health >0) then 
                 bloodPartSpawn(bloodEffects[i].en,7)
-                bloodEffects[i].en.health = bloodEffects[i].en.health - 0*dt -- damage
+                bloodEffects[i].en.health = bloodEffects[i].en.health - playerAbility.damage*playerSkillParametrs.damageK*dt*playerSkillParametrs.bloodAt -- damage
             end
             bloodEffects[i].timerTick = bloodEffects[i].timerTick - 200*dt
             bloodEffects[i].timer =bloodEffects[i].timer - 5 * dt
