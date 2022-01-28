@@ -402,6 +402,41 @@ function bloodPartSpawn(self,kol)
     end
 end
 
+function newDeffenseEffect(self)
+    if ( self~= nil) then
+        local deffenseEff  ={
+            en = self,
+            x = player.x, 
+            y = player.y,
+            speed =math.random(200,260)*k,
+        }
+        table.insert(deffenseEffects,deffenseEff)
+    end 
+end
+
+function deffenseEffect(dt) 
+    for i = #deffenseEffects,1, -1 do
+        if ( deffenseEffects[i] and deffenseEffects[i].en ~= nil and deffenseEffects[i].en.health>0 ) then 
+            love.graphics.setColor(0.27,0.80,0.63,1)
+            love.graphics.circle('fill',deffenseEffects[i].x,deffenseEffects[i].y,3*k)
+            local angle = math.atan2( deffenseEffects[i].en.x -  deffenseEffects[i].x, deffenseEffects[i].en.y -  deffenseEffects[i].y)
+            
+            
+            love.graphics.circle('fill',deffenseEffects[i].x-deffenseEffects[i].speed*math.sin(angle)*0.04*math.random() *2,deffenseEffects[i].y-deffenseEffects[i].speed*math.cos(angle)*0.04*math.random()*2,1*k)
+            love.graphics.circle('fill',deffenseEffects[i].x-deffenseEffects[i].speed*math.sin(angle)*0.02*math.random()*2 ,deffenseEffects[i].y-deffenseEffects[i].speed*math.cos(angle)*0.02*math.random()*2,2*k)
+             
+             
+            deffenseEffects[i].x = deffenseEffects[i].x +deffenseEffects[i].speed*math.sin(angle)*dt 
+            deffenseEffects[i].y = deffenseEffects[i].y +deffenseEffects[i].speed*math.cos(angle)*dt 
+            if ( math.abs(deffenseEffects[i].en.x -  deffenseEffects[i].x) < 5*k and  math.abs(deffenseEffects[i].en.y -  deffenseEffects[i].y) < 5*k) then
+                deffenseEffects[i].en.timer = deffenseEffects[i].en.invTimer/2
+                table.remove(deffenseEffects,i)  
+            end
+        else
+            table.remove(deffenseEffects,i)
+        end
+    end
+end
 
 function gradient(dt)
     if (gradientI == 1 ) then

@@ -275,7 +275,7 @@ enemyHammerClass = Class{
             if (self.invTimer == self.timer and self.dash~=self.dashTimer) then
                 flaginv = false 
                 self.dash=self.dashTimer
-                enAtackPlayer(self.damage,'m')
+                enAtackPlayer(self.damage,'m',self)
             end 
         else
             if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then

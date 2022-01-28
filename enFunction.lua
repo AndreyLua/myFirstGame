@@ -202,12 +202,13 @@ function enCollWithobjInRegularSCleaner(index,j,dt)
     end
 end
 
-function enFire(x,y,x2,y2,angleEn,damage,scale)
+function enFire(x,y,x2,y2,angleEn,damage,scale,self)
     if ( scale == nil) then
         scale =2
     end
     local ugol = math.atan2(x-x2,y-y2)
     local bullet = {
+        en = self,
         x = x2 + 10*k*math.sin(angleEn),
         y = y2 + 10*k2*math.cos(angleEn),
         ax = 22*k*math.sin(ugol),
@@ -218,9 +219,10 @@ function enFire(x,y,x2,y2,angleEn,damage,scale)
     table.insert(enemyBullets,bullet)
 end
 
-function enPreFire(x,y,x2,y2,angleEn,damage,scale)
+function enPreFire(x,y,x2,y2,angleEn,damage,scale,self)
     local ugol = math.atan2(x-x2,y-y2)
     local bullet = {
+        en = self,
         pre = true,
         x = x2 + scale*k*math.sin(angleEn),
         y = y2 + scale*k2*math.cos(angleEn),

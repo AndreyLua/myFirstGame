@@ -100,7 +100,7 @@ enemyInvaderClass = Class{
             self.angleWingFlag = 1
             if ( self.angleWing < -0.1) then 
                 self.atack = self.atackTimer-0.001
-                enPreFire(player.x,player.y,self.x,self.y,self.angleBody,self.damage,15)
+                enPreFire(player.x,player.y,self.x,self.y,self.angleBody,self.damage,15,self)
             end
         end
     end;

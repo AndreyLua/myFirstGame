@@ -78,7 +78,7 @@ resClass = Class {
         end
     end;
     collWithEn = function(self,index,j,dt)
-        if ( enRegulS[index]) then 
+        if ( res[j] and enRegulS[index]) then 
             local kek = enRegulS[index]
             if (kek) then
                 for i = #kek, 1, -1 do
@@ -107,7 +107,6 @@ resClass = Class {
                             end
                         end          
   
-                        
                         if (res[j] and math.abs(en[kek[i]].x - res[j].x)<12*k and math.abs(en[kek[i]].y - res[j].y)<12*k2 and  (math.pow((en[kek[i]].x - res[j].x),2) + math.pow((en[kek[i]].y - res[j].y),2))<=math.pow((12*k),2)) then
                             if ( en[kek[i]].tip == 1  )then 
                                 en[kek[i]].angleMouth = 0.5
@@ -115,7 +114,6 @@ resClass = Class {
                             table.remove(res,j) 
                             break   
                         end
-                        
                     end
                 end
             end

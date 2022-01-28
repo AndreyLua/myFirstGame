@@ -9,10 +9,37 @@ function wavesUpdate(dt)
             waves[1] = 5
         end
         colWave =waves[2]
-    
         wavesNextWave()
     end
     
+end
+
+function wavesSpawn()
+    if (#obj < 200) then
+        TimerObj:every(5, function()
+            for i=1,math.random(1,1) do
+                local Geo  =math.random(1,4)
+                allSpawn(obj,Geo)
+                if ( #obj >50) then
+                    if ( math.random(1,100) >50) then
+                        allSpawn(en,Geo,6)
+                    end
+                end
+            end
+            TimerObj:clear() 
+        end)
+    end  
+    if (#en < 50) then
+        TimerEn:every(math.random(5,8), function()
+            local Geo  =math.random(1,4)
+            local Tip =math.random(1,waves[1])
+            allSpawn(en,Geo,Tip)
+            if (math.random(1,100) > 90 and numberWave>=8 ) then   
+                wavesSpawnGroup(math.random(1,4))
+            end
+            TimerEn:clear() 
+        end)
+    end   
 end
 
 function wavesNextWave()

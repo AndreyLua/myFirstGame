@@ -9,6 +9,7 @@ function bulletsUpdate(dt)
                 else
                     local ugol = math.atan2(player.x- enemyBullets[i].x,player.y- enemyBullets[i].y)
                     local bullet = {
+                        en = enemyBullets[i].en,
                         x = enemyBullets[i].x,
                         y = enemyBullets[i].y,
                         ax = 22*k*math.sin(ugol),
@@ -100,7 +101,7 @@ end
         else
             if ((math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)) < math.pow(playerAbility.scaleBody*k+enemyBullets[i].scale*k,2)) then
                 flaginv = false 
-                enAtackPlayer(enemyBullets[i].damage,'r')
+                enAtackPlayer(enemyBullets[i].damage,'r',enemyBullets[i].en)
                 table.remove(enemyBullets,i)
             end
         end      

@@ -94,7 +94,7 @@ enemyShooterClass = Class{
         if (self.atack and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= 450*k ) then
             self.atack = self.atackTimer-0.001
             self.angleMouth = 1.5
-            enFire(player.x,player.y,self.x,self.y,self.angleBody,self.damage)
+            enFire(player.x,player.y,self.x,self.y,self.angleBody,self.damage,2,self)
         end
     end;
     atackTimerUpdate = function(self,dt)

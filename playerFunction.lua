@@ -80,6 +80,33 @@ function playerMove(dt)
     end
 end
 
+function playerCamera(dt)
+    if not( player.x > borderWidth*2-screenWidth/2+20*k or  player.x < -borderWidth+screenWidth/2+20*k) then
+        camera.x =camera.x+(player.x-camera.x)*dt*5*k
+    else
+        if (  player.x > borderWidth*2-screenWidth/2+20*k) then
+            camera.x =camera.x+( borderWidth*2-screenWidth/2+20*k-camera.x)*dt*5*k
+        else
+            camera.x =camera.x+(-borderWidth+screenWidth/2+20*k-camera.x)*dt*5*k
+        end
+    end
+    if not( player.y >  borderHeight*2-screenHeight/2+20*k2 or  player.y < - borderHeight+screenHeight/2+20*k2 ) then
+        camera.y =camera.y+(player.y-camera.y)*dt*5*k2
+    else
+        if (  player.y >borderHeight*2-screenHeight/2+20*k2) then
+            camera.y =camera.y+(borderHeight*2-screenHeight/2+20*k2-camera.y)*dt*5*k2
+        else
+            camera.y =camera.y+(-borderHeight+screenHeight/2+20*k2-camera.y)*dt*5*k2
+        end
+    end
+    if ( player.clowR> 0.2 ) then
+        player.clowRflag = 1 
+    end
+    if ( player.clowR< 0 ) then
+        player.clowRflag = 0 
+    end
+end 
+  
 function playerDraw(dt)
     local xDraw = screenWidth/2+20*k+(player.x-camera.x)
     local yDraw = screenHeight/2+20*k2+(player.y-camera.y)  
@@ -148,16 +175,18 @@ function playerCollWithObj(dt)
     objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1,dt)
 end
 
-function enAtackPlayer(dmg,tip)
+function enAtackPlayer(dmg,tip,self)
     dmg = dmg- playerSkillParametrs.hpK*dmg
     if ( tip=='m') then
         hp.long = hp.long - dmg*(1-playerSkillParametrs.meleeDefK)
+   --     newDeffenseEffect(self)
     end
     if ( tip=='e') then
         hp.long = hp.long - dmg
     end
      if ( tip=='r') then
         hp.long = hp.long - dmg*(1-playerSkillParametrs.rangeDefK)
+        newDeffenseEffect(self)
     end
 end
 
@@ -165,7 +194,7 @@ function playerAtackEn(self,dt)
     boost.long = boost.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*     playerAbility.boostWasteEnHit*dt
     self.health  =  self.health - playerAbility.damage*playerSkillParametrs.damageK
    -- newWaveEffect(self.x,self.y)
-    --newBloodEffect(self)
+  --  newBloodEffect(self)
    table.insert(masli,{table = self, timer = 10,flag = nil})
 end
 
@@ -392,6 +421,12 @@ function playerBorder()
     if ( player.y > borderHeight*2- playerAbility.scaleBody*k2) then
         player.y = borderHeight*2 -playerAbility.scaleBody*k2
     end 
+end
+
+function playerDie()
+    if ( hp.long<=0) then 
+        gamestate.switch(pause)
+    end
 end
 
 return playerFunction

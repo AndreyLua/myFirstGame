@@ -82,6 +82,8 @@ function skills:update(dt)
                 end
                 if (speedR == 0 and playerSkills[indexR+4] and  skillCostUpgrade[(playerSkills[indexR+4].numb)]< score) then
                     flagAcceptMenu = true
+                    flagRes = -0.1
+                    flagResBool = true
                 else
                   ---------------------------------
                     if (flagRes == nil or  flagRes < 0) then 
@@ -255,7 +257,7 @@ if ( playerSkills[indexR+4]) then
     end
 end
 
-flagRes,flagResBool = noRes(xBigSlot-(0.4*1.2*160*k)-difButton*0.15 ,screenHeight/2,0.4,flagRes,dt,flagResBool)
+flagRes,flagResBool = noRes(xBigSlot-(0.4*1.2*160*k)-difButton*0.12 ,screenHeight/2,0.4,flagRes,dt,flagResBool)
 
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 end

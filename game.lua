@@ -5,6 +5,7 @@ function game:init()
 --effect  
  waveEffects = {} 
  bloodEffects = {} 
+ deffenseEffects = {} 
  bloodPart = {}
 --effect
 numberCleaner = 0 
@@ -28,8 +29,8 @@ waveflag = 0
 wavex = -250*k
 wavey = 0
 numberWave =1 
-colWave= 100
-waves = {1,100}
+colWave= 50
+waves = {2,50}
 
 spped = 460
 flagsp = false
@@ -120,6 +121,7 @@ end
 
 
 function game:update(dt)
+ -- en = {en[1]}
 --flaginv =true
 explUpdate2(dt)
 objRegulS = {}
@@ -132,37 +134,13 @@ mouse.x = mouse.x
 mouse.y = mouse.y
 flagtouch2 = false -- для выхода в состояние пауза
 wavesUpdate(dt)
-if not( player.x > borderWidth*2-screenWidth/2+20*k or  player.x < -borderWidth+screenWidth/2+20*k) then
-    camera.x =camera.x+(player.x-camera.x)*dt*5*k
-else
-    if (  player.x > borderWidth*2-screenWidth/2+20*k) then
-        camera.x =camera.x+( borderWidth*2-screenWidth/2+20*k-camera.x)*dt*5*k
-    else
-        camera.x =camera.x+(-borderWidth+screenWidth/2+20*k-camera.x)*dt*5*k
-    end
-end
-if not( player.y >  borderHeight*2-screenHeight/2+20*k2 or  player.y < - borderHeight+screenHeight/2+20*k2 ) then
-    camera.y =camera.y+(player.y-camera.y)*dt*5*k2
-else
-    if (  player.y >borderHeight*2-screenHeight/2+20*k2) then
-        camera.y =camera.y+(borderHeight*2-screenHeight/2+20*k2-camera.y)*dt*5*k2
-    else
-        camera.y =camera.y+(-borderHeight+screenHeight/2+20*k2-camera.y)*dt*5*k2
-    end
-end
 
-if ( player.clowR> 0.2 ) then
-    player.clowRflag = 1 
-end
-if ( player.clowR< 0 ) then
-    player.clowRflag = 0 
-end
 --------------------
+playerCamera(dt)
 playerControl()
 playerClowR(dt)
 playerHP(dt)
 -------------------
-
 for i = #obj, 1, -1 do
     if (obj[i]) then  
         allInvTimer(i,obj,dt)
@@ -234,43 +212,13 @@ for i = #res, 1, -1 do
                     res[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1)-1,i,dt)
                 end
             end
-           -- res[i]:collWithEn(indexResInRegS,i,dt)
         end
     end
-end 
-
-playerBoost(dt)
-
-
-if (#obj < 200) then
-    TimerObj:every(5, function()
-        for i=1,math.random(1,1) do
-            local Geo  =math.random(1,4)
-            allSpawn(obj,Geo)
-            if ( #obj >50) then
-                if ( math.random(1,100) >50) then
-                    allSpawn(en,Geo,6)
-                end
-            end
-        end
-        TimerObj:clear() 
-    end)
-end  
-if (#en < 50) then
-    TimerEn:every(math.random(5,8), function()
-        local Geo  =math.random(1,4)
-        local Tip =math.random(1,waves[1])
-        allSpawn(en,Geo,Tip)
-        if (math.random(1,100) > 90 and numberWave>=8 ) then   
-            wavesSpawnGroup(math.random(1,4))
-        end
-        TimerEn:clear() 
-    end)
 end
-
+playerBoost(dt)
+wavesSpawn()
 TimerObj:update(dt)
 TimerEn:update(dt)
-
 playerCollWithObj(dt)
 playerCollWithEn(dt)
 playerDebaff(dt)
@@ -278,6 +226,7 @@ playerMove(dt)
 bulletsUpdate(dt)
 self:movement(dt)
 playerBorder()
+playerDie()
 end
 
 function game:keypressed(key1,key, code)
@@ -291,12 +240,7 @@ function game:keypressed(key1,key, code)
 end
 
 function game:movement(dt)
-    if ( hp.long<=0) then 
-        gamestate.switch(pause)
-    end
-    
     if ( love.mouse.isDown(1))then
-        
         flagtouch=true
     else
         if (  flagtouch==true and mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and flagtouch1== true) then
@@ -309,20 +253,19 @@ function game:movement(dt)
         flagtouch=false
         flagtouch1 = true
     end   
-     if love.keyboard.isDown('w') then
+    if love.keyboard.isDown('w') then
        kekKK = kekKK +0.01
     end
-     if love.keyboard.isDown('s') then
+    if love.keyboard.isDown('s') then
        kekKK = kekKK -0.01
     end
-    
     if love.keyboard.isDown('e') then
         local Geo  =math.random(1,4)
         allSpawn(obj,Geo)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,1)
+        allSpawn(en,Geo,2)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -357,7 +300,9 @@ function  game:draw()
         --love.graphics.rectangle('line',-borderWidth,-borderHeight,borderWidth*3,borderHeight*3,k,k2)
         waveEffect(dt)
         bloodEffect(dt)
+        
         allDraw(dt)
+      --  deffenseEffect(dt)
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(enBatchAfterDie)
         love.graphics.draw(resBatch)
@@ -386,7 +331,7 @@ function  game:draw()
     end
     love.graphics.draw(playerBatch)
     playerBatch:clear()
-  --  playerDrawCristal()
+    -- playerDrawCristal()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(enBatchDop)
     love.graphics.push()
@@ -396,23 +341,20 @@ function  game:draw()
         playerLiDraw(dt)
         love.graphics.draw(boomBatch)
         resAfterDie(dt)
-      --  waveEffect(dt)
-      
-    
+          deffenseEffect(dt)
+        --waveEffect(dt)
     love.graphics.pop()
-  --  love.graphics.push()
-   --     love.graphics.translate(screenWidth/2+20*k+(player.x-camera.x),screenHeight/2+20*k2+(player.y-camera.y))
-   --     love.graphics.rotate(-controler.angle)
-       -- playerLiInBodyDraw()
-   -- love.graphics.pop()
-
+    --love.graphics.push()
+        --love.graphics.translate(screenWidth/2+20*k+(player.x-camera.x),screenHeight/2+20*k2+(player.y-camera.y))
+        --love.graphics.rotate(-controler.angle)
+        --playerLiInBodyDraw()
+    --love.graphics.pop()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(playerBatch)
     love.graphics.setColor(1,1,1,1)
     for i=1,#exp do
         love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*15*k,exp[i].scale*15*k2,4*exp[i].scale*k)
     end
- 
     local fontWidth = font:getWidth(tostring(score))
     love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
     
@@ -432,9 +374,10 @@ function  game:draw()
     else
         love.graphics.draw(kek,0,0,0,sx,sy)
     end
+    
+    local stat  =  love.graphics.getStats()
     love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
     love.graphics.print("EN: "..tostring(#en), 100, 40,0,k/2,k2/2)
-    local stat  =  love.graphics.getStats()
     love.graphics.print("Stat  "..tostring(stat.drawcalls), 100, 70,0,k/2,k2/2)
     love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
     love.graphics.print("RES: "..tostring(#res), 100, 150,0,k/2,k2/2)
@@ -459,18 +402,18 @@ function enGeo(Geo)
     end
 end
 function objGeo(Geo)
-  if (Geo==1) then
+    if (Geo==1) then
         return -borderWidth-200*k,math.random(-borderHeight,borderHeight*2),math.random(18*k,30*k),math.random(-30*k,30*k), math.random()*math.random(-1,1)
-      end
-      if (Geo==2) then
+    end
+    if (Geo==2) then
         return  math.random(-borderWidth,borderWidth*2),-borderHeight-200*k2,math.random(-30*k,30*k),math.random(18*k,30*k),math.random()*math.random(-1,1)
-      end
-      if (Geo==3) then
+    end
+    if (Geo==3) then
         return   math.random(-borderWidth,borderWidth*2),borderHeight*2+200*k2,math.random(-30*k,30*k),math.random(-30*k2,-18*k2),math.random()*math.random(-1,1)
-      end
-      if (Geo==4) then
+    end
+    if (Geo==4) then
         return  borderWidth*2+200*k, math.random(-borderHeight,borderHeight*2),math.random(-30*k,-18*k),math.random(-30*k,30*k), math.random()*math.random(-1,1)
-      end
+    end
 end
 
 function allSpawn(mas,Geo,Tip)
@@ -571,13 +514,12 @@ function allInvTimer(i,mas,dt)
 end
 
 function allDraw(dt)
-
     for i= 1,#res do
         if (res[i] and res[i].x>camera.x-screenWidth/2-30*k and  res[i].x<camera.x+screenWidth/2+30*k and  res[i].y>camera.y-screenHeight/2-30*k2 and res[i].y<camera.y + screenHeight/2+30*k2) then
             res[i]:draw()
         end
     end 
-   
+    
     for i = #obj, 1, -1 do
         if (obj[i] and obj[i].body)  then
             if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then

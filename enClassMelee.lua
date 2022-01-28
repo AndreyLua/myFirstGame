@@ -369,7 +369,7 @@ enemyMeleeClass = Class{
             if ( self.climbFlag == 1 and self.meleeAtackTimer == self.meleeAtack )  then 
                 self.meleeAtack = self.meleeAtackTimer - 0.0001
                 flaginv = false 
-                enAtackPlayer(self.damage,'m')
+                enAtackPlayer(self.damage,'m',self)
             end
         else
             if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
