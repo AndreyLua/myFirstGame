@@ -18,7 +18,7 @@ function spawnDelMet(i)
 end
 
 function spawnResHitEn(i)
-     for kV =1, math.random(2,3) do
+    for kV =1, math.random(2,3) do
         newPoint(en,i,kV) 
     end
 end

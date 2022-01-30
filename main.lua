@@ -371,7 +371,7 @@ playerSkillParametrs = {
     enK = 0, -- common2
     meleeDefK = 0, -- common3
     rangeDefK = 0, -- common4
-    damageK = 0, -- common5
+    damageK = 1, -- common5
     speedK = 0, -- common6
     collectRangeK = 0, -- common7
     
@@ -379,6 +379,10 @@ playerSkillParametrs = {
     bloodAt = 0.2, -- rare9
     sealAt = 0.2, -- rare10
     spike = 0, -- rare11
+    
+    vampirK = 0.1, -- legend14
+    
+    
 }
 skillCostUpgrade = {
 100,-- common1
@@ -460,7 +464,7 @@ numb = 10 ,
 }
 playerSkills[11] ={
 img =skillQuads.spikeArmor,
-lvl = 10,
+lvl = 1,
 numb = 11 ,
 }
 -------------CONST AND FLAGS------

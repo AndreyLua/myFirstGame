@@ -179,7 +179,7 @@ function enAtackPlayer(dmg,tip,self)
     dmg = dmg- playerSkillParametrs.hpK*dmg
     if ( tip=='m') then
         hp.long = hp.long - dmg*(1-playerSkillParametrs.meleeDefK)
-   --     newDeffenseEffect(self)
+        newDeffenseEffect(self)
     end
     if ( tip=='e') then
         hp.long = hp.long - dmg
@@ -193,7 +193,8 @@ end
 function playerAtackEn(self,dt)
     boost.long = boost.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*     playerAbility.boostWasteEnHit*dt
     self.health  =  self.health - playerAbility.damage*playerSkillParametrs.damageK
-   -- newWaveEffect(self.x,self.y)
+    newVampirEffect(self)
+    --newWaveEffect(self.x,self.y)
   --  newBloodEffect(self)
    table.insert(masli,{table = self, timer = 10,flag = nil})
 end

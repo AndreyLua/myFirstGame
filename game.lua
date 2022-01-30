@@ -7,6 +7,7 @@ function game:init()
  bloodEffects = {} 
  deffenseEffects = {} 
  bloodPart = {}
+ greenPlayerEffect = {} 
 --effect
 numberCleaner = 0 
 -------------BODY------
@@ -128,7 +129,7 @@ objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
 boost.long = 1000
-hp.long = 1000 
+--hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -180,6 +181,9 @@ for i = #res, 1, -1 do
         res[i]:GravityWithPlayer()
         res[i]:move(dt)
         res[i]:border(i)
+        if (res[i] and res[i].tip == 6) then  
+            res[i]:traceSpawn()
+        end
         if (res[i]) then  
             res[i]:collWithPlayer(i)
         end
@@ -265,7 +269,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,2)
+        allSpawn(en,Geo,1)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -341,7 +345,8 @@ function  game:draw()
         playerLiDraw(dt)
         love.graphics.draw(boomBatch)
         resAfterDie(dt)
-          deffenseEffect(dt)
+        deffenseEffect(dt)
+        greenPlayerEffectDraw(dt)
         --waveEffect(dt)
     love.graphics.pop()
     --love.graphics.push()
@@ -517,6 +522,9 @@ function allDraw(dt)
     for i= 1,#res do
         if (res[i] and res[i].x>camera.x-screenWidth/2-30*k and  res[i].x<camera.x+screenWidth/2+30*k and  res[i].y>camera.y-screenHeight/2-30*k2 and res[i].y<camera.y + screenHeight/2+30*k2) then
             res[i]:draw()
+            if ( res[i].tip == 6 ) then 
+                res[i]:traceDraw(dt)
+            end
         end
     end 
     

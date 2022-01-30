@@ -130,6 +130,7 @@ function skills:update(dt)
                 if (speedR == 0 and playerSkills[indexR+4] and  skillCostUpgrade[(playerSkills[indexR+4].numb)]< score) then
                     score = score - skillCostUpgrade[(playerSkills[indexR+4].numb)]
                     playerSkills[indexR+4].lvl = playerSkills[indexR+4].lvl+1
+                    lvlParametrs()
                 end
             end
             if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*120*k+0.4*k*120 and butNo == true) then
@@ -297,7 +298,7 @@ function lvlParametrs()
             playerSkillParametrs.sealAt =0.1*math.log(masSkill.lvl,2)
         end
         if (masSkill.numb == 11 ) then 
-            playerSkillParametrs.spike =0.1*math.log(masSkill.lvl,2)
+            playerSkillParametrs.spike =0.01*math.log(masSkill.lvl,2)
         end
     end
 end

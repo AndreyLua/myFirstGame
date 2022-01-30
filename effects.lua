@@ -430,10 +430,72 @@ function deffenseEffect(dt)
             deffenseEffects[i].y = deffenseEffects[i].y +deffenseEffects[i].speed*math.cos(angle)*dt 
             if ( math.abs(deffenseEffects[i].en.x -  deffenseEffects[i].x) < 5*k and  math.abs(deffenseEffects[i].en.y -  deffenseEffects[i].y) < 5*k) then
                 deffenseEffects[i].en.timer = deffenseEffects[i].en.invTimer/2
+                deffenseEffects[i].en.health = deffenseEffects[i].en.health -  deffenseEffects[i].en.damage*playerSkillParametrs.spike
                 table.remove(deffenseEffects,i)  
             end
         else
             table.remove(deffenseEffects,i)
+        end
+    end
+end
+
+function newVampirEffect(self)
+    for i =1, math.random(3,5) do
+        local masPoint = {
+            10-0.00001, --timer
+            10, --invTimer
+            6, -- tip
+            math.random(-1,1), --r
+            0, -- color1
+            1, -- color2
+            0.67, -- color3
+            self.x,--x
+            self.y,--y
+            math.random(-2*k,2*k2)*1.5,  --ax
+            math.random(-2*k,2*k2)*1.5,  --ay
+            {},
+        }
+        local resClone = resClass(unpack(masPoint))
+        table.insert(res,resClone)
+    end
+end
+
+function newGreenPlayerEffect()
+   
+      local greenEff =
+      {
+        x =math.random(-20*k,20*k2)*1.5, 
+        y =math.random(-20*k,20*k2)*1.5,  
+        scale = math.random()*7, 
+        timer = 10,
+      }
+      table.insert(greenPlayerEffect,greenEff)
+    
+end
+
+function greenPlayerEffectDraw(dt)
+    love.graphics.setColor(0,1,0.67,1)
+    love.graphics.setLineWidth(1.1*k)
+              
+    for i = #greenPlayerEffect,1,-1 do
+        if ( greenPlayerEffect[i].timer > 0 ) then
+            greenPlayerEffect[i].timer =  greenPlayerEffect[i].timer -30*dt
+           
+            greenPlayerEffect[i].scale = greenPlayerEffect[i].scale  +10*dt
+             
+            love.graphics.line(player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y-0.5*k*greenPlayerEffect[i].scale,player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y+0.5*k*greenPlayerEffect[i].scale)
+          
+            love.graphics.line(player.x+ greenPlayerEffect[i].x-0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y,player.x+ greenPlayerEffect[i].x+0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y)
+          
+        else
+            greenPlayerEffect[i].scale = greenPlayerEffect[i].scale  -30*dt
+            if ( greenPlayerEffect[i].scale < 0 ) then 
+                table.remove(greenPlayerEffect,i)
+            end
+            if (  greenPlayerEffect[i]) then 
+                love.graphics.line(player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y-0.5*k*greenPlayerEffect[i].scale,player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y+0.5*k*greenPlayerEffect[i].scale)
+                love.graphics.line(player.x+ greenPlayerEffect[i].x-0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y,player.x+ greenPlayerEffect[i].x+0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y)
+            end
         end
     end
 end
