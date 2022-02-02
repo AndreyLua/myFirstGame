@@ -107,7 +107,7 @@ function convert:update(dt)
     else
         if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
             exp = {}
-            gamestate.switch(game)
+            gamestate.switch(pause)
         end 
 
         if (mouse.x > screenWidth/1.7+220*k-k2/4*120 and  mouse.x <screenWidth/1.7+220*k+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagButton1 == true) then
@@ -212,8 +212,12 @@ function convert:draw()
         end
         bodyButton(screenWidth/2+200*k,screenHeight/2,flagButton2)  
     end
+  --  UIBatch:setColor(0.4,0.4,0.4,1)
+  --  UIBatch:add(UIQuads.tableSkill,screenWidth/1.7-140*k,screenHeight/2-140*k,-math.pi/2,k*0.1,k2*0.1,160,160)
+  --  UIBatch:setColor(1,1,1,1)
     love.graphics.draw(UIBatch)
     love.graphics.draw(skillBatch) 
+    love.graphics.print(tostring(#playerSkills).."/14", screenWidth/1.7-130*k,screenHeight/2-130*k,-math.pi/2,k*0.4,k2*0.4)
     love.graphics.setColor(1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale) 
     textButton("Convert",screenWidth/1.7+220*k,screenHeight/2,flagButton1)
     if (flagRewardMenu == true) then 

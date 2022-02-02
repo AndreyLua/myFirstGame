@@ -45,7 +45,7 @@ function character:update(dt)
         end
         if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
             exp = {}
-            gamestate.switch(game)
+            gamestate.switch(pause)
         end 
         but2 = false
         but1 = false

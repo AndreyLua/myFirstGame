@@ -150,7 +150,7 @@ resClass = Class {
                 end
                 if ( self.tip == 6 ) then
                     newGreenPlayerEffect()
-                    hp.long=hp.long +  playerSkillParametrs.vampirK*playerSkillParametrs.damageK*50*k2
+                    hp.long=hp.long +  playerSkillParametrs.vampirK*playerSkillParametrs.damageK*50*k2----skill
                     resRemove(i)
                 end
             else

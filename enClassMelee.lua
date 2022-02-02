@@ -361,7 +361,7 @@ enemyMeleeClass = Class{
     end;
     hit  = function(self,a,i,dt)
         if ( a == 0 ) then
-            if ( player.invis == 10 and self.invTimer == self.timer and self.climbAtack == self.climbAtackTimer and self.dash  ~= self.dashTimer)  then
+            if (self.invTimer == self.timer and self.climbAtack == self.climbAtackTimer and self.dash  ~= self.dashTimer)  then
                 self.climbFlag = 1 
                 self.climbAtack = self.climbAtackTimer - 0.0001
                 self.dopAngle = self.angleBody-controler.angle

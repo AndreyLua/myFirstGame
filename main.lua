@@ -62,15 +62,15 @@ skillQuads = {
   atack = love.graphics.newQuad(640,  0,  320, 320, skillSet:getDimensions()),
   meleeDef = love.graphics.newQuad(0,  640,  320, 320, skillSet:getDimensions()),
   rangeDef = love.graphics.newQuad(320,  640,  320, 320, skillSet:getDimensions()),
-  
   collectRange = love.graphics.newQuad(960, 0,  320, 320, skillSet:getDimensions()),
   speed = love.graphics.newQuad(0, 320,  320, 320, skillSet:getDimensions()),
-  spikeArmor =  love.graphics.newQuad(640, 640,  320, 320, skillSet:getDimensions()),
   
+  spikeArmor =  love.graphics.newQuad(640, 640,  320, 320, skillSet:getDimensions()),
   waveAtack =  love.graphics.newQuad(960, 320,  320, 320, skillSet:getDimensions()),
   bloodAtack =  love.graphics.newQuad(640, 320,  320, 320, skillSet:getDimensions()),
   sealAtack =  love.graphics.newQuad(320, 320,  320, 320, skillSet:getDimensions()),
   
+  dopEnergy =   love.graphics.newQuad(640,  960,  320, 320, skillSet:getDimensions()),
   swapHpAndEn= love.graphics.newQuad(320,  960,  320, 320, skillSet:getDimensions()), 
   vampir = love.graphics.newQuad(0,  960,  320, 320, skillSet:getDimensions()),
 }
@@ -273,15 +273,15 @@ allSkills[6] = skillQuads.speed    -- minComplete
 allSkills[7] = skillQuads.collectRange-- minComplete
 -------------------------------------------------------------------
 --########################RARE###########################################
-allSkills[8] = skillQuads.waveAtack  
-allSkills[9] = skillQuads.bloodAtack
-allSkills[10] = skillQuads.sealAtack
-allSkills[11] = skillQuads.spikeArmor
+allSkills[8] = skillQuads.waveAtack  -- minComplete 
+allSkills[9] = skillQuads.bloodAtack -- minComplete
+allSkills[10] = skillQuads.sealAtack 
+allSkills[11] = skillQuads.spikeArmor 
 -------------------------------------------------------------------
 --########################LEGEND###########################################
---allSkills[12] = skillQuads.sealAtack --- new res nothing 
+allSkills[12] = skillQuads.dopEnergy
 allSkills[13] = skillQuads.swapHpAndEn
-allSkills[14] = skillQuads.vampir
+allSkills[14] = skillQuads.vampir -- minComplete
 -------------------------------------------------------------------
 playerDrawPar = {
     {
@@ -380,30 +380,26 @@ playerSkillParametrs = {
     sealAt = 0.2, -- rare10
     spike = 0, -- rare11
     
+    dopEn = 0.1, -- legend13
+    tradeK = 0.1, -- legend13
     vampirK = 0.1, -- legend14
-    
-    
 }
 skillCostUpgrade = {
-100,-- common1
-100,-- common2
-100,-- common3
-100,-- common4
-100,-- common5
-100,-- common6
-100,-- common7
-100,-- rare8
-100,-- rare9
-100,-- rare10
-100,-- rare11
-100,-- legend12
-100,-- legend13
-100,-- legend14
+100,-- common1 hp
+100,-- common2 en
+100,-- common3 meleeDef
+100,-- common4 rangeDef
+100,-- common5 damage
+100,-- common6 speed
+100,-- common7 collectRange
+100,-- rare8 waveAtack
+100,-- rare9 bloodAtack
+100,-- rare10 electricAtack 
+100,-- rare11 spikeArmor
+100,-- legend12 dopEn
+100,-- legend13 trade
+100,-- legend14 vampir
 }
-
-
-
-
 
 playerSet = {}
 playerSet[1] =true
@@ -449,23 +445,38 @@ numb = 7 ,
 }
 playerSkills[8] ={
 img =skillQuads.waveAtack,
-lvl = 10,
+lvl = 1,
 numb = 8 ,
 }
 playerSkills[9] ={
 img =skillQuads.bloodAtack,
-lvl = 10,
+lvl = 1,
 numb = 9 ,
 }
 playerSkills[10] ={
 img =skillQuads.sealAtack,
-lvl = 10,
+lvl = 1,
 numb = 10 ,
 }
 playerSkills[11] ={
 img =skillQuads.spikeArmor,
 lvl = 1,
 numb = 11 ,
+}
+playerSkills[12] ={
+img =skillQuads.dopEnergy,
+lvl = 1,
+numb = 12 ,
+}
+playerSkills[13] ={
+img =skillQuads.swapHpAndEn,
+lvl = 1,
+numb = 13 ,
+}
+playerSkills[14] ={
+img =skillQuads.vampir,
+lvl = 1,
+numb = 14 ,
 }
 -------------CONST AND FLAGS------
 volume = 50

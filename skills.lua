@@ -33,6 +33,11 @@ local textMas = {
     'Bloody attack modifier (expends energy)',-- rare9
     'Seal attack modifier (expends energy)',-- rare10
     'The armor returns the damage received',-- rare11
+    
+    'Increase the energy reserve for special attacks',-- legend12
+    'Exchanges energy for health and health for energy',-- legend13
+    'Steals part of the life of enemies',-- legend14
+          
 }
 local difButton = (screenWidth-35*k-0.4*1.2*320*k-60*k-0.196*1.2*320*k-320*k/3)
 local xTextPanel = (35*k)+0.2*difButton+(160/3*k)
@@ -70,7 +75,7 @@ function skills:update(dt)
     else
         if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
             exp = {}
-            gamestate.switch(game)
+            gamestate.switch(pause)
         end 
         if ( flagAcceptMenu == false) then 
             if (mouse.x > xButton-k2/4*120 and  mouse.x <xButton+ k2/4*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-500*k/4 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+500*k/4 and but1 == true) then
@@ -266,6 +271,7 @@ end
 function lvlParametrs()
     for i =1, #playerSkills do 
         local masSkill = playerSkills[i] 
+        ----------------------------------------------------------------------------
         if (masSkill.numb == 1 ) then 
             playerSkillParametrs.hpK =0.3*math.log10(masSkill.lvl)
         end
@@ -287,7 +293,7 @@ function lvlParametrs()
         if (masSkill.numb == 7 ) then 
             playerSkillParametrs.collectRangeK =1+0.1*math.log(masSkill.lvl,2)
         end
-        
+        ----------------------------------------------------------------------------
         if (masSkill.numb == 8 ) then 
             playerSkillParametrs.waveAt =0.2*math.log(masSkill.lvl,2)
         end
@@ -300,6 +306,17 @@ function lvlParametrs()
         if (masSkill.numb == 11 ) then 
             playerSkillParametrs.spike =0.01*math.log(masSkill.lvl,2)
         end
+        ----------------------------------------------------------------------------
+        if (masSkill.numb == 12 ) then 
+            playerSkillParametrs.dopEn =0.01*math.log(masSkill.lvl,2)
+        end
+        if (masSkill.numb == 13 ) then 
+            playerSkillParametrs.tradeK =0.01*math.log(masSkill.lvl,2)
+        end
+        if (masSkill.numb == 14 ) then 
+            playerSkillParametrs.vampirK =0.01*math.log(masSkill.lvl,2)
+        end
+        
     end
 end
 
@@ -345,6 +362,15 @@ function textPar(i,x,y,scale)
     if (i == 11 ) then 
         love.graphics.print("REF "..tostring(math.ceil(100*(playerSkillParametrs.spike))).."%",x,y,-3.14/2,scale*k,scale*k)
     end
+    if (i == 12 ) then 
+        love.graphics.print("EN "..tostring(math.ceil(100*(playerSkillParametrs.dopEn))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
+    if (i == 13 ) then 
+        love.graphics.print("SW "..tostring(math.ceil(100*(playerSkillParametrs.tradeK))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
+    if (i == 14 ) then 
+        love.graphics.print("VP "..tostring(math.ceil(100*(playerSkillParametrs.vampirK))).."%",x,y,-3.14/2,scale*k,scale*k)
+    end
 end
 
 function textUpdate(text,speed,dt) 
@@ -356,7 +382,7 @@ function textUpdate(text,speed,dt)
             textL = textL:sub(0,#textL-1)
         end
         textkek = text:sub(texti,texti)
-        if ( textK>11 and text:sub(texti,texti) == " ") then
+        if ( textK>13 and text:sub(texti,texti) == " ") then
             textK = 0 
             textkek =textkek.."\n"
         end

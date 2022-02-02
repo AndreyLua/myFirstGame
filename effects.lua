@@ -430,7 +430,7 @@ function deffenseEffect(dt)
             deffenseEffects[i].y = deffenseEffects[i].y +deffenseEffects[i].speed*math.cos(angle)*dt 
             if ( math.abs(deffenseEffects[i].en.x -  deffenseEffects[i].x) < 5*k and  math.abs(deffenseEffects[i].en.y -  deffenseEffects[i].y) < 5*k) then
                 deffenseEffects[i].en.timer = deffenseEffects[i].en.invTimer/2
-                deffenseEffects[i].en.health = deffenseEffects[i].en.health -  deffenseEffects[i].en.damage*playerSkillParametrs.spike
+                deffenseEffects[i].en.health = deffenseEffects[i].en.health -  deffenseEffects[i].en.damage*playerSkillParametrs.spike--skill
                 table.remove(deffenseEffects,i)  
             end
         else
@@ -486,7 +486,6 @@ function greenPlayerEffectDraw(dt)
             love.graphics.line(player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y-0.5*k*greenPlayerEffect[i].scale,player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y+0.5*k*greenPlayerEffect[i].scale)
           
             love.graphics.line(player.x+ greenPlayerEffect[i].x-0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y,player.x+ greenPlayerEffect[i].x+0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y)
-          
         else
             greenPlayerEffect[i].scale = greenPlayerEffect[i].scale  -30*dt
             if ( greenPlayerEffect[i].scale < 0 ) then 
@@ -499,6 +498,37 @@ function greenPlayerEffectDraw(dt)
         end
     end
 end
+
+function newTradeEffect()
+    for i = 1 , math.random(4,7) do 
+        local tradeEff =
+            {
+                x =math.random(-20*k,20*k2)*1.7, 
+                y =math.random(-20*k,20*k2)*1.7,  
+                timer = 10,
+            }
+        table.insert(tradeEffects,tradeEff)  
+    end
+end
+
+function tradeEffectDraw(dt)
+    love.graphics.setColor(1,1,0.2,1)
+    for i = #tradeEffects,1,-1 do
+        if ( tradeEffects[i].timer > 0 ) then
+            local angle = math.atan2( -tradeEffects[i].x,-tradeEffects[i].y)+1.5
+            tradeEffects[i].x = tradeEffects[i].x +300*math.sin(angle)*dt 
+            tradeEffects[i].y =tradeEffects[i].y +300*math.cos(angle)*dt 
+            love.graphics.circle('fill',player.x+ tradeEffects[i].x,player.y +  tradeEffects[i].y,1.8*k)
+            tradeEffects[i].timer =  tradeEffects[i].timer -4*dt  
+            if ( math.abs(tradeEffects[i].x) < 5*k and math.abs(tradeEffects[i].y) < 5*k) then
+                table.remove(tradeEffects,i) 
+            end
+        else
+            table.remove(tradeEffects,i)
+        end
+    end
+end
+
 
 function gradient(dt)
     if (gradientI == 1 ) then

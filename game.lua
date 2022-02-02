@@ -1,59 +1,43 @@
 local game = {} 
 
 function game:init()
-  
---effect  
- waveEffects = {} 
- bloodEffects = {} 
- deffenseEffects = {} 
- bloodPart = {}
- greenPlayerEffect = {} 
---effect
-numberCleaner = 0 
--------------BODY------
-----------------------------------
+--#####################################################
+--effects   
+waveEffects = {} 
+bloodEffects = {} 
+tradeEffects = {} 
+deffenseEffects = {} 
+bloodPart = {}
+greenPlayerEffect = {} 
+--effects
+--#####################################################
+-------------------gameParametrs
+score = 0
 borderWidth =screenWidth/2
 borderHeight = screenHeight/2
-
-flaginv = true
+numberCleaner = 0 
 shake = 0
-fff = 0 
-flagvsemflagamflag = 0 
-flagtouch =false
 touchx = 0
 touchy = 0 
-ggtouch = 30
-fflag= false
-score = 0
-
+flagtouch =false
+flagtouch1 = false
+flagtouch2 = false
+flagtouch3 = false
+-------------------gameParametrs
+--#####################################################
+-------------------playerParametrs
+flaginv = true
+-------------------playerParametrs
+--#####################################################
+-------------------WaveParametrs
 waveflag = 0
 wavex = -250*k
 wavey = 0
 numberWave =1 
 colWave= 50
 waves = {2,50}
+-------------------WaveParametrs
 
-spped = 460
-flagsp = false
-fff3flag = false
-flagCircle =false  
-flagtouch1 = false
-flagtouch2 = false
-flagtouch3 = false
-preyi= -1
-klacK = 0 
-colll = {}
-flagclass = "slicer" 
-tap =  false
-np = 0 
-flagfff3 = 0   
-
-dopPa = {
-  x = 0,
-  y = 0 ,
-  scalex = 0.8,
-  scaley = 1.6
-}
 controler = { 
   x0 = 0, 
   y0 = 0,
@@ -75,29 +59,32 @@ boost = {
     long3 =screenHeight
 }
 
+boostDop = {
+    flag = true,
+    long = screenHeight,
+    long2 =screenHeight,
+    long3 =screenHeight
+}
+
 player = {
+    a = 0 , 
     li = 0,
     liTimer = 20,
     debaffStrenght =1,
     body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,playerAbility.scaleBody*k),
-    invis = 10,
     clowR = 0, 
     clowRflag = 0, 
-    boost =  screenHeight,
-    hp =  screenHeight,
     x = borderWidth/2+40*k/2, 
     y = borderHeight/2+40*k2/2,  
     ax = 0,
-    a = 0 , 
     ay = 0,
-    color = 0,
 } 
-playerLiRan = {} 
 camera = {
     x = borderWidth/2+40*k/2, 
     y = borderHeight/2+40*k2/2
 }
 
+playerLiRan = {} 
 enBoomAnimat = {}
 removeEn = {}
 en = {}
@@ -113,23 +100,28 @@ enemyBullets = {}
 playerSledi = {} 
 
 masli= {} 
-masliDr = {}
 masliDr2 = {}
 lii = 0 
+
 
 lvlParametrs()
 end
 
+function love.focus(v)
+    if (not(v)) then
+        gamestate.switch(pause)
+    end
+end
 
 function game:update(dt)
- -- en = {en[1]}
+-- en = {en[1]}
 --flaginv =true
 explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
 boost.long = 1000
---hp.long = 1000 
+hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -220,6 +212,7 @@ for i = #res, 1, -1 do
     end
 end
 playerBoost(dt)
+playerBoostDop(dt) -- skill
 wavesSpawn()
 TimerObj:update(dt)
 TimerEn:update(dt)
@@ -269,7 +262,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,1)
+        allSpawn(en,Geo,math.random(1,6))
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -301,12 +294,9 @@ function  game:draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.push()
         love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
-        --love.graphics.rectangle('line',-borderWidth,-borderHeight,borderWidth*3,borderHeight*3,k,k2)
         waveEffect(dt)
         bloodEffect(dt)
-        
         allDraw(dt)
-      --  deffenseEffect(dt)
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(enBatchAfterDie)
         love.graphics.draw(resBatch)
@@ -345,8 +335,11 @@ function  game:draw()
         playerLiDraw(dt)
         love.graphics.draw(boomBatch)
         resAfterDie(dt)
+        ----------
         deffenseEffect(dt)
         greenPlayerEffectDraw(dt)
+        tradeEffectDraw(dt)
+        -----------
         --waveEffect(dt)
     love.graphics.pop()
     --love.graphics.push()

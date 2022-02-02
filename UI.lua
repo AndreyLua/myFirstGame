@@ -152,47 +152,43 @@ function noRes(x,y,scale,par,dt,flag)
     end
 end
 
-
-
 function sc(x,y)
-  love.graphics.setLineWidth(2)
-  love.graphics.setColor(0.731,0.845,0.873)
-  love.graphics.rectangle('line',x,y-100*k2,35*k,200*k2)
-  love.graphics.setColor(1,1,1,1)
+    love.graphics.setLineWidth(2*k)
+    love.graphics.setColor(0.731,0.845,0.873)
+    love.graphics.rectangle('line',x,y-100*k2,35*k,200*k2)
+    love.graphics.setColor(1,1,1,1)
 end
 
 function playerHP(dt)
-  if ( hp.long/screenHeight*100> 100) then
-    hp.long = screenHeight
-    hp.long2 = screenHeight 
-  end
-  
-  if (hp.long > hp.long2) then
-      hp.long2= hp.long
-  end
-  if (hp.long<hp.long2 ) then
-      hp.long2 = hp.long2-70*dt
-  end
-  if ( hp.long> hp.long3) then
-      hp.long3 = hp.long3+ 100*dt
-  else
-      hp.long3  = hp.long
-  end
-  if ( flaginv == false) then
-      inv:update(dt)
-      inv:every(playerAbility.invTimer, function()
-          inv:clear() 
-          shake  = 0    
-          flaginv =  true
-      end)
-  end
-  
+    if ( hp.long/screenHeight*100> 100) then
+        hp.long = screenHeight
+        hp.long2 = screenHeight 
+    end
+    if (hp.long > hp.long2) then
+        hp.long2= hp.long
+    end
+    if (hp.long<hp.long2 ) then
+        hp.long2 = hp.long2-70*dt
+    end
+    if ( hp.long> hp.long3) then
+        hp.long3 = hp.long3+ 100*dt
+    else
+        hp.long3  = hp.long
+    end
+    if ( flaginv == false) then
+        inv:update(dt)
+        inv:every(playerAbility.invTimer, function()
+            inv:clear() 
+            shake  = 0    
+            flaginv =  true
+        end)
+    end
 end
 
 function playerBoost(dt)
     if ( boost.long/screenHeight*100 > 100) then
-      boost.long = screenHeight
-      boost.long2 = screenHeight
+        boost.long = screenHeight
+        boost.long2 = screenHeight
     end
     
     if ( boost.long2>boost.long) then
@@ -203,8 +199,8 @@ function playerBoost(dt)
     end
     
     if ( boost.long <= 30*k2 ) then
-      player.a=0
-      boost.long =30*k2
+        player.a=0
+        boost.long =30*k2
     end
     
     if ( player.a==1) then
@@ -214,6 +210,33 @@ function playerBoost(dt)
     end
     if  (boost.long>screenHeight) then
         boost.long = screenHeight
+    end
+end
+
+function playerBoostDop(dt)
+    if ( boostDop.long/screenHeight*100 > 100) then
+        boostDop.long = screenHeight
+        boostDop.long2 = screenHeight
+    end
+    
+    if ( boostDop.long2>boostDop.long) then
+        boostDop.long2 = boostDop.long2-70*dt
+    end
+    if ( boostDop.long2<boostDop.long) then
+        boostDop.long2 = boostDop.long2+playerAbility.boostRegen *dt*2
+    end
+    
+    if ( boostDop.long <= 0 ) then
+        boostDop.long =0
+    end
+    
+    if ( player.a==1) then
+        boostDop.long = boostDop.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*dt
+    else
+       boostDop.long = boostDop.long + playerAbility.boostRegen *dt
+    end
+    if  (boostDop.long>screenHeight) then
+        boostDop.long = screenHeight
     end
 end
 
@@ -230,7 +253,13 @@ function Health_Boost()
     love.graphics.setColor(0,0.85,0.75,1)
     love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long2/7)
     love.graphics.setColor(0,0.643,0.502,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long/7)               
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long/7)     
+    ---skill
+    --love.graphics.setColor(1,1,0.4,1)
+    --love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boostDop.long2/7)
+    --love.graphics.setColor(0.9,0.9,0,1)
+    --love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boostDop.long/7) 
+    --skill
     love.graphics.setColor(1,1,1,1)
 end
 

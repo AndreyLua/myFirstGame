@@ -165,7 +165,7 @@ end
 
 function settings:keypressed(key, code)
     if key == "escape" then
-        gamestate.switch(game)
+        gamestate.switch(pause)
     elseif key == "q" then
         love.event.push('quit')
     end
