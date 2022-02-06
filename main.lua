@@ -7,6 +7,8 @@ moonshine = require 'moonshine'
 
 effect1 = moonshine(moonshine.effects.pixelate)
 effect1.pixelate.size =2
+-- fog типо туман
+effect2 = moonshine(moonshine.effects.crt)
 
 ------------------SETS-----------------------------
 meteorSet = love.graphics.newImage("assets/meteorSet.png")
@@ -50,7 +52,9 @@ UIQuads = {
   no= love.graphics.newQuad(241,  251,  240, 240, UISet:getDimensions()),
   yes= love.graphics.newQuad(0,  251,  240, 240, UISet:getDimensions()),
   panel = love.graphics.newQuad(0,  648,  1000, 240, UISet:getDimensions()),
-  tableSkill = love.graphics.newQuad(482,  0, 320, 320, UISet:getDimensions()),
+  tableSkillNormal = love.graphics.newQuad(482,  0, 320, 320, UISet:getDimensions()),
+  tableSkillRare = love.graphics.newQuad(1001,  361, 360, 360, UISet:getDimensions()),
+  tableSkillLegend = love.graphics.newQuad(984,  0, 360, 360, UISet:getDimensions()),
   tableSkillDestr = love.graphics.newQuad(482,  321, 320, 320, UISet:getDimensions()),
   butDirect = love.graphics.newQuad(803,  0, 180, 320, UISet:getDimensions()),
   textPanel = love.graphics.newQuad(0,  889, 1000, 320, UISet:getDimensions()), 
@@ -376,13 +380,20 @@ playerSkillParametrs = {
     collectRangeK = 0, -- common7
     
     waveAt = 0.2, -- rare8
+    waveAtFlag = false,
     bloodAt = 0.2, -- rare9
+    bloodAtFlag = false,
     sealAt = 0.2, -- rare10
+    sealAtFlag = false,
     spike = 0, -- rare11
+    spikeFlag = false,
     
     dopEn = 0.1, -- legend13
+    dopEnflag = false,
     tradeK = 0.1, -- legend13
+    tradeKFlag = false,
     vampirK = 0.1, -- legend14
+    vampirFlag = false,
 }
 skillCostUpgrade = {
 100,-- common1 hp

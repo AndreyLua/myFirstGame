@@ -259,7 +259,7 @@ enemyMeleeClass = Class{
         if (self.target =="player") then 
             anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
         else
-          if (obj[self.targetX] and obj[self.targetX].x) then
+            if (obj[self.targetX] and obj[self.targetX].x) then
                 anglePlayerEn = math.atan2(obj[self.targetX].x-self.x,obj[self.targetX].y-self.y)
             end
         end

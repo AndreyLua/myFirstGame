@@ -23,6 +23,17 @@ function bodyButton(x,y,flag,dopLight)
     end
 end
 
+function bodyButtonScale(x,y,flag,scale)
+    if (flag) then 
+        UIBatch:setColor(1,1,1,0.6)
+        UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k*scale,k2*scale,500,120)
+        UIBatch:setColor(1,1,1,1) 
+    else
+        UIBatch:setColor(1,1,1,1)
+        UIBatch:add(UIQuads.panel,x,y,-math.pi/2,k*scale,k2*scale,500,120)
+    end
+end
+
 function bodyTextPanel(x,y)
     UIBatch:add(UIQuads.textPanel,x,y,-math.pi/2,k/3,k2/3,500,160)
 end
@@ -105,13 +116,26 @@ end
 
 function rewardSlot(img,x,y,scale,money)
     if (img) then 
-        UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
-        skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+        if ( img > 11 ) then 
+            img = allSkills[img]
+            UIBatch:add(UIQuads.tableSkillLegend,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)      
+            skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+        else
+            if ( img > 7 ) then 
+                img = allSkills[img]
+                UIBatch:add(UIQuads.tableSkillRare,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)         
+                skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+            else
+                img = allSkills[img]
+                UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
+                skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+            end
+        end
     else
         if ( money == 0) then 
             UIBatch:add(UIQuads.tableSkillDestr,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)
         else
-            UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)   
+            UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)   
         end
     end    
 end
@@ -119,14 +143,24 @@ function slot(img,x,y,ox,oy,scale,light)
     if ( light == nil ) then
         light = 1 
     end
-
     UIBatch:setColor(light,light,light,light)
     skillBatch:setColor(light,light,light,light)
-    if (img) then 
-        UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
-        skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,ox,oy)
+    if (img and playerSkills[img].img ) then
+        if ( playerSkills[img].numb  > 11 ) then 
+            UIBatch:add(UIQuads.tableSkillLegend,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)       
+            skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+        else
+            if ( playerSkills[img].numb  > 7 ) then 
+                UIBatch:add(UIQuads.tableSkillRare,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)    
+                skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+            else
+                UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)      
+                skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+            end
+        end
+        skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,ox,oy)
     else
-        UIBatch:add(UIQuads.tableSkill,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
+        UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
     end
     UIBatch:setColor(1,1,1,1)
     skillBatch:setColor(1,1,1,1)
@@ -160,9 +194,9 @@ function sc(x,y)
 end
 
 function playerHP(dt)
-    if ( hp.long/screenHeight*100> 100) then
-        hp.long = screenHeight
-        hp.long2 = screenHeight 
+    if ( hp.long/720*100> 100) then
+        hp.long = 720
+        hp.long2 = 720 
     end
     if (hp.long > hp.long2) then
         hp.long2= hp.long
@@ -186,9 +220,9 @@ function playerHP(dt)
 end
 
 function playerBoost(dt)
-    if ( boost.long/screenHeight*100 > 100) then
-        boost.long = screenHeight
-        boost.long2 = screenHeight
+    if ( boost.long/720*100 > 100) then
+        boost.long = 720
+        boost.long2 = 720
     end
     
     if ( boost.long2>boost.long) then
@@ -208,58 +242,120 @@ function playerBoost(dt)
     else
         boost.long = boost.long + playerAbility.boostRegen *dt
     end
-    if  (boost.long>screenHeight) then
-        boost.long = screenHeight
+    if  (boost.long>720) then
+        boost.long = 720
     end
 end
 
 function playerBoostDop(dt)
-    if ( boostDop.long/screenHeight*100 > 100) then
-        boostDop.long = screenHeight
-        boostDop.long2 = screenHeight
-    end
-    
-    if ( boostDop.long2>boostDop.long) then
-        boostDop.long2 = boostDop.long2-70*dt
-    end
-    if ( boostDop.long2<boostDop.long) then
-        boostDop.long2 = boostDop.long2+playerAbility.boostRegen *dt*2
-    end
-    
-    if ( boostDop.long <= 0 ) then
-        boostDop.long =0
-    end
-    
-    if ( player.a==1) then
-        boostDop.long = boostDop.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*dt
+    if ( playerSkillParametrs.dopEnFlag == true) then 
+        angleBoostDop(dt,controler.angle)
+        if ( boostDop.long/720*100 > 100) then
+            boostDop.long = 720
+        end
+        if (boostDop.recovery == boostDop.recoveryTimer) then 
+            boostDop.long = boostDop.long + playerAbility.boostRegen/1.5 *dt*k
+            boostDop.shakeK = 1
+        end
+        if ( boostDop.long <= 0 ) then
+            boostDop.long =0
+        end
+        if  (boostDop.long>720) then
+            boostDop.long = 720
+        end
+        boostDop.shake = math.random()*math.random(-1,1)*boostDop.shakeK
+        if ( boostDop.shakeK > 1 ) then 
+            boostDop.shakeK  = boostDop.shakeK - 10 *dt
+        end
+        
+        if ( boostDop.recovery < boostDop.recoveryTimer) then 
+            boostDop.recovery =boostDop.recovery - 3*dt
+            if ( boostDop.recovery < 0 )then 
+                boostDop.recovery = boostDop.recoveryTimer
+            end
+        end
     else
-       boostDop.long = boostDop.long + playerAbility.boostRegen *dt
-    end
-    if  (boostDop.long>screenHeight) then
-        boostDop.long = screenHeight
+        boostDop.long = 0 
     end
 end
 
+
+function angleBoostDop (dt,angle) 
+    if ( boostDop.angle == 0) then
+        boostDop.angle=0.00000001
+    end
+    if ( boostDop.angle < -math.pi) then
+        boostDop.angle=math.pi
+    end
+    if ( boostDop.angle > math.pi) then
+        boostDop.angle=-math.pi
+    end
+    if ( angle == 0) then
+        angle=0.00000001
+    end
+    if ((angle -  boostDop.angle > 2.1*dt) or (angle -  boostDop.angle) <  -2.1*dt ) then
+        if (angle/math.abs(angle)==boostDop.angle/math.abs(boostDop.angle))then
+            if ( angle>boostDop.angle) then
+                boostDop.angle = boostDop.angle+2*dt
+            else 
+                boostDop.angle = boostDop.angle-2*dt
+            end
+        else
+            if (math.abs(angle)+math.abs(boostDop.angle)> 2*math.pi - math.abs(angle)-math.abs(boostDop.angle)) then
+                if (boostDop.angle>0) then 
+                    boostDop.angle = boostDop.angle+2*dt
+                else
+                    boostDop.angle = boostDop.angle-2*dt
+                end
+            else 
+                if (boostDop.angle>0) then 
+                    boostDop.angle = boostDop.angle-2*dt
+                else
+                    boostDop.angle = boostDop.angle+2*dt
+                end
+            end
+        end
+    end
+end
+        
 function Health_Boost()
     love.graphics.setColor(0.02,0.3,0.02,1)
     love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+31*k2,3*k2,-screenHeight/7)
     love.graphics.setColor(0.04,0.85,0.04,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+31*k2,3*k2,-hp.long2/7)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+31*k2,3*k2,-hp.long2/720*screenHeight/7)
     love.graphics.setColor(0.02,0.6,0.02,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+31*k2,3*k2,-hp.long3/7)
-    
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+31*k2,3*k2,-hp.long3/720*screenHeight/7)
+
     love.graphics.setColor(0,0.32,0.225,1)
     love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-screenHeight/7)
     love.graphics.setColor(0,0.85,0.75,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long2/7)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long2/720*screenHeight/7)
     love.graphics.setColor(0,0.643,0.502,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long/7)     
-    ---skill
-    --love.graphics.setColor(1,1,0.4,1)
-    --love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boostDop.long2/7)
-    --love.graphics.setColor(0.9,0.9,0,1)
-    --love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boostDop.long/7) 
-    --skill
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+31*k2,2*k2,-boost.long/720*screenHeight/7)     
+   
+    if ( playerSkillParametrs.dopEnFlag == true) then 
+        love.graphics.setLineWidth(2*k)
+        love.graphics.setColor(0,1,1,boostDop.long/720)
+        local kek1 =  love.math.newBezierCurve(player.x-(playerAbility.scaleBody/2)*k,player.y-(playerAbility.scaleBody+2)*k, player.x,player.y-(playerAbility.scaleBody+10)*k,player.x+(playerAbility.scaleBody/2)*k,player.y-(playerAbility.scaleBody+2)*k) 
+        kek1:rotate(-boostDop.angle-math.pi/2,player.x,player.y)
+        kek1:scale(boostDop.long/720,player.x,player.y)
+        kek1:translate((1-boostDop.long/720)*40*k*-1*math.cos(boostDop.angle),(1-boostDop.long/720)*40*k*math.sin(boostDop.angle))
+        love.graphics.line(kek1:render())
+        local colorRandom = math.random()/7*math.random(-1,1)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/10)
+        love.graphics.circle('fill',player.x,player.y,(playerAbility.scaleBody+6)*k)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/5)
+        
+        love.graphics.circle('line',player.x,player.y,(playerAbility.scaleBody+6)*k+boostDop.shake*k)
+        
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/7)
+        
+        love.graphics.circle('line',player.x,player.y,(playerAbility.scaleBody+6)*k-2*k+boostDop.shake*k)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/9)
+        
+        love.graphics.circle('line',player.x,player.y,(playerAbility.scaleBody+6)*k-4*k+boostDop.shake*k)
+    end
+  
     love.graphics.setColor(1,1,1,1)
 end
 

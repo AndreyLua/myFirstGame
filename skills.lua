@@ -2,6 +2,7 @@ local skills = {}
 local but1 = false
 local but2 = false
 local but3 = false
+local butSmall = false
 local masSkill = {}
 local mousePosX = 0 
 local mousePosY = 0 
@@ -39,15 +40,23 @@ local textMas = {
     'Steals part of the life of enemies',-- legend14
           
 }
-local difButton = (screenWidth-35*k-0.4*1.2*320*k-60*k-0.196*1.2*320*k-320*k/3)
-local xTextPanel = (35*k)+0.2*difButton+(160/3*k)
-local xBigSlot = (xTextPanel+ 160/3*k)+0.2*difButton+(0.4*1.2*160*k)
-local xSmallSlot =(0.4*1.2*160*k)+0.2*difButton+(0.196*1.2*160*k)
-local xButton = xBigSlot+xSmallSlot+(0.196*1.2*160*k)+0.2*difButton+(30*k)
+local difButton = (screenWidth-35*k-0.4*1.2*320*k-60*k-0.196*1.2*320*k-320*k/3-0.15*k*240)
+
+local xTextPanel = (35*k)+0.2*difButton*1.12+(160/3*k)
+local xBigSlot = (xTextPanel+ 160/3*k)+0.2*difButton*1.12+(0.4*1.2*160*k)
+local xSmallSlot =(0.4*1.2*160*k)+0.2*difButton*1.12+(0.196*1.2*160*k)
+local xButton = xBigSlot+xSmallSlot+(0.196*1.2*160*k)+0.2*difButton*1.12+(30*k)
+local xSmallButton = xButton+30*k+0.15*k*120+0.05*difButton
 
 
 function skills:update(dt)
     mouse.x,mouse.y=love.mouse.getPosition()
+    local indexR = xR / (math.pi/6)
+    if ( xR%(math.pi/6) > math.pi/12) then
+        indexR = math.ceil(xR / (math.pi/6))
+    else
+        indexR = math.floor(xR / (math.pi/6))
+    end
     if love.mouse.isDown(1)  then
         if ( flagtouch3 == false) then 
             mousePosX = mouse.x
@@ -63,6 +72,12 @@ function skills:update(dt)
             if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*300*k-90*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*300*k+160*k/3) then
                 but3 = true
             end
+            if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
+                if (  mouse.x > xSmallButton-0.15*k*120 and  mouse.x <xSmallButton+0.15*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-0.15*k*500 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+0.15*k*500) then
+                    butSmall = true
+                end
+            end
+            
         else
             if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*120*k+0.4*k*120 ) then
                 butYes = true
@@ -73,6 +88,43 @@ function skills:update(dt)
         end
         flagtouch3 =true
     else
+        if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
+            if ( ( mouse.x > xSmallButton-0.15*k*120 and  mouse.x <xSmallButton+0.15*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-0.15*k*500 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+0.15*k*500) and butSmall == true ) then
+      
+                if (playerSkills[indexR+4].numb == 8 ) then
+                    playerSkillParametrs.waveAtFlag = not(playerSkillParametrs.waveAtFlag)
+                    if ( playerSkillParametrs.waveAtFlag == true) then
+                        playerSkillParametrs.bloodAtFlag  =  false
+                        playerSkillParametrs.sealAtFlag = false
+                        playerSkillParametrs.vampirFlag = false
+                    end
+                end
+                if (playerSkills[indexR+4].numb == 9 ) then
+                    playerSkillParametrs.bloodAtFlag = not(playerSkillParametrs.bloodAtFlag)
+                    if ( playerSkillParametrs.bloodAtFlag == true) then
+                        playerSkillParametrs.waveAtFlag  =  false
+                        playerSkillParametrs.sealAtFlag = false
+                        playerSkillParametrs.vampirFlag = false
+                    end
+                end
+                if (playerSkills[indexR+4].numb == 10 ) then
+                    playerSkillParametrs.sealAtFlag = not(playerSkillParametrs.sealAtFlag)
+                    if ( playerSkillParametrs.sealAtFlag == true) then
+                        playerSkillParametrs.waveAtFlag  =  false
+                        playerSkillParametrs.bloodAtFlag = false
+                        playerSkillParametrs.vampirFlag = false
+                    end
+                end
+                if (playerSkills[indexR+4].numb == 14 ) then
+                    playerSkillParametrs.vampirFlag = not(playerSkillParametrs.vampirFlag)
+                    if ( playerSkillParametrs.vampirFlag == true) then
+                        playerSkillParametrs.waveAtFlag  =  false
+                        playerSkillParametrs.bloodAtFlag = false
+                        playerSkillParametrs.sealAtFlag = false
+                    end
+                end
+            end
+        end
         if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
             exp = {}
             gamestate.switch(pause)
@@ -143,6 +195,7 @@ function skills:update(dt)
                 lightKoff = 1
             end
         end
+        butSmall = false
         butNo = false
         butYes = false
         but3 = false
@@ -185,7 +238,7 @@ if ( playerSkills[indexR+4]) then
         textL = ""
         textK = 0 
     end
-    slot(playerSkills[indexR+4].img,xBigSlot,screenHeight/2,160,160,0.4) 
+    slot(indexR+4,xBigSlot,screenHeight/2,160,160,0.4) 
 else
     texti = 0 
     textL = ""
@@ -216,7 +269,7 @@ for i = 1 , 20 do
     end
   
     if (playerSkills[i]) then 
-        slot(playerSkills[i].img,(xBigSlot)-math.sin(angle)*xSmallSlot,screenHeight/2- math.cos(angle)*180*k,160,160,scale*1.2,light) 
+        slot(i,(xBigSlot)-math.sin(angle)*xSmallSlot,screenHeight/2- math.cos(angle)*180*k,160,160,scale*1.2,light) 
     else
         slot(nil,(xBigSlot)-math.sin(angle)*xSmallSlot,screenHeight/2- math.cos(angle)*180*k,160,160,scale*1.2,light) 
     end
@@ -226,6 +279,11 @@ bodyTextPanel(xTextPanel,screenHeight/2)
 bodyButtonDirect((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/1.4)*300*k,but2,'left')
 bodyButtonDirect((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/3.5)*300*k,but3,'right')
 bodyButton(xButton,screenHeight/2-math.cos(-math.pi/2)*310*k,but1)
+
+if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
+    bodyButtonScale(xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.15)
+end
+
 love.graphics.setColor(1,1,1,lightKoff)
 love.graphics.draw(UIBatch)
 love.graphics.draw(skillBatch)
@@ -234,7 +292,7 @@ skillBatch:clear()
 if (  flagAcceptMenu == true) then 
     love.graphics.setColor(1,1,1,1)
     exit(0,0)
-    slot(playerSkills[indexR+4].img,xBigSlot,screenHeight/2,160,160,0.4) 
+    slot(indexR+4,xBigSlot,screenHeight/2,160,160,0.4) 
     acceptBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/1.4)*120*k,0.4,butYes) 
     rejectBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/3.5)*120*k,0.4,butNo)
     love.graphics.draw(UIBatch)
@@ -242,6 +300,38 @@ if (  flagAcceptMenu == true) then
     love.graphics.setColor(1,1,1,lightKoff)
 end
 textButton("Update",xButton,screenHeight/2-math.cos(-math.pi/2)*310*k,but1,0.9)
+
+if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
+    if ( playerSkills[indexR+4].numb == 8) then 
+        if ( playerSkillParametrs.waveAtFlag == true) then
+            textButton("Used",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
+        else
+            textButton("Use",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
+        end
+    end
+    if ( playerSkills[indexR+4].numb ==9) then 
+        if ( playerSkillParametrs.bloodAtFlag == true) then
+            textButton("Used",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
+        else
+            textButton("Use",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
+        end
+    end
+    if ( playerSkills[indexR+4].numb ==10) then 
+        if ( playerSkillParametrs.sealAtFlag == true) then
+            textButton("Used",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
+        else
+            textButton("Use",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
+        end
+    end
+    if ( playerSkills[indexR+4].numb ==14) then 
+        if ( playerSkillParametrs.vampirFlag == true) then
+            textButton("Used",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
+        else
+            textButton("Use",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
+        end
+    end
+end
+
 love.graphics.setColor(1,1,1,1)
 local fontWidth = font:getWidth(tostring(score))
 love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
@@ -263,7 +353,7 @@ if ( playerSkills[indexR+4]) then
     end
 end
 
-flagRes,flagResBool = noRes(xBigSlot-(0.4*1.2*160*k)-difButton*0.12 ,screenHeight/2,0.4,flagRes,dt,flagResBool)
+flagRes,flagResBool = noRes(xBigSlot-(0.4*1.2*160*k)-difButton*0.16 ,screenHeight/2,0.4,flagRes,dt,flagResBool)
 
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 end
@@ -304,13 +394,16 @@ function lvlParametrs()
             playerSkillParametrs.sealAt =0.1*math.log(masSkill.lvl,2)
         end
         if (masSkill.numb == 11 ) then 
+            playerSkillParametrs.spikeFlag = true
             playerSkillParametrs.spike =0.01*math.log(masSkill.lvl,2)
         end
         ----------------------------------------------------------------------------
         if (masSkill.numb == 12 ) then 
+            playerSkillParametrs.dopEnFlag = true
             playerSkillParametrs.dopEn =0.01*math.log(masSkill.lvl,2)
         end
         if (masSkill.numb == 13 ) then 
+            playerSkillParametrs.tradeFlag = true
             playerSkillParametrs.tradeK =0.01*math.log(masSkill.lvl,2)
         end
         if (masSkill.numb == 14 ) then 
@@ -423,7 +516,5 @@ function speedRUpdate(dt)
         speedR = 0 
     end
 end
-
-
 
 return skills

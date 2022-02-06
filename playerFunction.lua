@@ -177,27 +177,45 @@ end
 
 function enAtackPlayer(dmg,tip,self)
     dmg = dmg- playerSkillParametrs.hpK*dmg
-    if ( tip=='m') then
-        hp.long = hp.long - dmg*(1-playerSkillParametrs.meleeDefK)
-    --    newDeffenseEffect(self)
-    end
-    if ( tip=='e') then
-        hp.long = hp.long - dmg
-    end
-     if ( tip=='r') then
-        hp.long = hp.long - dmg*(1-playerSkillParametrs.rangeDefK)
-    --    newDeffenseEffect(self)
+    boostDop.recovery =boostDop.recoveryTimer - 0.0000001
+    if (boostDop.long>0) then 
+        boostDop.long = boostDop.long - (dmg-(dmg*playerSkillParametrs.dopEn))*4
+        boostDop.shakeK = 30
+    else
+        if ( tip=='m') then
+            hp.long = hp.long - dmg*(1-playerSkillParametrs.meleeDefK)
+            if (playerSkillParametrs.spikeFlag == true) then 
+                newDeffenseEffect(self)
+            end
+        end
+        if ( tip=='e') then
+            hp.long = hp.long - dmg
+        end
+         if ( tip=='r') then
+            hp.long = hp.long - dmg*(1-playerSkillParametrs.rangeDefK)
+            if (playerSkillParametrs.spikeFlag == true) then 
+                newDeffenseEffect(self)
+            end
+        end
     end
 end
 
 function playerAtackEn(self,dt)
     boost.long = boost.long - (playerAbility.boostWaste-(playerAbility.boostWaste*playerSkillParametrs.enK))*     playerAbility.boostWasteEnHit*dt
     self.health  =  self.health - playerAbility.damage*playerSkillParametrs.damageK
-   -- newVampirEffect(self)
+    if (playerSkillParametrs.vampirFlag == true) then 
+        newVampirEffect(self)
+    end
    -- newTradeEffect()
-    --newWaveEffect(self.x,self.y)
-  --  newBloodEffect(self)
-   table.insert(masli,{table = self, timer = 10,flag = nil})
+    if (playerSkillParametrs.waveAtFlag == true) then 
+        newWaveEffect(self.x,self.y)
+    end
+    if (playerSkillParametrs.bloodAtFlag == true) then 
+        newBloodEffect(self)
+    end
+    if (playerSkillParametrs.sealAtFlag == true) then 
+        table.insert(masli,{table = self, timer = 10,flag = nil})
+    end
 end
 
 function playerFrontAtack(i) 

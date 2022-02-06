@@ -48,24 +48,25 @@ controler = {
 }
 hp = {
     flag = false,
-    long = screenHeight,
-    long2 =screenHeight,
-    long3 =screenHeight
+    long = 720,
+    long2 =720,
+    long3 =720
 }
 boost = {
     flag = true,
-    long = screenHeight,
-    long2 =screenHeight,
-    long3 =screenHeight
+    long = 720,
+    long2 =720,
+    long3 =720
 }
 
 boostDop = {
-    flag = true,
-    long = screenHeight,
-    long2 =screenHeight,
-    long3 =screenHeight
+    long = 0,
+    angle = 0 ,
+    recovery = 10,
+    recoveryTimer = 10,
+    shake = 1,
+    shakeK = 1,
 }
-
 player = {
     a = 0 , 
     li = 0,
@@ -114,14 +115,14 @@ function love.focus(v)
 end
 
 function game:update(dt)
--- en = {en[1]}
+-- en = {}
 --flaginv =true
 explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
 boost.long = 1000
-hp.long = 1000 
+--hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -262,7 +263,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,math.random(1,6))
+        allSpawn(en,Geo,math.random(3))
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
