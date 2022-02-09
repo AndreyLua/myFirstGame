@@ -16,6 +16,45 @@ function round(number)
   return number
 end
 
+function angleRotateToAngle2 (dt,angle,angle2,speed) 
+    if ( angle2 == 0) then
+        angle2=0.00000001
+    end
+    if ( angle2 < -math.pi) then
+        angle2=math.pi
+    end
+    if ( angle2 > math.pi) then
+        angle2=-math.pi
+    end
+    if ( angle == 0) then
+        angle=0.00000001
+    end
+    if ((angle -  angle2 > 2.1*dt) or (angle -  angle2) <  -2.1*dt ) then
+        if (angle/math.abs(angle)==angle2/math.abs(angle2))then
+            if ( angle>angle2) then
+                angle2 = angle2+speed*dt
+            else 
+                angle2 = angle2-speed*dt
+            end
+        else
+            if (math.abs(angle)+math.abs(angle2)> 2*math.pi - math.abs(angle)-math.abs(angle2)) then
+                if (angle2>0) then 
+                    angle2 = angle2+speed*dt
+                else
+                    angle2 = angle2-speed*dt
+                end
+            else 
+                if (angle2>0) then 
+                    angle2 = angle2-speed*dt
+                else
+                    angle2 = angle2+speed*dt
+                end
+            end
+        end
+    end
+    return angle2
+end
+
 function tableСopy(t)
   local t2 = {}
   for k,v in pairs(t) do

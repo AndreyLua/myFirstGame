@@ -163,7 +163,7 @@ function light22(x1,y1,x2,y2,kkk)
             local angle =math.pi-math.atan2((endSegm[1] -beginSegm[1]),(endSegm[2] -beginSegm[2]))
             local midX  =(beginSegm[1]+endSegm[1])/2+math.cos(angle)*ran
             local midY  =(beginSegm[2]+endSegm[2])/2+math.sin(angle)*ran
-            if ( math.random(1,3) == 1  )then 
+            if ( math.random(1,4) == 1  )then 
                 local lengthDopPoint = math.sqrt((midX-beginSegm[1])*(midX-beginSegm[1])+(midY-beginSegm[2])*(midY-beginSegm[2]))
                 local dopAngle = -math.atan2((endSegm[1]-beginSegm[1]),(endSegm[2]-beginSegm[2]))
                 local dopPointX = midX+math.cos(dopAngle+math.pi/2-math.random()*1.2*math.random(-1,1))*lengthDopPoint*0.7
@@ -177,7 +177,7 @@ function light22(x1,y1,x2,y2,kkk)
         offset = offset/2
     end
     return segments
-     end
+    end
 end
 
 function light22Draw(mas) 
@@ -500,29 +500,47 @@ function greenPlayerEffectDraw(dt)
 end
 
 function newTradeEffect()
-    for i = 1 , math.random(4,7) do 
+    for i = 1 , 1 do 
         local tradeEff =
             {
-                x =math.random(-20*k,20*k2)*1.7, 
-                y =math.random(-20*k,20*k2)*1.7,  
+                x =math.random()*k*math.random(-1,1)/1.3, 
+                y =math.random()*k*math.random(-1,1)/1.3,  
+                speed = math.random(),
+                color1 =0.82,
+                color2 =1,
+                color3 = 0.59,
                 timer = 10,
+                trace = {},
             }
         table.insert(tradeEffects,tradeEff)  
     end
 end
 
 function tradeEffectDraw(dt)
-    love.graphics.setColor(1,1,0.2,1)
     for i = #tradeEffects,1,-1 do
         if ( tradeEffects[i].timer > 0 ) then
-            local angle = math.atan2( -tradeEffects[i].x,-tradeEffects[i].y)+1.5
-            tradeEffects[i].x = tradeEffects[i].x +300*math.sin(angle)*dt 
-            tradeEffects[i].y =tradeEffects[i].y +300*math.cos(angle)*dt 
-            love.graphics.circle('fill',player.x+ tradeEffects[i].x,player.y +  tradeEffects[i].y,1.8*k)
-            tradeEffects[i].timer =  tradeEffects[i].timer -4*dt  
-            if ( math.abs(tradeEffects[i].x) < 5*k and math.abs(tradeEffects[i].y) < 5*k) then
-                table.remove(tradeEffects,i) 
+            local trace = {
+                x = tradeEffects[i].x,
+                y= tradeEffects[i].y,
+            }
+            table.insert(tradeEffects[i].trace,trace)
+            for j =#tradeEffects[i].trace,1,-1 do
+                local sled = tradeEffects[i].trace
+                love.graphics.setColor(tradeEffects[i].color1*tradeEffects[i].speed,tradeEffects[i].color2*tradeEffects[i].speed,tradeEffects[i].color3*tradeEffects[i].speed,0.25*j*tradeEffects[i].timer/10)
+                love.graphics.circle('fill',player.x+62*math.sin(-math.pi/2-math.pi/4.3)*k+ sled[j].x,player.y+62*math.cos(-math.pi/2-math.pi/4.3)*k +  sled[j].y,1.2*k)    
             end
+            if ( #tradeEffects[i].trace > 4) then 
+                table.remove(tradeEffects[i].trace,1) 
+            end
+            love.graphics.setColor(tradeEffects[i].color1*tradeEffects[i].speed,tradeEffects[i].color2*tradeEffects[i].speed,tradeEffects[i].color3*tradeEffects[i].speed,tradeEffects[i].timer/10)
+            
+            local angle = math.atan2( -tradeEffects[i].x,-tradeEffects[i].y)+1.5
+            tradeEffects[i].x = tradeEffects[i].x +80*math.sin(angle)*dt*k * (1+tradeEffects[i].speed)/3
+            tradeEffects[i].y =tradeEffects[i].y +80*math.cos(angle)*dt*k * (1+tradeEffects[i].speed)/3
+            
+            love.graphics.circle('fill',player.x+62*math.sin(-math.pi/2-math.pi/4.3)*k+tradeEffects[i].x,player.y +62*math.cos(-math.pi/2-math.pi/4.3)*k+  tradeEffects[i].y,1.2*k)
+            
+            tradeEffects[i].timer =  tradeEffects[i].timer -4*dt  
         else
             table.remove(tradeEffects,i)
         end

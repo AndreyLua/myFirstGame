@@ -244,6 +244,10 @@ function playerBoost(dt)
     end
     if  (boost.long>720) then
         boost.long = 720
+        if (playerSkillParametrs.tradeFlag == true and hp.long<720 and flaginv == true) then 
+            newTradeEffect()
+            hp.long = hp.long +10*dt
+        end
     end
 end
 
@@ -255,7 +259,7 @@ function playerBoostDop(dt)
         end
         if (boostDop.recovery == boostDop.recoveryTimer) then 
             boostDop.long = boostDop.long + playerAbility.boostRegen/1.5 *dt*k
-            boostDop.shakeK = 1
+            boostDop.shakeK = 0
         end
         if ( boostDop.long <= 0 ) then
             boostDop.long =0
@@ -341,17 +345,18 @@ function Health_Boost()
         kek1:scale(boostDop.long/720,player.x,player.y)
         kek1:translate((1-boostDop.long/720)*40*k*-1*math.cos(boostDop.angle),(1-boostDop.long/720)*40*k*math.sin(boostDop.angle))
         love.graphics.line(kek1:render())
-        local colorRandom = math.random()/7*math.random(-1,1)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/10)
+        local colorRandom =1 -- math.random()/2*math.random(-1,1)
+        --boostDop.shake = 0
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/7)
         love.graphics.circle('fill',player.x,player.y,(playerAbility.scaleBody+6)*k)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/5)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/2)
         
         love.graphics.circle('line',player.x,player.y,(playerAbility.scaleBody+6)*k+boostDop.shake*k)
         
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/7)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/4)
         
         love.graphics.circle('line',player.x,player.y,(playerAbility.scaleBody+6)*k-2*k+boostDop.shake*k)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/9)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/6)
         
         love.graphics.circle('line',player.x,player.y,(playerAbility.scaleBody+6)*k-4*k+boostDop.shake*k)
     end

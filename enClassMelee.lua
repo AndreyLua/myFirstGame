@@ -353,8 +353,8 @@ enemyMeleeClass = Class{
         for i = 1, #self.traces do
             local trace = self.traces[i]
             local radius =trace.r/6*i
-            trace.x = trace.x+80*trace.ax*dt
-            trace.y = trace.y+80*trace.ay*dt
+            trace.x = trace.x+1.3652*trace.ax
+            trace.y = trace.y+1.3652*trace.ay
             love.graphics.setColor(0.09/7*i,0.5/7*i,0.5/7*i) 
             love.graphics.circle("fill",self.x+  trace.x+math.cos(self.y+trace.y)+k*math.sin(self.angleBody-math.pi/2) ,self.y + trace.y+math.sin(self.x+trace.x) +k2*math.cos(self.angleBody-math.pi/2),radius)
         end

@@ -364,8 +364,8 @@ enemyBombClass = Class{
         for i = 1, #self.traces do
             local trace = self.traces[i]
             local radius =trace.r/6*i
-            trace.x = trace.x+80*trace.ax*dt
-            trace.y = trace.y+80*trace.ay*dt
+            trace.x = trace.x+1.3652*trace.ax
+            trace.y = trace.y+1.3652*trace.ay
             love.graphics.setColor(0.5/7*i,0.2/7*i,0.2/7*i) 
             love.graphics.circle("fill",self.x+  trace.x ,self.y + trace.y,radius)
         end

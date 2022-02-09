@@ -5,16 +5,22 @@ Class = require "libs/hump.class"
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
 
+
+
+
+
+
 effect1 = moonshine(moonshine.effects.pixelate)
 effect1.pixelate.size =2
 -- fog типо туман
-effect2 = moonshine(moonshine.effects.crt)
+--effect2 = moonshine(moonshine.effects.crt)
 
 ------------------SETS-----------------------------
 meteorSet = love.graphics.newImage("assets/meteorSet.png")
 enSet = love.graphics.newImage("assets/enSet.png")
 resSet = love.graphics.newImage("assets/resSet.png")
 playerSet = love.graphics.newImage("assets/playerSet.png")
+enSet:setFilter("nearest")
 playerSet:setFilter("nearest")
 UISet = love.graphics.newImage("assets/UISet.png")
 skillSet = love.graphics.newImage("assets/skillSet.png")
@@ -353,7 +359,7 @@ playerStaticParametrs = {
     scaleBody = 35,
     boostRegen = 100,
     boostWaste = 150,
-    boostWasteEnHit = 10,
+    boostWasteEnHit = 5,
 }
 playerAbility = {
     tip =playerStaticParametrs.tip, 
@@ -376,22 +382,22 @@ playerSkillParametrs = {
     meleeDefK = 0, -- common3
     rangeDefK = 0, -- common4
     damageK = 1, -- common5
-    speedK = 0, -- common6
-    collectRangeK = 0, -- common7
+    speedK = 1, -- common6
+    collectRangeK = 1, -- common7
     
     waveAt = 0.2, -- rare8
     waveAtFlag = false,
     bloodAt = 0.2, -- rare9
     bloodAtFlag = false,
     sealAt = 0.2, -- rare10
-    sealAtFlag = false,
+    sealAtFlag = true,
     spike = 0, -- rare11
     spikeFlag = false,
     
     dopEn = 0.1, -- legend13
     dopEnflag = false,
     tradeK = 0.1, -- legend13
-    tradeKFlag = false,
+    tradeFlag = false,
     vampirK = 0.1, -- legend14
     vampirFlag = false,
 }

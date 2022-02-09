@@ -260,8 +260,8 @@ enemyHammerClass = Class{
         for i = 1, #self.traces do
             local trace = self.traces[i]
             local radius =trace.r/8*i
-            trace.x = trace.x+70*trace.ax*dt
-            trace.y = trace.y+70*trace.ay*dt
+            trace.x = trace.x+1.1946*trace.ax
+            trace.y = trace.y+1.1946*trace.ay
             if ( self.invTimer and self.invTimer ~= self.timer) then
                 love.graphics.setColor(0.75/7*i,0.34/7*i,0.08/7*i,0.8) 
             else

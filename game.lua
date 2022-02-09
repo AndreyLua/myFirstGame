@@ -1,6 +1,7 @@
 local game = {} 
 
 function game:init()
+    
 --#####################################################
 --effects   
 waveEffects = {} 
@@ -74,7 +75,11 @@ player = {
     debaffStrenght =1,
     body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,playerAbility.scaleBody*k),
     clowR = 0, 
-    clowRflag = 0, 
+    clowRflag = 0,
+    clowLScaleK =1, 
+    clowRScaleK =1,
+    clowLTimer = 10,
+    clowRTimer = 10,
     x = borderWidth/2+40*k/2, 
     y = borderHeight/2+40*k2/2,  
     ax = 0,
@@ -101,11 +106,10 @@ enemyBullets = {}
 playerSledi = {} 
 
 masli= {} 
-masliDr2 = {}
-lii = 0 
 
 
-lvlParametrs()
+
+--lvlParametrs()
 end
 
 function love.focus(v)
@@ -275,6 +279,7 @@ end
 
 function  game:draw()
  -- flaginv =true
+  
     local dt = love.timer.getDelta()
     boomBatch:clear()
     UIBatch:clear()
@@ -324,6 +329,9 @@ function  game:draw()
     if (flaginv == false ) then
         love.graphics.setColor(1,0.7,0.7,1)
     end
+    if ( player.a == 1 ) then 
+        love.graphics.setColor(0.9,0.7,0.9,1)
+    end 
     love.graphics.draw(playerBatch)
     playerBatch:clear()
     -- playerDrawCristal()
@@ -343,13 +351,12 @@ function  game:draw()
         -----------
         --waveEffect(dt)
     love.graphics.pop()
-    --love.graphics.push()
-        --love.graphics.translate(screenWidth/2+20*k+(player.x-camera.x),screenHeight/2+20*k2+(player.y-camera.y))
+   -- love.graphics.push()
+      --  love.graphics.translate(screenWidth/2+20*k+(player.x-camera.x),screenHeight/2+20*k2+(player.y-camera.y))
         --love.graphics.rotate(-controler.angle)
-        --playerLiInBodyDraw()
-    --love.graphics.pop()
-    love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(playerBatch)
+      --  playerLiInBodyDraw()
+ --   love.graphics.pop()
+
     love.graphics.setColor(1,1,1,1)
     for i=1,#exp do
         love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*15*k,exp[i].scale*15*k2,4*exp[i].scale*k)
@@ -381,6 +388,9 @@ function  game:draw()
     love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
     love.graphics.print("RES: "..tostring(#res), 100, 150,0,k/2,k2/2)
     vect = {}
+ 
+  
+  
 end
                
 
