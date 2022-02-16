@@ -11,7 +11,6 @@ function wavesUpdate(dt)
         colWave =waves[2]
         wavesNextWave()
     end
-    
 end
 
 function wavesSpawn()
@@ -30,7 +29,7 @@ function wavesSpawn()
         end)
     end  
     if (#en < 50) then
-        TimerEn:every(math.random(5,8), function()
+        TimerEn:every(math.random(waves[3],8), function()
             local Geo  =math.random(1,4)
             local Tip =math.random(1,waves[1])
             allSpawn(en,Geo,Tip)

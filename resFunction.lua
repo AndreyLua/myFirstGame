@@ -1,7 +1,7 @@
 local resFunction = {}
 
 function spawnResCrackMet(i)
-    for kV =1, math.random(5,obj[i].scale/10) do
+    for kV =1, math.random(3,obj[i].scale/20) do
         newPoint(obj,i,kV) 
     end
 end
@@ -23,7 +23,7 @@ function spawnResHitEn(i)
     end
 end
 function spawnResKillEn(i)
-    for kV =1, math.random(5,9) do
+    for kV =1, math.random(4,6) do
         newPoint(en,i,kV) 
     end
 end

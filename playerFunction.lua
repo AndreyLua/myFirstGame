@@ -121,8 +121,10 @@ function playerDraw(dt)
     local r ,g ,b = gradient(dt)
     playerBatch:setColor(r,g,b)
     playerBatch:add(playerQuads[playerAbility.tip].cristal,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7,playerDrawPar[playerAbility.tip].cristalW/2, playerDrawPar[playerAbility.tip].cristalH/2-playerDrawPar[playerAbility.tip].cristalX)
-  
     playerBatch:setColor(1,1,1,1)
+    if (playerSkillParametrs.bloodAtFlag == true ) then
+        playerBatch:setColor(1,0.7,0.7,1)  
+    end
     playerBatch:add(playerQuads[playerAbility.tip].clow1,clow1X,clow1Y,-controler.angle+math.pi+player.clowR,k/7*player.clowLScaleK,k2/7*player.clowLScaleK,playerDrawPar[playerAbility.tip].clowW1, playerDrawPar[playerAbility.tip].clowH)
     playerBatch:add(playerQuads[playerAbility.tip].clow2,clow2X,clow2Y,-controler.angle+math.pi-player.clowR,k/7*player.clowRScaleK,k2/7*player.clowRScaleK,playerDrawPar[playerAbility.tip].clowW2, playerDrawPar[playerAbility.tip].clowH)
 end
@@ -176,6 +178,15 @@ function playerCollWithObj(dt)
 end
 
 function enAtackPlayer(dmg,tip,self)
+   if ( math.random(1,2) == 1) then 
+   --     AddSound(hurt1)
+    elseif ( math.random(1,2) == 1) then 
+   --     AddSound(hurt2)
+    elseif( math.random(1,2) == 1) then 
+    --    AddSound(hurt3)
+    else
+    --    AddSound(hurt4)
+    end
     dmg = dmg- playerSkillParametrs.hpK*dmg
     boostDop.recovery =boostDop.recoveryTimer - 0.0000001
     if (boostDop.long>0) then 
@@ -183,6 +194,7 @@ function enAtackPlayer(dmg,tip,self)
         boostDop.shakeK = 20
     else
         if ( tip=='m') then
+            newPlayerGetDamageEffect(self.x,self.y,7)
             hp.long = hp.long - dmg*(1-playerSkillParametrs.meleeDefK)
             if (playerSkillParametrs.spikeFlag == true) then 
                 newDeffenseEffect(self)
@@ -192,6 +204,7 @@ function enAtackPlayer(dmg,tip,self)
             hp.long = hp.long - dmg
         end
          if ( tip=='r') then
+            newPlayerGetDamageEffect(self.x,self.y,7)
             hp.long = hp.long - dmg*(1-playerSkillParametrs.rangeDefK)
             if (playerSkillParametrs.spikeFlag == true) then 
                 newDeffenseEffect(self)
@@ -201,6 +214,15 @@ function enAtackPlayer(dmg,tip,self)
 end
 
 function playerAtackEn(self,dt)
+    if ( math.random(1,2) == 1) then 
+        AddSound(hurt1,0.3)
+    elseif ( math.random(1,2) == 1) then 
+        AddSound(hurt2,0.3)
+    elseif( math.random(1,2) == 1) then 
+        AddSound(hurt3,0.3)
+    else
+        AddSound(hurt4,0.3)
+    end
     local clow1X =player.x +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle+playerDrawPar[playerAbility.tip].clowR)
     local clow1Y =player.y +playerDrawPar[playerAbility.tip].clowX*k2*math.cos(controler.angle+playerDrawPar[playerAbility.tip].clowR)
     local clow2X =player.x +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle-playerDrawPar[playerAbility.tip].clowR)
@@ -220,13 +242,14 @@ function playerAtackEn(self,dt)
         newVampirEffect(self)
     end
     if (playerSkillParametrs.waveAtFlag == true) then 
-        newWaveEffect(self.x,self.y)
+        newWaveEffect(self.x,self.y) -- damage
     end
     if (playerSkillParametrs.bloodAtFlag == true) then 
-        newBloodEffect(self)
+        newBloodEffect(self)  -- damage
     end
     if (playerSkillParametrs.sealAtFlag == true) then 
         table.insert(masli,{table = self, timer = 10,flag = nil})
+        self.health  =  self.health - 10*playerSkillParametrs.sealAt 
     end
 end
 
@@ -252,21 +275,21 @@ function playerFrontAtack(i)
 end
 
 function playerLiDraw(dt)
-    for i=#masli,1,-1 do
-        if (masli[i].table and masli[i].timer > 0  ) then
-            masli[i].timer = masli[i].timer - 50*dt
-            light22Draw(light22(player.x+35*k2*math.sin(controler.angle+math.pi/8)+math.random(-4,4)*k,player.y+35*k2*math.cos(controler.angle+math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
-            light22Draw(light22(player.x+35*k2*math.sin(controler.angle-math.pi/8)+math.random(-4,4)*k,player.y+35*k2*math.cos(controler.angle-math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
-        else
-            table.remove(masli,i)
+    if (playerSkillParametrs.sealAtFlag == true) then 
+        for i=#masli,1,-1 do
+            if (masli[i].table and masli[i].timer > 0  ) then
+                masli[i].timer = masli[i].timer - 50*dt
+                light22Draw(light22(player.x+35*k2*math.sin(controler.angle+math.pi/8)+math.random(-4,4)*k,player.y+35*k2*math.cos(controler.angle+math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
+                light22Draw(light22(player.x+35*k2*math.sin(controler.angle-math.pi/8)+math.random(-4,4)*k,player.y+35*k2*math.cos(controler.angle-math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
+            else
+                table.remove(masli,i)
+            end
+        end
+        if ( player.a == 1 and #masli == 0 ) then 
+            light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle+math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle+math.pi/4)+math.random(-2,2)*k,4))
+            light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle-math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle-math.pi/4)+math.random(-2,2)*k,4))
         end
     end
-    if ( player.a == 1 and #masli == 0 ) then 
-      light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle+math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle+math.pi/4)+math.random(-2,2)*k,4))
-      light22Draw(light22(player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,player.x+35*k2*math.sin(controler.angle-math.pi/4)+math.random(-2,2)*k,player.y+35*k2*math.cos(controler.angle-math.pi/4)+math.random(-2,2)*k,4))
-    end
-  --  light22Draw(light22(0,0,100,100,4))
-   -- end
 end
 
 

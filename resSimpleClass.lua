@@ -71,8 +71,8 @@ resClass = Class {
             local x1 = (player.x)-self.x+1*k
             local y1 = (player.y)-self.y+1*k2          
             local ugol = math.atan2(x1,y1) -0.8 * self.r
-            self.ax = 17*k*math.sin(ugol)
-            self.ay = 17*k*math.cos(ugol)
+            self.ax = 23*k*math.sin(ugol)
+            self.ay = 23*k*math.cos(ugol)
         else
             if ( player.a==0) then 
                  if ((self.timer == self.invTimer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) < playerAbility.radiusCollect*k*playerSkillParametrs.collectRangeK)) then
@@ -81,14 +81,14 @@ resClass = Class {
                     local ugol = math.atan2(x1,y1)
                     player.clowRflag =3
                     if ( self.ax> 17*k*math.sin(ugol)) then
-                        self.ax = self.ax - 2*k 
+                        self.ax = self.ax - 4*k 
                     else
-                        self.ax = self.ax + 2*k
+                        self.ax = self.ax + 4*k
                     end
                     if ( self.ay> 17*k2*math.cos(ugol)) then
-                        self.ay = self.ay - 2*k2
+                        self.ay = self.ay - 4*k2
                     else
-                        self.ay = self.ay + 2*k2 
+                        self.ay = self.ay + 4*k2 
                     end
                 end
             end
@@ -141,7 +141,7 @@ resClass = Class {
         if (self.timer == self.invTimer and  checkCollision(player.x-20*k,player.y-20*k2, 40*k, 40*k2,self.x,self.y,1*k,1*k2)) then
             if ( self.tip == 4 or self.tip == 5 or self.tip == 6) then
                 if ( self.tip == 4 ) then 
-                    hp.long=hp.long+50*k2
+                    hp.long=hp.long+50
                     resRemove(i)
                 end
                 if ( self.tip == 5 ) then 
@@ -150,10 +150,11 @@ resClass = Class {
                 end
                 if ( self.tip == 6 ) then
                     newGreenPlayerEffect()
-                    hp.long=hp.long +  playerSkillParametrs.vampirK*playerSkillParametrs.damageK*50*k2----skill
+                    hp.long=hp.long +  playerSkillParametrs.vampirK*playerSkillParametrs.damageK*50---skill
                     resRemove(i)
                 end
             else
+                AddSound(pickUp,0.1)
                 score = score +1
                 resRemove(i)
             end

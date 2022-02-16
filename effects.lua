@@ -1,151 +1,5 @@
 local effects = {}
 
-
-function light(x1,y1,x2,y2,i)
-    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-    local m = {x1,y1}
-    local masKof = {}
-    local x =0
-    local y = 0
-    local aye = 5 -- ширина разброса 
-    local ran =math.random(-length/aye,length/aye)
-    local angle =3.14-math.atan2((x2-x1),(y2-y1))
-    x =x1+(x2-x1)/2+math.cos(angle)*ran
-    y =y1+(y2-y1)/2+math.sin(angle)*ran
-    local m1 = pol(x1,y1,x,y,i)
-    for  i=1,#m1 do
-        table.insert(m,m1[i])
-    end
-    table.insert(m,x)
-    table.insert(m,y)
-    m1 = pol(x,y,x2,y2,i)
-    for  i=1,#m1 do
-        table.insert(m,m1[i])
-    end
-    table.insert(m,x2)
-    table.insert(m,y2)
-    return m
-end
-function pol(x1,y1,x2,y2,i) 
-    local aye = 5 -- ширина разброса 
-    local masKofPol = {}
-    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-    local ran =math.random(-length/aye,length/aye)
-    local angle =3.14-math.atan2((x2-x1),(y2-y1))
-    local x =x1+(x2-x1)/2+math.cos(angle)*ran
-    local y =y1+(y2-y1)/2+math.sin(angle)*ran
-    local m1 = {}
-    if ( i>0 and i~=0 ) then
-        local m2 = pol(x1,y1,x,y,i-1)
-        for  i=1,#m2 do
-            table.insert(m1,m2[i])
-        end
-    end
-    table.insert(m1,x)
-    table.insert(m1,y)
-    if ( i>0) then
-        local m2 = light(x,y,x2,y2,i-1)
-        for  i=1,#m2 do
-            table.insert(m1,m2[i])
-        end
-    end
-    if ( i>0) then
-        local m2 = pol(x,y,x2,y2,i-1)
-        for  i=1,#m2 do
-            table.insert(m1,m2[i])
-        end
-    end
-    return m1
-end
-
-function light2(x1,y1,x2,y2,i)
-    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-    local m = {x1,y1}
-    local x =0
-    local y = 0
-    local aye = 4 -- ширина разброса 
-    local ran =math.random(-length/aye,length/aye)
-    local angle =3.14-math.atan2((x2-x1),(y2-y1))
-    x =x1+(x2-x1)/2+math.cos(angle)*ran
-    y =y1+(y2-y1)/2+math.sin(angle)*ran
-    local m1 = pol2(x1,y1,x,y,i)
-    for  i=1,#m1 do
-        table.insert(m,m1[i])
-    end
-    table.insert(m,x)
-    table.insert(m,y)
-    m1 = pol2(x,y,x2,y2,i)
-    for  i=1,#m1 do
-        table.insert(m,m1[i])
-    end
-    table.insert(m,x2)
-    table.insert(m,y2)
-    return m
-end
-
-function pol2(x1,y1,x2,y2,i) 
-    local aye = 5 -- ширина разброса 
-    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-    local ran =math.random(-length/aye,length/aye)
-    local angle =3.14-math.atan2((x2-x1),(y2-y1))
-    local x =x1+(x2-x1)/2+math.cos(angle)*ran
-    local y =y1+(y2-y1)/2+math.sin(angle)*ran
-    local m1 = {}
-    table.insert(m1,x)
-    table.insert(m1,y)
-    return m1
-end
-
-function lightDesh(x1,y1,x2,y2,i,mas)
-    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-    local m = {x1,y1}
-    local aye = 4 -- ширина разброса 
-    local ran =mas[1]
-    local angle =3.14-math.atan2((x2-x1),(y2-y1))
-    local x =x1+(x2-x1)/2+math.cos(angle)*ran
-    local y =y1+(y2-y1)/2+math.sin(angle)*ran
-    local m1= polDesh(x1,y1,x,y,i,2,mas)
-    for  i=1,#m1 do
-        table.insert(m,m1[i])
-    end
-    table.insert(m,x)
-    table.insert(m,y)
-    m1 = polDesh(x,y,x2,y2,i,2+#m1/2,mas)
-    for  i=1,#m1 do
-        table.insert(m,m1[i])
-    end
-    table.insert(m,x2)
-    table.insert(m,y2)
-    return m
-end
-
-function polDesh(x1,y1,x2,y2,i,masI,mas) 
-    local aye = 5 -- ширина разброса 
-    local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-    local ran =mas[masI]
-    local angle =3.14-math.atan2((x2-x1),(y2-y1))
-    local x =x1+(x2-x1)/2+math.cos(angle)*ran
-    local y =y1+(y2-y1)/2+math.sin(angle)*ran
-    local m1 = {}
-    local m2 = {}
-    local m3 = {}
-    if ( i>0 and i~=0 ) then
-        m2 = polDesh(x1,y1,x,y,i-1,masI+1,mas)
-        for  i=1,#m2 do
-            table.insert(m1,m2[i])
-        end
-    end
-    table.insert(m1,x)
-    table.insert(m1,y)
-    if ( i>0) then
-        m3 = polDesh(x,y,x2,y2,i-1,masI+1+#m2/2,mas)
-        for  i=1,#m2 do
-            table.insert(m1,m3[i])
-        end
-    end
-    return m1
-end
-
 function light22(x1,y1,x2,y2,kkk)
     local segments = {{{x1,y1},{x2,y2}}}
     local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
@@ -545,6 +399,50 @@ function tradeEffectDraw(dt)
             table.remove(tradeEffects,i)
         end
     end
+end
+
+function newPlayerGetDamageEffect(x,y,kol)
+    local angleEnPl = math.atan2(player.x-x,player.y-y)+math.pi 
+    for kek =0, kol do
+        local e = {
+        color1 =playerStaticParametrs.colorR,
+        color2= playerStaticParametrs.colorG,
+        color3 =playerStaticParametrs.colorB,
+        x = player.x+(playerAbility.scaleBody-5)*k*math.sin(angleEnPl), 
+        y = player.y+(playerAbility.scaleBody-5)*k*math.cos(angleEnPl), 
+        ax  =60*k*math.sin(angleEnPl+math.random()*1.6), 
+        ay = 60*k*math.cos(angleEnPl+math.random()*1.6), 
+        scale =math.random()*1.5,
+        timer = 10,
+        }
+        table.insert(playerGerDamageEffect,e)
+    end
+end
+
+function playerGetDamageEffect(dt)
+    for i =#playerGerDamageEffect, 1,-1 do
+        if( playerGerDamageEffect[i]) then
+            if ( playerGerDamageEffect[i].timer>0) then 
+                playerGerDamageEffect[i].timer = playerGerDamageEffect[i].timer - 20*dt
+                playerGerDamageEffect[i].x= playerGerDamageEffect[i].x+playerGerDamageEffect[i].ax*dt*k
+                playerGerDamageEffect[i].y= playerGerDamageEffect[i].y+playerGerDamageEffect[i].ay*dt*k2
+                if ( playerGerDamageEffect[i].ax > 0 ) then
+                    playerGerDamageEffect[i].ax  = playerGerDamageEffect[i].ax -70*dt*k
+                else
+                    playerGerDamageEffect[i].ax  = playerGerDamageEffect[i].ax + 70*dt*k
+                end
+                if ( playerGerDamageEffect[i].ay > 0 ) then
+                    playerGerDamageEffect[i].ay  = playerGerDamageEffect[i].ay -70*dt*k2
+                else
+                    playerGerDamageEffect[i].ay  = playerGerDamageEffect[i].ay + 70*dt*k2
+                end
+                love.graphics.setColor(playerGerDamageEffect[i].color1,playerGerDamageEffect[i].color2,playerGerDamageEffect[i].color3,playerGerDamageEffect[i].timer/6)
+                love.graphics.rectangle("fill",playerGerDamageEffect[i].x,playerGerDamageEffect[i].y,playerGerDamageEffect[i].scale*3*k,playerGerDamageEffect[i].scale*3*k2,4*k)
+            else
+                table.remove(playerGerDamageEffect,i)
+            end
+        end
+    end  
 end
 
 

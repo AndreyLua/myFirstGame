@@ -10,6 +10,7 @@ tradeEffects = {}
 deffenseEffects = {} 
 bloodPart = {}
 greenPlayerEffect = {} 
+playerGerDamageEffect = {} 
 --effects
 --#####################################################
 -------------------gameParametrs
@@ -36,7 +37,7 @@ wavex = -250*k
 wavey = 0
 numberWave =1 
 colWave= 50
-waves = {2,50}
+waves = {2,50,7}
 -------------------WaveParametrs
 
 controler = { 
@@ -107,18 +108,18 @@ playerSledi = {}
 
 masli= {} 
 
-
-
 --lvlParametrs()
 end
 
-function love.focus(v)
-    if (not(v)) then
+function gamestate.focus(v)
+    if (not(v) and gamestate.current() == game) then
         gamestate.switch(pause)
     end
 end
 
 function game:update(dt)
+UpdateSound()
+UpdateBgMusic()
 -- en = {}
 --flaginv =true
 explUpdate2(dt)
@@ -126,7 +127,7 @@ objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
 boost.long = 1000
---hp.long = 1000 
+hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -233,6 +234,7 @@ end
 
 function game:keypressed(key1,key, code)
     if key == "escape" then
+       
         if gamestate.current() == self and player.isAlive then
             gamestate.switch(pause)
         end
@@ -256,6 +258,7 @@ function game:movement(dt)
         flagtouch1 = true
     end   
     if love.keyboard.isDown('w') then
+     
        kekKK = kekKK +0.01
     end
     if love.keyboard.isDown('s') then
@@ -267,7 +270,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,math.random(3))
+        allSpawn(en,Geo,math.random(6))
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -348,6 +351,7 @@ function  game:draw()
         deffenseEffect(dt)
         greenPlayerEffectDraw(dt)
         tradeEffectDraw(dt)
+        playerGetDamageEffect(dt)
         -----------
         --waveEffect(dt)
     love.graphics.pop()
