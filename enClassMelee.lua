@@ -18,7 +18,7 @@ enemyMeleeTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    12,  -- damage
+    80,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
@@ -31,7 +31,7 @@ enemyMeleeTable = {
     100, -- climbAtack
     100, --climbAtackTimer
     0, -- meleeAtack
-    10, --meleeAtackTimer
+    30, --meleeAtackTimer
     0 , -- dopAngle
     "player", --target
     0 , --targetX

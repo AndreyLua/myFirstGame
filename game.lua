@@ -35,9 +35,9 @@ flaginv = true
 waveflag = 0
 wavex = -250*k
 wavey = 0
-numberWave =1 
+numberWave =1
 colWave= 50
-waves = {2,50,7}
+waves = {2,50}
 -------------------WaveParametrs
 
 controler = { 
@@ -126,8 +126,8 @@ explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
-boost.long = 1000
-hp.long = 1000 
+--boost.long = 1000
+--hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -157,6 +157,7 @@ for i = #obj, 1, -1 do
         end
     end
     if (obj[i] and obj[i].health<0) then 
+        AddSound(objCrashSounds,0.1)
         objDestroy(obj,i) 
         table.remove(obj,i)
     end

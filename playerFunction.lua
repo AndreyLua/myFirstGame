@@ -136,7 +136,6 @@ function playerDrawCristal()
 end
 function playerSledDraw(x,y,dt)
  --  player.body:draw('line')
-    love.graphics.circle('fill',controler.x0,controler.y0,10*k)
     love.graphics.circle('line',controler.x0,controler.y0,13*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
@@ -178,15 +177,7 @@ function playerCollWithObj(dt)
 end
 
 function enAtackPlayer(dmg,tip,self)
-   if ( math.random(1,2) == 1) then 
-   --     AddSound(hurt1)
-    elseif ( math.random(1,2) == 1) then 
-   --     AddSound(hurt2)
-    elseif( math.random(1,2) == 1) then 
-    --    AddSound(hurt3)
-    else
-    --    AddSound(hurt4)
-    end
+    AddSound(playerHurtSounds,0.3)
     dmg = dmg- playerSkillParametrs.hpK*dmg
     boostDop.recovery =boostDop.recoveryTimer - 0.0000001
     if (boostDop.long>0) then 
@@ -214,15 +205,7 @@ function enAtackPlayer(dmg,tip,self)
 end
 
 function playerAtackEn(self,dt)
-    if ( math.random(1,2) == 1) then 
-        AddSound(hurt1,0.3)
-    elseif ( math.random(1,2) == 1) then 
-        AddSound(hurt2,0.3)
-    elseif( math.random(1,2) == 1) then 
-        AddSound(hurt3,0.3)
-    else
-        AddSound(hurt4,0.3)
-    end
+    AddSound(playerHitSounds,0.3)
     local clow1X =player.x +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle+playerDrawPar[playerAbility.tip].clowR)
     local clow1Y =player.y +playerDrawPar[playerAbility.tip].clowX*k2*math.cos(controler.angle+playerDrawPar[playerAbility.tip].clowR)
     local clow2X =player.x +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle-playerDrawPar[playerAbility.tip].clowR)
@@ -403,7 +386,7 @@ end
 
 function playerDie()
     if ( hp.long<=0) then 
-        gamestate.switch(pause)
+        gamestate.switch(die)
     end
 end
 

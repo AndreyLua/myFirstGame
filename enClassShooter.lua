@@ -16,7 +16,7 @@ enemyShooterTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    40,  -- damage
+    100,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  

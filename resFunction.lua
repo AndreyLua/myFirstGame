@@ -29,7 +29,7 @@ function spawnResKillEn(i)
 end
 
 function newHealPoint(mas,i,kV) 
-    if ( math.random(1,30)==1) then
+    if ( math.random(1,20)==1) then
         local masHPoint = {
             3-0.00001, --timer
             3, --invTimer

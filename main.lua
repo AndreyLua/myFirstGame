@@ -20,21 +20,28 @@ bg3 ="music/bg3.mp3"
 bgMusicTableMix = { bg1,bg1,bg2,bg2,bg3,bg3 }
 bgMusic = love.audio.newSource(bgMusicTableMix[bgMusicI],"stream",false)
 bgMusic:setVolume(0.2)
---love.audio.setPosition( 10,1,1 )
---love.audio.setDistanceModel( 'linear')
---love.audio.setOrientation(100,100,100,200,200,300)
 bgMusic:play()
-playerAtack = "sounds/player/dash/1.wav"
-soundSourceAt = love.audio.newSource(playerAtack, "static",true)
-pickUp = "sounds/pickUp.wav"
-enExpl ="sounds/expl.wav"
-power1 ="sounds/power1.wav"
-power2 ="sounds/power2.wav"
-hurt1 ="sounds/hurt1.wav" 
-hurt2 ="sounds/hurt2.wav"
-hurt3 ="sounds/hurt3.wav"
-hurt4 ="sounds/hurt4.wav"
-hurt5 ="sounds/hurt5.wav"
+
+objCrash1 ="sounds/obj/crash1.ogg"
+objCrash2 ="sounds/obj/crash2.ogg"
+objCrash3 ="sounds/obj/crash3.ogg"
+objCrashSounds = {objCrash1,objCrash2,objCrash2}
+
+playerHit1 = "sounds/player/hit/1.wav"
+playerHit2 = "sounds/player/hit/2.wav"
+playerHit3 = "sounds/player/hit/3.wav"
+playerHit4 = "sounds/player/hit/4.wav"
+playerHitSounds = {playerHit1,playerHit2,playerHit3,playerHit4}
+
+playerHurt1 = "sounds/player/hurt/1.wav"  
+playerHurt2 = "sounds/player/hurt/2.wav"  
+playerHurt3 = "sounds/player/hurt/3.wav"  
+playerHurt4 = "sounds/player/hurt/4.wav"   
+playerHurtSounds = {playerHurt1,playerHurt2,playerHurt3,playerHurt4}
+
+pickUp = "sounds/player/pickUp/1.wav"
+enExpl ="sounds/en/atack/expl.wav"
+
 
 ---------------------------------------------------
 ------------------SETS_And_FON-----------------------------
@@ -97,6 +104,7 @@ k = k2
 game = require "game"
 bulletFunction = require "bulletFunction"
 playerFunction = require "playerFunction"
+die =  require "die"
 enFunction = require "enFunction"
 soundFunction = require "soundFunction"
 resSimpleClass =  require "resSimpleClass" 

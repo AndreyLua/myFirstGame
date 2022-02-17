@@ -1,6 +1,9 @@
 local soundFunction = {} 
 
 function AddSound(sound,volume)
+    if (type(sound) == 'table') then
+        sound =sound[math.random(1,#sound)]
+    end
     local soundSource = love.audio.newSource(sound, "static",false)
     soundSource:setVolume(volume)
     soundSource:setPitch(math.random()/7*math.random(-1,1)+1)
