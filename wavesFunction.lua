@@ -16,7 +16,7 @@ end
 function wavesSpawn()
     if (#obj < 200) then
         TimerObj:every(5, function()
-            for i=1,math.random(1,1) do
+            for i=1,math.random(1,2) do
                 local Geo  =math.random(1,4)
                 allSpawn(obj,Geo)
                 if ( #obj >50) then
@@ -29,7 +29,7 @@ function wavesSpawn()
         end)
     end  
     if (#en < 50) then
-        TimerEn:every(math.random(5,8), function()
+        TimerEn:every(math.random(6,8), function()
             local Geo  =math.random(1,4)
             local Tip =math.random(1,waves[1])
             allSpawn(en,Geo,Tip)

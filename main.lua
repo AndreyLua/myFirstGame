@@ -39,6 +39,13 @@ playerHurt3 = "sounds/player/hurt/3.wav"
 playerHurt4 = "sounds/player/hurt/4.wav"   
 playerHurtSounds = {playerHurt1,playerHurt2,playerHurt3,playerHurt4}
 
+uiClick = "sounds/ui/click/2.ogg"   
+uiSelect = "sounds/ui/click/1.ogg"   
+uiClose = "sounds/ui/close/3.ogg" 
+uiSwitch = "sounds/ui/switch/4.ogg" ---!!!
+uiScroll = "sounds/ui/scroll/2.wav" ---!!!
+uiError = "sounds/ui/error/1.ogg"
+
 pickUp = "sounds/player/pickUp/1.wav"
 enExpl ="sounds/en/atack/expl.wav"
 

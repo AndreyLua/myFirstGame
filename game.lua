@@ -117,9 +117,12 @@ function gamestate.focus(v)
     end
 end
 
+function love.update(dt)
+    UpdateSound()
+    UpdateBgMusic()
+end
+
 function game:update(dt)
-UpdateSound()
-UpdateBgMusic()
 -- en = {}
 --flaginv =true
 explUpdate2(dt)
@@ -249,6 +252,7 @@ function game:movement(dt)
         flagtouch=true
     else
         if (  flagtouch==true and mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and flagtouch1== true) then
+            AddSound(uiClick,0.3)
             gamestate.switch(pause)
         end
         if ( flagtouch==false) then

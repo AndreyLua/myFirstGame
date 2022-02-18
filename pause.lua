@@ -35,8 +35,9 @@ function pause:update(dt)
         flagtouch2 = true
     else
          if (  mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch2 == true) then
-            gamestate.switch(game)
+            AddSound(uiClick,0.3)
             exp =  {}
+            gamestate.switch(game)
         end
         flagtouch2 = false
     end
@@ -68,18 +69,23 @@ function pause:update(dt)
     else
       
         if (but1 == true and  (mouse.x >difButton*6+30*k2-(60*k)/2) and (mouse.x <difButton*6+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
+            AddSound(uiSelect,0.3)
             gamestate.switch(skills)
         end
         if (but2 == true and (mouse.x >difButton*7+60*k2*1+30*k2-(60*k)/2) and (mouse.x <difButton*7+60*k2*1+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
+            AddSound(uiSelect,0.3)
             gamestate.switch(convert)
         end
         if (but5 == true and (mouse.x >difButton*8+60*k2*2+30*k2-(60*k)/2) and (mouse.x <difButton*8+60*k2*2+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
+            AddSound(uiSelect,0.3)
             gamestate.switch(character)
         end
         if (but3 == true and  (mouse.x >difButton*9+60*k2*3+30*k2-(60*k)/2) and (mouse.x <difButton*9+60*k2*3+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
+            AddSound(uiSelect,0.3)
             gamestate.switch(settings)
         end
         if (but4 == true and (mouse.x >difButton*10+60*k2*4+30*k2-(60*k)/2) and (mouse.x <difButton*10+60*k2*4+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
+            AddSound(uiSelect,0.3)
             love.event.push('quit')
         end
         exp =  {}

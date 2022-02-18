@@ -8,7 +8,7 @@ local mousePosX = 0
 local mousePosY = 0 
 local speedR = 0 
 local xR = -math.pi/6
-
+local indexRSave = -1
 local texti = 0 
 local textL = ""
 local textK = 0 
@@ -90,7 +90,7 @@ function skills:update(dt)
     else
         if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
             if ( ( mouse.x > xSmallButton-0.15*k*120 and  mouse.x <xSmallButton+0.15*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-0.15*k*500 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+0.15*k*500) and butSmall == true ) then
-      
+                AddSound(uiSelect,0.3)
                 if (playerSkills[indexR+4].numb == 8 ) then
                     playerSkillParametrs.waveAtFlag = not(playerSkillParametrs.waveAtFlag)
                     if ( playerSkillParametrs.waveAtFlag == true) then
@@ -127,6 +127,7 @@ function skills:update(dt)
         end
         if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
             exp = {}
+            AddSound(uiClick,0.3)
             gamestate.switch(pause)
         end 
         if ( flagAcceptMenu == false) then 
@@ -138,10 +139,12 @@ function skills:update(dt)
                     indexR = math.floor(xR / (math.pi/6))
                 end
                 if (speedR == 0 and playerSkills[indexR+4] and  skillCostUpgrade[(playerSkills[indexR+4].numb)]< score) then
+                    AddSound(uiSelect,0.3)
                     flagAcceptMenu = true
                     flagRes = -0.1
                     flagResBool = true
                 else
+                    AddSound(uiError,0.3)
                   ---------------------------------
                     if (flagRes == nil or  flagRes < 0) then 
                         flagRes = 0
@@ -178,6 +181,7 @@ function skills:update(dt)
             end
         else
             if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*120*k+0.4*k*120 and butYes == true ) then
+                AddSound(uiSelect,0.3)
                 local indexR = xR / (math.pi/6)
                 if ( xR%(math.pi/6) > math.pi/12) then
                     indexR = math.ceil(xR / (math.pi/6))
@@ -191,6 +195,7 @@ function skills:update(dt)
                 end
             end
             if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*120*k+0.4*k*120 and butNo == true) then
+                AddSound(uiClose,0.3)
                 flagAcceptMenu = false
                 lightKoff = 1
             end
@@ -354,8 +359,9 @@ if ( playerSkills[indexR+4]) then
 end
 
 flagRes,flagResBool = noRes(xBigSlot-(0.4*1.2*160*k)-difButton*0.16 ,screenHeight/2,0.4,flagRes,dt,flagResBool)
-
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
+
+indexRSave = indexR
 end
 
 function lvlParametrs()
@@ -419,6 +425,9 @@ function textPar(i,x,y,scale)
         indexR = math.ceil(xR / (math.pi/6))
     else
         indexR = math.floor(xR / (math.pi/6))
+    end
+    if ( indexR~= indexRSave) then 
+        AddSound(uiScroll,0.1,false)
     end
     if (playerSkills[indexR+4]) then 
         love.graphics.print("COST "..tostring(skillCostUpgrade[i]*(playerSkills[indexR+4].lvl)),x+30*k,y,-3.14/2,scale*k,scale*k) end
