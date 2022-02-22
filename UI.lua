@@ -1,5 +1,11 @@
 local UI = {}
 
+function butChange(x,y,xPoint,maxPointX)
+    UIBatch:setColor(1,1,1,1)    
+    UIBatch:add(UIQuads.butChange,x,y,-math.pi/2,k/5,k2/5,   1340/2, 146/2)
+    UIBatch:add(UIQuads.butPoint,x,y+1340*k/5/2-1340*k/5*xPoint/maxPointX,-math.pi/2,k/4,k2/4,120/2, 200/2)
+end
+
 
 function bodyButton(x,y,flag,dopLight)
     if (dopLight) then 
@@ -186,6 +192,23 @@ function noRes(x,y,scale,par,dt,flag)
     end
 end
 
+function noFill(par,dt,flag)
+    if (par~= nil and flag~=nil and par >= 0) then 
+        love.graphics.setColor(1,par,par,1)
+        if ( par <=3 and flag ==true ) then
+            return par+5*dt, true
+        else
+            if ( par > 2 and flag ==true ) then 
+                return par-5*dt,false
+            else
+                if (flag ==false and par >=0 ) then 
+                    return par-5*dt,false
+                end
+            end
+        end
+    end
+end
+
 function sc(x,y)
     love.graphics.setLineWidth(2*k)
     love.graphics.setColor(0.731,0.845,0.873)
@@ -364,12 +387,15 @@ function Health_Boost()
     love.graphics.setColor(1,1,1,1)
 end
 
-function exit(x,y)
+function exit()
+  local x = 0
+  local y = 0 
   if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and ((flagtouch==true and flagtouch1== true) or flagtouch2 == true or flagtouch3 == true) )  then
       UIBatch:setColor(1,1,1,0.6)
       UIBatch:add(UIQuads.add,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
       UIBatch:setColor(1,1,1,1)
   else
+      UIBatch:setColor(1,1,1,1)
       UIBatch:add(UIQuads.add,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
   end
   love.graphics.setColor(1,1,1,1)

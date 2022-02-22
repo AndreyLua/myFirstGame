@@ -14,6 +14,7 @@ effect1.pixelate.size =2
 ------------------SOUNDS---------------------------
 soundEffects = {} 
 bgMusicI = 1
+delayMusic = 0
 bg1 ="music/bg1.mp3"
 bg2 ="music/bg2.mp3"
 bg3 ="music/bg3.mp3"
@@ -41,10 +42,12 @@ playerHurtSounds = {playerHurt1,playerHurt2,playerHurt3,playerHurt4}
 
 uiClick = "sounds/ui/click/2.ogg"   
 uiSelect = "sounds/ui/click/1.ogg"   
-uiClose = "sounds/ui/close/3.ogg" 
-uiSwitch = "sounds/ui/switch/4.ogg" ---!!!
-uiScroll = "sounds/ui/scroll/2.wav" ---!!!
+uiClose = "sounds/ui/close/11.ogg" 
+uiSwitch = "sounds/ui/switch/4.ogg" 
+uiScroll = "sounds/ui/scroll/2.wav"
 uiError = "sounds/ui/error/1.ogg"
+uiParticl ="sounds/ui/particl/1.ogg" 
+uiParticlDestroy ="sounds/ui/particl/3.ogg" 
 
 pickUp = "sounds/player/pickUp/1.wav"
 enExpl ="sounds/en/atack/expl.wav"
@@ -63,6 +66,8 @@ fon1 =love.graphics.newImage("assets/fons/fon1.png")
 fon2 =love.graphics.newImage("assets/fons/fon2.png") 
 fon3 =love.graphics.newImage("assets/fons/fon3.png") 
 
+
+UISet:setFilter("nearest")
 meteorSet:setFilter("nearest")
 enSet:setFilter("nearest")
 playerSet:setFilter("nearest")
@@ -92,6 +97,8 @@ UIQuads = {
     tableSkillDestr = love.graphics.newQuad(482,  321, 320, 320, UISet:getDimensions()),
     butDirect = love.graphics.newQuad(803,  0, 180, 320, UISet:getDimensions()),
     textPanel = love.graphics.newQuad(0,  889, 1000, 320, UISet:getDimensions()), 
+    butChange = love.graphics.newQuad(0,  1210, 1340, 146, UISet:getDimensions()), 
+    butPoint = love.graphics.newQuad(1017,  751, 120, 200, UISet:getDimensions()), 
 }
 resQuads = {
     boost =   love.graphics.newQuad(0,0,130,210, resSet:getDimensions()),
@@ -151,14 +158,17 @@ mouse = {
     y=0
 }
 -------------CONST AND FLAGS------
-volume = 50
-sens = 50
+MusicVolume = 0.5
+SoundsVolume = 0.5
+Sensitivity = 1
+
+
 flagVibr = false
 gradientR = 1
 gradientG = 0 
 gradientB = 0 
 gradientI = 1
-scoreForParticle =0
+scoreForParticle =20
 colbaPar =  0
 -----------------------------------
 function loadPlayerParametrsAndImg()
@@ -175,7 +185,8 @@ function loadPlayerParametrsAndImg()
     img =skillQuads.energy,
     lvl = 1,
     numb = 2 ,
-    }
+  }
+  --[[
     playerSkills[4] ={
     img =skillQuads.meleeDef,------
     lvl = 1,
@@ -235,7 +246,8 @@ function loadPlayerParametrsAndImg()
     img =skillQuads.vampir,
     lvl = 1,
     numb = 14 ,
-    }
+  }
+  --]]
 
 end
 
@@ -352,8 +364,8 @@ function loadPlayerParametrs()
         vampirFlag = false,
     }
     skillCostUpgrade = {
-        100,-- common1 hp
-        100,-- common2 en
+        200,-- common1 hp
+        200,-- common2 en
         100,-- common3 meleeDef
         100,-- common4 rangeDef
         100,-- common5 damage

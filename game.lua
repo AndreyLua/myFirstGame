@@ -14,7 +14,7 @@ playerGerDamageEffect = {}
 --effects
 --#####################################################
 -------------------gameParametrs
-score = 0
+score = 100
 borderWidth =screenWidth/2
 borderHeight = screenHeight/2
 numberCleaner = 0 
@@ -108,7 +108,7 @@ playerSledi = {}
 
 masli= {} 
 
---lvlParametrs()
+lvlParametrs()
 end
 
 function gamestate.focus(v)
@@ -119,7 +119,15 @@ end
 
 function love.update(dt)
     UpdateSound()
-    UpdateBgMusic()
+    UpdateBgMusic(dt)
+end
+
+function love.keypressed(key, code)
+    if key == "escape" then
+        gamestate.switch(pause)
+    elseif key == "q" then
+        love.event.push('quit')
+    end
 end
 
 function game:update(dt)
@@ -375,7 +383,7 @@ function  game:draw()
     
     wavesTitleDraw(numberWave,dt)
     sc(0,screenHeight/2)
-    exit(0,0)
+    exit()
     
     love.graphics.draw(UIBatch)
     lineW()
@@ -507,8 +515,8 @@ function allSpawn(mas,Geo,Tip)
             e:newBody(e.x, e.y)
             table.insert(mas,e)
         end
-        if ( Tip ==6 and numberCleaner <3 ) then 
-             numberCleaner = numberCleaner+1
+        if ( Tip ==6 and numberCleaner <1 ) then 
+            numberCleaner = numberCleaner+1
             local e = enemyСleaner:clone()
             e.x = x 
             e.y = y 

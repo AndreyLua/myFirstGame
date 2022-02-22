@@ -1,55 +1,59 @@
 local character = {}
 local but1 = false
 local but2 = false
-local localY =screenHeight/2
 local mousePosY = 0
+
+local xR =math.pi/2
 local speedR = 0 
+local xRMax = math.pi/2
 function character:update(dt)
-    localY = localY - speedR*dt
-    if ( localY <screenHeight/2 )then
-        localY   = screenHeight/2
-        speedR = 0
-    end
-    if ( localY >screenHeight*2-20*k )then
-        localY   = screenHeight*2-20*k
-        speedR = 0
-    end
-    if ( math.abs(speedR) < 800*k) then
-        if ( localY > screenHeight+100*k and localY < screenHeight+105*k) then 
-          speedR = 0
-        end
-    else
-        if ( speedR>0) then
-            speedR = speedR - 700* dt*k
-        else
-            speedR = speedR + 700* dt*k
-        end
-    end
     mouse.x,mouse.y=love.mouse.getPosition()
     if love.mouse.isDown(1)  then
-       if ( flagtouch3 == false) then 
+        if ( mouse.x > screenWidth/2-800*k and  mouse.x <screenWidth/2+800*k and mouse.y > 0 and  mouse.y <screenHeight and flagtouch3 ==false) then
             mousePosY = mouse.y
-        end 
+        end
         flagtouch3 =true
     else
-        if (flagtouch3 == true and  math.abs( mouse.y - mousePosY ) > 40*k and mouse.x > screenWidth/2 and  mouse.x < screenWidth/2 + 250*k   ) then 
-                textK = 0 
-                if (  mouse.y >  mousePosY) then 
-                    speedR = speedR- 1200*math.abs( mouse.y - mousePosY )/screenHeight
-                else
-                    speedR = speedR+ 1200*math.abs( mouse.y - mousePosY )/screenHeight
-                end
-                if ( math.abs( speedR) < 800) then
-                    speedR =800* speedR / math.abs( speedR)
-                end
-        end
         if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
+            AddSound(uiClick,0.3)
             exp = {}
             gamestate.switch(pause)
         end 
+        if ( mouse.x > screenWidth/2-800*k and  mouse.x <screenWidth/2+800*k and mouse.y > 0 and  mouse.y <screenHeight and  flagtouch3 == true) then
+            if ( math.abs(mouse.y - mousePosY)>10*k) then
+                if ((mouse.y - mousePosY) <0) then
+                    speedR = -1
+                    xRMax = xRMax-math.pi/2
+                else
+                    xRMax = xRMax+math.pi/2
+                    speedR = 1
+                end
+                if (xRMax< math.pi/2) then 
+                    xRMax = math.pi/2
+                end
+                if (xRMax> math.pi/2*3) then 
+                    xRMax = math.pi/2*3
+                end
+            end
+        end
         but2 = false
         but1 = false
         flagtouch3 =false
+    end
+    
+    if (xR<xRMax and speedR>0) then
+        if (xR<xRMax) then 
+            xR = xR+speedR*dt
+        else
+            xR = xRMax
+        end
+    end
+    if (xR>xRMax and speedR<0) then
+        if (xR>xRMax) then 
+            xR = xR+speedR*dt
+        else
+            xR = xRMax
+        end
     end
 end
 
@@ -62,27 +66,29 @@ function character:draw()
     love.graphics.draw(fon2,0,0,0,k,k2)
     love.graphics.draw(fon3,0,0,0,k,k2)
     sc(0,screenHeight/2)
-    if ( speedR == 0) then
-        love.graphics.setColor(1,1,1,1)
-    else
-        love.graphics.setColor(1,1,1,0.5)
-    end
-    playerDrawCharacter(localY,dt,1)
+  
+    playerDrawCharacter(screenWidth-math.sin(xR)*screenWidth/2,screenHeight/2-math.cos(xR)*screenWidth/2 ,dt,1)
     love.graphics.draw(playerBatch)
     playerBatch:clear()
-    playerDrawCharacter(localY-screenHeight/2-100*k,dt,2)
+    playerDrawCharacter(screenWidth-math.sin(xR-math.pi/2)*screenWidth/2,screenHeight/2-math.cos(xR-math.pi/2)*screenWidth/2 ,dt,2)
     love.graphics.draw(playerBatch)
     playerBatch:clear()
-    playerDrawCharacter(localY-screenHeight-200*k,dt,3)
+    playerDrawCharacter(screenWidth-math.sin(xR-math.pi)*screenWidth/2,screenHeight/2-math.cos(xR-math.pi)*screenWidth/2 ,dt,3)
     love.graphics.draw(playerBatch)
     
-    bodyButtonDirect(screenWidth/2,screenHeight/2+140*k2,but1,'left',-math.pi/2)
-    bodyButtonDirect(screenWidth/2,screenHeight/2-140*k2,but2,'right',math.pi/2)
+    bodyButtonDirect(screenWidth-math.sin(xR+math.pi/6)*screenWidth/2,screenHeight/2-math.cos(xR+math.pi/6)*screenWidth/2,but1,'left',-math.pi/1.6)
+    bodyButtonDirect(screenWidth-math.sin(xR-math.pi/6)*screenWidth/2,screenHeight/2-math.cos(xR-math.pi/6)*screenWidth/2,but2,'right',math.pi/1.6)
+    
+     bodyButtonDirect(screenWidth-math.sin(xR+math.pi/6-math.pi/2)*screenWidth/2,screenHeight/2-math.cos(xR+math.pi/6-math.pi/2)*screenWidth/2,but1,'left',-math.pi/1.6)
+    bodyButtonDirect(screenWidth-math.sin(xR-math.pi/6-math.pi/2)*screenWidth/2,screenHeight/2-math.cos(xR-math.pi/6-math.pi/2)*screenWidth/2,but2,'right',math.pi/1.6)
+    
+     bodyButtonDirect(screenWidth-math.sin(xR+math.pi/6-math.pi)*screenWidth/2,screenHeight/2-math.cos(xR+math.pi/6-math.pi)*screenWidth/2,but1,'left',-math.pi/1.6)
+    bodyButtonDirect(screenWidth-math.sin(xR-math.pi/6-math.pi)*screenWidth/2,screenHeight/2-math.cos(xR-math.pi/6-math.pi)*screenWidth/2,but2,'right',math.pi/1.6)
     love.graphics.draw(UIBatch)
     love.graphics.setColor(1,1,1,1)
     UIBatch:clear()
     bodyButton(screenWidth/2.2-math.sin(-math.pi/2)*310*k,screenHeight/2-math.cos(-math.pi/2)*310*k,but1)
-    exit(0,0)
+    exit()
     love.graphics.draw(UIBatch)
     textButton("Select",screenWidth/2.2-math.sin(-math.pi/2)*310*k,screenHeight/2-math.cos(-math.pi/2)*310*k,but1,0.9)
     local fontWidth = font:getWidth(tostring(score))
@@ -90,9 +96,9 @@ function character:draw()
     love.graphics.setColor(1,1,1,1) 
     love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 end
-function playerDrawCharacter(y,dt,tip)
-    local xDraw =screenWidth/2
-    local yDraw = y
+function playerDrawCharacter(x,y,dt,tip)
+    local xDraw =x
+    local yDraw =y
     playerBatch:setColor(1,1,1,1)
     local clow1X =xDraw +playerDrawPar[tip].clowX*k2*math.sin(-math.pi/2+playerDrawPar[tip].clowR)*7/3
     local clow1Y =yDraw +playerDrawPar[tip].clowX*k2*math.cos(-math.pi/2+playerDrawPar[tip].clowR)*7/3

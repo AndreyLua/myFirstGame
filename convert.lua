@@ -6,6 +6,9 @@ local flagColl =  false
 local colbaBody = HC.circle(screenWidth/1.7,screenHeight/2,80*k)
 local colbaFill = false
 
+local flagFill = -0.1
+local flagFillBool = true
+
 local flagRes = -0.1
 local flagResBool = true
 -----------------------------------LEFT-----------------------------------
@@ -43,6 +46,8 @@ local flagRewardMenu = false
 local rewardMoney  = 0
 local rewardSkill  = 0
 local rewardSlotScale = 0 
+
+local delaySoundParticl = 0 
 
 function convert:update(dt)
     explUpdate2(dt)
@@ -85,6 +90,11 @@ function convert:update(dt)
         if ( (realX*realX + realY*realY < 100*k*100*k) and #particl<140 and flagRewardMenu == false ) then
             if ( score >=scoreForParticle and particlClearFlag == false) then
                 score = score - scoreForParticle
+                if ( delaySoundParticl <=0) then
+                    AddSound(uiParticl,0.2)
+                    delaySoundParticl = 1
+                end
+                delaySoundParticl = delaySoundParticl - 15*dt
                 if ( math.random(1,2) == 1 ) then
                     particlSpawn(0,math.random(screenHeight/2-90*k2,screenHeight/2-40*k2),1)
                 else
@@ -107,17 +117,29 @@ function convert:update(dt)
     else
         if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
             exp = {}
+            AddSound(uiClick,0.3)
             gamestate.switch(pause)
         end 
 
         if (mouse.x > screenWidth/1.7+220*k-k2/4*120 and  mouse.x <screenWidth/1.7+220*k+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagButton1 == true) then
             if (colbaFill==true and colbaPar == #particl) then
                   particlClearFlag = true
+                  AddSound(uiSelect,0.3)
+                  AddSound(uiParticlDestroy,0.2,false)
                   countReward = colbaPar
+            else
+                if (colbaFill~=true) then 
+                    if (flagFill == nil or  flagFill < 0) then 
+                        flagFill = 0
+                    end
+                    flagFillBool = true
+                end
+                AddSound(uiError,0.2)
             end
         end
         if (mouse.x > screenWidth/2+200*k-k2/4*120 and  mouse.x <screenWidth/2+200*k+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagRewardMenu == true and  flagButton2 == true ) then
             flagRewardMenu = false
+            AddSound(uiSelect,0.3,false)
             score = score + rewardMoney
             if ( rewardSkill ~= 0) then 
                 local flagPlHave = false
@@ -155,7 +177,7 @@ function convert:draw()
     love.graphics.draw(fon1,0,0,0,k,k2)
     love.graphics.draw(fon2,0,0,0,k,k2)
     love.graphics.draw(fon3,0,0,0,k,k2)
-    exit(0,0)
+    exit()
     love.graphics.setColor(1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale)
     bodyButton(screenWidth/1.7+220*k,screenHeight/2,flagButton1,rewardSlotScale)
     love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
@@ -200,6 +222,7 @@ function convert:draw()
     if ( math.ceil(colbaPar/1.4)== 100 ) then 
         love.graphics.setColor(0.8,0.8,0.3,1) 
     end
+    flagFill,flagFillBool = noFill(flagFill,dt,flagFillBool)
     fontWidth = font:getWidth(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%')
     love.graphics.print(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%',screenWidth/1.7-250*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
     love.graphics.setColor(1,1,1,1) 
@@ -459,7 +482,7 @@ end
 function particlClear(i,dt)
     if (particlClearFlag == true and particl[i].x >screenWidth/1.7+80*k-particlClearX ) then
         expl(particl[i].x,particl[i].y,3)
-        table.remove(particl,i) ---
+        table.remove(particl,i)
         colbaPar = colbaPar - 1
     end 
 end

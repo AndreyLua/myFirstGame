@@ -7,8 +7,8 @@ local masSkill = {}
 local mousePosX = 0 
 local mousePosY = 0 
 local speedR = 0 
-local xR = -math.pi/6
-local indexRSave = -1
+local xR = -math.pi/6*2
+local indexRSave = -2
 local texti = 0 
 local textL = ""
 local textK = 0 
@@ -138,7 +138,7 @@ function skills:update(dt)
                 else
                     indexR = math.floor(xR / (math.pi/6))
                 end
-                if (speedR == 0 and playerSkills[indexR+4] and  skillCostUpgrade[(playerSkills[indexR+4].numb)]< score) then
+                if (speedR == 0 and playerSkills[indexR+4] and  skillCostUpgrade[(playerSkills[indexR+4].numb)]<= score) then
                     AddSound(uiSelect,0.3)
                     flagAcceptMenu = true
                     flagRes = -0.1
@@ -146,10 +146,12 @@ function skills:update(dt)
                 else
                     AddSound(uiError,0.3)
                   ---------------------------------
-                    if (flagRes == nil or  flagRes < 0) then 
-                        flagRes = 0
+                    if ( playerSkills[indexR+4]) then 
+                        if (flagRes == nil or  flagRes < 0) then 
+                            flagRes = 0
+                        end
+                        flagResBool = true
                     end
-                    flagResBool = true
                   ---------------------------------
                 end
             end
@@ -188,14 +190,14 @@ function skills:update(dt)
                 else
                     indexR = math.floor(xR / (math.pi/6))
                 end
-                if (speedR == 0 and playerSkills[indexR+4] and  skillCostUpgrade[(playerSkills[indexR+4].numb)]< score) then
-                    score = score - skillCostUpgrade[(playerSkills[indexR+4].numb)]
+                if (speedR == 0 and playerSkills[indexR+4] and  skillCostUpgrade[(playerSkills[indexR+4].numb)]*(playerSkills[indexR+4].lvl)<= score) then
+                    score = score -skillCostUpgrade[(playerSkills[indexR+4].numb)]*(playerSkills[indexR+4].lvl)
                     playerSkills[indexR+4].lvl = playerSkills[indexR+4].lvl+1
                     lvlParametrs()
                 end
             end
             if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*120*k+0.4*k*120 and butNo == true) then
-                AddSound(uiClose,0.3)
+                AddSound(uiClose,0.2)
                 flagAcceptMenu = false
                 lightKoff = 1
             end
@@ -296,7 +298,7 @@ UIBatch:clear()
 skillBatch:clear()
 if (  flagAcceptMenu == true) then 
     love.graphics.setColor(1,1,1,1)
-    exit(0,0)
+    exit()
     slot(indexR+4,xBigSlot,screenHeight/2,160,160,0.4) 
     acceptBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/1.4)*120*k,0.4,butYes) 
     rejectBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/3.5)*120*k,0.4,butNo)
@@ -340,7 +342,9 @@ end
 love.graphics.setColor(1,1,1,1)
 local fontWidth = font:getWidth(tostring(score))
 love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
-
+if ( indexR~= indexRSave) then 
+    AddSound(uiScroll,0.1,false)
+end
 if ( playerSkills[indexR+4]) then 
     text(xTextPanel-(160/3*k)+20*k,screenHeight/2+140*k,0.42)
     textPar(playerSkills[indexR+4].numb,xTextPanel-(160/3*k)+20*k,screenHeight/2-60*k,0.43)
@@ -369,10 +373,10 @@ function lvlParametrs()
         local masSkill = playerSkills[i] 
         ----------------------------------------------------------------------------
         if (masSkill.numb == 1 ) then 
-            playerSkillParametrs.hpK =0.3*math.log10(masSkill.lvl)
+            playerSkillParametrs.hpK =0.02*masSkill.lvl
         end
         if (masSkill.numb == 2 ) then 
-            playerSkillParametrs.enK =0.3*math.log10(masSkill.lvl)
+            playerSkillParametrs.enK =0.02*masSkill.lvl
         end
         if (masSkill.numb == 3 ) then 
             playerSkillParametrs.meleeDefK=0.3*math.log10(masSkill.lvl)
@@ -425,9 +429,6 @@ function textPar(i,x,y,scale)
         indexR = math.ceil(xR / (math.pi/6))
     else
         indexR = math.floor(xR / (math.pi/6))
-    end
-    if ( indexR~= indexRSave) then 
-        AddSound(uiScroll,0.1,false)
     end
     if (playerSkills[indexR+4]) then 
         love.graphics.print("COST "..tostring(skillCostUpgrade[i]*(playerSkills[indexR+4].lvl)),x+30*k,y,-3.14/2,scale*k,scale*k) end

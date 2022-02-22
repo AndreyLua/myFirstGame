@@ -15,15 +15,23 @@ function AddSound(sound,volume,noise)
     table.insert(soundEffects,soundSource)
 end
 
-function UpdateBgMusic()
-    if not(bgMusic:isPlaying()) then
-        bgMusicI = bgMusicI + 1
-        if ( bgMusicI >#bgMusicTableMix) then
-            bgMusicI = 1
+function UpdateBgMusic(dt)
+    if (not(bgMusic:isPlaying()) and delayMusic >= 0)  then
+        delayMusic = delayMusic - 40*dt
+        if (delayMusic <= 0 ) then  
+            bgMusicI = bgMusicI + 1
+            if ( bgMusicI >#bgMusicTableMix) then
+                bgMusicI = 1
+            end
+            if (bgMusicTableMix[bgMusicI+1]~= bgMusicTableMix[bgMusicI]) then
+                delayMusic = 100 
+            else
+                delayMusic = 0
+            end
+            bgMusic = love.audio.newSource(bgMusicTableMix[bgMusicI],"stream",false)
+            bgMusic:setVolume(0.2)
+            bgMusic:play()
         end
-        bgMusic = love.audio.newSource(bgMusicTableMix[bgMusicI],"stream",false)
-        bgMusic:setVolume(0.2)
-        bgMusic:play()
     end
 end
 
