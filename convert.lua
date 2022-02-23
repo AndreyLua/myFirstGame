@@ -517,10 +517,10 @@ function smallReward(count)
         rewardSkill  = math.random(1,7) 
     else
         if ( math.random(1,100) > 80) then
-            rewardMoney  = count* scoreForParticle*0.7
+            rewardMoney  = math.ceil(count* scoreForParticle*0.7)
         else
             if ( math.random(1,100) > 50) then
-                rewardMoney  = count* scoreForParticle*0.5 
+                rewardMoney  = math.ceil(count* scoreForParticle*0.5)
             else
                 rewardMoney  = 0
             end

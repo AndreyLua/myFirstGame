@@ -232,7 +232,7 @@ function playerAtackEn(self,dt)
     end
     if (playerSkillParametrs.sealAtFlag == true) then 
         table.insert(masli,{table = self, timer = 10,flag = nil})
-        self.health  =  self.health - 10*playerSkillParametrs.sealAt 
+        self.health  =  self.health - playerAbility.damage*playerSkillParametrs.damageK*playerSkillParametrs.sealAt 
     end
 end
 

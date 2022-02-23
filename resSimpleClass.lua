@@ -80,12 +80,12 @@ resClass = Class {
                     local y1 = (player.y)-self.y+1*k2          
                     local ugol = math.atan2(x1,y1)
                     player.clowRflag =3
-                    if ( self.ax> 17*k*math.sin(ugol)) then
+                    if ( self.ax> 17*k*math.sin(ugol)*playerSkillParametrs.collectRangeK ) then
                         self.ax = self.ax - 4*k 
                     else
                         self.ax = self.ax + 4*k
                     end
-                    if ( self.ay> 17*k2*math.cos(ugol)) then
+                    if ( self.ay> 17*k2*math.cos(ugol)*playerSkillParametrs.collectRangeK ) then
                         self.ay = self.ay - 4*k2
                     else
                         self.ay = self.ay + 4*k2 

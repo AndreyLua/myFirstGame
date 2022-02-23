@@ -4,7 +4,7 @@ function wavesUpdate(dt)
     if ( colWave<=0) then
         numberWave = numberWave +1 
         waves[2]= waves[2]*(1+numberWave/10)
-        waves[1] =1+math.floor(numberWave/2)
+        waves[1] =1+math.ceil(numberWave/2)
         if ( waves[1] > 5) then 
             waves[1] = 5
         end

@@ -96,6 +96,7 @@ UIQuads = {
     tableSkillLegend = love.graphics.newQuad(984,  0, 360, 360, UISet:getDimensions()),
     tableSkillDestr = love.graphics.newQuad(482,  321, 320, 320, UISet:getDimensions()),
     butDirect = love.graphics.newQuad(803,  0, 180, 320, UISet:getDimensions()),
+    butDirectRotated = love.graphics.newQuad(1316,  791, 320, 320, UISet:getDimensions()),
     textPanel = love.graphics.newQuad(0,  889, 1000, 320, UISet:getDimensions()), 
     butChange = love.graphics.newQuad(0,  1210, 1340, 146, UISet:getDimensions()), 
     butPoint = love.graphics.newQuad(1017,  751, 120, 200, UISet:getDimensions()), 
@@ -158,8 +159,8 @@ mouse = {
     y=0
 }
 -------------CONST AND FLAGS------
-MusicVolume = 0.5
-SoundsVolume = 0.5
+MusicVolume = 1
+SoundsVolume = 1
 Sensitivity = 1
 
 
@@ -168,7 +169,7 @@ gradientR = 1
 gradientG = 0 
 gradientB = 0 
 gradientI = 1
-scoreForParticle =20
+scoreForParticle =15
 colbaPar =  0
 -----------------------------------
 function loadPlayerParametrsAndImg()
@@ -186,47 +187,50 @@ function loadPlayerParametrsAndImg()
     lvl = 1,
     numb = 2 ,
   }
-  --[[
+
     playerSkills[4] ={
     img =skillQuads.meleeDef,------
-    lvl = 1,
+    lvl = 25,
     numb = 3 ,
     }
     playerSkills[5] ={
     img =skillQuads.rangeDef,------
-    lvl = 1,
+    lvl = 25,
     numb = 4 ,
     }
     playerSkills[3] ={
     img =skillQuads.atack,
-    lvl = 1,
+    lvl = 25,
     numb = 5 ,
-    }
+  }
+ 
     playerSkills[6] ={
     img =skillQuads.speed,
-    lvl = 1,
+    lvl = 25,
     numb = 6 ,
     }
     playerSkills[7] ={
     img =skillQuads.collectRange,
-    lvl = 1,
+    lvl = 25,
     numb = 7 ,
-    }
+  }
+  
     playerSkills[8] ={
     img =skillQuads.waveAtack,
-    lvl = 1,
+    lvl = 25,
     numb = 8 ,
     }
     playerSkills[9] ={
     img =skillQuads.bloodAtack,
-    lvl = 1,
+    lvl = 25,
     numb = 9 ,
     }
     playerSkills[10] ={
     img =skillQuads.sealAtack,
-    lvl = 1,
+    lvl = 25,
     numb = 10 ,
-    }
+  }
+        --[[
     playerSkills[11] ={
     img =skillQuads.spikeArmor,
     lvl = 1,
@@ -247,6 +251,7 @@ function loadPlayerParametrsAndImg()
     lvl = 1,
     numb = 14 ,
   }
+
   --]]
 
 end

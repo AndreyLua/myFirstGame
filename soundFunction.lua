@@ -8,7 +8,7 @@ function AddSound(sound,volume,noise)
         sound =sound[math.random(1,#sound)]
     end
     local soundSource = love.audio.newSource(sound, "static",false)
-    soundSource:setVolume(volume)
+    soundSource:setVolume(volume*(SoundsVolume))
     if ( noise) then 
         soundSource:setPitch(math.random()/7*math.random(-1,1)+1)
     end
@@ -29,7 +29,7 @@ function UpdateBgMusic(dt)
                 delayMusic = 0
             end
             bgMusic = love.audio.newSource(bgMusicTableMix[bgMusicI],"stream",false)
-            bgMusic:setVolume(0.2)
+            bgMusic:setVolume(0.2*(MusicVolume))
             bgMusic:play()
         end
     end

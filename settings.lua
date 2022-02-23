@@ -36,13 +36,14 @@ function settings:update(dt)
                 xAlpha = mouse.y
                 VolumeAlpha = MusicVolume
             else
-                MusicVolume =VolumeAlpha+(xAlpha-mouse.y) /(1340*k/5)
-                if ( MusicVolume > 1) then
-                    MusicVolume = 1
+                MusicVolume =VolumeAlpha+(xAlpha-mouse.y) /(1340*k/10)
+                if ( MusicVolume > 2) then
+                    MusicVolume = 2
                 end
                 if ( MusicVolume < 0) then
                     MusicVolume = 0
                 end
+                bgMusic:setVolume(0.2*(MusicVolume))
             end
             but1 = true
         end
@@ -51,9 +52,9 @@ function settings:update(dt)
                 xAlpha = mouse.y
                 VolumeAlpha = SoundsVolume
             else
-                SoundsVolume =VolumeAlpha+(xAlpha-mouse.y) /(1340*k/5)
-                if ( SoundsVolume > 1) then
-                    SoundsVolume = 1
+                SoundsVolume =VolumeAlpha+(xAlpha-mouse.y) /(1340*k/10)
+                if ( SoundsVolume > 2) then
+                    SoundsVolume = 2
                 end
                 if (SoundsVolume < 0) then
                     SoundsVolume = 0
@@ -82,8 +83,8 @@ function settings:draw()
     love.graphics.setColor(1,1,1,1)
     exit()
     
-    butChange(xMusicVolumeBut,screenHeight/2,MusicVolume,1)
-    butChange(xSoundsVolumeBut,screenHeight/2,SoundsVolume,1)
+    butChange(xMusicVolumeBut,screenHeight/2,MusicVolume,2)
+    butChange(xSoundsVolumeBut,screenHeight/2,SoundsVolume,2)
     butChange(xSensitivityBut,screenHeight/2,Sensitivity,2)
     acceptBut(xVibrationBut,screenHeight/2+screenHeight/4,0.45,false) 
     

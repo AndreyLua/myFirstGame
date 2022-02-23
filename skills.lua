@@ -373,35 +373,35 @@ function lvlParametrs()
         local masSkill = playerSkills[i] 
         ----------------------------------------------------------------------------
         if (masSkill.numb == 1 ) then 
-            playerSkillParametrs.hpK =0.02*masSkill.lvl
+            playerSkillParametrs.hpK =0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 2 ) then 
-            playerSkillParametrs.enK =0.02*masSkill.lvl
+            playerSkillParametrs.enK =0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 3 ) then 
-            playerSkillParametrs.meleeDefK=0.3*math.log10(masSkill.lvl)
+            playerSkillParametrs.meleeDefK=0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 4 ) then 
-            playerSkillParametrs.rangeDefK=0.3*math.log10(masSkill.lvl)
+            playerSkillParametrs.rangeDefK=0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 5 ) then 
-            playerSkillParametrs.damageK =1+0.5*math.log(masSkill.lvl,2)
+            playerSkillParametrs.damageK =1+0.03*(masSkill.lvl-1)
         end
         if (masSkill.numb == 6 ) then 
-            playerSkillParametrs.speedK =1+0.1*math.log(masSkill.lvl,2)
+            playerSkillParametrs.speedK =1+0.015*(masSkill.lvl-1)
         end
         if (masSkill.numb == 7 ) then 
-            playerSkillParametrs.collectRangeK =1+0.1*math.log(masSkill.lvl,2)
+            playerSkillParametrs.collectRangeK =1+0.02*(masSkill.lvl-1)
         end
         ----------------------------------------------------------------------------
         if (masSkill.numb == 8 ) then 
-            playerSkillParametrs.waveAt =0.2*math.log(masSkill.lvl,2)
+            playerSkillParametrs.waveAt =0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 9 ) then 
-            playerSkillParametrs.bloodAt =0.1*math.log(masSkill.lvl,2)
+            playerSkillParametrs.bloodAt =0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 10 ) then 
-            playerSkillParametrs.sealAt =0.1*math.log(masSkill.lvl,2)
+            playerSkillParametrs.sealAt =0.04*(masSkill.lvl-1)
         end
         if (masSkill.numb == 11 ) then 
             playerSkillParametrs.spikeFlag = true

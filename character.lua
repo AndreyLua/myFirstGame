@@ -7,6 +7,7 @@ local xR =math.pi/2
 local speedR = 0 
 local xRMax = math.pi/2
 function character:update(dt)
+  
     mouse.x,mouse.y=love.mouse.getPosition()
     if love.mouse.isDown(1)  then
         if ( mouse.x > screenWidth/2-800*k and  mouse.x <screenWidth/2+800*k and mouse.y > 0 and  mouse.y <screenHeight and flagtouch3 ==false) then
@@ -22,11 +23,19 @@ function character:update(dt)
         if ( mouse.x > screenWidth/2-800*k and  mouse.x <screenWidth/2+800*k and mouse.y > 0 and  mouse.y <screenHeight and  flagtouch3 == true) then
             if ( math.abs(mouse.y - mousePosY)>10*k) then
                 if ((mouse.y - mousePosY) <0) then
-                    speedR = -1
+                    if ( speedR < 0 ) then 
+                        speedR = -6
+                    else
+                        speedR = -3
+                    end
                     xRMax = xRMax-math.pi/2
                 else
                     xRMax = xRMax+math.pi/2
-                    speedR = 1
+                     if ( speedR > 0 ) then 
+                        speedR = 6
+                    else
+                        speedR = 3
+                    end
                 end
                 if (xRMax< math.pi/2) then 
                     xRMax = math.pi/2
@@ -42,17 +51,18 @@ function character:update(dt)
     end
     
     if (xR<xRMax and speedR>0) then
-        if (xR<xRMax) then 
-            xR = xR+speedR*dt
-        else
-            xR = xRMax
+        xR = xR+(xRMax-xR)*speedR*dt
+    else
+        if (xR>=xRMax and speedR>0) then 
+            speedR = 0
         end
     end
+
     if (xR>xRMax and speedR<0) then
-        if (xR>xRMax) then 
-            xR = xR+speedR*dt
-        else
-            xR = xRMax
+        xR = xR+(xR-xRMax)*speedR*dt
+    else
+        if (xR<=xRMax and speedR<0) then 
+            speedR = 0
         end
     end
 end
@@ -75,15 +85,16 @@ function character:draw()
     playerBatch:clear()
     playerDrawCharacter(screenWidth-math.sin(xR-math.pi)*screenWidth/2,screenHeight/2-math.cos(xR-math.pi)*screenWidth/2 ,dt,3)
     love.graphics.draw(playerBatch)
+    local anglePlayerHeight = math.asin((140*k)/(screenWidth/2))
+    bodyButtonDirect(screenWidth-math.sin(xR+anglePlayerHeight)*screenWidth/2+50*k,screenHeight/2-math.cos(xR+anglePlayerHeight)*screenWidth/2,but1,'left',-math.pi/6-math.pi/2)
+    bodyButtonDirect(screenWidth-math.sin(xR-anglePlayerHeight)*screenWidth/2+50*k,screenHeight/2-math.cos(xR-anglePlayerHeight)*screenWidth/2,but2,'right',math.pi/6+math.pi/2)
     
-    bodyButtonDirect(screenWidth-math.sin(xR+math.pi/6)*screenWidth/2,screenHeight/2-math.cos(xR+math.pi/6)*screenWidth/2,but1,'left',-math.pi/1.6)
-    bodyButtonDirect(screenWidth-math.sin(xR-math.pi/6)*screenWidth/2,screenHeight/2-math.cos(xR-math.pi/6)*screenWidth/2,but2,'right',math.pi/1.6)
+     bodyButtonDirect(screenWidth-math.sin(xR+anglePlayerHeight-math.pi/2)*screenWidth/2+50*k,screenHeight/2-math.cos(xR+anglePlayerHeight-math.pi/2)*screenWidth/2,but1,'left',-math.pi/6-math.pi/2)
+    bodyButtonDirect(screenWidth-math.sin(xR-anglePlayerHeight-math.pi/2)*screenWidth/2+50*k,screenHeight/2-math.cos(xR-anglePlayerHeight-math.pi/2)*screenWidth/2,but2,'right',math.pi/6+math.pi/2)
     
-     bodyButtonDirect(screenWidth-math.sin(xR+math.pi/6-math.pi/2)*screenWidth/2,screenHeight/2-math.cos(xR+math.pi/6-math.pi/2)*screenWidth/2,but1,'left',-math.pi/1.6)
-    bodyButtonDirect(screenWidth-math.sin(xR-math.pi/6-math.pi/2)*screenWidth/2,screenHeight/2-math.cos(xR-math.pi/6-math.pi/2)*screenWidth/2,but2,'right',math.pi/1.6)
+     bodyButtonDirect(screenWidth-math.sin(xR+anglePlayerHeight-math.pi)*screenWidth/2+50*k,screenHeight/2-math.cos(xR+anglePlayerHeight-math.pi)*screenWidth/2,but1,'left',-math.pi/6-math.pi/2)
+    bodyButtonDirect(screenWidth-math.sin(xR-anglePlayerHeight-math.pi)*screenWidth/2+50*k,screenHeight/2-math.cos(xR-anglePlayerHeight-math.pi)*screenWidth/2,but2,'right',math.pi/6+math.pi/2)
     
-     bodyButtonDirect(screenWidth-math.sin(xR+math.pi/6-math.pi)*screenWidth/2,screenHeight/2-math.cos(xR+math.pi/6-math.pi)*screenWidth/2,but1,'left',-math.pi/1.6)
-    bodyButtonDirect(screenWidth-math.sin(xR-math.pi/6-math.pi)*screenWidth/2,screenHeight/2-math.cos(xR-math.pi/6-math.pi)*screenWidth/2,but2,'right',math.pi/1.6)
     love.graphics.draw(UIBatch)
     love.graphics.setColor(1,1,1,1)
     UIBatch:clear()

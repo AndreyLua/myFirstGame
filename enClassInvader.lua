@@ -22,8 +22,8 @@ enemyInvaderTable = {
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    2, --health
-    2, --healthM
+    5, --health
+    5, --healthM
     {}, -- traces
     0,-- angleWing
     0,-- angleWingFlag

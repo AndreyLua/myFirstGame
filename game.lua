@@ -14,7 +14,7 @@ playerGerDamageEffect = {}
 --effects
 --#####################################################
 -------------------gameParametrs
-score = 100
+score = 800
 borderWidth =screenWidth/2
 borderHeight = screenHeight/2
 numberCleaner = 0 

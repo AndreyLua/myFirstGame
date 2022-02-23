@@ -67,18 +67,18 @@ function bodyButtonDirect(x,y,flag,direct,angle,scale)
         if ( direct == 'left') then
             if (flag) then 
                 UIBatch:setColor(1,1,1,0.6)
-                UIBatch:add(UIQuads.butDirect,x,y,angle,k/4,k2/4,90,160)
+                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,90,160)
                 UIBatch:setColor(1,1,1,1) 
             else
-                UIBatch:add(UIQuads.butDirect,x,y,angle,k/4,k2/4,90,160)
+                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,90,160)
             end
         else
             if (flag) then 
                 UIBatch:setColor(1,1,1,0.6)
-                UIBatch:add(UIQuads.butDirect,x,y,angle,k/4,k2/4,90,160)
+                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,90,160)
                 UIBatch:setColor(1,1,1,1) 
             else
-                UIBatch:add(UIQuads.butDirect,x,y,angle,k/4,k2/4,90,160)
+                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,90,160)
             end
         end
     end
