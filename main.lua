@@ -23,35 +23,34 @@ bgMusic = love.audio.newSource(bgMusicTableMix[bgMusicI],"stream",false)
 bgMusic:setVolume(0.2)
 bgMusic:play()
 
-objCrash1 ="sounds/obj/crash1.ogg"
-objCrash2 ="sounds/obj/crash2.ogg"
-objCrash3 ="sounds/obj/crash3.ogg"
+objCrash1 = love.audio.newSource("sounds/obj/crash1.ogg", "static",false)
+objCrash2 = love.audio.newSource("sounds/obj/crash2.ogg", "static",false)
+objCrash3 = love.audio.newSource("sounds/obj/crash3.ogg", "static",false)
 objCrashSounds = {objCrash1,objCrash2,objCrash2}
 
-playerHit1 = "sounds/player/hit/1.wav"
-playerHit2 = "sounds/player/hit/2.wav"
-playerHit3 = "sounds/player/hit/3.wav"
-playerHit4 = "sounds/player/hit/4.wav"
+playerHit1 = love.audio.newSource("sounds/player/hit/1.wav", "static",false)
+playerHit2 = love.audio.newSource("sounds/player/hit/2.wav", "static",false)
+playerHit3 = love.audio.newSource("sounds/player/hit/3.wav", "static",false)
+playerHit4 = love.audio.newSource("sounds/player/hit/4.wav", "static",false)
 playerHitSounds = {playerHit1,playerHit2,playerHit3,playerHit4}
 
-playerHurt1 = "sounds/player/hurt/1.wav"  
-playerHurt2 = "sounds/player/hurt/2.wav"  
-playerHurt3 = "sounds/player/hurt/3.wav"  
-playerHurt4 = "sounds/player/hurt/4.wav"   
+playerHurt1 = love.audio.newSource("sounds/player/hurt/1.wav", "static",false)
+playerHurt2 = love.audio.newSource("sounds/player/hurt/2.wav", "static",false)
+playerHurt3 = love.audio.newSource("sounds/player/hurt/3.wav", "static",false)
+playerHurt4 = love.audio.newSource("sounds/player/hurt/4.wav", "static",false)
 playerHurtSounds = {playerHurt1,playerHurt2,playerHurt3,playerHurt4}
 
-uiClick = "sounds/ui/click/2.ogg"   
-uiSelect = "sounds/ui/click/1.ogg"   
-uiClose = "sounds/ui/close/11.ogg" 
-uiSwitch = "sounds/ui/switch/4.ogg" 
-uiScroll = "sounds/ui/scroll/2.wav"
-uiError = "sounds/ui/error/1.ogg"
-uiParticl ="sounds/ui/particl/1.ogg" 
-uiParticlDestroy ="sounds/ui/particl/3.ogg" 
+uiClick = love.audio.newSource("sounds/ui/click/2.ogg", "static",false)
+uiSelect = love.audio.newSource("sounds/ui/click/1.ogg", "static",false)
+uiClose = love.audio.newSource("sounds/ui/close/11.ogg", "static",false)
+uiSwitch = love.audio.newSource("sounds/ui/switch/4.ogg" , "static",false)
+uiScroll = love.audio.newSource("sounds/ui/scroll/2.wav", "static",false)
+uiError = love.audio.newSource( "sounds/ui/error/1.ogg", "static",false)
+uiParticl =love.audio.newSource("sounds/ui/particl/1.ogg","static",false)
+uiParticlDestroy =love.audio.newSource("sounds/ui/particl/3.ogg","static",false)
 
-pickUp = "sounds/player/pickUp/1.wav"
-enExpl ="sounds/en/atack/expl.wav"
-
+pickUp = love.audio.newSource("sounds/player/pickUp/1.wav", "static",false)
+enExpl = love.audio.newSource("sounds/en/atack/expl.wav", "static",false)
 
 ---------------------------------------------------
 ------------------SETS_And_FON-----------------------------
@@ -190,44 +189,44 @@ function loadPlayerParametrsAndImg()
 
     playerSkills[4] ={
     img =skillQuads.meleeDef,------
-    lvl = 25,
+    lvl = 1,
     numb = 3 ,
     }
     playerSkills[5] ={
     img =skillQuads.rangeDef,------
-    lvl = 25,
+    lvl = 1,
     numb = 4 ,
     }
     playerSkills[3] ={
     img =skillQuads.atack,
-    lvl = 25,
+    lvl = 1,
     numb = 5 ,
   }
  
     playerSkills[6] ={
     img =skillQuads.speed,
-    lvl = 25,
+    lvl = 1,
     numb = 6 ,
     }
     playerSkills[7] ={
     img =skillQuads.collectRange,
-    lvl = 25,
+    lvl = 1,
     numb = 7 ,
   }
   
     playerSkills[8] ={
     img =skillQuads.waveAtack,
-    lvl = 25,
+    lvl = 1,
     numb = 8 ,
     }
     playerSkills[9] ={
     img =skillQuads.bloodAtack,
-    lvl = 25,
+    lvl = 1,
     numb = 9 ,
     }
     playerSkills[10] ={
     img =skillQuads.sealAtack,
-    lvl = 25,
+    lvl = 1,
     numb = 10 ,
   }
         --[[
@@ -326,6 +325,7 @@ function loadPlayerParametrs()
         scaleBody = 35,
         boostRegen = 100,
         boostWaste = 150,
+        boostWasteSp =500,
         boostWasteEnHit = 5,
     }
     playerAbility = {
@@ -342,6 +342,7 @@ function loadPlayerParametrs()
         boostRegen = playerStaticParametrs.boostRegen,
         boostWaste = playerStaticParametrs.boostWaste,
         boostWasteEnHit = playerStaticParametrs.boostWasteEnHit,
+        boostWasteSp = playerStaticParametrs.boostWasteSp,
     }
     playerSkillParametrs = {
         hpK = 0, -- common1
@@ -371,18 +372,18 @@ function loadPlayerParametrs()
     skillCostUpgrade = {
         200,-- common1 hp
         200,-- common2 en
-        100,-- common3 meleeDef
-        100,-- common4 rangeDef
-        100,-- common5 damage
-        100,-- common6 speed
-        100,-- common7 collectRange
-        100,-- rare8 waveAtack
-        100,-- rare9 bloodAtack
-        100,-- rare10 electricAtack 
-        100,-- rare11 spikeArmor
-        100,-- legend12 dopEn
-        100,-- legend13 trade
-        100,-- legend14 vampir
+        400,-- common3 meleeDef
+        400,-- common4 rangeDef
+        500,-- common5 damage
+        400,-- common6 speed
+        250,-- common7 collectRange
+        400,-- rare8 waveAtack
+        400,-- rare9 bloodAtack
+        400,-- rare10 electricAtack 
+        600,-- rare11 spikeArmor
+        600,-- legend12 dopEn
+        600,-- legend13 trade
+        700,-- legend14 vampir
     }  
 end
 

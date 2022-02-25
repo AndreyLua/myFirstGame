@@ -86,16 +86,15 @@ function settings:draw()
     butChange(xMusicVolumeBut,screenHeight/2,MusicVolume,2)
     butChange(xSoundsVolumeBut,screenHeight/2,SoundsVolume,2)
     butChange(xSensitivityBut,screenHeight/2,Sensitivity,2)
-    acceptBut(xVibrationBut,screenHeight/2+screenHeight/4,0.45,false) 
-    
+    bodyButton(xSoundsVolumeBut+150*k,screenHeight/2,false)
     love.graphics.draw(UIBatch)
     
     textButton("Music volume",xMusicVolume,screenHeight/2,false,0.9)
     textButton("Sounds volume",xSoundsVolume,screenHeight/2,false,0.9)
     
-    textButton("Vibration",xVibration,screenHeight/2+screenHeight/4,false,0.7)
-    textButton("Controller",xController,screenHeight/2-screenHeight/4,false,0.7)
-    
+ 
+    textButton("Controller",xController,screenHeight/2,false,0.9)
+    textButton("Not fixed",xSoundsVolumeBut+150*k,screenHeight/2,false,0.8)
     textButton("Sensitivity",xSensitivity,screenHeight/2,false,0.9)
     
 

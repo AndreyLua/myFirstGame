@@ -138,14 +138,14 @@ function skills:update(dt)
                 else
                     indexR = math.floor(xR / (math.pi/6))
                 end
-                if (speedR == 0 and playerSkills[indexR+4] and  skillCostUpgrade[(playerSkills[indexR+4].numb)]<= score) then
+                if (speedR == 0 and playerSkills[indexR+4] and  ((playerSkills[indexR+4].lvl)*skillCostUpgrade[(playerSkills[indexR+4].numb)])<= score) then
                     AddSound(uiSelect,0.3)
                     flagAcceptMenu = true
                     flagRes = -0.1
                     flagResBool = true
                 else
                     AddSound(uiError,0.3)
-                  ---------------------------------
+                    ---------------------------------
                     if ( playerSkills[indexR+4]) then 
                         if (flagRes == nil or  flagRes < 0) then 
                             flagRes = 0

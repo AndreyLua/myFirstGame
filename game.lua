@@ -118,7 +118,6 @@ function gamestate.focus(v)
 end
 
 function love.update(dt)
-    UpdateSound()
     UpdateBgMusic(dt)
 end
 

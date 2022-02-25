@@ -205,6 +205,10 @@ function enAtackPlayer(dmg,tip,self)
 end
 
 function playerAtackEn(self,dt)
+    if (playerSkillParametrs.waveAtFlag or playerSkillParametrs.bloodAtFlag or playerSkillParametrs.sealAtFlag or playerSkillParametrs.vampirFlag) then 
+        boost.long = boost.long - (playerAbility.boostWasteSp-(playerAbility.boostWasteSp*playerSkillParametrs.enK))*     playerAbility.boostWasteEnHit*dt
+    end
+        
     AddSound(playerHitSounds,0.3)
     local clow1X =player.x +playerDrawPar[playerAbility.tip].clowX*k2*math.sin(controler.angle+playerDrawPar[playerAbility.tip].clowR)
     local clow1Y =player.y +playerDrawPar[playerAbility.tip].clowX*k2*math.cos(controler.angle+playerDrawPar[playerAbility.tip].clowR)

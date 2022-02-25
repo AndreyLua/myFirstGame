@@ -7,12 +7,11 @@ function AddSound(sound,volume,noise)
     if (type(sound) == 'table') then
         sound =sound[math.random(1,#sound)]
     end
-    local soundSource = love.audio.newSource(sound, "static",false)
-    soundSource:setVolume(volume*(SoundsVolume))
     if ( noise) then 
-        soundSource:setPitch(math.random()/7*math.random(-1,1)+1)
+        sound:setPitch(math.random()/7*math.random(-1,1)+1)
     end
-    table.insert(soundEffects,soundSource)
+    sound:setVolume(volume*(SoundsVolume))
+    sound:clone():play()
 end
 
 function UpdateBgMusic(dt)
@@ -34,17 +33,5 @@ function UpdateBgMusic(dt)
         end
     end
 end
-
-
-
-function UpdateSound()
-    for i=#soundEffects,1,-1 do
-          love.audio.play(soundEffects[i])
-          if (soundEffects[i]:isPlaying()) then 
-              table.remove(soundEffects,i)
-          end
-    end
-end
-
 
 return soundFunction
