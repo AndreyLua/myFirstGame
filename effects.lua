@@ -447,6 +447,39 @@ function playerGetDamageEffect(dt)
     end  
 end
 
+function newStar()
+    local star = {
+        x = -borderWidth-200*k,
+        y = math.random(-borderHeight,borderHeight*2),
+        speed = math.random(1,3)/2+0.2,
+        speedA = math.random(1,3),
+        color = math.random()+0.4,
+        angleFall =0.4+math.random(-1,1)*0.8,
+        
+    }
+    star.x,star.y,speed = objGeo(math.random(1,4))
+    table.insert(stars,star)
+end
+
+function drawStar(dt)
+    love.graphics.setColor(0.8,0.9,0.9,0.5)
+    for i =#stars, 1,-1 do
+        stars[i].x = stars[i].x+stars[i].speed*dt*200*k*math.cos(stars[i].angleFall)*stars[i].speedA
+        stars[i].y = stars[i].y+stars[i].speed*dt*200*k*math.sin(stars[i].angleFall)*stars[i].speedA
+        stars[i].speedA = stars[i].speedA -0.5*dt
+        if ( stars[i].speedA < 1 ) then 
+            stars[i].speedA = 1
+        end
+        love.graphics.circle('fill',stars[i].x,stars[i].y,1.5*k)
+        for j =1, 10 do 
+            love.graphics.setColor(0.8/(1+j/6)*stars[i].color,0.9,0.9,(1*stars[i].speedA)/(1+j/6)*1)
+            love.graphics.circle('fill',stars[i].x-j*1*k*math.cos(stars[i].angleFall),stars[i].y-j*1*k*math.sin(stars[i].angleFall),1.8*k/(1+j/4))
+        end
+        allBorder(i,stars)
+    end
+end
+
+
 
 function gradient(dt)
     if (gradientI == 1 ) then

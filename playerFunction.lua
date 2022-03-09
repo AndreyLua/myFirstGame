@@ -7,8 +7,16 @@ function playerControl()
     player.body:moveTo(player.x,player.y)
     if ( love.mouse.isDown(1) ) then
         if ( controler.flag == false and mouse.x > screenWidth / 9) then 
-            controler.x0 = mouse.x
-            controler.y0 = mouse.y
+            if ( controllerChoose == 1 ) then 
+                controler.x0 = mouse.x
+                controler.y0 = mouse.y
+            elseif ( controllerChoose == 2 ) then 
+                controler.x0 = screenWidth/1.2
+                controler.y0 = screenHeight - screenHeight/3
+            elseif ( controllerChoose == 3 ) then  
+                controler.x0 = screenWidth/1.2
+                controler.y0 = screenHeight/3
+            end
             controler.flag = true
         end
         if ( controler.flag == true and mouse.x > screenWidth / 9) then 
@@ -19,8 +27,8 @@ function playerControl()
                 controler.angle = math.atan2(controler.x,controler.y)
             end  
             if (( math.abs(controler.x) >1*k or math.abs(controler.y)>1*k2)) then
-                player.ax  =math.sin(controler.angle)*math.abs(controler.x*screenWidth/screenHeight/3.5)
-                player.ay  =math.cos(controler.angle)*math.abs(controler.y*screenWidth/screenHeight/3.5)
+                player.ax  =math.sin(controler.angle)*math.abs(controler.x*screenWidth/screenHeight/3.5)*Sensitivity
+                player.ay  =math.cos(controler.angle)*math.abs(controler.y*screenWidth/screenHeight/3.5)*Sensitivity
                 
                 if ( player.ax > playerAbility.maxSpeed) then
                     player.ax = playerAbility.maxSpeed 

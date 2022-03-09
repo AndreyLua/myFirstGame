@@ -161,9 +161,8 @@ mouse = {
 MusicVolume = 1
 SoundsVolume = 1
 Sensitivity = 1
+controllerChoose = 1
 
-
-flagVibr = false
 gradientR = 1
 gradientG = 0 
 gradientB = 0 
@@ -256,6 +255,9 @@ function loadPlayerParametrsAndImg()
 end
 
 function loadPlayerParametrs()
+    playerTip = 1 
+    playerTipParametrs = {true,false,false}
+  
     playerDrawPar = {
         {
           bodyW  = 464, 

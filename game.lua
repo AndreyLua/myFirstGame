@@ -11,6 +11,8 @@ deffenseEffects = {}
 bloodPart = {}
 greenPlayerEffect = {} 
 playerGerDamageEffect = {} 
+
+stars = {} 
 --effects
 --#####################################################
 -------------------gameParametrs
@@ -307,6 +309,8 @@ function  game:draw()
     love.graphics.clear()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon1,0,0,0,k,k2)
+    drawStar(dt)
+       love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon2,(-player.x+40*k/2+screenWidth/2)/20,(-player.y+40*k2/2+screenHeight/2)/40,0,k,k2)
     love.graphics.draw(fon3,(-player.x+40*k/2+screenWidth/2)/7,(-player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
     if (flaginv == false ) then
@@ -606,17 +610,22 @@ function allDraw(dt)
     end
 end
 function allBorder(i,mas)
-    ----------если залетел на карту поднимаем флаг-------------------------------------  
-    if (mas[i].x< borderWidth*2-mas[i].collScale*k/2 and  mas[i].x> -borderWidth +mas[i].collScale*k/2 and  mas[i].y> -borderHeight+mas[i].collScale*k2/2 and  mas[i].y<borderHeight*2-mas[i].collScale*k2/2) then
-        mas[i].f = true
+    if (mas[i].collScale~=nil) then 
+        if (mas[i].x< borderWidth*2-mas[i].collScale*k/2 and  mas[i].x> -borderWidth +mas[i].collScale*k/2 and  mas[i].y> -borderHeight+mas[i].collScale*k2/2 and  mas[i].y<borderHeight*2-mas[i].collScale*k2/2) then
+            mas[i].f = true
+        end
+    else
+        if (mas[i].x > borderWidth*2+500*k or mas[i].x < -borderWidth-500*k or mas[i].y < -borderHeight-500*k or  mas[i].y > borderHeight*2+500*k ) then
+            table.remove(mas,i)
+        end
     end
     if ( mas == obj and mas[i].pok > 0 ) then 
         if ( mas[i].x > borderWidth*2 or mas[i].x < -borderWidth or mas[i].y < -borderHeight or  mas[i].y > borderHeight*2 ) then
-           table.remove(mas,i)
+            table.remove(mas,i)
         end 
     end 
-    --------------------------------------------------
-    if ( mas[i] and mas[i].f == true) then
+    
+    if ( mas[i] and mas[i].f == true and mas[i].collScale~=nil) then
         if ( mas[i].x > borderWidth*2-mas[i].collScale*k/2) then 
             mas[i].ax = -mas[i].ax
             mas[i].x =borderWidth*2 - 0.1*k-mas[i].collScale*k/2
@@ -634,7 +643,7 @@ function allBorder(i,mas)
             mas[i].y = borderHeight*2 - 0.1*k2-mas[i].collScale*k2/2
         end
         if ( mas[i].x > borderWidth*2 or mas[i].x < -borderWidth or mas[i].y < -borderHeight or  mas[i].y > borderHeight*2 ) then
-           table.remove(mas,i)
+            table.remove(mas,i)
         end
     end
 end

@@ -2,7 +2,7 @@ local UI = {}
 
 function butChange(x,y,xPoint,maxPointX)
     UIBatch:setColor(1,1,1,1)    
-    UIBatch:add(UIQuads.butChange,x,y,-math.pi/2,k/5,k2/5,   1340/2, 146/2)
+    UIBatch:add(UIQuads.butChange,x,y,-math.pi/2,k/5,k2/5,1340/2, 146/2)
     UIBatch:add(UIQuads.butPoint,x,y+1340*k/5/2-1340*k/5*xPoint/maxPointX,-math.pi/2,k/4,k2/4,120/2, 200/2)
 end
 
@@ -67,18 +67,18 @@ function bodyButtonDirect(x,y,flag,direct,angle,scale)
         if ( direct == 'left') then
             if (flag) then 
                 UIBatch:setColor(1,1,1,0.6)
-                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,90,160)
+                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,160,160)
                 UIBatch:setColor(1,1,1,1) 
             else
-                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,90,160)
+                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,160,160)
             end
         else
             if (flag) then 
                 UIBatch:setColor(1,1,1,0.6)
-                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,90,160)
+                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,160,160)
                 UIBatch:setColor(1,1,1,1) 
             else
-                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,90,160)
+                UIBatch:add(UIQuads.butDirectRotated,x,y,angle,k/4,k2/4,160,160)
             end
         end
     end
@@ -89,13 +89,28 @@ function textButton(name,x,y,flag,scale)
         scale = 1 
     end
     local fontWidth = font:getWidth(name)
-    local fontHeight = font:getHeight(name)
+    local fontHeight = font:getHeight()
     if (flag) then 
         love.graphics.setColor(1,1,1,0.6)
-        love.graphics.print(name, x-fontHeight/1.9*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
+        love.graphics.print(name, x-fontHeight/2*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
         love.graphics.setColor(1,1,1,1)
     else
-        love.graphics.print(name, x-fontHeight/1.9*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
+        love.graphics.print(name, x-fontHeight/2*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
+    end
+end
+
+function textButtonFixed(nameMas,x,y,flag,scale,state)
+    if not(scale) then
+        scale = 1 
+    end
+    local fontWidth = font:getWidth(nameMas[state])
+    local fontHeight = font:getHeight()
+    if (flag) then
+        love.graphics.setColor(1,1,1,0.6)
+        love.graphics.print(nameMas[state], x-fontHeight/2*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
+        love.graphics.setColor(1,1,1,1)
+    else
+        love.graphics.print(nameMas[state], x-fontHeight/2*k2*scale,y+fontWidth/2*k*scale,-math.pi/2,k*scale,k2*scale)
     end
 end
 
