@@ -7,7 +7,7 @@ enemyInvaderTable = {
     HC.rectangle(-100*k,-100*k2,16*k,25*k2), --body
     0,  --timer
     20, -- invTimer
-    0, -- atack
+    79, -- atack
     80, --atackTimer
     0.216, --color1 
     0.224, --color2
@@ -30,10 +30,11 @@ enemyInvaderTable = {
     10,--cost
     20, -- charge
     20, --chargeTimer
+    true, -- atacked
 }
 
 enemyInvaderClass = Class{
-    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag,cost,charge,chargeTimer)
+    init = function(self,w,h,tip,body,timer,invTimer,atack,atackTimer,color1,color2,color3 ,scale,angleMouth,angleBody,angleMouthFlag,damage,f,x,y,ax,ay,health,healthM,traces,angleWing,angleWingFlag,cost,charge,chargeTimer,atacked)
         self.w = w
         self.h = h 
         self.tip = tip 
@@ -63,6 +64,7 @@ enemyInvaderClass = Class{
         self.cost = cost
         self.charge = charge
         self.chargeTimer = chargeTimer
+        self.atacked = atacked
     end;
     newBody =  function(self)
         local bodyEn  = HC.rectangle(self.x,self.y, enemyInvaderTable[1]*k, enemyInvaderTable[2]*k)
@@ -95,12 +97,13 @@ enemyInvaderClass = Class{
         end
     end;
     atackStart = function(self)
-        if (self.atack and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= 450*k ) then
+        if (self.atack and self.atacked and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= 450*k and EnFront(self) ) then
             self.charge = self.chargeTimer-0.001
             self.angleWingFlag = 1
             if ( self.angleWing < -0.1) then 
                 self.atack = self.atackTimer-0.001
-                enPreFire(player.x,player.y,self.x,self.y,self.angleBody,self.damage,15,self)
+                self.atacked = false
+                enPreFire(player.x,player.y,self.x+30*k*math.sin(self.angleBody),self.y+30*k2*math.cos(self.angleBody),self.angleBody,self.damage,15,self)
             end
         end
     end;
@@ -115,6 +118,7 @@ enemyInvaderClass = Class{
             self.charge  = self.charge  - 30*dt
         end
         if ( self.charge < 0) then
+            self.atacked = true
             self.charge  = self.chargeTimer
         end
     end;
@@ -191,7 +195,8 @@ enemyInvaderClass = Class{
     end;
     move =  function(self,dt)
         self.body:moveTo(self.x, self.y)
-        self.body:setRotation(-self.angleBody) 
+        self.body:setRotation(-self.angleBody)
+       
         if (self.invTimer and  self.invTimer == self.timer) then
             self.moveNormal(self,dt)
         else
@@ -200,8 +205,10 @@ enemyInvaderClass = Class{
     end;
     moveNormal = function(self,dt)
         local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
-        self.angleBodyTr(self,anglePlayerEn,dt)
-        self.angleWingTr(self,dt)
+        if ( self.atacked) then 
+            self.angleBodyTr(self,anglePlayerEn,dt)
+            self.angleWingTr(self,dt)
+        end
         if ( (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) >= 400*k ) then
             self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
             self.ay=self.ay+80*k2*math.cos(anglePlayerEn)*dt

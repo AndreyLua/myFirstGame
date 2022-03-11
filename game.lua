@@ -110,6 +110,7 @@ playerSledi = {}
 
 masli= {} 
 
+loadSave()
 lvlParametrs()
 end
 
@@ -247,7 +248,7 @@ end
 
 function game:keypressed(key1,key, code)
     if key == "escape" then
-       
+      --  print(love.filesystem.load( 'Save.lua' ))
         if gamestate.current() == self and player.isAlive then
             gamestate.switch(pause)
         end
@@ -271,13 +272,6 @@ function game:movement(dt)
         flagtouch=false
         flagtouch1 = true
     end   
-    if love.keyboard.isDown('w') then
-     
-       kekKK = kekKK +0.01
-    end
-    if love.keyboard.isDown('s') then
-       kekKK = kekKK -0.01
-    end
     if love.keyboard.isDown('e') then
         local Geo  =math.random(1,4)
         allSpawn(obj,Geo)

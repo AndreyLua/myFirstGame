@@ -398,6 +398,7 @@ end
 
 function playerDie()
     if ( hp.long<=0) then 
+        makeSave()
         gamestate.switch(die)
     end
 end

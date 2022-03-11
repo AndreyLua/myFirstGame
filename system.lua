@@ -82,6 +82,28 @@ function rot(mode,x,y,w,h,rx,ry,segments,r,ox,oy)
   love.graphics.pop()
 end
 
+function EnFront(en) 
+    local flagAt = false
+    local anglePlEn =  math.atan2(player.x-en.x, player.y-en.y) 
+    if (anglePlEn/math.abs(anglePlEn)==en.angleBody/math.abs(en.angleBody))then
+        if (math.abs(math.abs(anglePlEn) - math.abs(en.angleBody)) <  math.pi/4) then 
+            flagAt = true
+        end
+    else
+        if (math.abs(anglePlEn)+math.abs(en.angleBody)> 2*math.pi - math.abs(anglePlEn)-math.abs(en.angleBody)) then
+            if ((2*math.pi - math.abs(anglePlEn)-math.abs(en.angleBody)) <  math.pi/4) then 
+                flagAt = true
+            end
+        else 
+            if ((math.abs(anglePlEn)+math.abs(en.angleBody)) <  math.pi/4) then 
+                flagAt = true
+            end
+        end
+    end
+    return flagAt
+end
+
+
 function checkCircle(x,y,scale1,scale2,x2,y2,r)
     if ( (math.sqrt((x-r-x2)*(x-r-x2)+(y-r-y2)*(y-r-y2))<r) or (math.sqrt((x-r+scale1*40*k-x2)*(x-r+scale1*40*k-x2)+(y-r-y2)*(y-r-y2))<r) or (math.sqrt((x-r-x2)*(x-r-x2)+(y-r+scale2*40*k2-y2)*(y-r+scale2*40*k2-y2))<r) or (math.sqrt((x-r+scale1*40*k-x2)*(x-r+scale1*40*k-x2)+(y-r+scale2*40*k2-y2)*(y-r+scale2*40*k2-y2))<r) ) then
         return true

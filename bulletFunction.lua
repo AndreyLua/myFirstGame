@@ -125,9 +125,15 @@ end
     end
     
     function bulletsDraw()
-        love.graphics.setColor(0.8,0.5,0.5,1)
+        enBatch:setColor(1,1,1,1)
         for i = 1, #enemyBullets do
-          love.graphics.circle('line',enemyBullets[i].x,enemyBullets[i].y,enemyBullets[i].scale*k)
+            if (enemyBullets[i].scale < 5) then 
+                enBatch:add(enQuads.bulletShooter,enemyBullets[i].x,enemyBullets[i].y,0,k/15*enemyBullets[i].scale,k2/15*enemyBullets[i].scale,25, 25)
+            else
+                enBatch:add(enQuads.bulletInvader,enemyBullets[i].x,enemyBullets[i].y,0,k/50*enemyBullets[i].scale,k2/50*enemyBullets[i].scale,65, 65)
+            end
+          
+        --    love.graphics.circle('line',enemyBullets[i].x,enemyBullets[i].y,enemyBullets[i].scale*k)
         end
     end
   

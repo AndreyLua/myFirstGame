@@ -1,9 +1,12 @@
 ------------------LIBS ----------------------------
+binser = require "libs/binser/binser"
 gamestate = require "libs/gamestate" 
 Timer = require 'libs/hump.timer' 
 Class = require "libs/hump.class"
 HC = require 'libs/HC'
 moonshine = require 'moonshine'
+
+save = {}
 ---------------------------------------------------
 ------------------EFFECTS -------------------------
 effect1 = moonshine(moonshine.effects.pixelate)
@@ -138,6 +141,7 @@ character = require "character"
 settings = require "settings" 
 effects = require "effects" 
 system = require "system" 
+saveFunction = require "saveFunction" 
 UI= require "UI"
 ----------------------------------
 inv = Timer.new()
@@ -461,6 +465,9 @@ end
 
 function loadEnImg()
     enQuads = {
+        bulletShooter = love.graphics.newQuad(1136,  815,  50,50, enSet:getDimensions()),
+        bulletInvader = love.graphics.newQuad(1056,  907,  130,130, enSet:getDimensions()),
+        
         -------------------------------------------------------------------------
         bodyMelee = love.graphics.newQuad(0,  0,  120,176, enSet:getDimensions()),
         clow1Melee = love.graphics.newQuad(120,  0,  72, 88, enSet:getDimensions()),

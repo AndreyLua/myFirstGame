@@ -141,6 +141,9 @@ resClass = Class {
         if (self.timer == self.invTimer and  checkCollision(player.x-20*k,player.y-20*k2, 40*k, 40*k2,self.x,self.y,1*k,1*k2)) then
             if ( self.tip == 4 or self.tip == 5 or self.tip == 6) then
                 if ( self.tip == 4 ) then 
+                    for i =1,math.random(3,5) do 
+                        newGreenPlayerEffect()
+                    end
                     hp.long=hp.long+50
                     resRemove(i)
                 end
