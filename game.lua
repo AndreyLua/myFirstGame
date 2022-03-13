@@ -124,6 +124,10 @@ function love.update(dt)
     UpdateBgMusic(dt)
 end
 
+function love.quit()
+    makeSave()
+end
+
 function love.keypressed(key, code)
     if key == "escape" then
         gamestate.switch(pause)

@@ -10,6 +10,7 @@ function wavesUpdate(dt)
         end
         colWave =waves[2]
         wavesNextWave()
+        makeSave()
     end
 end
 
