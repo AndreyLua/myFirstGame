@@ -26,7 +26,7 @@ function loadSave()
             numberWave =TableSave[2]
         end
         if ( TableSave[4]) then 
-            playerSkills= TableSave[4]
+            loadPlayerSkills(TableSave[4])
         end
         if ( TableSave[5]) then 
             loadParticl(TableSave[5])
@@ -37,8 +37,21 @@ end
 function makeSave()
     local playerSettings = {MusicVolume, SoundsVolume, Sensitivity, controllerChoose}
     local particlSaveMas = saveParticl() 
-    save = {score,numberWave,playerSettings,playerSkills,particlSaveMas}
+    local playerSkillsSaveMas = savePlayerSkills()
+    save = {score,numberWave,playerSettings,playerSkillsSaveMas,particlSaveMas}
     love.filesystem.write('save.lua',  binser.serialize(save))
+end
+
+function savePlayerSkills()
+    local playerSkillsSaveMas = {}
+    for i =1, #playerSkills do
+        local savePlayerSkill ={
+            lvl = playerSkills[i].lvl,
+            numb = playerSkills[i].numb
+        }
+        table.insert(playerSkillsSaveMas,savePlayerSkill)
+    end
+    return playerSkillsSaveMas
 end
 
 function saveParticl()
@@ -80,4 +93,15 @@ function loadParticl(particlSaveMas)
     end
 end
 
+function loadPlayerSkills(playerSkillsSaveMas)
+    playerSkills = {} 
+    for i =1, #playerSkillsSaveMas do
+        local skill = {
+            img = allSkills[playerSkillsSaveMas[i].numb],
+            numb = playerSkillsSaveMas[i].numb,
+            lvl = playerSkillsSaveMas[i].lvl
+        }
+        table.insert(playerSkills,skill)
+    end
+end
 return saveFunction
