@@ -23,7 +23,7 @@ function loadSave()
             score =TableSave[1]
         end
         if ( TableSave[2]) then 
-            numberWave =TableSave[2]
+            numberWave = TableSave[2]
         end
         if ( TableSave[4]) then 
             loadPlayerSkills(TableSave[4])

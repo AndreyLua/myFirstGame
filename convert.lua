@@ -70,7 +70,7 @@ function convert:update(dt)
         countReward = 0 
     end
     -----
-    if ( math.ceil(colbaPar/1.4)>= 30 ) then 
+    if ( math.ceil(#particl/1.4)>= 30 ) then 
         colbaFill= true
     else
         colbaFill= false
@@ -122,11 +122,11 @@ function convert:update(dt)
         end 
 
         if (mouse.x > screenWidth/1.7+220*k-k2/4*120 and  mouse.x <screenWidth/1.7+220*k+ k2/4*120 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and flagButton1 == true) then
-            if (colbaFill==true and colbaPar == #particl) then
+            if (colbaFill==true and (particl[#particl].body:collidesWith(colbaBody))) then
                   particlClearFlag = true
                   AddSound(uiSelect,0.3)
                   AddSound(uiParticlDestroy,0.2,false)
-                  countReward = colbaPar
+                  countReward = #particl
             else
                 if (colbaFill~=true) then 
                     if (flagFill == nil or  flagFill < 0) then 
@@ -213,18 +213,18 @@ function convert:draw()
     sc(0,screenHeight/2)
     local fontWidth = font:getWidth(tostring(score))
     love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
-    if ( math.ceil(colbaPar/1.4)>= 30 ) then 
+    if ( math.ceil(#particl/1.4)>= 30 ) then 
         love.graphics.setColor(0.308,0.661,0.445,1) 
     end
-    if ( math.ceil(colbaPar/1.4)>= 60 ) then 
+    if ( math.ceil(#particl/1.4)>= 60 ) then 
         love.graphics.setColor(0.6,0.3,0.6,1) 
     end
-    if ( math.ceil(colbaPar/1.4)== 100 ) then 
+    if ( math.ceil(#particl/1.4)== 100 ) then 
         love.graphics.setColor(0.8,0.8,0.3,1) 
     end
     flagFill,flagFillBool = noFill(flagFill,dt,flagFillBool)
-    fontWidth = font:getWidth(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%')
-    love.graphics.print(tostring(math.abs(math.ceil(colbaPar/1.4)))..'%',screenWidth/1.7-250*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
+    fontWidth = font:getWidth(tostring(math.abs(math.ceil(#particl/1.4)))..'%')
+    love.graphics.print(tostring(math.abs(math.ceil(#particl/1.4)))..'%',screenWidth/1.7-250*k/1.9, screenHeight/2+fontWidth/2*k2/1.5,-math.pi/2,k/1.5,k2/1.5)
     love.graphics.setColor(1,1,1,1) 
 
     if (flagRewardMenu == true) then 
@@ -438,7 +438,7 @@ function particlCollWithStatic(i,dt)
         end
         if (particl[i].body:collidesWith(colbaBody)) then 
             particl[i].flag = true 
-            colbaPar =   colbaPar + 1 
+            --colbaPar =   colbaPar + 1 
             particl[i].ax =particl[i].ax / 200
             particl[i].ay =particl[i].ay / 200 
         end
@@ -483,7 +483,7 @@ function particlClear(i,dt)
     if (particlClearFlag == true and particl[i].x >screenWidth/1.7+80*k-particlClearX ) then
         expl(particl[i].x,particl[i].y,3)
         table.remove(particl,i)
-        colbaPar = colbaPar - 1
+       -- colbaPar = colbaPar - 1
     end 
 end
 function giveReward(count)

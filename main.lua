@@ -172,7 +172,7 @@ gradientG = 0
 gradientB = 0 
 gradientI = 1
 scoreForParticle =15
-colbaPar =  0
+--colbaPar =  0
 -----------------------------------
 function loadPlayerParametrsAndImg()
     loadPlayerParametrs()
