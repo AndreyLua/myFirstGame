@@ -32,11 +32,11 @@ local textMas = {
     
     'Wave attack modifier (expends energy)',-- rare8
     'Bloody attack modifier (expends energy)',-- rare9
-    'Seal attack modifier (expends energy)',-- rare10
+    'Electric attack modifier (expends energy)',-- rare10
     'The armor returns the damage received',-- rare11
     
     'Increase the energy reserve for special attacks',-- legend12
-    'Exchanges energy for health and health for energy',-- legend13
+    'Exchanges energy for health',-- legend13
     'Steals part of the life of enemies',-- legend14
           
 }

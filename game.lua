@@ -16,7 +16,7 @@ stars = {}
 --effects
 --#####################################################
 -------------------gameParametrs
-score = 800
+score = 9999999
 borderWidth =screenWidth/2
 borderHeight = screenHeight/2
 numberCleaner = 0 
@@ -37,9 +37,9 @@ flaginv = true
 waveflag = 0
 wavex = -250*k
 wavey = 0
-numberWave =1
+numberWave =8
 colWave= 50
-waves = {2,50}
+waves = {5,50}
 -------------------WaveParametrs
 
 controler = { 

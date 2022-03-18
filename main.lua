@@ -232,7 +232,7 @@ function loadPlayerParametrsAndImg()
     lvl = 1,
     numb = 10 ,
   }
-        --[[
+        
     playerSkills[11] ={
     img =skillQuads.spikeArmor,
     lvl = 1,
@@ -254,7 +254,7 @@ function loadPlayerParametrsAndImg()
     numb = 14 ,
   }
 
-  --]]
+
 
 end
 

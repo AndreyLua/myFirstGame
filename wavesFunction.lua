@@ -138,14 +138,12 @@ function wavesTitleDraw(n,dt)
     local fontWidth = font:getWidth("Waves")
     
     love.graphics.setColor(0.431,0.545,0.573,(125*k+wavex)/125*k+0.4)
-    love.graphics.print("W   v   s", 80*k+wavex*k,screenHeight/2+fontWidth/2*k2-wavey*k2,-math.pi/2,k,k2)
-    
+        love.graphics.print("W   v   s", 80*k+wavex*k,screenHeight/2+fontWidth/2*k2-wavey*k2,-math.pi/2,k,k2)
     love.graphics.setColor(0.531,0.645,0.673,(125*k+wavex)/125*k+0.4)
-    love.graphics.print("    a   e   ", 80*k+wavex*k,screenHeight/2+fontWidth/2*k2-wavey*k2,-math.pi/2,k,k2)
-    
+        love.graphics.print("    a   e   ", 80*k+wavex*k,screenHeight/2+fontWidth/2*k2-wavey*k2,-math.pi/2,k,k2)
     love.graphics.setColor(0.431,0.545,0.573,(125*k+wavex)/125*k+0.4)
-    fontWidth = font:getWidth(">>"..tostring (n)..'<<')
-    love.graphics.print(">>"..tostring (n)..'<<', 125*k+wavex*k,screenHeight/2+fontWidth/2*k2+wavey*k2,-math.pi/2,k,k2)
+        fontWidth = font:getWidth(">>"..tostring (n)..'<<')
+        love.graphics.print(">>"..tostring (n)..'<<', 125*k+wavex*k,screenHeight/2+fontWidth/2*k2+wavey*k2,-math.pi/2,k,k2)
 end
 
 return wavesFunction
