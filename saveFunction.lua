@@ -31,6 +31,13 @@ function loadSave()
         if ( TableSave[5]) then 
             loadParticl(TableSave[5])
         end
+        if ( TableSave[6]) then 
+            local usedSkills = TableSave[6]
+            playerSkillParametrs.waveAtFlag = usedSkills[1]
+            playerSkillParametrs.bloodAtFlag =usedSkills[2]
+            playerSkillParametrs.sealAtFlag =usedSkills[3]
+            playerSkillParametrs.vampirFlag =usedSkills[4]
+        end
     end
 end
 
@@ -38,7 +45,8 @@ function makeSave()
     local playerSettings = {MusicVolume, SoundsVolume, Sensitivity, controllerChoose}
     local particlSaveMas = saveParticl() 
     local playerSkillsSaveMas = savePlayerSkills()
-    save = {score,numberWave,playerSettings,playerSkillsSaveMas,particlSaveMas}
+    local usedSkills = { playerSkillParametrs.waveAtFlag,playerSkillParametrs.bloodAtFlag,playerSkillParametrs.sealAtFlag,playerSkillParametrs.vampirFlag}
+    save = {score,numberWave,playerSettings,playerSkillsSaveMas,particlSaveMas,usedSkills}
     love.filesystem.write('save.lua',  binser.serialize(save))
 end
 
