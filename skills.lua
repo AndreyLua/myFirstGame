@@ -131,6 +131,7 @@ function skills:update(dt)
             gamestate.switch(pause)
         end 
         if ( flagAcceptMenu == false) then 
+          
             if (mouse.x > xButton-k2/4*120 and  mouse.x <xButton+ k2/4*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-500*k/4 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+500*k/4 and but1 == true) then
                 local indexR = xR / (math.pi/6)
                 if ( xR%(math.pi/6) > math.pi/12) then
@@ -155,6 +156,7 @@ function skills:update(dt)
                   ---------------------------------
                 end
             end
+            
             if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3 and but2 == true) then
                 speedR =2.2
                 texti = 0 
@@ -168,7 +170,7 @@ function skills:update(dt)
                 textK = 0 
             end
             
-            if (flagtouch3 == true and  math.abs( mouse.y - mousePosY ) > 40*k and mouse.x > screenWidth/2.2 and  mouse.x < screenWidth/2.2 + 250*k   ) then 
+            if (flagtouch3 == true and  math.abs( mouse.y - mousePosY ) > 40*k and mouse.x > xBigSlot and  mouse.x < xButton   ) then 
                 texti = 0 
                 textL = ""
                 textK = 0 
@@ -226,7 +228,7 @@ love.graphics.draw(fon1,0,0,0,k,k2)
 love.graphics.draw(fon2,0,0,0,k,k2)
 love.graphics.draw(fon3,0,0,0,k,k2)
 
-exit(0,0)
+add(0,0)
 love.graphics.setColor(1,1,1,lightKoff)
 sc(0,screenHeight/2)
 
@@ -296,9 +298,9 @@ love.graphics.draw(UIBatch)
 love.graphics.draw(skillBatch)
 UIBatch:clear()
 skillBatch:clear()
-if (  flagAcceptMenu == true) then 
+if (flagAcceptMenu == true) then 
     love.graphics.setColor(1,1,1,1)
-    exit()
+    add()
     slot(indexR+4,xBigSlot,screenHeight/2,160,160,0.4) 
     acceptBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/1.4)*120*k,0.4,butYes) 
     rejectBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/3.5)*120*k,0.4,butNo)
@@ -366,61 +368,6 @@ flagRes,flagResBool = noRes(xBigSlot-(0.4*1.2*160*k)-difButton*0.16 ,screenHeigh
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 
 indexRSave = indexR
-end
-
-function lvlParametrs()
-    for i =1, #playerSkills do 
-        local masSkill = playerSkills[i] 
-        ----------------------------------------------------------------------------
-        if (masSkill.numb == 1 ) then 
-            playerSkillParametrs.hpK =0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 2 ) then 
-            playerSkillParametrs.enK =0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 3 ) then 
-            playerSkillParametrs.meleeDefK=0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 4 ) then 
-            playerSkillParametrs.rangeDefK=0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 5 ) then 
-            playerSkillParametrs.damageK =1+0.03*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 6 ) then 
-            playerSkillParametrs.speedK =1+0.015*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 7 ) then 
-            playerSkillParametrs.collectRangeK =1+0.02*(masSkill.lvl-1)
-        end
-        ----------------------------------------------------------------------------
-        if (masSkill.numb == 8 ) then 
-            playerSkillParametrs.waveAt =0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 9 ) then 
-            playerSkillParametrs.bloodAt =0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 10 ) then 
-            playerSkillParametrs.sealAt =0.04*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 11 ) then 
-            playerSkillParametrs.spikeFlag = true
-            playerSkillParametrs.spike =0.01*math.log(masSkill.lvl,2)
-        end
-        ----------------------------------------------------------------------------
-        if (masSkill.numb == 12 ) then 
-            playerSkillParametrs.dopEnFlag = true
-            playerSkillParametrs.dopEn =0.01*math.log(masSkill.lvl,2)
-        end
-        if (masSkill.numb == 13 ) then 
-            playerSkillParametrs.tradeFlag = true
-            playerSkillParametrs.tradeK =0.01*math.log(masSkill.lvl,2)
-        end
-        if (masSkill.numb == 14 ) then 
-            playerSkillParametrs.vampirK =0.01*math.log(masSkill.lvl,2)
-        end
-        
-    end
 end
 
 function textPar(i,x,y,scale)

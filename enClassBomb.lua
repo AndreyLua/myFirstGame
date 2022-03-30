@@ -234,7 +234,7 @@ enemyBombClass = Class{
             
         end
         if ( self.flagBomb == 1) then
-            AddSound(enExpl,0.4)
+            AddSound(enExpl,0.2)
             self.flagBomb =0 
             self.w =enemyBombTable[1]*k
             self.health = -1 

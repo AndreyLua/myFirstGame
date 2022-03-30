@@ -6,6 +6,13 @@ function butChange(x,y,xPoint,maxPointX)
     UIBatch:add(UIQuads.butPoint,x,y+1340*k/5/2-1340*k/5*xPoint/maxPointX,-math.pi/2,k/4,k2/4,120/2, 200/2)
 end
 
+function setButtonFlag(xMinRegion,xMaxRegion,yMinRegion,yMaxRegion)
+    local flagBut = false
+    if ( (mouse.x > xMinRegion) and (mouse.x <xMaxRegion) and (mouse.y >yMinRegion) and (mouse.y < yMaxRegion) ) then
+        flagBut = true
+    end
+    return flagBut
+end
 
 function bodyButton(x,y,flag,dopLight)
     if (dopLight) then 
@@ -362,18 +369,18 @@ end
         
 function Health_Boost()
     love.graphics.setColor(0.02,0.3,0.02,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+720/11*k/2,3*k2,-720/11*k)
-    love.graphics.setColor(0.04,0.85,0.04,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+720/11*k/2,3*k2,(-hp.long2/720*720/11)*k)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+17)*k,player.y+720/11*k/2,4*k2,-720/11*k)
+    love.graphics.setColor(0.19,1,0.19,1)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+17)*k,player.y+720/11*k/2,4*k2,(-hp.long2/720*720/11)*k)
     love.graphics.setColor(0.02,0.6,0.02,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+15)*k,player.y+720/11*k/2,3*k2,(-hp.long3/720*720/11)*k)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+17)*k,player.y+720/11*k/2,4*k2,(-hp.long3/720*720/11)*k)
 
     love.graphics.setColor(0,0.32,0.225,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+720/11*k/2,2*k2,-720/11*k)
-    love.graphics.setColor(0,0.85,0.75,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+720/11*k/2,2*k2,(-boost.long2/720*720/11)*k)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+11)*k,player.y+720/11*k/2,3*k2,-720/11*k)
+    love.graphics.setColor(0.15,1,0.9,1)
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+11)*k,player.y+720/11*k/2,3*k2,(-boost.long2/720*720/11)*k)
     love.graphics.setColor(0,0.643,0.502,1)
-    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+10)*k,player.y+720/11*k/2,2*k2,(-boost.long/720*720/11)*k)     
+    love.graphics.rectangle("fill",player.x-(playerAbility.scaleBody+11)*k,player.y+720/11*k/2,3*k2,(-boost.long/720*720/11)*k)     
    
     if ( playerSkillParametrs.dopEnFlag == true) then 
         love.graphics.setLineWidth(2*k)
@@ -402,7 +409,7 @@ function Health_Boost()
     love.graphics.setColor(1,1,1,1)
 end
 
-function exit()
+function add()
   local x = 0
   local y = 0 
   if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and ((flagtouch==true and flagtouch1== true) or flagtouch2 == true or flagtouch3 == true) )  then
@@ -412,6 +419,20 @@ function exit()
   else
       UIBatch:setColor(1,1,1,1)
       UIBatch:add(UIQuads.add,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
+  end
+  love.graphics.setColor(1,1,1,1)
+end
+
+function exit()
+  local x = 0
+  local y = 0 
+  if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and ((flagtouch==true and flagtouch1== true) or flagtouch2 == true or flagtouch3 == true) )  then
+      UIBatch:setColor(1,1,1,0.6)
+      UIBatch:add(UIQuads.ex,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
+      UIBatch:setColor(1,1,1,1)
+  else
+      UIBatch:setColor(1,1,1,1)
+      UIBatch:add(UIQuads.ex,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
   end
   love.graphics.setColor(1,1,1,1)
 end

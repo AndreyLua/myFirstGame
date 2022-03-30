@@ -11,7 +11,7 @@ function die:update(dt)
 end
 function die:draw()
     love.graphics.setColor(1,1,1,timer/200+0.3)
-        love.graphics.draw(kek,0,0,0,1,1)  
+        love.graphics.draw(canvasToEffect,0,0,0,1,1)  
     love.graphics.setColor(1,1,1,1)
     local fontWidth = font:getWidth('You die')
     love.graphics.print("You die",screenWidth/3,screenHeight/2+fontWidth/2*k,-math.pi/2,k,k)

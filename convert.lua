@@ -177,7 +177,7 @@ function convert:draw()
     love.graphics.draw(fon1,0,0,0,k,k2)
     love.graphics.draw(fon2,0,0,0,k,k2)
     love.graphics.draw(fon3,0,0,0,k,k2)
-    exit()
+    add()
     love.graphics.setColor(1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale,1-rewardSlotScale)
     bodyButton(screenWidth/1.7+220*k,screenHeight/2,flagButton1,rewardSlotScale)
     love.graphics.draw(colba,screenWidth/1.7,screenHeight/2,-math.pi/2,k/1.9,k2/1.9,250,193.5)
@@ -444,41 +444,7 @@ function particlCollWithStatic(i,dt)
         end
     end
 end
-function particlColor() 
-    local randomNumber = math.random(1,5)
-   --[[ if ( randomNumber ==  1 ) then 
-        return 0,0.471,0.176
-    end 
-    if ( randomNumber ==  2 ) then 
-        return 0.137,0.545,0.286
-    end 
-    if ( randomNumber ==  3 ) then 
-        return 0,0.725,0.271
-    end 
-    if ( randomNumber ==  4 ) then 
-        return 0.216,0.863,0.455
-    end 
-    if ( randomNumber == 5 ) then 
-        return 0.388,0.863,0.565
-    end
-  ]]--  
-    
-     if ( randomNumber ==  1 ) then 
-        return 0.008,0.298,0.408
-    end 
-    if ( randomNumber ==  2 ) then 
-        return 0.133,0.376,0.471
-    end 
-    if ( randomNumber ==  3 ) then 
-        return 0.027,0.463,0.627
-    end 
-    if ( randomNumber ==  4 ) then 
-        return 0.227,0.651,0.816
-    end 
-    if ( randomNumber == 5 ) then 
-        return 0.384,0.694,0.816
-    end 
-end
+
 function particlClear(i,dt)
     if (particlClearFlag == true and particl[i].x >screenWidth/1.7+80*k-particlClearX ) then
         expl(particl[i].x,particl[i].y,3)
@@ -486,6 +452,7 @@ function particlClear(i,dt)
        -- colbaPar = colbaPar - 1
     end 
 end
+
 function giveReward(count)
     flagRewardMenu = true 
     if ( count == 140) then 

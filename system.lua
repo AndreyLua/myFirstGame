@@ -112,6 +112,79 @@ function checkCircle(x,y,scale1,scale2,x2,y2,r)
     end
 end
 
+function particlColor() 
+    local randomNumber = math.random(1,5)
+    
+    if ( randomNumber ==  1 ) then 
+        return 0.008,0.298,0.408
+    end 
+    if ( randomNumber ==  2 ) then 
+        return 0.133,0.376,0.471
+    end 
+    if ( randomNumber ==  3 ) then 
+        return 0.027,0.463,0.627
+    end 
+    if ( randomNumber ==  4 ) then 
+        return 0.227,0.651,0.816
+    end 
+    if ( randomNumber == 5 ) then 
+        return 0.384,0.694,0.816
+    end 
+end
 
+function lvlParametrs()
+    for i =1, #playerSkills do 
+        local masSkill = playerSkills[i] 
+        ----------------------------------------------------------------------------
+        if (masSkill.numb == 1 ) then 
+            playerSkillParametrs.hpK =0.02*(masSkill.lvl-1)
+        end
+        if (masSkill.numb == 2 ) then 
+            playerSkillParametrs.enK =0.02*(masSkill.lvl-1)
+        end
+        if (masSkill.numb == 3 ) then 
+            playerSkillParametrs.meleeDefK=0.02*(masSkill.lvl-1)
+        end
+        if (masSkill.numb == 4 ) then 
+            playerSkillParametrs.rangeDefK=0.02*(masSkill.lvl-1)
+        end
+        if (masSkill.numb == 5 ) then 
+            playerSkillParametrs.damageK =1+0.03*(masSkill.lvl-1)
+        end
+        if (masSkill.numb == 6 ) then 
+            playerSkillParametrs.speedK =1+0.015*(masSkill.lvl-1)
+        end
+        if (masSkill.numb == 7 ) then 
+            playerSkillParametrs.collectRangeK =1+0.02*(masSkill.lvl-1)
+        end
+        ----------------------------------------------------------------------------
+        if (masSkill.numb == 8 ) then 
+            playerSkillParametrs.waveAt =0.02*(masSkill.lvl-1)
+        end
+        if (masSkill.numb == 9 ) then 
+            playerSkillParametrs.bloodAt =0.02*(masSkill.lvl-1)
+        end
+        if (masSkill.numb == 10 ) then 
+            playerSkillParametrs.sealAt =0.04*(masSkill.lvl-1)
+        end
+        if (masSkill.numb == 11 ) then 
+            playerSkillParametrs.spikeFlag = true
+            playerSkillParametrs.spike =0.01*math.log(masSkill.lvl,2)
+        end
+        ----------------------------------------------------------------------------
+        if (masSkill.numb == 12 ) then 
+            playerSkillParametrs.dopEnFlag = true
+            playerSkillParametrs.dopEn =0.01*math.log(masSkill.lvl,2)
+        end
+        if (masSkill.numb == 13 ) then 
+            playerSkillParametrs.tradeFlag = true
+            playerSkillParametrs.tradeK =0.01*math.log(masSkill.lvl,2)
+        end
+        if (masSkill.numb == 14 ) then 
+            playerSkillParametrs.vampirK =0.01*math.log(masSkill.lvl,2)
+        end
+        
+    end
+end
 
 return system 

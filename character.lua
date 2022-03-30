@@ -146,7 +146,7 @@ function character:draw()
     love.graphics.setColor(1,1,1,1)
     UIBatch:clear()
     bodyButton(butSelect,screenHeight/2,but3)
-    exit()
+    add()
     love.graphics.draw(UIBatch)
     textButton("Select",butSelect,screenHeight/2,but3,0.9)
   

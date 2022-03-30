@@ -1,7 +1,29 @@
 local game = {} 
 
+local playerFunction = require "playerFunction"
+local bulletFunction = require "bulletFunction"
+local enFunction = require "enFunction"
+local enClassMelee = require "enClassMelee" 
+local enClassHammer = require "enClassHammer" 
+local enClassShooter = require "enClassShooter" 
+local enClassInvader = require "enClassInvader" 
+local enClassBomb = require "enClassBomb" 
+local enClassСleaner = require "enClassCleaner" 
+local resSimpleClass =  require "resSimpleClass" 
+local resFunction = require "resFunction" 
+local objFunction = require "objFunction" 
+local wavesFunction = require "wavesFunction" 
+pause = require "pause" 
+local loadGame = require "loadGame"
+
+loadPlayerParametrsAndImg()
+loadEnImg()
+loadObjImg()
+
 function game:init()
-    
+
+
+
 --#####################################################
 --effects   
 waveEffects = {} 
@@ -121,6 +143,7 @@ function gamestate.focus(v)
 end
 
 function love.update(dt)
+    mouse.x,mouse.y=love.mouse.getPosition()
     UpdateBgMusic(dt)
 end
 
@@ -137,6 +160,7 @@ function love.keypressed(key, code)
 end
 
 function game:update(dt)
+
 -- en = {}
 --flaginv =true
 explUpdate2(dt)
@@ -303,7 +327,7 @@ function  game:draw()
     enBatch:clear()
     enBatchDop:clear()
     enBatchAfterDie:clear()
-    love.graphics.setCanvas(kek)
+    love.graphics.setCanvas(canvasToEffect)
     love.graphics.clear()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon1,0,0,0,k,k2)
@@ -384,7 +408,7 @@ function  game:draw()
     
     wavesTitleDraw(numberWave,dt)
     sc(0,screenHeight/2)
-    exit()
+    add()
     
     love.graphics.draw(UIBatch)
     lineW()
@@ -393,10 +417,10 @@ function  game:draw()
     love.graphics.setColor(1,1,1,1)
     if (flaginv == false ) then
         effect1(function()
-            love.graphics.draw(kek,0,0,0,sx,sy)
+            love.graphics.draw(canvasToEffect,0,0,0,sx,sy)
         end)
     else
-        love.graphics.draw(kek,0,0,0,sx,sy)
+        love.graphics.draw(canvasToEffect,0,0,0,sx,sy)
     end
     
     local stat  =  love.graphics.getStats()

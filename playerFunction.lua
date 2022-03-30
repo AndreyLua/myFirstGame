@@ -1,5 +1,7 @@
 local playerFunction = {} 
 
+local die = require "die" 
+local saveFunction = require "saveFunction" 
 function playerControl()
     mouse.x,mouse.y=love.mouse.getPosition()
     mouse.x = mouse.x

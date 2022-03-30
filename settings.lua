@@ -108,9 +108,9 @@ end
 function settings:draw()
     UIBatch:clear()
     love.graphics.setColor(1,1,1,0.6)
-    love.graphics.draw(kek,0,0,0,1,1) 
+    love.graphics.draw(canvasToEffect,0,0,0,1,1) 
     love.graphics.setColor(1,1,1,1)
-    exit()
+    add()
     
     butChange(xMusicVolumeBut,screenHeight/2,MusicVolume,2)
     butChange(xSoundsVolumeBut,screenHeight/2,SoundsVolume,2)
@@ -124,8 +124,7 @@ function settings:draw()
     textButton("Controller",xController,screenHeight/2,false,0.9)
     textButtonFixed({"Not fixed","Fixed - left","Fixed - right"},xControllerBut,screenHeight/2,but4,0.7,controllerChoose)
     textButton("Sensitivity",xSensitivity,screenHeight/2,false,0.9)
-    
-
+  
 end
 
 return settings
