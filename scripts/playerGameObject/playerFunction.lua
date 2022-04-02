@@ -1,7 +1,7 @@
 local playerFunction = {} 
 
-local die = require "die" 
-local saveFunction = require "saveFunction" 
+local die = require "scripts/gameStates/gameLoop/die" 
+local saveFunction = require "scripts/systemFunction/saveFunction" 
 function playerControl()
     mouse.x,mouse.y=love.mouse.getPosition()
     mouse.x = mouse.x
@@ -82,11 +82,11 @@ function playerMove(dt)
     end
     playerLiTimerUpdate(dt)
     if ( player.a==1) then
-        player.x = player.x + player.ax*dt*playerAbility.speedA*k*player.debaffStrenght*playerSkillParametrs.speedK
-        player.y = player.y + player.ay*dt*playerAbility.speedA*k2*player.debaffStrenght*playerSkillParametrs.speedK
+        player.x = player.x + player.ax*dt*playerAbility.speed*playerAbility.speedA*k*player.debaffStrenght*playerSkillParametrs.speedK
+        player.y = player.y + player.ay*dt*playerAbility.speed*playerAbility.speedA*k2*player.debaffStrenght*playerSkillParametrs.speedK
     else
-        player.x = player.x + player.ax*dt*playerAbility.speed*k*player.debaffStrenght*playerSkillParametrs.speedK
-        player.y = player.y + player.ay*dt*playerAbility.speed*k2*player.debaffStrenght*playerSkillParametrs.speedK
+        player.x = player.x + player.ax*dt*k*playerAbility.speed*player.debaffStrenght*playerSkillParametrs.speedK
+        player.y = player.y + player.ay*dt*k2*playerAbility.speed*player.debaffStrenght*playerSkillParametrs.speedK
     end
 end
 
@@ -374,6 +374,7 @@ function playerLiTimerUpdate(dt)
         end
     end
 end
+
 function playerDebaff(dt)
     if (player.debaffStrenght < 1) then
         local time = 3 

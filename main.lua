@@ -118,12 +118,12 @@ k2 = screenHeight/1080*2.5
 k = k2 
 
 --------------STATES--------------
-system = require "system" 
-soundFunction = require "soundFunction"
-saveFunction = require "saveFunction" 
-game = require "game"
-effects = require "effects" 
-UI= require "UI"
+system = require "scripts/systemFunction/system" 
+soundFunction = require "scripts/systemFunction/soundFunction"
+saveFunction = require "scripts/systemFunction/saveFunction" 
+game = require "scripts/gameStates/gameLoop/game"
+effects = require "scripts//systemFunction/effects" 
+UI= require "scripts//systemFunction/UI"
 
 ----------------------------------
 inv = Timer.new()
@@ -132,9 +132,7 @@ hp2 = Timer.new()
 hp3 = Timer.new()
 boost1 = Timer.new()
 boost2 = Timer.new()
-wavetimer=  Timer.new()
-TimerObj = Timer.new()
-TimerEn = Timer.new()
+
 ----------------------------------
 
 -------------MASIIIIIIV-----------

@@ -36,7 +36,7 @@ function character:update(dt)
         if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
             AddSound(uiClick,0.3)
             exp = {}
-            gamestate.switch(pause)
+            gamestate.switch(menu)
         end 
         if ( mouse.x >screenWidth-math.sin(math.pi/2+anglePlayerHeight)*screenWidth/2+50*k-50*k and  mouse.x <screenWidth-math.sin(math.pi/2+anglePlayerHeight)*screenWidth/2+50*k+50*k   and mouse.y > screenHeight/2-math.cos(math.pi/2+anglePlayerHeight)*screenWidth/2-50*k   and  mouse.y <screenHeight/2-math.cos(math.pi/2+anglePlayerHeight)*screenWidth/2+50*k and but1 == true ) then
             if ( speedR < 0 ) then 

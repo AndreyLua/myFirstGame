@@ -437,10 +437,4 @@ function exit()
   love.graphics.setColor(1,1,1,1)
 end
 
-function lineW()
-    love.graphics.setColor(0.431,0.545,0.573)
-    love.graphics.rectangle("line",50*k,screenHeight/2-(colWave*250*k2/waves[2])/2,8*k,colWave*250*k2/waves[2])
-    love.graphics.setColor(1,1,1,1)
-end 
-
 return UI

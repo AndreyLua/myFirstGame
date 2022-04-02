@@ -1,4 +1,4 @@
-local pause = {}
+local menu = {}
 
 local but1 = false
 local but2 = false
@@ -12,14 +12,14 @@ local butNo = false
 
 local exitFlag = false
 
-function pause:init()  
-    skills = require "skills" 
-    convert = require "convert"
-    character = require "character"
-    settings = require "settings" 
+function menu:init()  
+    skills = require "scripts/gameStates/menuSections/skills" 
+    convert = require "scripts/gameStates/menuSections/convert"
+    character = require "scripts/gameStates/menuSections/character"
+    settings = require "scripts/gameStates/menuSections/settings" 
 end
 
-function pause:update(dt)
+function menu:update(dt)
     flagtouch3 = false
     flagtouch1 = false
     if love.mouse.isDown(1)  then
@@ -100,7 +100,7 @@ function pause:update(dt)
     
 end
 
-function pause:draw()
+function menu:draw()
     UIBatch:clear()
     love.graphics.setColor(1,1,1,0.7)
         if ( exitFlag) then 
@@ -116,21 +116,21 @@ function pause:draw()
     bodyButton(difButton*10+60*k2*4+30*k2,screenHeight/2,but4)
     if (exitFlag) then 
         love.graphics.setColor(0.2,0.2,0.2,1)
-        pause:drawMainButtons()
+        menu:drawMainButtons()
         UIBatch:clear()
         love.graphics.setColor(1,1,1,1)
         exit()
         acceptBut(difButton*9+60*k2*3+30*k2,screenHeight/2-math.cos(-math.pi/1.4)*120*k,0.4,butYes) 
         rejectBut(difButton*9+60*k2*3+30*k2,screenHeight/2-math.cos(-math.pi/3.5)*120*k,0.4,butNo)
         love.graphics.draw(UIBatch)
-        pause:drawMessageAboutExit()
+        menu:drawMessageAboutExit()
         love.graphics.setColor(0.2,0.2,0.2,1)
     else
-        pause:drawMainButtons()
+        menu:drawMainButtons()
     end
 end
 
-function pause:drawMainButtons()
+function menu:drawMainButtons()
     love.graphics.draw(UIBatch)
     textButton("Skills",difButton*6+30*k2,screenHeight/2,but1,0.9)
     textButton("Converter",difButton*7+60*k2*1+30*k2,screenHeight/2, but2,0.9)
@@ -139,8 +139,8 @@ function pause:drawMainButtons()
     textButton("Exit",difButton*10+60*k2*4+30*k2,screenHeight/2, but4,0.9)
 end
 
-function pause:drawMessageAboutExit()
+function menu:drawMessageAboutExit()
     textButton("Do you want to exit? ",difButton*7+60*k2*1+30*k2,screenHeight/2,false,1)
 end
 
-return pause
+return menu

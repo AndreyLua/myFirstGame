@@ -407,9 +407,9 @@ function newPlayerGetDamageEffect(x,y,kol)
     local angleEnPl = math.atan2(player.x-x,player.y-y)+math.pi 
     for kek =0, kol do
         local e = {
-        color1 =playerStaticParametrs.colorR,
-        color2= playerStaticParametrs.colorG,
-        color3 =playerStaticParametrs.colorB,
+        color1 =playerAbility.colorR,
+        color2= playerAbility.colorG,
+        color3 =playerAbility.colorB,
         x = player.x+(playerAbility.scaleBody-5)*k*math.sin(angleEnPl), 
         y = player.y+(playerAbility.scaleBody-5)*k*math.cos(angleEnPl), 
         ax  =60*k*math.sin(angleEnPl+math.random()*1.6), 

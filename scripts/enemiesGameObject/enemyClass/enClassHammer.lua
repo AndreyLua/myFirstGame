@@ -305,9 +305,8 @@ enemyHammerClass = Class{
               ox = 125,
               oy = 95.5
             }
-            expl(54*k,screenHeight/2-(colWave*250*k2/waves[2])/2,10)
-            expl(54*k,screenHeight/2+(colWave*250*k2/waves[2])/2,10)
-            colWave =  colWave - en[i].cost
+            Wave:progressBarEffect(en[i].cost)
+            
             table.insert(enAfterDieTex,enDrawDie)
             table.remove(en,i)
         end  

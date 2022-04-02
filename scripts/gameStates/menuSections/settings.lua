@@ -87,7 +87,7 @@ function settings:update(dt)
     else
         if (  mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true  ) then
             AddSound(uiClick,0.3)
-            gamestate.switch(pause)
+            gamestate.switch(menu)
         end  
         if (  mouse.x >  xControllerBut - 120*k/4  and  mouse.x < xControllerBut+120*k/4 and mouse.y > screenHeight/2-500*k/4 and  mouse.y <screenHeight/2+500*k/4 and but4 == true) then
             AddSound(uiSelect,0.3)

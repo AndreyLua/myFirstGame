@@ -1,20 +1,20 @@
 local game = {} 
 
-local playerFunction = require "playerFunction"
-local bulletFunction = require "bulletFunction"
-local enFunction = require "enFunction"
-local enClassMelee = require "enClassMelee" 
-local enClassHammer = require "enClassHammer" 
-local enClassShooter = require "enClassShooter" 
-local enClassInvader = require "enClassInvader" 
-local enClassBomb = require "enClassBomb" 
-local enClassСleaner = require "enClassCleaner" 
-local resSimpleClass =  require "resSimpleClass" 
-local resFunction = require "resFunction" 
-local objFunction = require "objFunction" 
-local wavesFunction = require "wavesFunction" 
-pause = require "pause" 
-local loadGame = require "loadGame"
+local playerFunction = require "scripts/playerGameObject/playerFunction"
+local bulletFunction = require "scripts/bulletsGameObject/bulletFunction"
+local enFunction = require "scripts/enemiesGameObject/enFunction"
+local enClassMelee = require "scripts/enemiesGameObject/enemyClass/enClassMelee" 
+local enClassHammer = require "scripts/enemiesGameObject/enemyClass/enClassHammer" 
+local enClassShooter = require "scripts/enemiesGameObject/enemyClass/enClassShooter" 
+local enClassInvader = require "scripts/enemiesGameObject/enemyClass/enClassInvader" 
+local enClassBomb = require "scripts/enemiesGameObject/enemyClass/enClassBomb" 
+local enClassСleaner = require "scripts/enemiesGameObject/enemyClass/enClassCleaner" 
+local resSimpleClass =  require "scripts/resourcesGameObject/resSimpleClass" 
+local resFunction = require "scripts/resourcesGameObject/resFunction" 
+local objFunction = require "scripts/meteoritesGameObject/objFunction" 
+local wavesFunction = require "scripts/wavesFunction" 
+menu = require "scripts/gameStates/menu" 
+local loadGame = require "scripts/systemFunction/loadGame"
 
 loadPlayerParametrsAndImg()
 loadEnImg()
@@ -56,12 +56,6 @@ flaginv = true
 -------------------playerParametrs
 --#####################################################
 -------------------WaveParametrs
-waveflag = 0
-wavex = -250*k
-wavey = 0
-numberWave =8
-colWave= 50
-waves = {5,50}
 -------------------WaveParametrs
 
 controler = { 
@@ -132,13 +126,13 @@ playerSledi = {}
 
 masli= {} 
 
-loadSave()
+--loadSave()
 lvlParametrs()
 end
 
 function gamestate.focus(v)
     if (not(v) and gamestate.current() == game) then
-        gamestate.switch(pause)
+        gamestate.switch(menu)
     end
 end
 
@@ -167,13 +161,13 @@ explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
---boost.long = 1000
---hp.long = 1000 
+boost.long = 1000
+hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
 flagtouch2 = false -- для выхода в состояние пауза
-wavesUpdate(dt)
+Wave:update(dt)
 
 --------------------
 playerCamera(dt)
@@ -261,9 +255,7 @@ for i = #res, 1, -1 do
 end
 playerBoost(dt)
 playerBoostDop(dt) -- skill
-wavesSpawn()
-TimerObj:update(dt)
-TimerEn:update(dt)
+Wave:spawn()
 playerCollWithObj(dt)
 playerCollWithEn(dt)
 playerDebaff(dt)
@@ -291,7 +283,7 @@ function game:movement(dt)
     else
         if (  flagtouch==true and mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and flagtouch1== true) then
             AddSound(uiClick,0.3)
-            gamestate.switch(pause)
+            gamestate.switch(menu)
         end
         if ( flagtouch==false) then
             touchx = mouse.x
@@ -406,12 +398,12 @@ function  game:draw()
     local fontWidth = font:getWidth(tostring(score))
     love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
     
-    wavesTitleDraw(numberWave,dt)
+    Wave:notionDraw(dt)
     sc(0,screenHeight/2)
     add()
     
     love.graphics.draw(UIBatch)
-    lineW()
+    Wave:progressBarDraw()
    
     love.graphics.setCanvas()
     love.graphics.setColor(1,1,1,1)

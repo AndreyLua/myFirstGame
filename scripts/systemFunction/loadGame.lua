@@ -138,7 +138,8 @@ function loadPlayerParametrs()
           cristalX = 55,
         }, 
     }
-    playerStaticParametrs = {
+
+    playerAbility = {
         colorR = 0.5,
         colorG = 0.437,
         colorB = 0.59, 
@@ -148,30 +149,14 @@ function loadPlayerParametrs()
         damage = 1,
         invTimer = 0.5,
         maxSpeed = 30,
+        speedA  = 1.8,
         speed = 6,
-        speedA  = 10,
         debaffStrenght =0.2,
         scaleBody = 35,
         boostRegen = 100,
         boostWaste = 150,
         boostWasteSp =500,
         boostWasteEnHit = 5,
-    }
-    playerAbility = {
-        tip =playerStaticParametrs.tip, 
-        mass =playerStaticParametrs.mass,
-        radiusCollect =playerStaticParametrs.radiusCollect,
-        damage = playerStaticParametrs.damage,
-        invTimer = playerStaticParametrs.invTimer,
-        maxSpeed = playerStaticParametrs.maxSpeed,
-        speed = playerStaticParametrs.speed,
-        speedA  = playerStaticParametrs.speedA,
-        debaffStrenght =playerStaticParametrs.debaffStrenght,
-        scaleBody = playerStaticParametrs.scaleBody,
-        boostRegen = playerStaticParametrs.boostRegen,
-        boostWaste = playerStaticParametrs.boostWaste,
-        boostWasteEnHit = playerStaticParametrs.boostWasteEnHit,
-        boostWasteSp = playerStaticParametrs.boostWasteSp,
     }
     playerSkillParametrs = {
         hpK = 0, -- common1
