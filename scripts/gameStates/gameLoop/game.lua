@@ -12,9 +12,9 @@ local enClassСleaner = require "scripts/enemiesGameObject/enemyClass/enClassCle
 local resSimpleClass =  require "scripts/resourcesGameObject/resSimpleClass" 
 local resFunction = require "scripts/resourcesGameObject/resFunction" 
 local objFunction = require "scripts/meteoritesGameObject/objFunction" 
-local wavesFunction = require "scripts/wavesFunction" 
+local waveSystem = require "scripts/waveSystem" 
 menu = require "scripts/gameStates/menu" 
-local loadGame = require "scripts/systemFunction/loadGame"
+local loadGame = require "scripts/systemComponents/loadGame"
 
 loadPlayerParametrsAndImg()
 loadEnImg()
@@ -22,7 +22,7 @@ loadObjImg()
 
 function game:init()
 
-
+exp =  {}
 
 --#####################################################
 --effects   

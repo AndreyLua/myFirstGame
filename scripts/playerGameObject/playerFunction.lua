@@ -1,7 +1,7 @@
 local playerFunction = {} 
 
 local die = require "scripts/gameStates/gameLoop/die" 
-local saveFunction = require "scripts/systemFunction/saveFunction" 
+local saveFunction = require "scripts/systemComponents/saveFunction" 
 function playerControl()
     mouse.x,mouse.y=love.mouse.getPosition()
     mouse.x = mouse.x

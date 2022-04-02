@@ -1,4 +1,4 @@
-local wavesFunction = {}
+local waveSystem = {}
 
 Wave = {
     notionIdleTimer =  Timer.new(),
@@ -181,4 +181,4 @@ function Wave:progressBarEffect(enValue)
     self.countKilledEnemies =  self.countKilledEnemies - enValue
 end
 
-return wavesFunction
+return waveSystem

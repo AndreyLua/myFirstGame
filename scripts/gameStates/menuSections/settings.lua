@@ -2,7 +2,6 @@ local settings = {}
 
 local difButton = (screenWidth-3*(45*k2*0.9+200/4*k)-45*k2*0.9-k/2*120)/28
 
-
 local xMusicVolume = difButton*10+45*k2*0.9/2
 local xMusicVolumeBut =xMusicVolume+difButton+45*k2*0.9/2+200/4*k/2
 
@@ -14,8 +13,6 @@ local xControllerBut = xController+ 45*k2*0.9/2 + difButton + k/4*120
 
 local xSensitivity = xControllerBut+ k/4*120 + difButton+ 45*k2*0.9/2
 local xSensitivityBut = xSensitivity+ 45*k2*0.9/2+difButton+200/4*k/2
-
-
 
 local xAlpha = 0 
 local but1 = false

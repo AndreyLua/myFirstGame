@@ -118,12 +118,12 @@ k2 = screenHeight/1080*2.5
 k = k2 
 
 --------------STATES--------------
-system = require "scripts/systemFunction/system" 
-soundFunction = require "scripts/systemFunction/soundFunction"
-saveFunction = require "scripts/systemFunction/saveFunction" 
+system = require "scripts/systemComponents/system" 
+soundFunction = require "scripts/systemComponents/soundFunction"
+saveFunction = require "scripts/systemComponents/saveFunction" 
 game = require "scripts/gameStates/gameLoop/game"
-effects = require "scripts//systemFunction/effects" 
-UI= require "scripts//systemFunction/UI"
+effects = require "scripts/systemComponents/effects" 
+UI= require "scripts/systemComponents/UI"
 
 ----------------------------------
 inv = Timer.new()

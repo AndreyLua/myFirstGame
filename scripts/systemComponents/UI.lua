@@ -1,18 +1,49 @@
 local UI = {}
 
+Button = Class{
+    init = function(self, x, y, width, height)
+        self.isTappedFlag = false
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+    end;
+
+    mouseOnTheButton = function (self)
+        local flagMouseOnTheButton = false
+        if ( (mouse.x > self.x - self.width /2) and (mouse.x < self.x + self.width /2) and (mouse.y > self.y - self.height /2) and (mouse.y < self.y + self.height /2) ) then
+            flagMouseOnTheButton = true
+        end
+        return flagMouseOnTheButton
+    end;
+    
+    IsTapped  = function (self)
+        if love.mouse.isDown(1)  then
+              if self.mouseOnTheButton(self) then 
+                  self.isTappedFlag = true
+              end
+        else
+            if (self.isTappedFlag and self.mouseOnTheButton(self)) then 
+                self.isTappedFlag = false 
+                return true
+            end
+            self.isTappedFlag = false
+        end
+        return false
+    end;
+    
+}
+
+
+
+
+
 function butChange(x,y,xPoint,maxPointX)
     UIBatch:setColor(1,1,1,1)    
     UIBatch:add(UIQuads.butChange,x,y,-math.pi/2,k/5,k2/5,1340/2, 146/2)
     UIBatch:add(UIQuads.butPoint,x,y+1340*k/5/2-1340*k/5*xPoint/maxPointX,-math.pi/2,k/4,k2/4,120/2, 200/2)
 end
 
-function setButtonFlag(xMinRegion,xMaxRegion,yMinRegion,yMaxRegion)
-    local flagBut = false
-    if ( (mouse.x > xMinRegion) and (mouse.x <xMaxRegion) and (mouse.y >yMinRegion) and (mouse.y < yMaxRegion) ) then
-        flagBut = true
-    end
-    return flagBut
-end
 
 function bodyButton(x,y,flag,dopLight)
     if (dopLight) then 

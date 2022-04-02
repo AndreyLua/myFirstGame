@@ -1,129 +1,146 @@
 local menu = {}
 
-local but1 = false
-local but2 = false
-local but3 = false
-local but4 = false
-local but5 = false 
+local UI= require "scripts/systemComponents/UI"
+local skills = require "scripts/gameStates/menuSections/skills" 
+local convert = require "scripts/gameStates/menuSections/convert"
+local character = require "scripts/gameStates/menuSections/character"
+local settings = require "scripts/gameStates/menuSections/settings" 
+
 local difButton = (screenWidth-60*k2*5)/16
-
-local butYes = false
-local butNo = false
-
 local exitFlag = false
 
-function menu:init()  
-    skills = require "scripts/gameStates/menuSections/skills" 
-    convert = require "scripts/gameStates/menuSections/convert"
-    character = require "scripts/gameStates/menuSections/character"
-    settings = require "scripts/gameStates/menuSections/settings" 
+local buttonAdd = Button(0,0,120*k,120*k)  
+function buttonAdd:draw()
+    exit(buttonAdd.x,buttonAdd.y)
+end
+
+local buttonSkillsX = difButton*6+30*k2
+local buttonSkillsY = screenHeight/2
+local buttonSkillsWidth = 60*k
+local buttonSkillsHeight = 250*k2
+local buttonSkills = Button(buttonSkillsX,buttonSkillsY,buttonSkillsWidth,buttonSkillsHeight)
+function buttonSkills:draw()
+    bodyButton(buttonSkills.x,buttonSkills.y,buttonSkills.isTappedFlag)
+end
+
+local buttonConverterX = difButton*7+60*k2*1+30*k2
+local buttonConverterY = screenHeight/2
+local buttonConverterWidth = 60*k
+local buttonConverterHeight = 250*k2
+local buttonConverter = Button(buttonConverterX,buttonConverterY,buttonConverterWidth,buttonConverterHeight)
+function buttonConverter:draw()
+    bodyButton(buttonConverter.x,buttonConverter.y,buttonConverter.isTappedFlag)
+end
+
+local buttonCharacterX = difButton*8+60*k2*2+30*k2
+local buttonCharacterY = screenHeight/2
+local buttonCharacterWidth = 60*k
+local buttonCharacterHeight = 250*k2
+local buttonCharacter = Button(buttonCharacterX,buttonCharacterY,buttonCharacterWidth,buttonCharacterHeight)
+function buttonCharacter:draw()
+    bodyButton(buttonCharacter.x,buttonCharacter.y,buttonCharacter.isTappedFlag)
+end
+
+local buttonSettingsX = difButton*9+60*k2*3+30*k2
+local buttonSettingsY = screenHeight/2
+local buttonSettingsWidth = 60*k
+local buttonSettingsHeight = 250*k2
+local buttonSettings = Button(buttonSettingsX,buttonSettingsY,buttonSettingsWidth,buttonSettingsHeight)
+function buttonSettings:draw()
+    bodyButton(buttonSettings.x,buttonSettings.y,buttonSettings.isTappedFlag)
+end
+
+local buttonExitX = difButton*10+60*k2*4+30*k2
+local buttonExitY = screenHeight/2
+local buttonExitWidth = 60*k
+local buttonExitHeight = 250*k2
+local buttonExit = Button(buttonExitX,buttonExitY,buttonExitWidth,buttonExitHeight)
+function buttonExit:draw()
+    bodyButton(buttonExit.x,buttonExit.y,buttonExit.isTappedFlag)
+end
+
+
+local buttonYesX = difButton*9+60*k2*3+30*k2 
+local buttonYesY = screenHeight/2-math.cos(-math.pi/1.4)*120*k
+local buttonYesScale =0.4
+local buttonYesSize = buttonYesScale*k*240
+local buttonYes = Button(buttonYesX,buttonYesY,buttonYesSize,buttonYesSize)
+function buttonYes:draw()
+    acceptBut(buttonYes.x,buttonYes.y,buttonYesScale,buttonYes.isTappedFlag) 
+end
+
+local buttonNoX = difButton*9+60*k2*3+30*k2
+local buttonNoY = screenHeight/2-math.cos(-math.pi/3.5)*120*k
+local buttonNoScale =0.4
+local buttonNoSize = buttonNoScale*k*240
+local buttonNo = Button(buttonNoX,buttonNoY,buttonNoSize,buttonNoSize)
+function buttonNo:draw()
+    rejectBut(buttonNo.x,buttonNo.y,buttonNoScale,buttonNo.isTappedFlag) 
 end
 
 function menu:update(dt)
-    flagtouch3 = false
-    flagtouch1 = false
-    if love.mouse.isDown(1)  then
-        flagtouch2 = true
-    else
-         if (  mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch2 == true) then
-            AddSound(uiClick,0.3)
-            exp =  {}
-            gamestate.switch(game)
-        end
-        flagtouch2 = false
+    if (buttonAdd:IsTapped()) then 
+        AddSound(uiClick,0.3)
+        exp =  {}
+        gamestate.switch(game)
     end
     if ( exitFlag == false) then 
-        if love.mouse.isDown(1)  then
-            if ( (mouse.x >difButton*6+30*k2-(60*k)/2) and (mouse.x <difButton*6+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                but1 = true
-            end
-            if ( (mouse.x >difButton*7+60*k2*1+30*k2-(60*k)/2) and (mouse.x <difButton*7+60*k2*1+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                but2 = true
-            end
-            if ( (mouse.x >difButton*9+60*k2*3+30*k2-(60*k)/2) and (mouse.x <difButton*9+60*k2*3+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                but3 = true
-            end
-            if ( (mouse.x >difButton*10+60*k2*4+30*k2-(60*k)/2) and (mouse.x <difButton*10+60*k2*4+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                but4 = true
-            end
-            if ( (mouse.x >difButton*8+60*k2*2+30*k2-(60*k)/2) and (mouse.x <difButton*8+60*k2*2+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                but5 = true
-            end
-        else
-          
-            if (but1 == true and  (mouse.x >difButton*6+30*k2-(60*k)/2) and (mouse.x <difButton*6+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                AddSound(uiSelect,0.3)
-                gamestate.switch(skills)
-            end
-            if (but2 == true and (mouse.x >difButton*7+60*k2*1+30*k2-(60*k)/2) and (mouse.x <difButton*7+60*k2*1+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                AddSound(uiSelect,0.3)
-                gamestate.switch(convert)
-            end
-            if (but5 == true and (mouse.x >difButton*8+60*k2*2+30*k2-(60*k)/2) and (mouse.x <difButton*8+60*k2*2+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                AddSound(uiSelect,0.3)
-                gamestate.switch(character)
-            end
-            if (but3 == true and  (mouse.x >difButton*9+60*k2*3+30*k2-(60*k)/2) and (mouse.x <difButton*9+60*k2*3+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                AddSound(uiSelect,0.3)
-                gamestate.switch(settings)
-            end
-            if (but4 == true and (mouse.x >difButton*10+60*k2*4+30*k2-(60*k)/2) and (mouse.x <difButton*10+60*k2*4+30*k2+(60*k)/2) and (mouse.y <screenHeight/2+(250*k2)/2) and (mouse.y >screenHeight/2-(250*k2)/2) ) then
-                AddSound(uiSelect,0.3)
-                exitFlag = true 
-            --    love.event.push('quit')
-            end
-            exp =  {}
-            but1 = false
-            but2 = false
-            but3 = false
-            but4 = false
-            but5 = false
+        if (buttonSkills:IsTapped()) then 
+            AddSound(uiSelect,0.3)
+            gamestate.switch(skills)
+        end
+        if (buttonConverter:IsTapped()) then 
+            AddSound(uiSelect,0.3)
+            gamestate.switch(convert)
+        end
+        if (buttonCharacter:IsTapped()) then 
+            AddSound(uiSelect,0.3)
+            gamestate.switch(character)
+        end
+        if (buttonSettings:IsTapped()) then 
+            AddSound(uiSelect,0.3)
+            gamestate.switch(settings)
+        end
+        if (buttonExit:IsTapped()) then 
+            AddSound(uiSelect,0.3)
+            exitFlag = true 
         end
     else
-        if love.mouse.isDown(1)  then
-            butYes = setButtonFlag(difButton*9+60*k2*3+30*k2-0.4*k*120,difButton*9+60*k2*3+30*k2+0.4*k*120,screenHeight/2-math.cos(-math.pi/1.4)*120*k-0.4*k*120,screenHeight/2-math.cos(-math.pi/1.4)*120*k+0.4*k*120)
-            butNo = setButtonFlag(difButton*9+60*k2*3+30*k2-0.4*k*120,difButton*9+60*k2*3+30*k2+0.4*k*120,screenHeight/2-math.cos(-math.pi/3.5)*120*k-0.4*k*120,screenHeight/2-math.cos(-math.pi/3.5)*120*k+0.4*k*120)
-        else
-            if (setButtonFlag(difButton*9+60*k2*3+30*k2-0.4*k*120,difButton*9+60*k2*3+30*k2+0.4*k*120,screenHeight/2-math.cos(-math.pi/1.4)*120*k-0.4*k*120,screenHeight/2-math.cos(-math.pi/1.4)*120*k+0.4*k*120) and butYes) then
-                AddSound(uiSelect,0.3)
-                love.event.push('quit')  
-            end
-            if (setButtonFlag(difButton*9+60*k2*3+30*k2-0.4*k*120,difButton*9+60*k2*3+30*k2+0.4*k*120,screenHeight/2-math.cos(-math.pi/3.5)*120*k-0.4*k*120,screenHeight/2-math.cos(-math.pi/3.5)*120*k+0.4*k*120) and butNo) then
-                AddSound(uiSelect,0.3)
-                exitFlag = false
-            end
-            butYes = false
-            butNo = false
+        if (buttonYes:IsTapped()) then 
+            AddSound(uiSelect,0.3)
+            love.event.push('quit')  
         end
-         
+        if (buttonNo:IsTapped()) then 
+            AddSound(uiSelect,0.3)
+            exitFlag = false
+        end
     end
-    
 end
 
 function menu:draw()
     UIBatch:clear()
     love.graphics.setColor(1,1,1,0.7)
-        if ( exitFlag) then 
-            love.graphics.setColor(0.2,0.2,0.2,1)
-        end
-        love.graphics.draw(canvasToEffect,0,0,0,1,1)  
+      if ( exitFlag) then 
+          love.graphics.setColor(0.2,0.2,0.2,1)
+      end
+      love.graphics.draw(canvasToEffect,0,0,0,1,1)  
     love.graphics.setColor(1,1,1,1)
-    exit(0,0)
-    bodyButton(difButton*6+30*k2,screenHeight/2,but1)
-    bodyButton(difButton*7+60*k2*1+30*k2,screenHeight/2,but2)
-    bodyButton(difButton*8+60*k2*2+30*k2,screenHeight/2,but5)
-    bodyButton(difButton*9+60*k2*3+30*k2,screenHeight/2,but3)
-    bodyButton(difButton*10+60*k2*4+30*k2,screenHeight/2,but4)
+      buttonAdd:draw()
+      buttonSkills:draw()
+      buttonConverter:draw()
+      buttonSettings:draw()
+      buttonCharacter:draw()
+      buttonExit:draw()
     if (exitFlag) then 
         love.graphics.setColor(0.2,0.2,0.2,1)
-        menu:drawMainButtons()
-        UIBatch:clear()
+          menu:drawMainButtons()
+          UIBatch:clear()
         love.graphics.setColor(1,1,1,1)
-        exit()
-        acceptBut(difButton*9+60*k2*3+30*k2,screenHeight/2-math.cos(-math.pi/1.4)*120*k,0.4,butYes) 
-        rejectBut(difButton*9+60*k2*3+30*k2,screenHeight/2-math.cos(-math.pi/3.5)*120*k,0.4,butNo)
-        love.graphics.draw(UIBatch)
-        menu:drawMessageAboutExit()
+          exit()
+          buttonYes:draw()
+          buttonNo:draw()
+          love.graphics.draw(UIBatch)
+          menu:drawMessageAboutExit()
         love.graphics.setColor(0.2,0.2,0.2,1)
     else
         menu:drawMainButtons()
@@ -132,15 +149,15 @@ end
 
 function menu:drawMainButtons()
     love.graphics.draw(UIBatch)
-    textButton("Skills",difButton*6+30*k2,screenHeight/2,but1,0.9)
-    textButton("Converter",difButton*7+60*k2*1+30*k2,screenHeight/2, but2,0.9)
-    textButton("Character",difButton*8+60*k2*2+30*k2,screenHeight/2, but5,0.9)
-    textButton("Settings",difButton*9+60*k2*3+30*k2,screenHeight/2, but3,0.9)
-    textButton("Exit",difButton*10+60*k2*4+30*k2,screenHeight/2, but4,0.9)
+    textButton("Skills",buttonSkills.x,buttonSkills.y,buttonSkills.isTappedFlag,0.9)
+    textButton("Converter",buttonConverter.x,buttonConverter.y,buttonConverter.isTappedFlag,0.9)
+    textButton("Character",buttonCharacter.x,buttonCharacter.y,buttonCharacter.isTappedFlag,0.9)
+    textButton("Settings",buttonSettings.x,buttonSettings.y,buttonSettings.isTappedFlag,0.9)
+    textButton("Exit",buttonExit.x,buttonExit.y,buttonExit.isTappedFlag,0.9)
 end
 
 function menu:drawMessageAboutExit()
-    textButton("Do you want to exit? ",difButton*7+60*k2*1+30*k2,screenHeight/2,false,1)
+    textButton("Do you want to exit? ",buttonConverterX,screenHeight/2,false,1)
 end
 
 return menu
