@@ -97,7 +97,7 @@ enemyBombClass = Class{
         end
     end;
     atackStart = function(self)
-        if (self.atack and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= 50*k ) then
+        if (self.atack and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) <= 50*k ) then
             self.atack = self.atackTimer-0.001
         end
     end;
@@ -122,7 +122,7 @@ enemyBombClass = Class{
             self.atack  = self.atackTimer
             self.flagBomb = 1 
             self.w = 100
-            if (player.a ==0 and  (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= self.w*k+playerAbility.scaleBody*k ) then
+            if (Player.a ==0 and  (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) <= self.w*k+Player.scaleBody*k ) then
                 flaginv = false 
                 enAtackPlayer(self.damage,'e')
             end
@@ -259,10 +259,10 @@ enemyBombClass = Class{
         end
     end;
     moveNormal = function(self,dt)
-        local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+        local anglePlayerEn = math.atan2(Player.x-self.x,Player.y-self.y)
         self.angleBodyTr(self,anglePlayerEn,dt)
         self.angleMouthTr(self,dt)
-        if ( (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) >= 20*k ) then
+        if ( (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) >= 20*k ) then
             self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
             self.ay=self.ay+80*k2*math.cos(anglePlayerEn)*dt
         else
@@ -378,8 +378,8 @@ enemyBombClass = Class{
             if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
                 playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
-                self.ax =self.ax - player.ax
-                self.ay =self.ay -  player.ay
+                self.ax =self.ax - Player.ax
+                self.ay =self.ay -  Player.ay
                 spawnResHitEn(i)
             end  
         end

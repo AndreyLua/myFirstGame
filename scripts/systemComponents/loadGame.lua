@@ -139,25 +139,7 @@ function loadPlayerParametrs()
         }, 
     }
 
-    playerAbility = {
-        colorR = 0.5,
-        colorG = 0.437,
-        colorB = 0.59, 
-        tip =1 , 
-        mass =200,
-        radiusCollect = 100,
-        damage = 1,
-        invTimer = 0.5,
-        maxSpeed = 30,
-        speedA  = 1.8,
-        speed = 6,
-        debaffStrenght =0.2,
-        scaleBody = 35,
-        boostRegen = 100,
-        boostWaste = 150,
-        boostWasteSp =500,
-        boostWasteEnHit = 5,
-    }
+
     playerSkillParametrs = {
         hpK = 0, -- common1
         enK = 0, -- common2

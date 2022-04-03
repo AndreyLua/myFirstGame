@@ -4,10 +4,10 @@ function enCollWithPlayerInRegularS(index,dt)
      if ( enRegulS[index]) then 
         local kek = enRegulS[index]
         for i = #kek, 1, -1 do
-            if (en[kek[i]] and en[kek[i]].body and en[kek[i]].timer == en[kek[i]].invTimer and  math.abs(en[kek[i]].x - (player.x))<playerAbility.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k and math.abs(en[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+math.max(en[kek[i]].w,en[kek[i]].h)/2*k2  and  (math.pow((en[kek[i]].x - (player.x)),2) + math.pow((en[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k),2))  then
-                local collisFlag, intVectorX ,intVectorY = player.body:collidesWith(en[kek[i]].body)
+            if (en[kek[i]] and en[kek[i]].body and en[kek[i]].timer == en[kek[i]].invTimer and  math.abs(en[kek[i]].x - (Player.x))<Player.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k and math.abs(en[kek[i]].y - (Player.y))<Player.scaleBody*k2+math.max(en[kek[i]].w,en[kek[i]].h)/2*k2  and  (math.pow((en[kek[i]].x - (Player.x)),2) + math.pow((en[kek[i]].y - (Player.y)),2))<=math.pow((Player.scaleBody*k+math.max(en[kek[i]].w,en[kek[i]].h)/2*k),2))  then
+                local collisFlag, intVectorX ,intVectorY = Player.body:collidesWith(en[kek[i]].body)
                 if (collisFlag) then
-                    enCollWithPlayerResult(kek[i],dt,intVectorX ,intVectorY,player.a,en[kek[i]].tip)
+                    enCollWithPlayerResult(kek[i],dt,intVectorX ,intVectorY,Player.a,en[kek[i]].tip)
                 end
             end
         end
@@ -19,7 +19,7 @@ function enCollWithPlayerResult(i, dt,intVectorX ,intVectorY,a,tip)
         en[i].x  = en[i].x -intVectorX*dt*10
         en[i].y = en[i].y - intVectorY*dt*10
     end
-    en[i]:hit(player.a,i,dt)
+    en[i]:hit(Player.a,i,dt)
 end
 
 function enCollWithenInRegularS(index,j,dt)
@@ -247,7 +247,7 @@ function enCollWithWavesInRegularS(index,j,dt)
                 if (kek[i] and waveEffects[kek[i]] and en[j]) then
                     if (math.abs(waveEffects[kek[i]].x - en[j].x)<waveEffects[kek[i]].r*k+enJScale*k and math.abs(waveEffects[kek[i]].y - en[j].y)<waveEffects[kek[i]].r*k2+enJScale*k2 and  (math.pow((waveEffects[kek[i]].x - en[j].x),2) + math.pow((waveEffects[kek[i]].y - en[j].y),2))<=math.pow((waveEffects[kek[i]].r*k+enJScale*k),2)) then
                         if (en[j].timer == en[j].invTimer ) then 
-                            en[j].health = en[j].health -  playerAbility.damage*playerSkillParametrs.damageK*playerSkillParametrs.waveAt
+                            en[j].health = en[j].health -  Player.damage*playerSkillParametrs.damageK*playerSkillParametrs.waveAt
                             en[j].timer = en[j].invTimer-0.0001
                         end
                     end

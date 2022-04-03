@@ -206,7 +206,7 @@ function bloodEffect(dt)
         if ( bloodEffects[i].timer > 0 and  bloodEffects[i].en ~=nil ) then 
             if ( bloodEffects[i].timerTick == 10 and bloodEffects[i].en.health >0) then 
                 bloodPartSpawn(bloodEffects[i].en,7)
-                bloodEffects[i].en.health = bloodEffects[i].en.health - playerAbility.damage*playerSkillParametrs.damageK*dt*playerSkillParametrs.bloodAt/2 -- damage
+                bloodEffects[i].en.health = bloodEffects[i].en.health - Player.damage*playerSkillParametrs.damageK*dt*playerSkillParametrs.bloodAt/2 -- damage
                 bloodEffects[i].en.ax = bloodEffects[i].en.ax*(1-playerSkillParametrs.bloodAt)
                 bloodEffects[i].en.ay = bloodEffects[i].en.ay*(1-playerSkillParametrs.bloodAt)
             end
@@ -262,8 +262,8 @@ function newDeffenseEffect(self)
     if ( self~= nil) then
         local deffenseEff  ={
             en = self,
-            x = player.x, 
-            y = player.y,
+            x = Player.x, 
+            y = Player.y,
             speed =math.random(200,260)*k,
         }
         table.insert(deffenseEffects,deffenseEff)
@@ -339,17 +339,17 @@ function greenPlayerEffectDraw(dt)
            
             greenPlayerEffect[i].scale = greenPlayerEffect[i].scale  +10*dt
              
-            love.graphics.line(player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y-0.5*k*greenPlayerEffect[i].scale,player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y+0.5*k*greenPlayerEffect[i].scale)
+            love.graphics.line(Player.x+ greenPlayerEffect[i].x,Player.y +  greenPlayerEffect[i].y-0.5*k*greenPlayerEffect[i].scale,Player.x+ greenPlayerEffect[i].x,Player.y +  greenPlayerEffect[i].y+0.5*k*greenPlayerEffect[i].scale)
           
-            love.graphics.line(player.x+ greenPlayerEffect[i].x-0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y,player.x+ greenPlayerEffect[i].x+0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y)
+            love.graphics.line(Player.x+ greenPlayerEffect[i].x-0.5*k*greenPlayerEffect[i].scale,Player.y +  greenPlayerEffect[i].y,Player.x+ greenPlayerEffect[i].x+0.5*k*greenPlayerEffect[i].scale,Player.y +  greenPlayerEffect[i].y)
         else
             greenPlayerEffect[i].scale = greenPlayerEffect[i].scale  -30*dt
             if ( greenPlayerEffect[i].scale < 0 ) then 
                 table.remove(greenPlayerEffect,i)
             end
             if (  greenPlayerEffect[i]) then 
-                love.graphics.line(player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y-0.5*k*greenPlayerEffect[i].scale,player.x+ greenPlayerEffect[i].x,player.y +  greenPlayerEffect[i].y+0.5*k*greenPlayerEffect[i].scale)
-                love.graphics.line(player.x+ greenPlayerEffect[i].x-0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y,player.x+ greenPlayerEffect[i].x+0.5*k*greenPlayerEffect[i].scale,player.y +  greenPlayerEffect[i].y)
+                love.graphics.line(Player.x+ greenPlayerEffect[i].x,Player.y +  greenPlayerEffect[i].y-0.5*k*greenPlayerEffect[i].scale,Player.x+ greenPlayerEffect[i].x,Player.y +  greenPlayerEffect[i].y+0.5*k*greenPlayerEffect[i].scale)
+                love.graphics.line(Player.x+ greenPlayerEffect[i].x-0.5*k*greenPlayerEffect[i].scale,Player.y +  greenPlayerEffect[i].y,Player.x+ greenPlayerEffect[i].x+0.5*k*greenPlayerEffect[i].scale,Player.y +  greenPlayerEffect[i].y)
             end
         end
     end
@@ -383,7 +383,7 @@ function tradeEffectDraw(dt)
             for j =#tradeEffects[i].trace,1,-1 do
                 local sled = tradeEffects[i].trace
                 love.graphics.setColor(tradeEffects[i].color1*tradeEffects[i].speed,tradeEffects[i].color2*tradeEffects[i].speed,tradeEffects[i].color3*tradeEffects[i].speed,0.25*j*tradeEffects[i].timer/10)
-                love.graphics.circle('fill',player.x+62*math.sin(-math.pi/2-math.pi/4.3)*k+ sled[j].x,player.y+62*math.cos(-math.pi/2-math.pi/4.3)*k +  sled[j].y,1.2*k)    
+                love.graphics.circle('fill',Player.x+62*math.sin(-math.pi/2-math.pi/4.3)*k+ sled[j].x,Player.y+62*math.cos(-math.pi/2-math.pi/4.3)*k +  sled[j].y,1.2*k)    
             end
             if ( #tradeEffects[i].trace > 4) then 
                 table.remove(tradeEffects[i].trace,1) 
@@ -394,7 +394,7 @@ function tradeEffectDraw(dt)
             tradeEffects[i].x = tradeEffects[i].x +80*math.sin(angle)*dt*k * (1+tradeEffects[i].speed)/3
             tradeEffects[i].y =tradeEffects[i].y +80*math.cos(angle)*dt*k * (1+tradeEffects[i].speed)/3
             
-            love.graphics.circle('fill',player.x+62*math.sin(-math.pi/2-math.pi/4.3)*k+tradeEffects[i].x,player.y +62*math.cos(-math.pi/2-math.pi/4.3)*k+  tradeEffects[i].y,1.2*k)
+            love.graphics.circle('fill',Player.x+62*math.sin(-math.pi/2-math.pi/4.3)*k+tradeEffects[i].x,Player.y +62*math.cos(-math.pi/2-math.pi/4.3)*k+  tradeEffects[i].y,1.2*k)
             
             tradeEffects[i].timer =  tradeEffects[i].timer -4*dt  
         else
@@ -404,14 +404,14 @@ function tradeEffectDraw(dt)
 end
 
 function newPlayerGetDamageEffect(x,y,kol)
-    local angleEnPl = math.atan2(player.x-x,player.y-y)+math.pi 
+    local angleEnPl = math.atan2(Player.x-x,Player.y-y)+math.pi 
     for kek =0, kol do
         local e = {
-        color1 =playerAbility.colorR,
-        color2= playerAbility.colorG,
-        color3 =playerAbility.colorB,
-        x = player.x+(playerAbility.scaleBody-5)*k*math.sin(angleEnPl), 
-        y = player.y+(playerAbility.scaleBody-5)*k*math.cos(angleEnPl), 
+        color1 =Player.Color.colorR,
+        color2= Player.Color.colorG,
+        color3 =Player.Color.colorB,
+        x = Player.x+(Player.scaleBody-5)*k*math.sin(angleEnPl), 
+        y = Player.y+(Player.scaleBody-5)*k*math.cos(angleEnPl), 
         ax  =60*k*math.sin(angleEnPl+math.random()*1.6), 
         ay = 60*k*math.cos(angleEnPl+math.random()*1.6), 
         scale =math.random()*1.5,

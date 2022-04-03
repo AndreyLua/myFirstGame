@@ -113,7 +113,7 @@ enemyMeleeClass = Class{
         end
     end;
     atackStart = function(self)
-        if (self.dash and self.dash==self.dashTimer and self.atack and self.atack==self.atackTimer and self.invTimer ==           self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <=100*k ) then
+        if (self.dash and self.dash==self.dashTimer and self.atack and self.atack==self.atackTimer and self.invTimer ==           self.timer and (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) <=100*k ) then
            self.atack = self.atackTimer-0.001
            self.dash = self.dashTimer-0.001
         end
@@ -220,7 +220,7 @@ enemyMeleeClass = Class{
         enCollWithenInRegularSMelee(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)  
     end;
     collWithObj = function( self,IenRegulS,i,dt) 
-        self.targetY = math.pow(player.x-self.x,2) + math.pow(player.y-self.y,2)
+        self.targetY = math.pow(Player.x-self.x,2) + math.pow(Player.y-self.y,2)
         self.targetX = -1
         enCollWithobjInRegularS(IenRegulS,i,dt)
         enCollWithobjInRegularS(IenRegulS-1,i,dt)
@@ -247,17 +247,17 @@ enemyMeleeClass = Class{
                 self.moveWounded(self,dt)
             end
         else
-            local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+            local anglePlayerEn = math.atan2(Player.x-self.x,Player.y-self.y)
             self.angleBody = anglePlayerEn
             self.angleMouthTr(self,dt)
-            self.x =self.x + ((player.x -(playerAbility.scaleBody+5)*k*math.sin(controler.angle + self.dopAngle)) - self.x)*dt*20*k
-            self.y = self.y + (( player.y -(playerAbility.scaleBody+5)*k2*math.cos(controler.angle + self.dopAngle)) - self.y)*dt*20*k2
+            self.x =self.x + ((Player.x -(Player.scaleBody+5)*k*math.sin(controler.angle + self.dopAngle)) - self.x)*dt*20*k
+            self.y = self.y + (( Player.y -(Player.scaleBody+5)*k2*math.cos(controler.angle + self.dopAngle)) - self.y)*dt*20*k2
         end
     end;
     moveNormal = function(self,dt)
         local anglePlayerEn =0
         if (self.target =="player") then 
-            anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+            anglePlayerEn = math.atan2(Player.x-self.x,Player.y-self.y)
         else
             if (obj[self.targetX] and obj[self.targetX].x) then
                 anglePlayerEn = math.atan2(obj[self.targetX].x-self.x,obj[self.targetX].y-self.y)
@@ -378,8 +378,8 @@ enemyMeleeClass = Class{
                 self.climbAtack = self.climbAtackTimer
                 self.timer =  self.invTimer-0.001
                 self.dash = self.dashTimer
-                self.ax =self.ax - player.ax
-                self.ay =self.ay -  player.ay
+                self.ax =self.ax - Player.ax
+                self.ay =self.ay -  Player.ay
                 spawnResHitEn(i)
             end  
             if (self.invTimer and  self.invTimer ==self.timer) then

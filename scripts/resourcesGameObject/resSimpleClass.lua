@@ -68,18 +68,18 @@ resClass = Class {
     end;
     GravityWithPlayer = function(self)
         if ( self.timer == self.invTimer and  self.tip == 6 ) then
-            local x1 = (player.x)-self.x+1*k
-            local y1 = (player.y)-self.y+1*k2          
+            local x1 = (Player.x)-self.x+1*k
+            local y1 = (Player.y)-self.y+1*k2          
             local ugol = math.atan2(x1,y1) -0.8 * self.r
             self.ax = 23*k*math.sin(ugol)
             self.ay = 23*k*math.cos(ugol)
         else
-            if ( player.a==0) then 
-                 if ((self.timer == self.invTimer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) < playerAbility.radiusCollect*k*playerSkillParametrs.collectRangeK)) then
-                    local x1 = (player.x)-self.x+1*k
-                    local y1 = (player.y)-self.y+1*k2          
+            if ( Player.a==0) then 
+                 if ((self.timer == self.invTimer and (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) < Player.radiusCollect*k*playerSkillParametrs.collectRangeK)) then
+                    local x1 = (Player.x)-self.x+1*k
+                    local y1 = (Player.y)-self.y+1*k2          
                     local ugol = math.atan2(x1,y1)
-                    player.clowRflag =3
+                    Player.Clows.flag =3
                     if ( self.ax> 17*k*math.sin(ugol)*playerSkillParametrs.collectRangeK ) then
                         self.ax = self.ax - 4*k 
                     else
@@ -138,22 +138,22 @@ resClass = Class {
     end;
     
     collWithPlayer = function(self,i)
-        if (self.timer == self.invTimer and  checkCollision(player.x-20*k,player.y-20*k2, 40*k, 40*k2,self.x,self.y,1*k,1*k2)) then
+        if (self.timer == self.invTimer and  checkCollision(Player.x-20*k,Player.y-20*k2, 40*k, 40*k2,self.x,self.y,1*k,1*k2)) then
             if ( self.tip == 4 or self.tip == 5 or self.tip == 6) then
                 if ( self.tip == 4 ) then 
                     for i =1,math.random(3,5) do 
                         newGreenPlayerEffect()
                     end
-                    hp.long=hp.long+50
+                    Player.Hp.long=Player.Hp.long+50
                     resRemove(i)
                 end
                 if ( self.tip == 5 ) then 
-                    boost.long=boost.long+50*k2
+                    Player.Boost.long=Player.Boost.long+50*k2
                     resRemove(i)
                 end
                 if ( self.tip == 6 ) then
                     newGreenPlayerEffect()
-                    hp.long=hp.long +  playerSkillParametrs.vampirK*playerSkillParametrs.damageK*50---skill
+                    Player.Hp.long=Player.Hp.long +  playerSkillParametrs.vampirK*playerSkillParametrs.damageK*50---skill
                     resRemove(i)
                 end
             else

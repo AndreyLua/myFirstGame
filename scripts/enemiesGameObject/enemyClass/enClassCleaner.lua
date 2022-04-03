@@ -224,7 +224,7 @@ enemyСleanerClass = Class{
         end
     end;
     moveNormal = function(self,dt)
-        local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+        local anglePlayerEn = math.atan2(Player.x-self.x,Player.y-self.y)
         if ( self.targetX > 0 and obj[self.targetX] ) then
             anglePlayerEn = math.atan2(obj[self.targetX].x-self.x,obj[self.targetX].y-self.y)
             if (self.dash and self.dash==self.dashTimer) then
@@ -337,8 +337,8 @@ enemyСleanerClass = Class{
             if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
                 playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
-                self.ax =self.ax - player.ax
-                self.ay =self.ay -  player.ay
+                self.ax =self.ax - Player.ax
+                self.ay =self.ay -  Player.ay
                 spawnResHitEn(i)
             end  
         end
@@ -400,7 +400,7 @@ enemyСleanerClass = Class{
     end;
     border = function(self,dt)
         if ( self.x > borderWidth*2-20*k or self.x < -borderWidth+20*k or self.y < -borderHeight+20*k or  self.y > borderHeight*2-20*k ) then
-            local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+            local anglePlayerEn = math.atan2(Player.x-self.x,Player.y-self.y)
             self.ax=self.ax+80*k*math.sin(self.angleBody)*dt
             self.ay=self.ay+80*k2*math.cos(self.angleBody)*dt
             self.dash=self.dashTimer

@@ -84,7 +84,7 @@ end
 
 function EnFront(en) 
     local flagAt = false
-    local anglePlEn =  math.atan2(player.x-en.x, player.y-en.y) 
+    local anglePlEn =  math.atan2(Player.x-en.x, Player.y-en.y) 
     if (anglePlEn/math.abs(anglePlEn)==en.angleBody/math.abs(en.angleBody))then
         if (math.abs(math.abs(anglePlEn) - math.abs(en.angleBody)) <  math.pi/4) then 
             flagAt = true

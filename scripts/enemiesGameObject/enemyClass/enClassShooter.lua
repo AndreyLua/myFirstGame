@@ -91,10 +91,10 @@ enemyShooterClass = Class{
         end
     end;
     atackStart = function(self)
-        if (self.atack and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= 450*k ) then
+        if (self.atack and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) <= 450*k ) then
             self.atack = self.atackTimer-0.001
             self.angleMouth = 1.5
-            enFire(player.x,player.y,self.x,self.y,self.angleBody,self.damage,2,self)
+            enFire(Player.x,Player.y,self.x,self.y,self.angleBody,self.damage,2,self)
         end
     end;
     atackTimerUpdate = function(self,dt)
@@ -196,11 +196,11 @@ enemyShooterClass = Class{
         end
     end;
     moveNormal = function(self,dt)
-        local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+        local anglePlayerEn = math.atan2(Player.x-self.x,Player.y-self.y)
         self.angleBodyTr(self,anglePlayerEn,dt)
         self.angleMouthTr(self,dt)
         self.angleWingTr(self,dt)
-        if ( (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) >= 400*k ) then
+        if ( (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) >= 400*k ) then
             self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
             self.ay=self.ay+80*k2*math.cos(anglePlayerEn)*dt
         else
@@ -299,8 +299,8 @@ enemyShooterClass = Class{
             if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
                 playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
-                self.ax =self.ax - player.ax
-                self.ay =self.ay -  player.ay
+                self.ax =self.ax - Player.ax
+                self.ay =self.ay -  Player.ay
                 spawnResHitEn(i)
             end  
         end

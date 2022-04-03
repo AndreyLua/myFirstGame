@@ -7,7 +7,7 @@ function bulletsUpdate(dt)
                 if ( enemyBullets[i].scale < enemyBullets[i].normalScale ) then
                     enemyBullets[i].scale  = enemyBullets[i].scale + 30*dt
                 else
-                    local ugol = math.atan2(player.x- enemyBullets[i].x,player.y- enemyBullets[i].y)
+                    local ugol = math.atan2(Player.x- enemyBullets[i].x,Player.y- enemyBullets[i].y)
                     local bullet = {
                         en = enemyBullets[i].en,
                         x = enemyBullets[i].x,
@@ -87,19 +87,19 @@ function bulletsCollWithObj(index,dt,j)
 end
 
 function bulletsCollWithPlayer(index,i)
-    local playerIndex =math.floor((player.x-40*k)/(120*k)) + math.floor((player.y-40*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
+    local playerIndex =math.floor((Player.x-40*k)/(120*k)) + math.floor((Player.y-40*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
     if ( index == playerIndex) then 
         bulletsColl(i)
     end
 end
 
     function bulletsColl(i)
-        if (player.a == 1) then
-            if ((math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)) < math.pow(playerAbility.scaleBody*k+enemyBullets[i].scale*k,2)) then
+        if (Player.a == 1) then
+            if ((math.pow((Player.x-enemyBullets[i].x),2)+math.pow((Player.y-enemyBullets[i].y),2)) < math.pow(Player.scaleBody*k+enemyBullets[i].scale*k,2)) then
                 table.remove(enemyBullets,i)
             end
         else
-            if ((math.pow((player.x-enemyBullets[i].x),2)+math.pow((player.y-enemyBullets[i].y),2)) < math.pow(playerAbility.scaleBody*k+enemyBullets[i].scale*k,2)) then
+            if ((math.pow((Player.x-enemyBullets[i].x),2)+math.pow((Player.y-enemyBullets[i].y),2)) < math.pow(Player.scaleBody*k+enemyBullets[i].scale*k,2)) then
                 flaginv = false 
                 enAtackPlayer(enemyBullets[i].damage,'r',enemyBullets[i].en)
                 table.remove(enemyBullets,i)

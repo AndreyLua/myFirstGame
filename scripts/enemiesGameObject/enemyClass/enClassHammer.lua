@@ -91,7 +91,7 @@ enemyHammerClass = Class{
         end
     end;
     atackStart = function(self)
-        if (self.dash and self.dash==self.dashTimer and self.atack and self.atack==self.atackTimer and self.invTimer ==           self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <=100*k ) then
+        if (self.dash and self.dash==self.dashTimer and self.atack and self.atack==self.atackTimer and self.invTimer ==           self.timer and (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) <=100*k ) then
            self.atack = self.atackTimer-0.001
            self.dash = self.dashTimer-0.001
         end
@@ -190,7 +190,7 @@ enemyHammerClass = Class{
         end
     end;
     moveNormal = function(self,dt)
-        local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+        local anglePlayerEn = math.atan2(Player.x-self.x,Player.y-self.y)
         if (self.dash and self.dash==self.dashTimer) then
             self.angleBodyTr(self,anglePlayerEn,dt)
             self.angleMouthTr(self,dt)
@@ -282,8 +282,8 @@ enemyHammerClass = Class{
                 playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
                 self.dash = self.dashTimer
-                self.ax =self.ax - player.ax
-                self.ay =self.ay -  player.ay
+                self.ax =self.ax - Player.ax
+                self.ay =self.ay -  Player.ay
                 spawnResHitEn(i)
             end  
         end

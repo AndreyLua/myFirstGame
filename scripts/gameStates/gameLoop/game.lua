@@ -35,7 +35,8 @@ loadEnImg()
 loadObjImg()
 
 function game:init()
-
+--playerFunction:init()
+Wave:refreshNotionParameters()
 exp =  {}
 
 --#####################################################
@@ -70,18 +71,7 @@ controler = {
   angle = 0,
   flag = false
 }
-hp = {
-    flag = false,
-    long = 720,
-    long2 =720,
-    long3 =720
-}
-boost = {
-    flag = true,
-    long = 720,
-    long2 =720,
-    long3 =720
-}
+
 
 boostDop = {
     long = 0,
@@ -91,23 +81,7 @@ boostDop = {
     shake = 1,
     shakeK = 1,
 }
-player = {
-    a = 0 , 
-    li = 0,
-    liTimer = 20,
-    debaffStrenght =1,
-    body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,playerAbility.scaleBody*k),
-    clowR = 0, 
-    clowRflag = 0,
-    clowLScaleK =1, 
-    clowRScaleK =1,
-    clowLTimer = 10,
-    clowRTimer = 10,
-    x = borderWidth/2+40*k/2, 
-    y = borderHeight/2+40*k2/2,  
-    ax = 0,
-    ay = 0,
-} 
+
 camera = {
     x = borderWidth/2+40*k/2, 
     y = borderHeight/2+40*k2/2
@@ -169,8 +143,8 @@ explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
-boost.long = 1000
-hp.long = 1000 
+Player.Boost.long = 1000
+Player.Hp.long = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -179,7 +153,7 @@ Wave:update(dt)
 --------------------
 playerCamera(dt)
 playerControl()
-playerClowR(dt)
+Player:Clows(self,dt)
 playerHP(dt)
 -------------------
 for i = #obj, 1, -1 do
@@ -276,7 +250,7 @@ end
 function game:keypressed(key1,key, code)
     if key == "escape" then
       --  print(love.filesystem.load( 'Save.lua' ))
-        if gamestate.current() == self and player.isAlive then
+        if gamestate.current() == self and Player.isAlive then
             gamestate.switch(pause)
         end
     elseif key == "q" then
@@ -316,8 +290,8 @@ function  game:draw()
     love.graphics.draw(fon1,0,0,0,k,k2)
     drawStar(dt)
        love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(fon2,(-player.x+40*k/2+screenWidth/2)/20,(-player.y+40*k2/2+screenHeight/2)/40,0,k,k2)
-    love.graphics.draw(fon3,(-player.x+40*k/2+screenWidth/2)/7,(-player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
+    love.graphics.draw(fon2,(-Player.x+40*k/2+screenWidth/2)/20,(-Player.y+40*k2/2+screenHeight/2)/40,0,k,k2)
+    love.graphics.draw(fon3,(-Player.x+40*k/2+screenWidth/2)/7,(-Player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
     if (flaginv == false ) then
         love.graphics.translate( 0  ,random()*random(-2,0,2)*k )   
     end
@@ -353,7 +327,7 @@ function  game:draw()
     if (flaginv == false ) then
         love.graphics.setColor(1,0.7,0.7,1)
     end
-    if ( player.a == 1 ) then 
+    if ( Player.a == 1 ) then 
         love.graphics.setColor(0.9,0.7,0.9,1)
     end 
     love.graphics.draw(playerBatch)

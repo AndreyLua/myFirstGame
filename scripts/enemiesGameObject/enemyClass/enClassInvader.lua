@@ -97,13 +97,13 @@ enemyInvaderClass = Class{
         end
     end;
     atackStart = function(self)
-        if (self.atack and self.atacked and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) <= 450*k and EnFront(self) ) then
+        if (self.atack and self.atacked and self.atack==self.atackTimer and self.invTimer ==self.timer and (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) <= 450*k and EnFront(self) ) then
             self.charge = self.chargeTimer-0.001
             self.angleWingFlag = 1
             if ( self.angleWing < -0.1) then 
                 self.atack = self.atackTimer-0.001
                 self.atacked = false
-                enPreFire(player.x,player.y,self.x+30*k*math.sin(self.angleBody),self.y+30*k2*math.cos(self.angleBody),self.angleBody,self.damage,15,self)
+                enPreFire(Player.x,Player.y,self.x+30*k*math.sin(self.angleBody),self.y+30*k2*math.cos(self.angleBody),self.angleBody,self.damage,15,self)
             end
         end
     end;
@@ -204,12 +204,12 @@ enemyInvaderClass = Class{
         end
     end;
     moveNormal = function(self,dt)
-        local anglePlayerEn = math.atan2(player.x-self.x,player.y-self.y)
+        local anglePlayerEn = math.atan2(Player.x-self.x,Player.y-self.y)
         if ( self.atacked) then 
             self.angleBodyTr(self,anglePlayerEn,dt)
             self.angleWingTr(self,dt)
         end
-        if ( (math.sqrt(math.pow((player.x-self.x),2)+math.pow((player.y-self.y),2))) >= 400*k ) then
+        if ( (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) >= 400*k ) then
             self.ax=self.ax+80*k*math.sin(anglePlayerEn)*dt
             self.ay=self.ay+80*k2*math.cos(anglePlayerEn)*dt
         else
@@ -294,8 +294,8 @@ enemyInvaderClass = Class{
             if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
                 playerAtackEn(self,dt)
                 self.timer =  self.invTimer-0.001
-                self.ax =self.ax - player.ax
-                self.ay =self.ay -  player.ay
+                self.ax =self.ax - Player.ax
+                self.ay =self.ay -  Player.ay
                 spawnResHitEn(i)
             end  
         end

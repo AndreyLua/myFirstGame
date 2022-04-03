@@ -99,7 +99,7 @@ function objDestroy(mas,i)
             centrTX = mas[i].centrTX
             centrTY = mas[i].centrTY
         end
-        local angle = math.atan2(mas[i].x- player.x,mas[i].y- player.y)
+        local angle = math.atan2(mas[i].x- Player.x,mas[i].y- Player.y)
         local kolMeteor = 6 
        
         if ( mas[i].scale <50 ) then
@@ -286,8 +286,8 @@ function objCollWithPlayerInRegularS(index,dt)
     if ( objRegulS[index]) then 
         local kek = objRegulS[index]
         for i = #kek, 1, -1 do
-            if (obj[kek[i]] and obj[kek[i]].body and obj[kek[i]].invTimer==obj[kek[i]].timer and math.abs(obj[kek[i]].x - (player.x))<playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k and math.abs(obj[kek[i]].y - (player.y))<playerAbility.scaleBody*k2+obj[kek[i]].collScale/2*k2  and  (math.pow((obj[kek[i]].x - (player.x)),2) + math.pow((obj[kek[i]].y - (player.y)),2))<=math.pow((playerAbility.scaleBody*k+obj[kek[i]].collScale/2*k),2))  then
-                local collisFlag, intVectorX ,intVectorY = player.body:collidesWith(obj[kek[i]].body)
+            if (obj[kek[i]] and obj[kek[i]].body and obj[kek[i]].invTimer==obj[kek[i]].timer and math.abs(obj[kek[i]].x - (Player.x))<Player.scaleBody*k+obj[kek[i]].collScale/2*k and math.abs(obj[kek[i]].y - (Player.y))<Player.scaleBody*k2+obj[kek[i]].collScale/2*k2  and  (math.pow((obj[kek[i]].x - (Player.x)),2) + math.pow((obj[kek[i]].y - (Player.y)),2))<=math.pow((Player.scaleBody*k+obj[kek[i]].collScale/2*k),2))  then
+                local collisFlag, intVectorX ,intVectorY = Player.body:collidesWith(obj[kek[i]].body)
                 if (collisFlag) then
                     objCollWithPlayerResult(kek[i],dt,intVectorX ,intVectorY)
                 end
@@ -297,14 +297,14 @@ function objCollWithPlayerInRegularS(index,dt)
 end
 
 function objCollWithPlayerResult(i, dt,intVectorX ,intVectorY)
-    local angleD = math.atan2(player.x-obj[i].x,player.y-obj[i].y)
-    local sumMas = obj[i].scale + playerAbility.mass
-    if ( player.a == 1 ) then 
-        obj[i].ax= obj[i].ax-80000*dt*k*math.sin(angleD)/obj[i].scale +(player.ax*playerAbility.speedA*k*dt*player.debaffStrenght)/obj[i].scale*1000
-        obj[i].ay=  obj[i].ay-80000*dt*k2*math.cos(angleD)/obj[i].scale +(player.ay*playerAbility.speedA*k2*dt*player.debaffStrenght)/obj[i].scale*1000
+    local angleD = math.atan2(Player.x-obj[i].x,Player.y-obj[i].y)
+    local sumMas = obj[i].scale + Player.mass
+    if ( Player.a == 1 ) then 
+        obj[i].ax= obj[i].ax-80000*dt*k*math.sin(angleD)/obj[i].scale +(Player.ax*Player.speedA*k*dt*Player.debaffStrenght)/obj[i].scale*1000
+        obj[i].ay=  obj[i].ay-80000*dt*k2*math.cos(angleD)/obj[i].scale +(Player.ay*Player.speedA*k2*dt*Player.debaffStrenght)/obj[i].scale*1000
     else
-        obj[i].ax= obj[i].ax-40000*dt*k*math.sin(angleD)/obj[i].scale +(player.ax*playerAbility.speed*k*dt*player.debaffStrenght)/obj[i].scale*500
-        obj[i].ay=  obj[i].ay-40000*dt*k2*math.cos(angleD)/obj[i].scale +(player.ay*playerAbility.speed*k2*dt*player.debaffStrenght)/obj[i].scale*500
+        obj[i].ax= obj[i].ax-40000*dt*k*math.sin(angleD)/obj[i].scale +(Player.ax*Player.speed*k*dt*Player.debaffStrenght)/obj[i].scale*500
+        obj[i].ay=  obj[i].ay-40000*dt*k2*math.cos(angleD)/obj[i].scale +(Player.ay*Player.speed*k2*dt*Player.debaffStrenght)/obj[i].scale*500
     end
     ---
     if ((intVectorX*intVectorX+intVectorY*intVectorY>=math.pow(0.05*obj[i].collScale*k,2))) then
@@ -312,8 +312,8 @@ function objCollWithPlayerResult(i, dt,intVectorX ,intVectorY)
         obj[i].y = obj[i].y - intVectorY*dt*5
     end
     ----
-    player.debaffStrenght =(1-obj[i].scale/sumMas)
-    obj[i].health = obj[i].health -2*playerAbility.damage
+    Player.debaffStrenght =(1-obj[i].scale/sumMas)
+    obj[i].health = obj[i].health -2*Player.damage
     obj[i].timer= obj[i].invTimer - 0.001
 
 end
