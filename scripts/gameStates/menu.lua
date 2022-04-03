@@ -11,7 +11,7 @@ local exitFlag = false
 
 local buttonAdd = Button(0,0,120*k,120*k)  
 function buttonAdd:draw()
-    exit(buttonAdd.x,buttonAdd.y)
+    exit()
 end
 
 local buttonSkillsX = difButton*6+30*k2
@@ -79,38 +79,38 @@ function buttonNo:draw()
 end
 
 function menu:update(dt)
-    if (buttonAdd:IsTapped()) then 
+    if (buttonAdd:isTapped()) then 
         AddSound(uiClick,0.3)
         exp =  {}
         gamestate.switch(game)
     end
     if ( exitFlag == false) then 
-        if (buttonSkills:IsTapped()) then 
+        if (buttonSkills:isTapped()) then 
             AddSound(uiSelect,0.3)
             gamestate.switch(skills)
         end
-        if (buttonConverter:IsTapped()) then 
+        if (buttonConverter:isTapped()) then 
             AddSound(uiSelect,0.3)
             gamestate.switch(convert)
         end
-        if (buttonCharacter:IsTapped()) then 
+        if (buttonCharacter:isTapped()) then 
             AddSound(uiSelect,0.3)
             gamestate.switch(character)
         end
-        if (buttonSettings:IsTapped()) then 
+        if (buttonSettings:isTapped()) then 
             AddSound(uiSelect,0.3)
             gamestate.switch(settings)
         end
-        if (buttonExit:IsTapped()) then 
+        if (buttonExit:isTapped()) then 
             AddSound(uiSelect,0.3)
             exitFlag = true 
         end
     else
-        if (buttonYes:IsTapped()) then 
+        if (buttonYes:isTapped()) then 
             AddSound(uiSelect,0.3)
             love.event.push('quit')  
         end
-        if (buttonNo:IsTapped()) then 
+        if (buttonNo:isTapped()) then 
             AddSound(uiSelect,0.3)
             exitFlag = false
         end
@@ -133,7 +133,7 @@ function menu:draw()
       buttonExit:draw()
     if (exitFlag) then 
         love.graphics.setColor(0.2,0.2,0.2,1)
-          menu:drawMainButtons()
+          menu:drawTextButtons()
           UIBatch:clear()
         love.graphics.setColor(1,1,1,1)
           exit()
@@ -143,11 +143,11 @@ function menu:draw()
           menu:drawMessageAboutExit()
         love.graphics.setColor(0.2,0.2,0.2,1)
     else
-        menu:drawMainButtons()
+        menu:drawTextButtons()
     end
 end
 
-function menu:drawMainButtons()
+function menu:drawTextButtons()
     love.graphics.draw(UIBatch)
     textButton("Skills",buttonSkills.x,buttonSkills.y,buttonSkills.isTappedFlag,0.9)
     textButton("Converter",buttonConverter.x,buttonConverter.y,buttonConverter.isTappedFlag,0.9)

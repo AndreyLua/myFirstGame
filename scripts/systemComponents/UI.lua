@@ -17,10 +17,12 @@ Button = Class{
         return flagMouseOnTheButton
     end;
     
-    IsTapped  = function (self)
+    isTapped = function (self)
         if love.mouse.isDown(1)  then
               if self.mouseOnTheButton(self) then 
                   self.isTappedFlag = true
+              else
+                  self.isTappedFlag = false
               end
         else
             if (self.isTappedFlag and self.mouseOnTheButton(self)) then 
@@ -31,9 +33,66 @@ Button = Class{
         end
         return false
     end;
-    
 }
 
+Slider = Class{
+    init = function(self, x, y, width, height, value, minValue, maxValue)
+        self.mouseAlpha = 0
+        self.value = value
+        self.minValue = minValue
+        self.maxValue = maxValue
+        self.startValue = value
+        self.isPressedFlag = false
+        self.isFistClickFlag = false
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+    end;
+
+    mouseOnTheButton = function (self)
+        local flagMouseOnTheButton = false
+        if ( (mouse.x > self.x - self.width /2) and (mouse.x < self.x + self.width /2) and (mouse.y > self.y - self.height /2) and (mouse.y < self.y + self.height /2) ) then
+            flagMouseOnTheButton = true
+        end
+        return flagMouseOnTheButton
+    end;
+    
+    isPressed  = function (self)
+        if love.mouse.isDown(1)  then
+            if (self.mouseOnTheButton(self) and self.isFistClickFlag == false) then
+                if (self.isPressedFlag == false) then
+                    self.mouseAlpha = mouse.y
+                    self.startValue = self.value
+                end
+                self.isPressedFlag = true
+            end
+            if (self.isPressedFlag) then 
+                self.value =self.startValue+(self.mouseAlpha-mouse.y) /(1340*k/10)
+            end
+            self.isFistClickFlag = true
+            if ( self.value > self.maxValue ) then
+                self.value = self.maxValue
+            end
+            if (self.value < self.minValue) then
+                self.value = self.minValue
+            end
+            return true 
+        else
+            self.isFistClickFlag = false
+            self.isPressedFlag = false
+            return false
+        end
+    end;
+    
+    getValue = function(self)
+        return self.value
+    end;
+    
+    draw = function(self)
+        butChange(self.x,self.y,self.value,2)
+    end;
+} 
 
 
 

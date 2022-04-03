@@ -7,6 +7,16 @@ HC = require 'libs/HC'
 moonshine = require 'moonshine'
 
 save = {}
+
+globalParameters = {
+    musicVolume = 1
+
+}
+MusicVolume = 1
+SoundsVolume = 1
+Sensitivity = 1
+controllerChoose = 1
+
 ---------------------------------------------------
 ------------------EFFECTS -------------------------
 effect1 = moonshine(moonshine.effects.pixelate)
@@ -144,10 +154,6 @@ mouse =
   y=0
 }
 -------------CONST AND FLAGS------
-MusicVolume = 1
-SoundsVolume = 1
-Sensitivity = 1
-controllerChoose = 1
 
 gradientR = 1
 gradientG = 0 
