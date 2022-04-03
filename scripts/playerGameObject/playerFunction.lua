@@ -2,10 +2,48 @@ local playerFunction = {}
 
 local die = require "scripts/gameStates/gameLoop/die" 
 local saveFunction = require "scripts/systemComponents/saveFunction" 
+
+Player = {
+    tip =1 , 
+    x = borderWidth/2+40*k/2, 
+    y = borderHeight/2+40*k2/2,  
+    scaleBody = 35,
+    body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,35*k),
+    a = 0 , 
+    ax = 0,
+    ay = 0,
+    mass =200,
+    radiusCollect = 100,
+    damage = 1,
+    invTimer = 0.5,
+    maxSpeed = 30,
+    speedA  = 1.8,
+    speed = 6,
+    debaffStrenght =0.2,
+
+    boost = {
+        boostRegen = 100,
+        boostWaste = 150,
+        boostWasteSp =500,
+        boostWasteEnHit = 5,
+    },
+    
+    cristalColor = {
+        colorR = 0.5,
+        colorG = 0.437,
+        colorB = 0.59,
+    },
+    
+    clowR = 0, 
+    clowRflag = 0,
+    clowLScaleK =1, 
+    clowRScaleK =1,
+    clowLTimer = 10,
+    clowRTimer = 10,
+}
+
+
 function playerControl()
-    mouse.x,mouse.y=love.mouse.getPosition()
-    mouse.x = mouse.x
-    mouse.y = mouse.y
     player.body:moveTo(player.x,player.y)
     if ( love.mouse.isDown(1) ) then
         if ( controler.flag == false and mouse.x > screenWidth / 9) then 
@@ -80,7 +118,6 @@ function playerMove(dt)
             player.ay = player.ay+10*dt*k2
         end
     end
-    playerLiTimerUpdate(dt)
     if ( player.a==1) then
         player.x = player.x + player.ax*dt*playerAbility.speed*playerAbility.speedA*k*player.debaffStrenght*playerSkillParametrs.speedK
         player.y = player.y + player.ay*dt*playerAbility.speed*playerAbility.speedA*k2*player.debaffStrenght*playerSkillParametrs.speedK
@@ -138,12 +175,7 @@ function playerDraw(dt)
     playerBatch:add(playerQuads[playerAbility.tip].clow1,clow1X,clow1Y,-controler.angle+math.pi+player.clowR,k/7*player.clowLScaleK,k2/7*player.clowLScaleK,playerDrawPar[playerAbility.tip].clowW1, playerDrawPar[playerAbility.tip].clowH)
     playerBatch:add(playerQuads[playerAbility.tip].clow2,clow2X,clow2Y,-controler.angle+math.pi-player.clowR,k/7*player.clowRScaleK,k2/7*player.clowRScaleK,playerDrawPar[playerAbility.tip].clowW2, playerDrawPar[playerAbility.tip].clowH)
 end
-function playerDrawCristal()
-    local xDraw = screenWidth/2+20*k+(player.x-camera.x)
-    local yDraw = screenHeight/2+20*k2+(player.y-camera.y)  
-    playerBatch:setColor(1,1,1,1)
-    playerBatch:add(playerQuads[playerAbility.tip].cristal,xDraw,yDraw,-controler.angle+math.pi,k/(7-player.li/10),k2/(7-player.li/10),playerDrawPar[playerAbility.tip].cristalW/2, playerDrawPar[playerAbility.tip].cristalH/2-playerDrawPar[playerAbility.tip].cristalX)  
-end
+
 function playerSledDraw(x,y,dt)
  --  player.body:draw('line')
     love.graphics.circle('line',controler.x0,controler.y0,13*k)
@@ -353,24 +385,6 @@ function playerClowR(dt)
     if ( player.clowRflag ==4) then
         if (  player.clowR<0.6) then
           player.clowR = player.clowR+2*dt
-        end
-    end
-end
-function playerLiTimerUpdate(dt)
-    if ( player.a == 1 ) then
-        if (player.li < 0) then
-            player.li = player.liTimer
-            playerLiRan ={math.random(1,2),math.random(1,2),math.random(1,2),math.random(1,2)}
-        end
-        if ( player.li < player.liTimer) then 
-            player.li = player.li - 100 * dt
-        end
-    else
-        if ( player.li < player.liTimer) then 
-            player.li = player.li - 100 * dt
-            if ( player.li < 0) then
-                player.li = 0 
-            end
         end
     end
 end

@@ -1,5 +1,19 @@
 local game = {} 
 
+local buttonAdd = Button(0,0,120*k,120*k)  
+function buttonAdd:draw()
+    add()
+end
+
+
+score = 9999999
+borderWidth =screenWidth/2
+borderHeight = screenHeight/2
+numberCleaner = 0 
+shake = 0
+
+
+
 local playerFunction = require "scripts/playerGameObject/playerFunction"
 local bulletFunction = require "scripts/bulletsGameObject/bulletFunction"
 local enFunction = require "scripts/enemiesGameObject/enFunction"
@@ -38,17 +52,7 @@ stars = {}
 --effects
 --#####################################################
 -------------------gameParametrs
-score = 9999999
-borderWidth =screenWidth/2
-borderHeight = screenHeight/2
-numberCleaner = 0 
-shake = 0
-touchx = 0
-touchy = 0 
-flagtouch =false
-flagtouch1 = false
-flagtouch2 = false
-flagtouch3 = false
+
 -------------------gameParametrs
 --#####################################################
 -------------------playerParametrs
@@ -126,7 +130,7 @@ playerSledi = {}
 
 masli= {} 
 
---loadSave()
+loadSave()
 lvlParametrs()
 end
 
@@ -155,6 +159,10 @@ end
 
 function game:update(dt)
 
+if (buttonAdd:isTapped()) then 
+    AddSound(uiClick,0.3)
+    gamestate.switch(menu)
+end
 -- en = {}
 --flaginv =true
 explUpdate2(dt)
@@ -166,7 +174,6 @@ hp.long = 1000
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
-flagtouch2 = false -- для выхода в состояние пауза
 Wave:update(dt)
 
 --------------------
@@ -278,20 +285,6 @@ function game:keypressed(key1,key, code)
 end
 
 function game:movement(dt)
-    if ( love.mouse.isDown(1))then
-        flagtouch=true
-    else
-        if (  flagtouch==true and mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and flagtouch1== true) then
-            AddSound(uiClick,0.3)
-            gamestate.switch(menu)
-        end
-        if ( flagtouch==false) then
-            touchx = mouse.x
-            touchy = mouse.y
-        end
-        flagtouch=false
-        flagtouch1 = true
-    end   
     if love.keyboard.isDown('e') then
         local Geo  =math.random(1,4)
         allSpawn(obj,Geo)
@@ -309,8 +302,6 @@ end
 
 
 function  game:draw()
- -- flaginv =true
-  
     local dt = love.timer.getDelta()
     boomBatch:clear()
     UIBatch:clear()
@@ -383,13 +374,8 @@ function  game:draw()
         tradeEffectDraw(dt)
         playerGetDamageEffect(dt)
         -----------
-        --waveEffect(dt)
     love.graphics.pop()
-   -- love.graphics.push()
-      --  love.graphics.translate(screenWidth/2+20*k+(player.x-camera.x),screenHeight/2+20*k2+(player.y-camera.y))
-        --love.graphics.rotate(-controler.angle)
-      --  playerLiInBodyDraw()
- --   love.graphics.pop()
+
 
     love.graphics.setColor(1,1,1,1)
     for i=1,#exp do
@@ -400,7 +386,7 @@ function  game:draw()
     
     Wave:notionDraw(dt)
     sc(0,screenHeight/2)
-    add()
+    buttonAdd:draw()
     
     love.graphics.draw(UIBatch)
     Wave:progressBarDraw()

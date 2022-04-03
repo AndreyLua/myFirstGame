@@ -8,10 +8,6 @@ moonshine = require 'moonshine'
 
 save = {}
 
-globalParameters = {
-    musicVolume = 1
-
-}
 MusicVolume = 1
 SoundsVolume = 1
 Sensitivity = 1
@@ -131,9 +127,9 @@ k = k2
 system = require "scripts/systemComponents/system" 
 soundFunction = require "scripts/systemComponents/soundFunction"
 saveFunction = require "scripts/systemComponents/saveFunction" 
-game = require "scripts/gameStates/gameLoop/game"
 effects = require "scripts/systemComponents/effects" 
 UI= require "scripts/systemComponents/UI"
+game = require "scripts/gameStates/gameLoop/game"
 
 ----------------------------------
 inv = Timer.new()

@@ -9,19 +9,24 @@ local difButton = (screenWidth-3*(45*k2*0.9+200/4*k)-45*k2*0.9-k/2*120)/28
 
 local textButtonMusicVolumeX = difButton*10+45*k2*0.9/2
 local sliderMusicVolumeX =textButtonMusicVolumeX+difButton+45*k2*0.9/2+200/4*k/2
-local sliderMusicVolume = Slider(sliderMusicVolumeX, screenHeight/2,146/5*k,screenHeight,MusicVolume,0,2)
 
 local textButtonSoundsVolumeX = sliderMusicVolumeX+200/4*k/2+difButton*1+45*k2*0.9/2 
 local sliderSoundsVolumeX =textButtonSoundsVolumeX+45*k2*0.9/2+difButton+200/4*k/2
-local sliderSoundsVolume = Slider(sliderSoundsVolumeX, screenHeight/2,146/5*k,screenHeight,SoundsVolume,0,2)
-
 local buttonTextControllerX = sliderSoundsVolumeX+200/4*k/2+difButton*2+45*k2*0.9/2 
 local buttonControllerX = buttonTextControllerX+ 45*k2*0.9/2 + difButton + k/4*120
-local buttonController = Button(buttonControllerX,screenHeight/2,60*k,250*k2)
-
 local sliderTextSensitivityX = buttonControllerX+ k/4*120 + difButton+ 45*k2*0.9/2
 local sliderSensitivityX = sliderTextSensitivityX+ 45*k2*0.9/2+difButton+200/4*k/2
-local sliderSensitivity = Slider(sliderSensitivityX,screenHeight/2,146/5*k,screenHeight,Sensitivity,0.2,2)
+
+local buttonController = Button(buttonControllerX,screenHeight/2,60*k,250*k2)
+function buttonController:draw()
+    bodyButton(buttonController.x,buttonController.y,buttonController.isTappedFlag)
+end
+
+function settings:init()
+    sliderMusicVolume = Slider(sliderMusicVolumeX, screenHeight/2,146/5*k,screenHeight,MusicVolume,0,2)
+    sliderSoundsVolume = Slider(sliderSoundsVolumeX, screenHeight/2,146/5*k,screenHeight,SoundsVolume,0,2)
+    sliderSensitivity = Slider(sliderSensitivityX,screenHeight/2,146/5*k,screenHeight,Sensitivity,0.2,2)
+end
 
 function settings:update(dt)
     if (buttonAdd:isTapped()) then 
@@ -58,8 +63,8 @@ function settings:draw()
     sliderMusicVolume:draw()
     sliderSensitivity:draw()
     sliderSoundsVolume:draw()
+    buttonController:draw()
     
-    bodyButton(buttonControllerX,screenHeight/2,but4)
     love.graphics.draw(UIBatch)
     
     settings:drawTextButtons()
