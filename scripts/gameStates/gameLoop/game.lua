@@ -35,8 +35,8 @@ loadEnImg()
 loadObjImg()
 
 function game:init()
---playerFunction:init()
 Wave:refreshNotionParameters()
+Player:refreshParameters()
 exp =  {}
 
 --#####################################################
@@ -57,20 +57,11 @@ stars = {}
 -------------------gameParametrs
 --#####################################################
 -------------------playerParametrs
-flaginv = true
 -------------------playerParametrs
 --#####################################################
 -------------------WaveParametrs
 -------------------WaveParametrs
 
-controler = { 
-  x0 = 0, 
-  y0 = 0,
-  x = 0,
-  y = 0,
-  angle = 0,
-  flag = false
-}
 
 
 boostDop = {
@@ -104,7 +95,7 @@ playerSledi = {}
 
 masli= {} 
 
-loadSave()
+--loadSave()
 lvlParametrs()
 end
 
@@ -125,7 +116,7 @@ end
 
 function love.keypressed(key, code)
     if key == "escape" then
-        gamestate.switch(pause)
+        gamestate.switch(menu)
     elseif key == "q" then
         love.event.push('quit')
     end
@@ -137,14 +128,14 @@ if (buttonAdd:isTapped()) then
     AddSound(uiClick,0.3)
     gamestate.switch(menu)
 end
--- en = {}
---flaginv =true
+ --en = {en[1]}
+--Player.flagInv =true
 explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
-Player.Boost.long = 1000
-Player.Hp.long = 1000 
+--Player.Energy.value = 1000
+--Player.Hp.value = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -152,9 +143,10 @@ Wave:update(dt)
 
 --------------------
 playerCamera(dt)
-playerControl()
-Player:Clows(self,dt)
-playerHP(dt)
+Player:control()
+Player:invisible(dt)
+Player.Clows:update(dt)
+Player.Hp:update(dt)
 -------------------
 for i = #obj, 1, -1 do
     if (obj[i]) then  
@@ -234,17 +226,16 @@ for i = #res, 1, -1 do
         end
     end
 end
-playerBoost(dt)
+Player.Energy:update(dt)
 playerBoostDop(dt) -- skill
 Wave:spawn()
 playerCollWithObj(dt)
 playerCollWithEn(dt)
 playerDebaff(dt)
-playerMove(dt)
+Player:move(dt)
 bulletsUpdate(dt)
 self:movement(dt)
-playerBorder()
-playerDie()
+Player:border()
 end
 
 function game:keypressed(key1,key, code)
@@ -265,7 +256,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,math.random(6))
+        allSpawn(en,Geo,3)
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -292,7 +283,7 @@ function  game:draw()
        love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon2,(-Player.x+40*k/2+screenWidth/2)/20,(-Player.y+40*k2/2+screenHeight/2)/40,0,k,k2)
     love.graphics.draw(fon3,(-Player.x+40*k/2+screenWidth/2)/7,(-Player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
-    if (flaginv == false ) then
+    if (Player.flagInv == false ) then
         love.graphics.translate( 0  ,random()*random(-2,0,2)*k )   
     end
     love.graphics.setColor(1,1,1,1)
@@ -324,7 +315,7 @@ function  game:draw()
     love.graphics.pop()
     love.graphics.setColor(1,1,1,1)
     playerDraw(dt)
-    if (flaginv == false ) then
+    if (Player.flagInv == false ) then
         love.graphics.setColor(1,0.7,0.7,1)
     end
     if ( Player.a == 1 ) then 
@@ -337,7 +328,7 @@ function  game:draw()
     love.graphics.draw(enBatchDop)
     love.graphics.push()
         love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
-        Health_Boost()
+        Player.drawUI()
         love.graphics.setColor(1,1,1,1)
         playerLiDraw(dt)
         love.graphics.draw(boomBatch)
@@ -367,7 +358,7 @@ function  game:draw()
    
     love.graphics.setCanvas()
     love.graphics.setColor(1,1,1,1)
-    if (flaginv == false ) then
+    if (Player.flagInv == false ) then
         effect1(function()
             love.graphics.draw(canvasToEffect,0,0,0,sx,sy)
         end)

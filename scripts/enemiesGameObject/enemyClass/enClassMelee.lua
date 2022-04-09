@@ -119,6 +119,7 @@ enemyMeleeClass = Class{
         end
     end;
     atackTimerUpdate = function(self,dt)
+        self.atackOnTheClimb(self)
         if ( self.atack <  self.atackTimer) then
             self.atack  = self.atack  - 30*dt
         end
@@ -250,8 +251,8 @@ enemyMeleeClass = Class{
             local anglePlayerEn = math.atan2(Player.x-self.x,Player.y-self.y)
             self.angleBody = anglePlayerEn
             self.angleMouthTr(self,dt)
-            self.x =self.x + ((Player.x -(Player.scaleBody+5)*k*math.sin(controler.angle + self.dopAngle)) - self.x)*dt*20*k
-            self.y = self.y + (( Player.y -(Player.scaleBody+5)*k2*math.cos(controler.angle + self.dopAngle)) - self.y)*dt*20*k2
+            self.x =self.x + ((Player.x -(Player.scaleBody+5)*k*math.sin(Player.Controller.angle + self.dopAngle)) - self.x)*dt*20*k
+            self.y = self.y + (( Player.y -(Player.scaleBody+5)*k2*math.cos(Player.Controller.angle + self.dopAngle)) - self.y)*dt*20*k2
         end
     end;
     moveNormal = function(self,dt)
@@ -319,7 +320,7 @@ enemyMeleeClass = Class{
             enBatch:add(enQuads.clow1Melee,clow1X,clow1Y,-self.angleBody-math.pi+self.angleMouth,k/6,k2/6,36, 44)
             enBatch:add(enQuads.clow2Melee,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
             enBatch:add(enQuads.bodyMelee,self.x,self.y,-self.angleBody+math.pi,k/6,k2/6,60, 88)
-          --  self.body:draw('fill')
+            --self.body:draw('fill')
         else
             local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
             local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
@@ -335,6 +336,13 @@ enemyMeleeClass = Class{
             --self.body:draw('fill')
         end
     end;
+    atackOnTheClimb = function(self)
+        if ( self.climbFlag == 1 and self.meleeAtackTimer == self.meleeAtack )  then 
+            self.meleeAtack = self.meleeAtackTimer - 0.0001
+            Player:takeDamage(self.damage,'m',self)
+        end
+    end;
+  
     traceSpawn = function(self)
         local trace = {
             angle = self.angleBody,
@@ -364,13 +372,8 @@ enemyMeleeClass = Class{
             if (self.invTimer == self.timer and self.climbAtack == self.climbAtackTimer and self.dash  ~= self.dashTimer)  then
                 self.climbFlag = 1 
                 self.climbAtack = self.climbAtackTimer - 0.0001
-                self.dopAngle = self.angleBody-controler.angle
+                self.dopAngle = self.angleBody-Player.angleBody
             end 
-            if ( self.climbFlag == 1 and self.meleeAtackTimer == self.meleeAtack )  then 
-                self.meleeAtack = self.meleeAtackTimer - 0.0001
-                flaginv = false 
-                enAtackPlayer(self.damage,'m',self)
-            end
         else
             if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
                 playerAtackEn(self,dt)

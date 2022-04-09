@@ -123,8 +123,7 @@ enemyBombClass = Class{
             self.flagBomb = 1 
             self.w = 100
             if (Player.a ==0 and  (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) <= self.w*k+Player.scaleBody*k ) then
-                flaginv = false 
-                enAtackPlayer(self.damage,'e')
+                Player:takeDamage(self.damage,'e')
             end
         end
         if ( self.atack < 0) then

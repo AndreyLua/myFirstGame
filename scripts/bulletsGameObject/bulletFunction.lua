@@ -100,8 +100,7 @@ end
             end
         else
             if ((math.pow((Player.x-enemyBullets[i].x),2)+math.pow((Player.y-enemyBullets[i].y),2)) < math.pow(Player.scaleBody*k+enemyBullets[i].scale*k,2)) then
-                flaginv = false 
-                enAtackPlayer(enemyBullets[i].damage,'r',enemyBullets[i].en)
+                Player:takeDamage(enemyBullets[i].damage,'r',enemyBullets[i].en)
                 table.remove(enemyBullets,i)
             end
         end      

@@ -144,16 +144,16 @@ resClass = Class {
                     for i =1,math.random(3,5) do 
                         newGreenPlayerEffect()
                     end
-                    Player.Hp.long=Player.Hp.long+50
+                    Player:heal(50)
                     resRemove(i)
                 end
-                if ( self.tip == 5 ) then 
-                    Player.Boost.long=Player.Boost.long+50*k2
+                if ( self.tip == 5 ) then
+                    Player:rechargeEnergy(50)
                     resRemove(i)
                 end
                 if ( self.tip == 6 ) then
                     newGreenPlayerEffect()
-                    Player.Hp.long=Player.Hp.long +  playerSkillParametrs.vampirK*playerSkillParametrs.damageK*50---skill
+                    Player:heal(playerSkillParametrs.vampirK*playerSkillParametrs.damageK*50) -- skill
                     resRemove(i)
                 end
             else

@@ -8,6 +8,7 @@ Player = {
     x = borderWidth/2+40*k/2, 
     y = borderHeight/2+40*k2/2,  
     scaleBody = 35,
+    angleBody = 0,
     body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,35*k),
     a = 0 , 
     ax = 0,
@@ -15,27 +16,28 @@ Player = {
     mass =200,
     radiusCollect = 100,
     damage = 1,
-    invTimer = 0.5,
+    flagInv = true,
+    inv = 2,
+    invTimer = 2,
     maxSpeed = 30,
     speedA  = 1.8,
     speed = 6,
     debaffStrenght =0.2,
 
-    Boost = {
+    Energy = {
+        value = 1000,
+        maxValue = 1000,
+        lengthBar = 1000,
         flag = true,
-        long = 720,
-        long2 =720,
-        long3 =720,
-        boostRegen = 100,
-        boostWaste = 150,
-        boostWasteSp =500,
-        boostWasteEnHit = 5,
+        regen = 100,
+        wasteBoost = 150,
+        wasteAtack = 5,
+        wasteSpecialAtack =500,
     },
     Hp = {
-        flag = false,
-        long = 720,
-        long2 =720,
-        long3 =720
+        value = 1000, 
+        maxValue = 1000,
+        lengthBar = 1000,
     },
     Color = {
         colorR = 0.5,
@@ -54,35 +56,69 @@ Player = {
             timer = 10,
         },
     },
+    Controller = { 
+        x0 = 0, 
+        y0 = 0,
+        x = 0,
+        y = 0,
+        angle = 0,
+        flag = false
+    },
 
 }
 
-function playerControl()
-    Player.body:moveTo(Player.x,Player.y)
+function Player:refreshParameters()
+    self.x = borderWidth/2+40*k/2 
+    self.y = borderHeight/2+40*k2/2
+    self.body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,self.scaleBody)
+    self.a = 0 
+    self.ax = 0
+    self.ay = 0
+    self.inv =self.invTimer
+    self.flagInv = true
+    self.debaffStrenght =0.2
+    
+    self.Hp.value = self.Hp.maxValue
+    self.Hp.lengthBar = self.Hp.maxValue
+
+    self.Energy.value = self.Energy.maxValue
+    self.Energy.lengthBar = self.Energy.maxValue
+    
+    self.Clows.angle = 0
+    self.Clows.flag = 0
+    self.Clows.R.timer = 10
+    self.Clows.L.timer = 10
+    self.Clows.R.scale = 1
+    self.Clows.L.scale = 1
+end
+
+function Player:control()
     if ( love.mouse.isDown(1) ) then
-        if ( controler.flag == false and mouse.x > screenWidth / 9) then 
+        if ( self.Controller.flag == false and mouse.x > screenWidth / 9) then 
             if ( controllerChoose == 1 ) then 
-                controler.x0 = mouse.x
-                controler.y0 = mouse.y
+                self.Controller.x0 = mouse.x
+                self.Controller.y0 = mouse.y
             elseif ( controllerChoose == 2 ) then 
-                controler.x0 = screenWidth/1.2
-                controler.y0 = screenHeight - screenHeight/3
+                self.Controller.x0 = screenWidth/1.2
+                self.Controller.y0 = screenHeight - screenHeight/3
             elseif ( controllerChoose == 3 ) then  
-                controler.x0 = screenWidth/1.2
-                controler.y0 = screenHeight/3
+                self.Controller.x0 = screenWidth/1.2
+                self.Controller.y0 = screenHeight/3
             end
-            controler.flag = true
+            self.Controller.flag = true
         end
-        if ( controler.flag == true and mouse.x > screenWidth / 9) then 
-            controler.x = mouse.x -   controler.x0
-            controler.y = mouse.y -   controler.y0
+        
+        if ( self.Controller.flag == true and mouse.x > screenWidth / 9) then 
+            self.Controller.x = mouse.x -   self.Controller.x0
+            self.Controller.y = mouse.y -   self.Controller.y0
             Player.a = 0
-            if ( math.abs(controler.x) >1*k or math.abs(controler.y)>1*k2) then
-                controler.angle = math.atan2(controler.x,controler.y)
+            if ( math.abs(self.Controller.x) >1*k or math.abs(self.Controller.y)>1*k2) then
+                self.Controller.angle = math.atan2(self.Controller.x,self.Controller.y)
+                self.angleBody = self.Controller.angle
             end  
-            if (( math.abs(controler.x) >1*k or math.abs(controler.y)>1*k2)) then
-                Player.ax  =math.sin(controler.angle)*math.abs(controler.x*screenWidth/screenHeight/3.5)*Sensitivity
-                Player.ay  =math.cos(controler.angle)*math.abs(controler.y*screenWidth/screenHeight/3.5)*Sensitivity
+            if (( math.abs(self.Controller.x) >1*k or math.abs(self.Controller.y)>1*k2)) then
+                Player.ax  =math.sin(self.Controller.angle)*math.abs(self.Controller.x*screenWidth/screenHeight/3.5)*Sensitivity
+                Player.ay  =math.cos(self.Controller.angle)*math.abs(self.Controller.y*screenWidth/screenHeight/3.5)*Sensitivity
                 
                 if ( Player.ax > Player.maxSpeed) then
                     Player.ax = Player.maxSpeed 
@@ -98,28 +134,20 @@ function playerControl()
                 end
             end
         else
-            controler.flag = true
+            self.Controller.flag = true
         end
     else
         Player.a = 0
-        controler.flag =false
+        self.Controller.flag =false
     end
     
-    if ((#love.touch.getTouches()>1 and Player.Boost.flag == true) or (love.keyboard.isDown('t')  and Player.Boost.flag == true ) ) then
+    if ((#love.touch.getTouches()>1 and Player.Energy.flag == true) or (love.keyboard.isDown('t')  and Player.Energy.flag == true ) ) then
         Player.Clows.flag =4 
         Player.a = 1 
     end
-    if ( Player.Boost.long >70*k2  ) then
-        Player.Boost.flag = true
-    end
-    if ( Player.Boost.long <= 30*k2  ) then
-        Player.a=0
-        Player.Boost.long =30*k2
-        Player.Boost.flag = false
-    end
 end
 
-function playerMove(dt)
+function Player:move(dt)
     if not(love.mouse.isDown(1)) then
         if ( Player.ax> 0) then
             Player.ax = Player.ax-10*dt*k
@@ -132,6 +160,7 @@ function playerMove(dt)
             Player.ay = Player.ay+10*dt*k2
         end
     end
+    
     if ( Player.a==1) then
         Player.x = Player.x + Player.ax*dt*Player.speed*Player.speedA*k*Player.debaffStrenght*playerSkillParametrs.speedK
         Player.y = Player.y + Player.ay*dt*Player.speed*Player.speedA*k2*Player.debaffStrenght*playerSkillParametrs.speedK
@@ -139,6 +168,7 @@ function playerMove(dt)
         Player.x = Player.x + Player.ax*dt*k*Player.speed*Player.debaffStrenght*playerSkillParametrs.speedK
         Player.y = Player.y + Player.ay*dt*k2*Player.speed*Player.debaffStrenght*playerSkillParametrs.speedK
     end
+    Player.body:moveTo(Player.x,Player.y)
 end
 
 function playerCamera(dt)
@@ -165,34 +195,34 @@ end
 function playerDraw(dt)
     local xDraw = screenWidth/2+20*k+(Player.x-camera.x)
     local yDraw = screenHeight/2+20*k2+(Player.y-camera.y)  
-    local clow1X =xDraw +playerDrawPar[Player.tip].clowX*k2*math.sin(controler.angle+playerDrawPar[Player.tip].clowR)
-    local clow1Y =yDraw +playerDrawPar[Player.tip].clowX*k2*math.cos(controler.angle+playerDrawPar[Player.tip].clowR)
-    local clow2X =xDraw +playerDrawPar[Player.tip].clowX*k2*math.sin(controler.angle-playerDrawPar[Player.tip].clowR)
-    local clow2Y =yDraw+playerDrawPar[Player.tip].clowX*k2*math.cos(controler.angle-playerDrawPar[Player.tip].clowR)
+    local clow1X =xDraw +playerDrawPar[Player.tip].clowX*k2*math.sin(Player.angleBody+playerDrawPar[Player.tip].clowR)
+    local clow1Y =yDraw +playerDrawPar[Player.tip].clowX*k2*math.cos(Player.angleBody+playerDrawPar[Player.tip].clowR)
+    local clow2X =xDraw +playerDrawPar[Player.tip].clowX*k2*math.sin(Player.angleBody-playerDrawPar[Player.tip].clowR)
+    local clow2Y =yDraw+playerDrawPar[Player.tip].clowX*k2*math.cos(Player.angleBody-playerDrawPar[Player.tip].clowR)
     playerSledDraw(screenWidth/2+20*k,screenHeight/2+20*k2,dt)
-    playerBatch:add(playerQuads[Player.tip].body,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7, playerDrawPar[Player.tip].bodyW/2, playerDrawPar[Player.tip].bodyH/2)
+    playerBatch:add(playerQuads[Player.tip].body,xDraw,yDraw,-Player.angleBody+math.pi,k/7,k2/7, playerDrawPar[Player.tip].bodyW/2, playerDrawPar[Player.tip].bodyH/2)
     playerBatch:setColor( 1, 1,1,0.8 )
-    playerBatch:add(playerQuads[Player.tip].wings,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7,playerDrawPar[Player.tip].wingsW/2, playerDrawPar[Player.tip].wingsH/2-playerDrawPar[Player.tip].wingsX)
+    playerBatch:add(playerQuads[Player.tip].wings,xDraw,yDraw,-Player.angleBody+math.pi,k/7,k2/7,playerDrawPar[Player.tip].wingsW/2, playerDrawPar[Player.tip].wingsH/2-playerDrawPar[Player.tip].wingsX)
     local r ,g ,b = gradient(dt)
     playerBatch:setColor(r,g,b)
-    playerBatch:add(playerQuads[Player.tip].cristal,xDraw,yDraw,-controler.angle+math.pi,k/7,k2/7,playerDrawPar[Player.tip].cristalW/2, playerDrawPar[Player.tip].cristalH/2-playerDrawPar[Player.tip].cristalX)
+    playerBatch:add(playerQuads[Player.tip].cristal,xDraw,yDraw,-Player.angleBody+math.pi,k/7,k2/7,playerDrawPar[Player.tip].cristalW/2, playerDrawPar[Player.tip].cristalH/2-playerDrawPar[Player.tip].cristalX)
     playerBatch:setColor(1,1,1,1)
     if (playerSkillParametrs.bloodAtFlag == true ) then
         playerBatch:setColor(1,0.7,0.7,1)  
     end
-    playerBatch:add(playerQuads[Player.tip].clow1,clow1X,clow1Y,-controler.angle+math.pi+Player.Clows.angle,k/7*Player.Clows.L.scale,k2/7*Player.Clows.L.scale,playerDrawPar[Player.tip].clowW1, playerDrawPar[Player.tip].clowH)
-    playerBatch:add(playerQuads[Player.tip].clow2,clow2X,clow2Y,-controler.angle+math.pi-Player.Clows.angle,k/7*Player.Clows.R.scale,k2/7*Player.Clows.R.scale,playerDrawPar[Player.tip].clowW2, playerDrawPar[Player.tip].clowH)
+    playerBatch:add(playerQuads[Player.tip].clow1,clow1X,clow1Y,-Player.angleBody+math.pi+Player.Clows.angle,k/7*Player.Clows.L.scale,k2/7*Player.Clows.L.scale,playerDrawPar[Player.tip].clowW1, playerDrawPar[Player.tip].clowH)
+    playerBatch:add(playerQuads[Player.tip].clow2,clow2X,clow2Y,-Player.angleBody+math.pi-Player.Clows.angle,k/7*Player.Clows.R.scale,k2/7*Player.Clows.R.scale,playerDrawPar[Player.tip].clowW2, playerDrawPar[Player.tip].clowH)
 end
 
 function playerSledDraw(x,y,dt)
- --  Player.body:draw('line')
-    love.graphics.circle('line',controler.x0,controler.y0,13*k)
+    --Player.body:draw('line')
+    love.graphics.circle('line',Player.Controller.x0,Player.Controller.y0,13*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
     local playerSled = {
-        angle = -controler.angle+math.pi,
-        ax =-2*k*math.sin(controler.angle) ,
-        ay =-2*k2*math.cos(controler.angle),
+        angle = -Player.angleBody+math.pi,
+        ax =-2*k*math.sin(Player.angleBody) ,
+        ay =-2*k2*math.cos(Player.angleBody),
         x = x,
         y = y, 
         r = 0.2,
@@ -226,7 +256,8 @@ function playerCollWithObj(dt)
     objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1,dt)
 end
 
-function enAtackPlayer(dmg,tip,self)
+function Player:takeDamage(dmg,tip,atacker)
+    self.flagInv = false
     AddSound(playerHurtSounds,0.3)
     dmg = dmg- playerSkillParametrs.hpK*dmg
     boostDop.recovery =boostDop.recoveryTimer - 0.0000001
@@ -236,34 +267,46 @@ function enAtackPlayer(dmg,tip,self)
     else
         if ( tip=='m') then
             newPlayerGetDamageEffect(self.x,self.y,7)
-            Player.Hp.long = Player.Hp.long - dmg*(1-playerSkillParametrs.meleeDefK)
+            self.Hp.value = self.Hp.value - dmg*(1-playerSkillParametrs.meleeDefK)
             if (playerSkillParametrs.spikeFlag == true) then 
-                newDeffenseEffect(self)
+                newDeffenseEffect(atacker)
             end
         end
         if ( tip=='e') then
-            Player.Hp.long = Player.Hp.long - dmg
+            self.Hp.value = self.Hp.value - dmg
         end
          if ( tip=='r') then
             newPlayerGetDamageEffect(self.x,self.y,7)
-            Player.Hp.long = Player.Hp.long - dmg*(1-playerSkillParametrs.rangeDefK)
+            self.Hp.value = self.Hp.value - dmg*(1-playerSkillParametrs.rangeDefK)
             if (playerSkillParametrs.spikeFlag == true) then 
-                newDeffenseEffect(self)
+                newDeffenseEffect(atacker)
             end
         end
     end
+    if ( self.Hp.value<=0) then 
+        makeSave()
+        gamestate.switch(die)
+    end
+end
+
+function Player:heal(value)
+    Player.Hp.value=Player.Hp.value+value
+end
+
+function Player:rechargeEnergy(value)
+    self.Energy.value=self.Energy.value+value
 end
 
 function playerAtackEn(self,dt)
     if (playerSkillParametrs.waveAtFlag or playerSkillParametrs.bloodAtFlag or playerSkillParametrs.sealAtFlag or playerSkillParametrs.vampirFlag) then 
-        Player.Boost.long = Player.Boost.long - (Player.Boost.boostWasteSp-(Player.Boost.boostWasteSp*playerSkillParametrs.enK))*     Player.Boost.boostWasteEnHit*dt
+        Player.Energy.value = Player.Energy.value - (Player.Energy.wasteSpecialAtack-(Player.Energy.wasteSpecialAtack*playerSkillParametrs.enK))*Player.Energy.wasteAtack*dt
     end
         
     AddSound(playerHitSounds,0.3)
-    local clow1X =Player.x +playerDrawPar[Player.tip].clowX*k2*math.sin(controler.angle+playerDrawPar[Player.tip].clowR)
-    local clow1Y =Player.y +playerDrawPar[Player.tip].clowX*k2*math.cos(controler.angle+playerDrawPar[Player.tip].clowR)
-    local clow2X =Player.x +playerDrawPar[Player.tip].clowX*k2*math.sin(controler.angle-playerDrawPar[Player.tip].clowR)
-    local clow2Y =Player.y+playerDrawPar[Player.tip].clowX*k2*math.cos(controler.angle-playerDrawPar[Player.tip].clowR)
+    local clow1X =Player.x +playerDrawPar[Player.tip].clowX*k2*math.sin(Player.angleBody+playerDrawPar[Player.tip].clowR)
+    local clow1Y =Player.y +playerDrawPar[Player.tip].clowX*k2*math.cos(Player.angleBody+playerDrawPar[Player.tip].clowR)
+    local clow2X =Player.x +playerDrawPar[Player.tip].clowX*k2*math.sin(Player.angleBody-playerDrawPar[Player.tip].clowR)
+    local clow2Y =Player.y+playerDrawPar[Player.tip].clowX*k2*math.cos(Player.angleBody-playerDrawPar[Player.tip].clowR)
     
     if ((math.pow(clow1X-self.x,2) + math.pow(clow1Y-self.y,2))> (math.pow(clow2X-self.x,2) + math.pow(clow2Y-self.y,2))) then 
         Player.clowRScaleK = 1.2
@@ -273,7 +316,7 @@ function playerAtackEn(self,dt)
         Player.clowLTimer = 10 -0.0001
     end
   
-    Player.Boost.long = Player.Boost.long - (Player.Boost.boostWaste-(Player.Boost.boostWaste*playerSkillParametrs.enK))*     Player.Boost.boostWasteEnHit*dt
+    Player.Energy.value = Player.Energy.value - (Player.Energy.wasteBoost-(Player.Energy.wasteBoost*playerSkillParametrs.enK))*     Player.Energy.wasteAtack*dt
     self.health  =  self.health - Player.damage*playerSkillParametrs.damageK
     if (playerSkillParametrs.vampirFlag == true) then 
         newVampirEffect(self)
@@ -293,17 +336,17 @@ end
 function playerFrontAtack(i) 
     local flagAt = false
     local anglePlEn =  math.atan2(en[i].x -Player.x, en[i].y - Player.y) 
-    if (anglePlEn/math.abs(anglePlEn)==controler.angle/math.abs(controler.angle))then
-        if (math.abs(math.abs(anglePlEn) - math.abs(controler.angle)) <  math.pi/4) then 
+    if (anglePlEn/math.abs(anglePlEn)==Player.angleBody/math.abs(Player.angleBody))then
+        if (math.abs(math.abs(anglePlEn) - math.abs(Player.angleBody)) <  math.pi/4) then 
             flagAt = true
         end
     else
-        if (math.abs(anglePlEn)+math.abs(controler.angle)> 2*math.pi - math.abs(anglePlEn)-math.abs(controler.angle)) then
-            if ((2*math.pi - math.abs(anglePlEn)-math.abs(controler.angle)) <  math.pi/4) then 
+        if (math.abs(anglePlEn)+math.abs(Player.angleBody)> 2*math.pi - math.abs(anglePlEn)-math.abs(Player.angleBody)) then
+            if ((2*math.pi - math.abs(anglePlEn)-math.abs(Player.angleBody)) <  math.pi/4) then 
                 flagAt = true
             end
         else 
-            if ((math.abs(anglePlEn)+math.abs(controler.angle)) <  math.pi/4) then 
+            if ((math.abs(anglePlEn)+math.abs(Player.angleBody)) <  math.pi/4) then 
                 flagAt = true
             end
         end
@@ -316,15 +359,15 @@ function playerLiDraw(dt)
         for i=#masli,1,-1 do
             if (masli[i].table and masli[i].timer > 0  ) then
                 masli[i].timer = masli[i].timer - 50*dt
-                light22Draw(light22(Player.x+35*k2*math.sin(controler.angle+math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(controler.angle+math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
-                light22Draw(light22(Player.x+35*k2*math.sin(controler.angle-math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(controler.angle-math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
+                light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody+math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(Player.angleBody+math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
+                light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody-math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(Player.angleBody-math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
             else
                 table.remove(masli,i)
             end
         end
         if ( Player.a == 1 and #masli == 0 ) then 
-            light22Draw(light22(Player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,Player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,Player.x+35*k2*math.sin(controler.angle+math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(controler.angle+math.pi/4)+math.random(-2,2)*k,4))
-            light22Draw(light22(Player.x+35*k2*math.sin(controler.angle)+math.random(-2,2)*k,Player.y+35*k2*math.cos(controler.angle)+math.random(-2,2)*k,Player.x+35*k2*math.sin(controler.angle-math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(controler.angle-math.pi/4)+math.random(-2,2)*k,4))
+            light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody)+math.random(-2,2)*k,Player.x+35*k2*math.sin(Player.angleBody+math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody+math.pi/4)+math.random(-2,2)*k,4))
+            light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody)+math.random(-2,2)*k,Player.x+35*k2*math.sin(Player.angleBody-math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody-math.pi/4)+math.random(-2,2)*k,4))
         end
     end
 end
@@ -346,10 +389,9 @@ function playerCollWithEn(dt)
     enCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(80*k))+1)-1,dt)
 end
 
-function Player:Clows(dt)
-    local Clows = Player.Clows
-    local ClowR = Clows.R
-    local ClowL = Clows.L
+function Player.Clows:update(dt)
+    local ClowR = self.R
+    local ClowL = self.L
     
     if (ClowR.timer < 10) then 
         ClowR.timer = ClowR.timer - 40*dt
@@ -367,44 +409,45 @@ function Player:Clows(dt)
         ClowL.timer = 10
     end
   
-    if ( Clows.flag == 0 or Clows.flag ==1) then
-        if (Clows.angle> 0.2) then
-            Clows.flag = 1 
+    if ( self.flag == 0 or self.flag ==1) then
+        if (self.angle> 0.2) then
+            self.flag = 1 
         end
-        if (Clows.angle< 0) then
-            Clows.flag = 0 
+        if (self.angle< 0) then
+            self.flag = 0 
         end
-        if (Clows.flag==1) then
-            if ( Clows.angle > 0.25) then
-                Clows.angle = Clows.angle-1*dt
+        if (self.flag==1) then
+            if ( self.angle > 0.25) then
+                self.angle = self.angle-1*dt
             else
-                Clows.angle = Clows.angle-0.2*dt
+                self.angle = self.angle-0.2*dt
             end
         else
-            if ( Clows.angle<-0.1) then
-                Clows.angle = Clows.angle+1.2*dt
+            if ( self.angle<-0.1) then
+                self.angle = self.angle+1.2*dt
             else
-                Clows.angle = Clows.angle+0.6*dt
+                self.angle = self.angle+0.6*dt
             end
         end
     end
     
-    if ( Clows.flag ==3) then
-        if (Clows.angle>-0.35) then
-            Clows.angle = Clows.angle-2*dt
+    if ( self.flag ==3) then
+        if (self.angle>-0.35) then
+            self.angle = self.angle-2*dt
         end
     end
-    if ( Clows.flag  ==4) then
-        if (Clows.angle<0.6) then
-            Clows.angle = Clows.angle+2*dt
+    if ( self.flag  ==4) then
+        if (self.angle<0.6) then
+            self.angle = self.angle+2*dt
         end
     end
     
-    if ( Player.Clows.angle> 0.2 ) then
-        Player.Clows.flag = 1 
+    if ( self.angle> 0.2 ) then
+        self.flag = 1 
     end
-    if ( Player.Clows.angle< 0 ) then
-        Player.Clows.flag = 0 
+    
+    if ( self.angle< 0 ) then
+        self.flag = 0 
     end
     
 end
@@ -418,87 +461,94 @@ function playerDebaff(dt)
     end
 end
 
-function playerBorder()
-    if ( Player.x > borderWidth*2-Player.scaleBody*k) then
-        Player.x = borderWidth*2 -Player.scaleBody*k
+function Player:border()
+    if ( self.x > borderWidth*2-self.scaleBody*k) then
+        self.x = borderWidth*2 -self.scaleBody*k
     end 
-    if ( Player.x < -borderWidth+Player.scaleBody*k) then
-        Player.x = -borderWidth +Player.scaleBody*k
+    if ( self.x < -borderWidth+self.scaleBody*k) then
+        self.x = -borderWidth +self.scaleBody*k
     end 
-    if ( Player.y < -borderHeight+Player.scaleBody*k2) then
-        Player.y = -borderHeight +Player.scaleBody*k2
+    if ( self.y < -borderHeight+self.scaleBody*k2) then
+        self.y = -borderHeight +self.scaleBody*k2
     end 
-    if ( Player.y > borderHeight*2- Player.scaleBody*k2) then
-        Player.y = borderHeight*2 -Player.scaleBody*k2
+    if ( self.y > borderHeight*2- self.scaleBody*k2) then
+        self.y = borderHeight*2 -self.scaleBody*k2
     end 
 end
 
-function playerHP(dt)
-    if ( Player.Hp.long/720*100> 100) then
-        Player.Hp.long = 720
-        Player.Hp.long2 = 720 
+function Player.Hp:update(dt)
+    if ( self.value>self.maxValue) then
+        self.value = self.maxValue
+        self.lengthBar = self.maxValue 
     end
-    if (Player.Hp.long > Player.Hp.long2) then
-        Player.Hp.long2= Player.Hp.long
+    
+    if (self.lengthBar<self.value) then
+        self.lengthBar= self.value
     end
-    if (Player.Hp.long<Player.Hp.long2 ) then
-        Player.Hp.long2 = Player.Hp.long2-70*dt
+    if (self.lengthBar>self.value ) then
+        self.lengthBar = self.lengthBar-self.maxValue/100*10*dt
     end
-    if ( Player.Hp.long> Player.Hp.long3) then
-        Player.Hp.long3 = Player.Hp.long3+ 100*dt
-    else
-        Player.Hp.long3  = Player.Hp.long
-    end
-    if ( flaginv == false) then
-        inv:update(dt)
-        inv:every(Player.invTimer, function()
-            inv:clear() 
+end
+
+function Player:invisible(dt)
+    if ( self.flagInv == false) then
+        if (self.inv > 0 ) then 
+            self.inv = self.inv-10*dt
+        else
+            self.inv = self.invTimer
             shake  = 0    
-            flaginv =  true
-        end)
+            self.flagInv =  true
+        end
     end
 end
 
-function playerBoost(dt)
-    if ( Player.Boost.long/720*100 > 100) then
-        Player.Boost.long = 720
-        Player.Boost.long2 = 720
+function Player.Energy:update(dt)
+    if ( self.value > self.maxValue) then
+        self.value = self.maxValue
+        self.lengthBar = self.maxValue
     end
     
-    if ( Player.Boost.long2>Player.Boost.long) then
-        Player.Boost.long2 = Player.Boost.long2-70*dt
+    if ( self.lengthBar>self.value) then
+        self.lengthBar = self.lengthBar-self.maxValue/100*8*dt
     end
-    if ( Player.Boost.long2<Player.Boost.long) then
-        Player.Boost.long2 = Player.Boost.long2+Player.Boost.boostRegen *dt*2
+    if ( self.lengthBar<self.value) then
+        self.lengthBar = self.value
     end
     
-    if ( Player.Boost.long <= 30*k2 ) then
+    if ( Player.Energy.value > Player.Energy.maxValue/100*15) then
+        Player.Energy.flag = true
+    end
+    if ( Player.Energy.value <= 0  ) then
         Player.a=0
-        Player.Boost.long =30*k2
+        Player.Energy.value =0
+        Player.Energy.flag = false
     end
     
     if ( Player.a==1) then
-        Player.Boost.long = Player.Boost.long - (Player.Boost.boostWaste-(Player.Boost.boostWaste*playerSkillParametrs.enK))*dt
+        self.value = self.value - (self.wasteBoost-(self.wasteBoost*playerSkillParametrs.enK))*dt
     else
-        Player.Boost.long = Player.Boost.long + Player.Boost.boostRegen *dt
+        self.value = self.value + self.regen *dt
     end
-    if  (Player.Boost.long>720) then
-        Player.Boost.long = 720
-        if (playerSkillParametrs.tradeFlag == true and Player.Hp.long<720 and flaginv == true) then 
+    
+    ---------------------------------
+    if  (self.value>self.maxValue) then
+        self.value = self.maxValue
+        if (playerSkillParametrs.tradeFlag == true and Player.Hp.value<Player.Hp.maxValue and Player.flagInv == true) then 
             newTradeEffect()
-            Player.Hp.long = Player.Hp.long +10*dt
-        end
+            Player.Hp.value = Player.Hp.value +10*dt
+        end --skill
     end
+    ----------------------------------
 end
 
 function playerBoostDop(dt)
     if ( playerSkillParametrs.dopEnFlag == true) then 
-        angleBoostDop(dt,controler.angle)
+        angleBoostDop(dt,Player.Controller.angle)
         if ( boostDop.long/720*100 > 100) then
             boostDop.long = 720
         end
         if (boostDop.recovery == boostDop.recoveryTimer) then 
-            boostDop.long = boostDop.long + Player.Boost.boostRegen/1.5 *dt*k
+            boostDop.long = boostDop.long + Player.Energy.regen/1.5 *dt*k
             boostDop.shakeK = 0
         end
         if ( boostDop.long <= 0 ) then
@@ -562,20 +612,20 @@ function angleBoostDop (dt,angle)
     end
 end
         
-function Health_Boost()
+function Player:drawUI()
     love.graphics.setColor(0.02,0.3,0.02,1)
     love.graphics.rectangle("fill",Player.x-(Player.scaleBody+17)*k,Player.y+720/11*k/2,4*k2,-720/11*k)
     love.graphics.setColor(0.19,1,0.19,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+17)*k,Player.y+720/11*k/2,4*k2,(-Player.Hp.long2/720*720/11)*k)
+    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+17)*k,Player.y+720/11*k/2,4*k2,(-Player.Hp.lengthBar/Player.Hp.maxValue*720/11)*k)
     love.graphics.setColor(0.02,0.6,0.02,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+17)*k,Player.y+720/11*k/2,4*k2,(-Player.Hp.long3/720*720/11)*k)
+    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+17)*k,Player.y+720/11*k/2,4*k2,(-Player.Hp.value/Player.Hp.maxValue*720/11)*k)
 
     love.graphics.setColor(0,0.32,0.225,1)
     love.graphics.rectangle("fill",Player.x-(Player.scaleBody+11)*k,Player.y+720/11*k/2,3*k2,-720/11*k)
     love.graphics.setColor(0.15,1,0.9,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+11)*k,Player.y+720/11*k/2,3*k2,(-Player.Boost.long2/720*720/11)*k)
+    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+11)*k,Player.y+720/11*k/2,3*k2,(-Player.Energy.lengthBar/Player.Energy.maxValue*720/11)*k)
     love.graphics.setColor(0,0.643,0.502,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+11)*k,Player.y+720/11*k/2,3*k2,(-Player.Boost.long/720*720/11)*k)     
+    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+11)*k,Player.y+720/11*k/2,3*k2,(-Player.Energy.value/Player.Energy.maxValue*720/11)*k)     
    
     if ( playerSkillParametrs.dopEnFlag == true) then 
         love.graphics.setLineWidth(2*k)
@@ -602,19 +652,6 @@ function Health_Boost()
     end
   
     love.graphics.setColor(1,1,1,1)
-end
-
-
-
-
-
-
-
-function playerDie()
-    if ( Player.Hp.long<=0) then 
-        makeSave()
-        gamestate.switch(die)
-    end
 end
 
 return playerFunction

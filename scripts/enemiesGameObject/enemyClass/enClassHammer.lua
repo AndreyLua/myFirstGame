@@ -273,9 +273,8 @@ enemyHammerClass = Class{
     hit  = function(self,a,i,dt)
         if ( a == 0 ) then
             if (self.invTimer == self.timer and self.dash~=self.dashTimer) then
-                flaginv = false 
                 self.dash=self.dashTimer
-                enAtackPlayer(self.damage,'m',self)
+                Player:takeDamage(self.damage,'m',self)
             end 
         else
             if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then

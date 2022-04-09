@@ -25,13 +25,14 @@ function loadPlayerParametrsAndImg()
     img =skillQuads.rangeDef,------
     lvl = 1,
     numb = 4 ,
-    }
+  }
+
     playerSkills[3] ={
     img =skillQuads.atack,
     lvl = 1,
     numb = 5 ,
   }
- 
+ --[[
     playerSkills[6] ={
     img =skillQuads.speed,
     lvl = 1,
@@ -79,6 +80,7 @@ function loadPlayerParametrsAndImg()
     lvl = 1,
     numb = 14 ,
   }
+  ]]--
 end
 
 function loadPlayerParametrs()
