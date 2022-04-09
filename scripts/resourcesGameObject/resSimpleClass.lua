@@ -75,17 +75,17 @@ resClass = Class {
             self.ay = 23*k*math.cos(ugol)
         else
             if ( Player.a==0) then 
-                 if ((self.timer == self.invTimer and (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) < Player.radiusCollect*k*playerSkillParametrs.collectRangeK)) then
+                 if ((self.timer == self.invTimer and (math.sqrt(math.pow((Player.x-self.x),2)+math.pow((Player.y-self.y),2))) < Player.radiusCollect*k*Player.Skills.Collect.collectRangeK)) then
                     local x1 = (Player.x)-self.x+1*k
                     local y1 = (Player.y)-self.y+1*k2          
                     local ugol = math.atan2(x1,y1)
                     Player.Clows.flag =3
-                    if ( self.ax> 17*k*math.sin(ugol)*playerSkillParametrs.collectRangeK ) then
+                    if ( self.ax> 17*k*math.sin(ugol)*Player.Skills.Collect.collectRangeK ) then
                         self.ax = self.ax - 4*k 
                     else
                         self.ax = self.ax + 4*k
                     end
-                    if ( self.ay> 17*k2*math.cos(ugol)*playerSkillParametrs.collectRangeK ) then
+                    if ( self.ay> 17*k2*math.cos(ugol)*Player.Skills.Collect.collectRangeK ) then
                         self.ay = self.ay - 4*k2
                     else
                         self.ay = self.ay + 4*k2 
@@ -153,7 +153,7 @@ resClass = Class {
                 end
                 if ( self.tip == 6 ) then
                     newGreenPlayerEffect()
-                    Player:heal(playerSkillParametrs.vampirK*playerSkillParametrs.damageK*50) -- skill
+                    Player:heal(Player.Skills.SpecialAtack.Vampir.vampirK*Player.Skills.Damage.damageK*50) -- skill
                     resRemove(i)
                 end
             else

@@ -78,7 +78,7 @@ enemyShooterClass = Class{
         end   
     end;
     inScreen = function(self)
-        return (self.x>camera.x-screenWidth/2-math.max(self.w,self.h)*k and  self.x<screenWidth+camera.x-screenWidth/2+20*k+math.max(self.w,self.h)*k and  self.y>camera.y-screenHeight/2-math.max(self.w,self.h)*k2 and self.y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(self.w,self.h)*k2)
+        return (self.x>Player.Camera.x-screenWidth/2-math.max(self.w,self.h)*k and  self.x<screenWidth+Player.Camera.x-screenWidth/2+20*k+math.max(self.w,self.h)*k and  self.y>Player.Camera.y-screenHeight/2-math.max(self.w,self.h)*k2 and self.y<screenHeight+Player.Camera.y-screenHeight/2+20*k2+math.max(self.w,self.h)*k2)
     end;
     invTimerUpdate = function(self,dt) 
         if ( self.invTimer) then
@@ -296,8 +296,8 @@ enemyShooterClass = Class{
         if ( a == 0 ) then
           
         else
-            if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
-                playerAtackEn(self,dt)
+            if (Player:isFrontOf(self) and self.invTimer and  self.invTimer ==self.timer) then
+                Player:atack(self,dt)
                 self.timer =  self.invTimer-0.001
                 self.ax =self.ax - Player.ax
                 self.ay =self.ay -  Player.ay

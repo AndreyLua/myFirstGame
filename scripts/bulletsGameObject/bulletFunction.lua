@@ -111,7 +111,7 @@ end
       
       
     function bulletsBorder(i)
-        if not(enemyBullets[i] and  enemyBullets[i].x>camera.x-screenWidth/2-20*k and  enemyBullets[i].x<screenWidth+camera.x-screenWidth/2+20*k+20*k and  enemyBullets[i].y>camera.y-screenHeight/2-20*k2 and enemyBullets[i].y<screenHeight+camera.y-screenHeight/2+20*k2+20*k2) then
+        if not(enemyBullets[i] and  enemyBullets[i].x>Player.Camera.x-screenWidth/2-20*k and  enemyBullets[i].x<screenWidth+Player.Camera.x-screenWidth/2+20*k+20*k and  enemyBullets[i].y>Player.Camera.y-screenHeight/2-20*k2 and enemyBullets[i].y<screenHeight+Player.Camera.y-screenHeight/2+20*k2+20*k2) then
             table.remove(enemyBullets,i)
         end
     end

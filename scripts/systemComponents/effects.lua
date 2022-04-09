@@ -206,9 +206,9 @@ function bloodEffect(dt)
         if ( bloodEffects[i].timer > 0 and  bloodEffects[i].en ~=nil ) then 
             if ( bloodEffects[i].timerTick == 10 and bloodEffects[i].en.health >0) then 
                 bloodPartSpawn(bloodEffects[i].en,7)
-                bloodEffects[i].en.health = bloodEffects[i].en.health - Player.damage*playerSkillParametrs.damageK*dt*playerSkillParametrs.bloodAt/2 -- damage
-                bloodEffects[i].en.ax = bloodEffects[i].en.ax*(1-playerSkillParametrs.bloodAt)
-                bloodEffects[i].en.ay = bloodEffects[i].en.ay*(1-playerSkillParametrs.bloodAt)
+                bloodEffects[i].en.health = bloodEffects[i].en.health - Player.damage*Player.Skills.Damage.damageK*dt*Player.Skills.SpecialAtack.Bloody.bloodAt/2 -- damage
+                bloodEffects[i].en.ax = bloodEffects[i].en.ax*(1-Player.Skills.SpecialAtack.Bloody.bloodAt)
+                bloodEffects[i].en.ay = bloodEffects[i].en.ay*(1-Player.Skills.SpecialAtack.Bloody.bloodAt)
             end
             bloodEffects[i].timerTick = bloodEffects[i].timerTick - 200*dt
             bloodEffects[i].timer =bloodEffects[i].timer - 5 * dt
@@ -286,7 +286,7 @@ function deffenseEffect(dt)
             deffenseEffects[i].y = deffenseEffects[i].y +deffenseEffects[i].speed*math.cos(angle)*dt 
             if ( math.abs(deffenseEffects[i].en.x -  deffenseEffects[i].x) < 5*k and  math.abs(deffenseEffects[i].en.y -  deffenseEffects[i].y) < 5*k) then
                 deffenseEffects[i].en.timer = deffenseEffects[i].en.invTimer/2
-                deffenseEffects[i].en.health = deffenseEffects[i].en.health -  deffenseEffects[i].en.damage*playerSkillParametrs.spike--skill
+                deffenseEffects[i].en.health = deffenseEffects[i].en.health -  deffenseEffects[i].en.damage*Player.Skills.SpikeArmor.spike--skill
                 table.remove(deffenseEffects,i)  
             end
         else

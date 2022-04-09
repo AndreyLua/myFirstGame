@@ -73,10 +73,7 @@ boostDop = {
     shakeK = 1,
 }
 
-camera = {
-    x = borderWidth/2+40*k/2, 
-    y = borderHeight/2+40*k2/2
-}
+
 
 playerLiRan = {} 
 enBoomAnimat = {}
@@ -134,15 +131,15 @@ explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
---Player.Energy.value = 1000
---Player.Hp.value = 1000 
+Player.Energy.value = 1000
+Player.Hp.value = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
 Wave:update(dt)
 
 --------------------
-playerCamera(dt)
+Player.Camera:update(dt)
 Player:control()
 Player:invisible(dt)
 Player.Clows:update(dt)
@@ -155,7 +152,7 @@ for i = #obj, 1, -1 do
         allBorder(i,obj)
         if (obj[i]) then 
             local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
-            if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
+            if (obj[i].x>Player.Camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+Player.Camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>Player.Camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+Player.Camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
                 if (objRegulS[IobjRegulS]) then
                     table.insert(objRegulS[IobjRegulS],i)
                 else
@@ -229,10 +226,9 @@ end
 Player.Energy:update(dt)
 playerBoostDop(dt) -- skill
 Wave:spawn()
-playerCollWithObj(dt)
-playerCollWithEn(dt)
-playerDebaff(dt)
 Player:move(dt)
+Player:collision(dt)
+Player:debaff(dt)
 bulletsUpdate(dt)
 self:movement(dt)
 Player:border()
@@ -240,7 +236,6 @@ end
 
 function game:keypressed(key1,key, code)
     if key == "escape" then
-      --  print(love.filesystem.load( 'Save.lua' ))
         if gamestate.current() == self and Player.isAlive then
             gamestate.switch(pause)
         end
@@ -256,7 +251,7 @@ function game:movement(dt)
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
-        allSpawn(en,Geo,3)
+        allSpawn(en,Geo,math.random(6))
         en[#en].x = mouse.x
         en[#en].y = mouse.y
     end
@@ -288,7 +283,7 @@ function  game:draw()
     end
     love.graphics.setColor(1,1,1,1)
     love.graphics.push()
-        love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
+        love.graphics.translate(-Player.Camera.x+40*k/2+screenWidth/2,-Player.Camera.y+40*k2/2+screenHeight/2)
         waveEffect(dt)
         bloodEffect(dt)
         allDraw(dt)
@@ -314,7 +309,7 @@ function  game:draw()
         love.graphics.setColor(1,0,0,1)
     love.graphics.pop()
     love.graphics.setColor(1,1,1,1)
-    playerDraw(dt)
+    Player:draw(dt)
     if (Player.flagInv == false ) then
         love.graphics.setColor(1,0.7,0.7,1)
     end
@@ -327,7 +322,7 @@ function  game:draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(enBatchDop)
     love.graphics.push()
-        love.graphics.translate(-camera.x+40*k/2+screenWidth/2,-camera.y+40*k2/2+screenHeight/2)
+        love.graphics.translate(-Player.Camera.x+40*k/2+screenWidth/2,-Player.Camera.y+40*k2/2+screenHeight/2)
         Player.drawUI()
         love.graphics.setColor(1,1,1,1)
         playerLiDraw(dt)
@@ -509,7 +504,7 @@ end
 
 function allDraw(dt)
     for i= 1,#res do
-        if (res[i] and res[i].x>camera.x-screenWidth/2-30*k and  res[i].x<camera.x+screenWidth/2+30*k and  res[i].y>camera.y-screenHeight/2-30*k2 and res[i].y<camera.y + screenHeight/2+30*k2) then
+        if (res[i] and res[i].x>Player.Camera.x-screenWidth/2-30*k and  res[i].x<Player.Camera.x+screenWidth/2+30*k and  res[i].y>Player.Camera.y-screenHeight/2-30*k2 and res[i].y<Player.Camera.y + screenHeight/2+30*k2) then
             res[i]:draw()
             if ( res[i].tip == 6 ) then 
                 res[i]:traceDraw(dt)
@@ -519,7 +514,7 @@ function allDraw(dt)
     
     for i = #obj, 1, -1 do
         if (obj[i] and obj[i].body)  then
-            if (obj[i].x>camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
+            if (obj[i].x>Player.Camera.x-screenWidth/2-obj[i].collScale*k and  obj[i].x<screenWidth+Player.Camera.x-screenWidth/2+20*k+obj[i].collScale*k and  obj[i].y>Player.Camera.y-screenHeight/2-obj[i].collScale*k2 and obj[i].y<screenHeight+Player.Camera.y-screenHeight/2+20*k2+obj[i].collScale*k2) then
                 local IobjRegulS =math.floor((obj[i].x-60*k)/(120*k)) + math.floor((obj[i].y-60*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1)
                 objCollWithObjInRegularS(IobjRegulS,i,dt)
                 objCollWithObjInRegularS(IobjRegulS+1,i,dt)

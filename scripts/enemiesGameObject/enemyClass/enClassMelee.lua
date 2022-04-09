@@ -100,7 +100,7 @@ enemyMeleeClass = Class{
         end   
     end;
     inScreen = function(self)
-        return (self.x>camera.x-screenWidth/2-math.max(self.w,self.h)*k and  self.x<screenWidth+camera.x-screenWidth/2+20*k+math.max(self.w,self.h)*k and  self.y>camera.y-screenHeight/2-math.max(self.w,self.h)*k2 and self.y<screenHeight+camera.y-screenHeight/2+20*k2+math.max(self.w,self.h)*k2)
+        return (self.x>Player.Camera.x-screenWidth/2-math.max(self.w,self.h)*k and  self.x<screenWidth+Player.Camera.x-screenWidth/2+20*k+math.max(self.w,self.h)*k and  self.y>Player.Camera.y-screenHeight/2-math.max(self.w,self.h)*k2 and self.y<screenHeight+Player.Camera.y-screenHeight/2+20*k2+math.max(self.w,self.h)*k2)
     end;
     invTimerUpdate = function(self,dt) 
         if ( self.invTimer) then
@@ -331,8 +331,8 @@ enemyMeleeClass = Class{
             enBatch:add(enQuads.clow2Melee,clow2X,clow2Y,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
             enBatch:add(enQuads.bodyMelee,self.x,self.y,-self.angleBody+math.pi,k/6,k2/6,60, 88)
             enBatchDop:setColor(1,0.5,0.5,0.4)
-            enBatchDop:add(enQuads.clow1Melee,clow1X-camera.x+40*k/2+screenWidth/2,clow1Y-camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi+self.angleMouth,k/6,k2/6,36, 44)
-            enBatchDop:add(enQuads.clow2Melee,clow2X-camera.x+40*k/2+screenWidth/2,clow2Y-camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
+            enBatchDop:add(enQuads.clow1Melee,clow1X-Player.Camera.x+40*k/2+screenWidth/2,clow1Y-Player.Camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi+self.angleMouth,k/6,k2/6,36, 44)
+            enBatchDop:add(enQuads.clow2Melee,clow2X-Player.Camera.x+40*k/2+screenWidth/2,clow2Y-Player.Camera.y+40*k2/2+screenHeight/2,-self.angleBody-math.pi-self.angleMouth,k/6,k2/6,36, 44)
             --self.body:draw('fill')
         end
     end;
@@ -375,8 +375,8 @@ enemyMeleeClass = Class{
                 self.dopAngle = self.angleBody-Player.angleBody
             end 
         else
-            if (playerFrontAtack(i) and self.invTimer and  self.invTimer ==self.timer) then
-                playerAtackEn(self,dt)
+            if (Player:isFrontOf(self) and self.invTimer and  self.invTimer ==self.timer) then
+                Player:atack(self,dt)
                 self.climbFlag = 0
                 self.climbAtack = self.climbAtackTimer
                 self.timer =  self.invTimer-0.001

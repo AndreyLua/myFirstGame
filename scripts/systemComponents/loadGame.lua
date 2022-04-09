@@ -32,7 +32,7 @@ function loadPlayerParametrsAndImg()
     lvl = 1,
     numb = 5 ,
   }
- --[[
+ 
     playerSkills[6] ={
     img =skillQuads.speed,
     lvl = 1,
@@ -80,7 +80,6 @@ function loadPlayerParametrsAndImg()
     lvl = 1,
     numb = 14 ,
   }
-  ]]--
 end
 
 function loadPlayerParametrs()
@@ -139,33 +138,6 @@ function loadPlayerParametrs()
           wingsX =44,
           cristalX = 55,
         }, 
-    }
-
-
-    playerSkillParametrs = {
-        hpK = 0, -- common1
-        enK = 0, -- common2
-        meleeDefK = 0, -- common3
-        rangeDefK = 0, -- common4
-        damageK = 1, -- common5
-        speedK = 1, -- common6
-        collectRangeK = 1, -- common7
-        
-        waveAt = 0.2, -- rare8
-        waveAtFlag = false,
-        bloodAt = 0.2, -- rare9
-        bloodAtFlag = false,
-        sealAt = 0.2, -- rare10
-        sealAtFlag = false,
-        spike = 0, -- rare11
-        spikeFlag = false,
-        
-        dopEn = 0.1, -- legend13
-        dopEnflag = false,
-        tradeK = 0.1, -- legend13
-        tradeFlag = false,
-        vampirK = 0.1, -- legend14
-        vampirFlag = false,
     }
     skillCostUpgrade = {
         200,-- common1 hp

@@ -137,51 +137,51 @@ function lvlParametrs()
         local masSkill = playerSkills[i] 
         ----------------------------------------------------------------------------
         if (masSkill.numb == 1 ) then 
-            playerSkillParametrs.hpK =0.02*(masSkill.lvl-1)
+            Player.Skills.Hp.hpK =0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 2 ) then 
-            playerSkillParametrs.enK =0.02*(masSkill.lvl-1)
+            Player.Skills.Energy.enK =0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 3 ) then 
-            playerSkillParametrs.meleeDefK=0.02*(masSkill.lvl-1)
+            Player.Skills.MeleeDefense.meleeDefK=0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 4 ) then 
-            playerSkillParametrs.rangeDefK=0.02*(masSkill.lvl-1)
+            Player.Skills.RangeDefense.rangeDefK=0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 5 ) then 
-            playerSkillParametrs.damageK =1+0.03*(masSkill.lvl-1)
+            Player.Skills.Damage.damageK =1+0.03*(masSkill.lvl-1)
         end
         if (masSkill.numb == 6 ) then 
-            playerSkillParametrs.speedK =1+0.015*(masSkill.lvl-1)
+            Player.Skills.Speed.speedK =1+0.015*(masSkill.lvl-1)
         end
         if (masSkill.numb == 7 ) then 
-            playerSkillParametrs.collectRangeK =1+0.02*(masSkill.lvl-1)
+            Player.Skills.Collect.collectRangeK =1+0.02*(masSkill.lvl-1)
         end
         ----------------------------------------------------------------------------
         if (masSkill.numb == 8 ) then 
-            playerSkillParametrs.waveAt =0.02*(masSkill.lvl-1)
+            Player.Skills.SpecialAtack.Wave.waveAt =0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 9 ) then 
-            playerSkillParametrs.bloodAt =0.02*(masSkill.lvl-1)
+            Player.Skills.SpecialAtack.Bloody.bloodAt =0.02*(masSkill.lvl-1)
         end
         if (masSkill.numb == 10 ) then 
-            playerSkillParametrs.sealAt =0.04*(masSkill.lvl-1)
+            Player.Skills.SpecialAtack.Electric.sealAt =0.04*(masSkill.lvl-1)
         end
         if (masSkill.numb == 11 ) then 
-            playerSkillParametrs.spikeFlag = true
-            playerSkillParametrs.spike =0.01*math.log(masSkill.lvl,2)
+            Player.Skills.SpikeArmor.spikeFlag = true
+            Player.Skills.SpikeArmor.spike =0.01*math.log(masSkill.lvl,2)
         end
         ----------------------------------------------------------------------------
         if (masSkill.numb == 12 ) then 
-            playerSkillParametrs.dopEnFlag = true
-            playerSkillParametrs.dopEn =0.01*math.log(masSkill.lvl,2)
+            Player.Skills.EnergyArmor.dopEnFlag = true
+            Player.Skills.EnergyArmor.dopEn =0.01*math.log(masSkill.lvl,2)
         end
         if (masSkill.numb == 13 ) then 
-            playerSkillParametrs.tradeFlag = true
-            playerSkillParametrs.tradeK =0.01*math.log(masSkill.lvl,2)
+            Player.Skills.Trade.tradeFlag = true
+            Player.Skills.Trade.tradeK =0.01*math.log(masSkill.lvl,2)
         end
         if (masSkill.numb == 14 ) then 
-            playerSkillParametrs.vampirK =0.01*math.log(masSkill.lvl,2)
+            Player.Skills.SpecialAtack.Vampir.vampirK =0.01*math.log(masSkill.lvl,2)
         end
         
     end
