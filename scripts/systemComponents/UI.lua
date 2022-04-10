@@ -304,23 +304,6 @@ function noRes(x,y,scale,par,dt,flag)
     end
 end
 
-function noFill(par,dt,flag)
-    if (par~= nil and flag~=nil and par >= 0) then 
-        love.graphics.setColor(1,par,par,1)
-        if ( par <=3 and flag ==true ) then
-            return par+5*dt, true
-        else
-            if ( par > 2 and flag ==true ) then 
-                return par-5*dt,false
-            else
-                if (flag ==false and par >=0 ) then 
-                    return par-5*dt,false
-                end
-            end
-        end
-    end
-end
-
 function sc(x,y)
     love.graphics.setLineWidth(2*k)
     love.graphics.setColor(0.731,0.845,0.873)
@@ -332,7 +315,7 @@ end
 function add()
   local x = 0
   local y = 0 
-  if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and ((flagtouch==true and flagtouch1== true) or flagtouch2 == true or flagtouch3 == true) )  then
+  if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and love.mouse.isDown(1))  then
       UIBatch:setColor(1,1,1,0.6)
       UIBatch:add(UIQuads.add,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
       UIBatch:setColor(1,1,1,1)
@@ -346,7 +329,7 @@ end
 function exit()
   local x = 0
   local y = 0 
-  if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and ((flagtouch==true and flagtouch1== true) or flagtouch2 == true or flagtouch3 == true) )  then
+  if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and love.mouse.isDown(1))  then
       UIBatch:setColor(1,1,1,0.6)
       UIBatch:add(UIQuads.ex,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
       UIBatch:setColor(1,1,1,1)

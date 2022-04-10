@@ -524,15 +524,4 @@ function gradientOp3(dt)
     end
 end
 
-
-
-
-
-
-
-
-
-
-
-
 return effects

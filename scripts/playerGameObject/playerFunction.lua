@@ -1,5 +1,6 @@
 local playerFunction = {} 
 
+local playerSkills = require "scripts/playerGameObject/playerSkills" 
 local die = require "scripts/gameStates/gameLoop/die" 
 local saveFunction = require "scripts/systemComponents/saveFunction" 
 
@@ -71,54 +72,68 @@ Player = {
     Skills = {
         Hp = {
             hpK = 0, -- common1
+            text = 'Increasing the amount of health',
         },
         Energy = {
             enK = 0, -- common2
+            text = 'Increasing the amount of energy',
         },
         MeleeDefense = {
             meleeDefK = 0, -- common3
+            text = 'Increased resistance to melee attacks',
         },
         RangeDefense = {
             rangeDefK = 0, -- common4
+            text = 'Increased resistance to range attacks',
         },
         Damage = {
             damageK = 1, -- common5
+            text = 'Increased attack power',
         },
         Speed = {
             speedK = 1, -- common6
+            text = 'Speed increase',
         },
         Collect = {
             collectRangeK = 1, -- common7
+            text = 'Increasing the resource collection radius',
         },
         SpecialAtack = {
             Wave = {
                 waveAt = 0.2, -- rare8
                 waveAtFlag = false,  
+                text = 'Wave attack modifier (expends energy)',
             },
             Bloody = {
                 bloodAt = 0.2, -- rare9
                 bloodAtFlag = false,
+                text = 'Bloody attack modifier (expends energy)',
             },
             Electric = {
                 sealAt = 0.2, -- rare10
                 sealAtFlag = false,
+                text = 'Electric attack modifier (expends energy)',
             },
             Vampir = {
                 vampirK = 0.1, -- legend14
                 vampirFlag = false,
+                text = 'Steals part of the life of enemies',
             },
         },
         SpikeArmor = {
             spike = 0, -- rare11
             spikeFlag = false,
+            text = 'The armor returns the damage received',
         },
         EnergyArmor = {
-            dopEn = 0.1, -- legend13
+            dopEn = 0.1, -- legend12
             dopEnflag = false,
+            text = 'Increase the energy reserve for defense',
         },
         Trade = {
             tradeK = 0.1, -- legend13
             tradeFlag = false,
+            text = 'Exchanges energy for health',
         },
     },
 
@@ -173,8 +188,20 @@ function Player:control()
                 self.angleBody = self.Controller.angle
             end  
             if (( math.abs(self.Controller.x) >1*k or math.abs(self.Controller.y)>1*k2)) then
-                Player.ax  =math.sin(self.Controller.angle)*math.abs(self.Controller.x*screenWidth/screenHeight/3.5)*Sensitivity
-                Player.ay  =math.cos(self.Controller.angle)*math.abs(self.Controller.y*screenWidth/screenHeight/3.5)*Sensitivity
+                self.ax  =math.sin(self.Controller.angle)*math.abs(self.Controller.x*screenWidth/screenHeight/3.5)*Sensitivity
+                self.ay  =math.cos(self.Controller.angle)*math.abs(self.Controller.y*screenWidth/screenHeight/3.5)*Sensitivity
+                if ( self.ax > self.maxSpeed) then
+                    self.ax = self.maxSpeed 
+                end
+                if ( self.ax < -self.maxSpeed) then
+                    self.ax = -self.maxSpeed 
+                end
+                if ( self.ay > self.maxSpeed) then
+                    self.ay = self.maxSpeed
+                end
+                if ( self.ay < -self.maxSpeed) then
+                    self.ay = -self.maxSpeed
+                end
             end
         else
             self.Controller.flag = true
@@ -183,49 +210,36 @@ function Player:control()
         self.Controller.flag =false
     end
     
-    if ((#love.touch.getTouches()>1 and Player.Energy.flag == true) or (love.keyboard.isDown('t')  and Player.Energy.flag == true ) ) then
-        Player.Clows.flag =4 
-        Player.a = 1
+    if ((#love.touch.getTouches()>1 and self.Energy.flag == true) or (love.keyboard.isDown('t')  and self.Energy.flag == true ) ) then
+        self.Clows.flag =4 
+        self.a = 1
     else
-        Player.a = 0
+        self.a = 0
     end
 end
 
 function Player:move(dt)
-    if ( Player.ax > Player.maxSpeed) then
-        Player.ax = Player.maxSpeed 
-    end
-    if ( Player.ax < -Player.maxSpeed) then
-        Player.ax = -Player.maxSpeed 
-    end
-    if ( Player.ay > Player.maxSpeed) then
-        Player.ay = Player.maxSpeed
-    end
-    if ( Player.ay < -Player.maxSpeed) then
-        Player.ay = -Player.maxSpeed
-    end
-  
     if not(love.mouse.isDown(1)) then
-        if ( Player.ax> 0) then
-            Player.ax = Player.ax-10*dt*k
+        if ( self.ax> 0) then
+            self.ax = self.ax-10*dt*k
         else
-            Player.ax = Player.ax+10*dt*k
+            self.ax = self.ax+10*dt*k
         end
-        if ( Player.ay> 0) then
-            Player.ay = Player.ay-10*dt*k2
+        if ( self.ay> 0) then
+            self.ay = self.ay-10*dt*k2
         else
-            Player.ay = Player.ay+10*dt*k2
+            self.ay = self.ay+10*dt*k2
         end
     end
     
-    if ( Player.a==1) then
-        Player.x = Player.x + Player.ax*dt*Player.speed*Player.speedA*k*Player.debaffStrenght*Player.Skills.Speed.speedK
-        Player.y = Player.y + Player.ay*dt*Player.speed*Player.speedA*k2*Player.debaffStrenght*Player.Skills.Speed.speedK
+    if ( self.a==1) then
+        self.x = self.x + self.ax*dt*self.speed*self.speedA*k*self.debaffStrenght*self.Skills.Speed.speedK
+        self.y = self.y + self.ay*dt*self.speed*self.speedA*k2*self.debaffStrenght*self.Skills.Speed.speedK
     else
-        Player.x = Player.x + Player.ax*dt*k*Player.speed*Player.debaffStrenght*Player.Skills.Speed.speedK
-        Player.y = Player.y + Player.ay*dt*k2*Player.speed*Player.debaffStrenght*Player.Skills.Speed.speedK
+        self.x = self.x + self.ax*dt*k*self.speed*self.debaffStrenght*self.Skills.Speed.speedK
+        self.y = self.y + self.ay*dt*k2*self.speed*self.debaffStrenght*self.Skills.Speed.speedK
     end
-    Player.body:moveTo(Player.x,Player.y)
+    self.body:moveTo(self.x,self.y)
 end
 
 function Player.Camera:update(dt)
@@ -267,7 +281,7 @@ function Player:draw(dt)
       playerBatch:add(playerQuads[self.tip].cristal,xDraw,yDraw,-self.angleBody+math.pi,k/7,k2/7,playerDrawPar[self.tip].cristalW/2, playerDrawPar[self.tip].cristalH/2-playerDrawPar[self.tip].cristalX)
       
     playerBatch:setColor(1,1,1,1)
-    if (Player.Skills.SpecialAtack.Bloody.bloodAtFlag == true ) then
+    if (self.Skills.SpecialAtack.Bloody.bloodAtFlag == true ) then
         playerBatch:setColor(1,0.7,0.7,1)  
     end
       playerBatch:add(playerQuads[self.tip].clow1,clow1X,clow1Y,-self.angleBody+math.pi+self.Clows.angle,k/7*self.Clows.L.scale,k2/7*self.Clows.L.scale,playerDrawPar[self.tip].clowW1, playerDrawPar[self.tip].clowH)
@@ -275,7 +289,7 @@ function Player:draw(dt)
 end
 
 function Player:sledDraw(x,y,dt)
-    --Player.body:draw('line')
+    --self.body:draw('line')
     love.graphics.circle('line',self.Controller.x0,self.Controller.y0,13*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
     love.graphics.circle('line',mouse.x,mouse.y,5*k)
@@ -300,8 +314,102 @@ function Player:sledDraw(x,y,dt)
         table.remove(playerSledi,1)
     end
 end
+
+function Player:takeDamage(dmg,tip,atacker)
+    self.flagInv = false
+    AddSound(playerHurtSounds,0.3)
+    dmg = dmg- self.Skills.Hp.hpK*dmg
+    boostDop.recovery =boostDop.recoveryTimer - 0.0000001
+    if (boostDop.long>0) then 
+        boostDop.long = boostDop.long - (dmg-(dmg*self.Skills.EnergyArmor.dopEn))*4
+        boostDop.shakeK = 20
+    else
+        if ( tip=='m') then
+            newPlayerGetDamageEffect(self.x,self.y,7)
+            self.Hp.value = self.Hp.value - dmg*(1-self.Skills.MeleeDefense.meleeDefK)
+            if (self.Skills.SpikeArmor.spikeFlag == true) then 
+                newDeffenseEffect(atacker)
+            end
+        end
+        if ( tip=='e') then
+            self.Hp.value = self.Hp.value - dmg
+        end
+         if ( tip=='r') then
+            newPlayerGetDamageEffect(self.x,self.y,7)
+            self.Hp.value = self.Hp.value - dmg*(1-self.Skills.RangeDefense.rangeDefK)
+            if (self.Skills.SpikeArmor.spikeFlag == true) then 
+                newDeffenseEffect(atacker)
+            end
+        end
+    end
+    if ( self.Hp.value<=0) then 
+        makeSave()
+        gamestate.switch(die)
+    end
+end
+
+function Player:heal(value)
+    self.Hp.value=self.Hp.value+value
+end
+
+function Player:rechargeEnergy(value)
+    self.Energy.value=self.Energy.value+value
+end
+
+function Player:atack(target,dt)
+    if (self.Skills.SpecialAtack.Wave.waveAtFlag or self.Skills.SpecialAtack.Bloody.bloodAtFlag or self.Skills.SpecialAtack.Electric.sealAtFlag or self.Skills.SpecialAtack.Vampir.vampirFlag) then 
+        self.Energy.value = self.Energy.value - (self.Energy.wasteSpecialAtack-(self.Energy.wasteSpecialAtack*self.Skills.Energy.enK))*self.Energy.wasteAtack*dt
+    end
+        
+    AddSound(playerHitSounds,0.3)
+    self.Clows:scale()
+    self.Energy.value = self.Energy.value - (self.Energy.wasteBoost-(self.Energy.wasteBoost*self.Skills.Energy.enK))*     self.Energy.wasteAtack*dt
+    target.health  =  target.health - self.damage*self.Skills.Damage.damageK
+    
+    if (self.Skills.SpecialAtack.Vampir.vampirFlag == true) then 
+        newVampirEffect(target)
+    end
+    if (self.Skills.SpecialAtack.Wave.waveAtFlag == true) then 
+        newWaveEffect(self.x,self.y) -- damage
+    end
+    if (self.Skills.SpecialAtack.Bloody.bloodAtFlag == true) then 
+        newBloodEffect(target)  -- damage
+    end
+    if (self.Skills.SpecialAtack.Electric.sealAtFlag == true) then 
+        table.insert(masli,{table = target, timer = 10,flag = nil})
+        target.health  =  target.health - self.damage*self.Skills.Damage.damageK*self.Skills.SpecialAtack.Electric.sealAt 
+    end
+    
+end
+
+function Player:isFrontOf(target) 
+    local flagFront = false
+    local anglePlayerAndTarget =  math.atan2(target.x -self.x, target.y - self.y) 
+    if (anglePlayerAndTarget/math.abs(anglePlayerAndTarget)==self.angleBody/math.abs(self.angleBody))then
+        if (math.abs(math.abs(anglePlayerAndTarget) - math.abs(self.angleBody)) <  math.pi/4) then 
+            flagFront = true
+        end
+    else
+        if (math.abs(anglePlayerAndTarget)+math.abs(self.angleBody)> 2*math.pi - math.abs(anglePlayerAndTarget)-math.abs(self.angleBody)) then
+            if ((2*math.pi - math.abs(anglePlayerAndTarget)-math.abs(self.angleBody)) <  math.pi/4) then 
+                flagFront = true
+            end
+        else 
+            if ((math.abs(anglePlayerAndTarget)+math.abs(self.angleBody)) <  math.pi/4) then 
+                flagFront = true
+            end
+        end
+    end
+    return flagFront
+end
+
+function Player:collision(dt)
+    self:collisionWithObj(dt)
+    self:collisionWithEnemies(dt)
+end
+
 function Player:collisionWithObj(dt)
-    local playerIndex =math.floor((Player.x-40*k)/(120*k)) + math.floor((Player.y-40*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
+    local playerIndex =math.floor((self.x-40*k)/(120*k)) + math.floor((self.y-40*k2)/(120*k2))*math.floor((screenWidth/(120*k))+1) 
     objCollWithPlayerInRegularS(playerIndex,dt)
     objCollWithPlayerInRegularS(playerIndex-1,dt)
     objCollWithPlayerInRegularS(playerIndex+1,dt)
@@ -316,117 +424,8 @@ function Player:collisionWithObj(dt)
     objCollWithPlayerInRegularS(playerIndex-math.floor((screenWidth/(120*k))+1)-1,dt)
 end
 
-function Player:takeDamage(dmg,tip,atacker)
-    self.flagInv = false
-    AddSound(playerHurtSounds,0.3)
-    dmg = dmg- Player.Skills.Hp.hpK*dmg
-    boostDop.recovery =boostDop.recoveryTimer - 0.0000001
-    if (boostDop.long>0) then 
-        boostDop.long = boostDop.long - (dmg-(dmg*Player.Skills.EnergyArmor.dopEn))*4
-        boostDop.shakeK = 20
-    else
-        if ( tip=='m') then
-            newPlayerGetDamageEffect(self.x,self.y,7)
-            self.Hp.value = self.Hp.value - dmg*(1-Player.Skills.MeleeDefense.meleeDefK)
-            if (Player.Skills.SpikeArmor.spikeFlag == true) then 
-                newDeffenseEffect(atacker)
-            end
-        end
-        if ( tip=='e') then
-            self.Hp.value = self.Hp.value - dmg
-        end
-         if ( tip=='r') then
-            newPlayerGetDamageEffect(self.x,self.y,7)
-            self.Hp.value = self.Hp.value - dmg*(1-Player.Skills.RangeDefense.rangeDefK)
-            if (Player.Skills.SpikeArmor.spikeFlag == true) then 
-                newDeffenseEffect(atacker)
-            end
-        end
-    end
-    if ( self.Hp.value<=0) then 
-        makeSave()
-        gamestate.switch(die)
-    end
-end
-
-function Player:heal(value)
-    Player.Hp.value=Player.Hp.value+value
-end
-
-function Player:rechargeEnergy(value)
-    self.Energy.value=self.Energy.value+value
-end
-
-function Player:atack(self,dt)
-    if (Player.Skills.SpecialAtack.Wave.waveAtFlag or Player.Skills.SpecialAtack.Bloody.bloodAtFlag or Player.Skills.SpecialAtack.Electric.sealAtFlag or Player.Skills.SpecialAtack.Vampir.vampirFlag) then 
-        Player.Energy.value = Player.Energy.value - (Player.Energy.wasteSpecialAtack-(Player.Energy.wasteSpecialAtack*Player.Skills.Energy.enK))*Player.Energy.wasteAtack*dt
-    end
-        
-    AddSound(playerHitSounds,0.3)
-    Player.Clows:scale()
-    Player.Energy.value = Player.Energy.value - (Player.Energy.wasteBoost-(Player.Energy.wasteBoost*Player.Skills.Energy.enK))*     Player.Energy.wasteAtack*dt
-    self.health  =  self.health - Player.damage*Player.Skills.Damage.damageK
-    if (Player.Skills.SpecialAtack.Vampir.vampirFlag == true) then 
-        newVampirEffect(self)
-    end
-    if (Player.Skills.SpecialAtack.Wave.waveAtFlag == true) then 
-        newWaveEffect(self.x,self.y) -- damage
-    end
-    if (Player.Skills.SpecialAtack.Bloody.bloodAtFlag == true) then 
-        newBloodEffect(self)  -- damage
-    end
-    if (Player.Skills.SpecialAtack.Electric.sealAtFlag == true) then 
-        table.insert(masli,{table = self, timer = 10,flag = nil})
-        self.health  =  self.health - Player.damage*Player.Skills.Damage.damageK*Player.Skills.SpecialAtack.Electric.sealAt 
-    end
-end
-
-function Player:isFrontOf(target) 
-    local flagFront = false
-    local anglePlayerAndTarget =  math.atan2(target.x -Player.x, target.y - Player.y) 
-    if (anglePlayerAndTarget/math.abs(anglePlayerAndTarget)==Player.angleBody/math.abs(Player.angleBody))then
-        if (math.abs(math.abs(anglePlayerAndTarget) - math.abs(Player.angleBody)) <  math.pi/4) then 
-            flagFront = true
-        end
-    else
-        if (math.abs(anglePlayerAndTarget)+math.abs(Player.angleBody)> 2*math.pi - math.abs(anglePlayerAndTarget)-math.abs(Player.angleBody)) then
-            if ((2*math.pi - math.abs(anglePlayerAndTarget)-math.abs(Player.angleBody)) <  math.pi/4) then 
-                flagFront = true
-            end
-        else 
-            if ((math.abs(anglePlayerAndTarget)+math.abs(Player.angleBody)) <  math.pi/4) then 
-                flagFront = true
-            end
-        end
-    end
-    return flagFront
-end
-
-function playerLiDraw(dt)
-    if (Player.Skills.SpecialAtack.Electric.sealAtFlag == true) then 
-        for i=#masli,1,-1 do
-            if (masli[i].table and masli[i].timer > 0  ) then
-                masli[i].timer = masli[i].timer - 50*dt
-                light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody+math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(Player.angleBody+math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
-                light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody-math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(Player.angleBody-math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
-            else
-                table.remove(masli,i)
-            end
-        end
-        if ( Player.a == 1 and #masli == 0 ) then 
-            light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody)+math.random(-2,2)*k,Player.x+35*k2*math.sin(Player.angleBody+math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody+math.pi/4)+math.random(-2,2)*k,4))
-            light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody)+math.random(-2,2)*k,Player.x+35*k2*math.sin(Player.angleBody-math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody-math.pi/4)+math.random(-2,2)*k,4))
-        end
-    end
-end
-
-function Player:collision(dt)
-    self:collisionWithObj(dt)
-    self:collisionWithEnemies(dt)
-end
-
 function Player:collisionWithEnemies(dt)
-    local playerIndex =math.floor((Player.x-40*k)/(80*k)) + math.floor((Player.y-40*k2)/(80*k2))*math.floor((screenWidth/(80*k))+1) 
+    local playerIndex =math.floor((self.x-40*k)/(80*k)) + math.floor((self.y-40*k2)/(80*k2))*math.floor((screenWidth/(80*k))+1) 
     enCollWithPlayerInRegularS(playerIndex,dt)
     enCollWithPlayerInRegularS(playerIndex-1,dt)
     enCollWithPlayerInRegularS(playerIndex+1,dt)
@@ -557,18 +556,6 @@ function Player.Hp:update(dt)
     end
 end
 
-function Player:invisible(dt)
-    if ( self.flagInv == false) then
-        if (self.inv > 0 ) then 
-            self.inv = self.inv-10*dt
-        else
-            self.inv = self.invTimer
-            shake  = 0    
-            self.flagInv =  true
-        end
-    end
-end
-
 function Player.Energy:update(dt)
     if ( self.value > self.maxValue) then
         self.value = self.maxValue
@@ -582,13 +569,13 @@ function Player.Energy:update(dt)
         self.lengthBar = self.value
     end
     
-    if ( Player.Energy.value > Player.Energy.maxValue/100*15) then
-        Player.Energy.flag = true
+    if ( self.value > self.maxValue/100*15) then
+        self.flag = true
     end
-    if ( Player.Energy.value <= 0  ) then
+    if ( self.value <= 0  ) then
         Player.a=0
-        Player.Energy.value =0
-        Player.Energy.flag = false
+        self.value =0
+        self.flag = false
     end
     
     if ( Player.a==1) then
@@ -602,120 +589,61 @@ function Player.Energy:update(dt)
         self.value = self.maxValue
         if (Player.Skills.Trade.tradeFlag == true and Player.Hp.value<Player.Hp.maxValue and Player.flagInv == true) then 
             newTradeEffect()
-            Player.Hp.value = Player.Hp.value +10*dt
+            Player.Hp.value = self.Hp.value +10*dt
         end --skill
     end
     ----------------------------------
 end
 
-function playerBoostDop(dt)
-    if ( Player.Skills.EnergyArmor.dopEnFlag == true) then 
-        angleBoostDop(dt,Player.Controller.angle)
-        if ( boostDop.long/720*100 > 100) then
-            boostDop.long = 720
-        end
-        if (boostDop.recovery == boostDop.recoveryTimer) then 
-            boostDop.long = boostDop.long + Player.Energy.regen/1.5 *dt*k
-            boostDop.shakeK = 0
-        end
-        if ( boostDop.long <= 0 ) then
-            boostDop.long =0
-        end
-        if  (boostDop.long>720) then
-            boostDop.long = 720
-        end
-        boostDop.shake = math.random()*math.random(-1,1)*boostDop.shakeK
-        if ( boostDop.shakeK > 1 ) then 
-            boostDop.shakeK  = boostDop.shakeK - 10 *dt
-        end
-        
-        if ( boostDop.recovery < boostDop.recoveryTimer) then 
-            boostDop.recovery =boostDop.recovery - 3*dt
-            if ( boostDop.recovery < 0 )then 
-                boostDop.recovery = boostDop.recoveryTimer
-            end
-        end
-    else
-        boostDop.long = 0 
-    end
-end
-
-
-function angleBoostDop (dt,angle) 
-    if ( boostDop.angle == 0) then
-        boostDop.angle=0.00000001
-    end
-    if ( boostDop.angle < -math.pi) then
-        boostDop.angle=math.pi
-    end
-    if ( boostDop.angle > math.pi) then
-        boostDop.angle=-math.pi
-    end
-    if ( angle == 0) then
-        angle=0.00000001
-    end
-    if ((angle -  boostDop.angle > 2.1*dt) or (angle -  boostDop.angle) <  -2.1*dt ) then
-        if (angle/math.abs(angle)==boostDop.angle/math.abs(boostDop.angle))then
-            if ( angle>boostDop.angle) then
-                boostDop.angle = boostDop.angle+2*dt
-            else 
-                boostDop.angle = boostDop.angle-2*dt
-            end
+function Player:invisible(dt)
+    if ( self.flagInv == false) then
+        if (self.inv > 0 ) then 
+            self.inv = self.inv-10*dt
         else
-            if (math.abs(angle)+math.abs(boostDop.angle)> 2*math.pi - math.abs(angle)-math.abs(boostDop.angle)) then
-                if (boostDop.angle>0) then 
-                    boostDop.angle = boostDop.angle+2*dt
-                else
-                    boostDop.angle = boostDop.angle-2*dt
-                end
-            else 
-                if (boostDop.angle>0) then 
-                    boostDop.angle = boostDop.angle-2*dt
-                else
-                    boostDop.angle = boostDop.angle+2*dt
-                end
-            end
+            self.inv = self.invTimer
+            shake  = 0    
+            self.flagInv =  true
         end
     end
 end
         
 function Player:drawUI()
     love.graphics.setColor(0.02,0.3,0.02,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+17)*k,Player.y+720/11*k/2,4*k2,-720/11*k)
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+17)*k,self.y+720/11*k/2,4*k2,-720/11*k)
     love.graphics.setColor(0.19,1,0.19,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+17)*k,Player.y+720/11*k/2,4*k2,(-Player.Hp.lengthBar/Player.Hp.maxValue*720/11)*k)
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+17)*k,self.y+720/11*k/2,4*k2,(-self.Hp.lengthBar/self.Hp.maxValue*720/11)*k)
     love.graphics.setColor(0.02,0.6,0.02,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+17)*k,Player.y+720/11*k/2,4*k2,(-Player.Hp.value/Player.Hp.maxValue*720/11)*k)
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+17)*k,self.y+720/11*k/2,4*k2,(-self.Hp.value/self.Hp.maxValue*720/11)*k)
 
     love.graphics.setColor(0,0.32,0.225,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+11)*k,Player.y+720/11*k/2,3*k2,-720/11*k)
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,-720/11*k)
     love.graphics.setColor(0.15,1,0.9,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+11)*k,Player.y+720/11*k/2,3*k2,(-Player.Energy.lengthBar/Player.Energy.maxValue*720/11)*k)
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,(-self.Energy.lengthBar/self.Energy.maxValue*720/11)*k)
     love.graphics.setColor(0,0.643,0.502,1)
-    love.graphics.rectangle("fill",Player.x-(Player.scaleBody+11)*k,Player.y+720/11*k/2,3*k2,(-Player.Energy.value/Player.Energy.maxValue*720/11)*k)     
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,(-self.Energy.value/self.Energy.maxValue*720/11)*k)     
    
-    if ( Player.Skills.EnergyArmor.dopEnFlag == true) then 
+    if ( self.Skills.EnergyArmor.dopEnFlag == true) then 
         love.graphics.setLineWidth(2*k)
         love.graphics.setColor(0,1,1,boostDop.long/720)
-        local kek1 =  love.math.newBezierCurve(Player.x-(Player.scaleBody/2)*k,Player.y-(Player.scaleBody+2)*k, Player.x,Player.y-(Player.scaleBody+10)*k,Player.x+(Player.scaleBody/2)*k,Player.y-(Player.scaleBody+2)*k) 
-        kek1:rotate(-boostDop.angle-math.pi/2,Player.x,Player.y)
-        kek1:scale(boostDop.long/720,Player.x,Player.y)
+        local kek1 =  love.math.newBezierCurve(self.x-(self.scaleBody/2)*k,self.y-(self.scaleBody+2)*k, self.x,self.y-(self.scaleBody+10)*k,self.x+(self.scaleBody/2)*k,self.y-(self.scaleBody+2)*k) 
+        kek1:rotate(-boostDop.angle-math.pi/2,self.x,self.y)
+        kek1:scale(boostDop.long/720,self.x,self.y)
         kek1:translate((1-boostDop.long/720)*40*k*-1*math.cos(boostDop.angle),(1-boostDop.long/720)*40*k*math.sin(boostDop.angle))
         love.graphics.line(kek1:render())
         local colorRandom =1 -- math.random()/2*math.random(-1,1)
         --boostDop.shake = 0
         love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/7)
-        love.graphics.circle('fill',Player.x,Player.y,(Player.scaleBody+6)*k)
+        love.graphics.circle('fill',self.x,self.y,(self.scaleBody+6)*k)
         love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/2)
         
-        love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k+boostDop.shake*k)
+        love.graphics.circle('line',self.x,self.y,(self.scaleBody+6)*k+boostDop.shake*k)
         
         love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/4)
         
-        love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-2*k+boostDop.shake*k)
+        love.graphics.circle('line',self.x,self.y,(self.scaleBody+6)*k-2*k+boostDop.shake*k)
         love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/6)
         
-        love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-4*k+boostDop.shake*k)
+        love.graphics.circle('line',self.x,self.y,(self.scaleBody+6)*k-4*k+boostDop.shake*k)
     end
   
     love.graphics.setColor(1,1,1,1)

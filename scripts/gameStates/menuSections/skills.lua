@@ -349,7 +349,7 @@ if ( indexR~= indexRSave) then
 end
 if ( playerSkills[indexR+4]) then 
     text(xTextPanel-(160/3*k)+20*k,screenHeight/2+140*k,0.42)
-    textPar(playerSkills[indexR+4].numb,xTextPanel-(160/3*k)+20*k,screenHeight/2-60*k,0.43)
+    --textPar(playerSkills[indexR+4].numb,xTextPanel-(160/3*k)+20*k,screenHeight/2-60*k,0.43)
     local fontWidth = font:getWidth(tostring(playerSkills[indexR+4].lvl))
     love.graphics.setColor(0,0,0,0.5) 
     xBigSlot = (xTextPanel+ 160/3*k)+0.2*difButton+(0.4*1.2*160*k)
