@@ -143,7 +143,6 @@ boost2 = Timer.new()
 
 -------------MASIIIIIIV-----------
 exp =  {}
-particl =  {}
 mouse = 
 {
   x=0,
