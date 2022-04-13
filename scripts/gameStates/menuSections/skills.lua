@@ -1,4 +1,7 @@
 local skills = {}
+
+local playerSkills= {}
+
 local but1 = false
 local but2 = false
 local but3 = false
@@ -21,25 +24,7 @@ local butNo = false
 local flagRes = -0.1
 local flagResBool = true
 
-local textMas = {
-    'Increasing the amount of health', -- common1
-    'Increasing the amount of energy', -- common2
-    'Increased resistance to melee attacks', -- common3
-    'Increased resistance to range attacks', -- common4
-    'Increased attack power', -- common5
-    'Speed increase', -- common6
-    'Increasing the resource collection radius', -- common7
-    
-    'Wave attack modifier (expends energy)',-- rare8
-    'Bloody attack modifier (expends energy)',-- rare9
-    'Electric attack modifier (expends energy)',-- rare10
-    'The armor returns the damage received',-- rare11
-    
-    'Increase the energy reserve for special attacks',-- legend12
-    'Exchanges energy for health',-- legend13
-    'Steals part of the life of enemies',-- legend14
-          
-}
+
 local difButton = (screenWidth-35*k-0.4*1.2*320*k-60*k-0.196*1.2*320*k-320*k/3-0.15*k*240)
 
 local xTextPanel = (35*k)+0.2*difButton*1.12+(160/3*k)
@@ -48,6 +33,21 @@ local xSmallSlot =(0.4*1.2*160*k)+0.2*difButton*1.12+(0.196*1.2*160*k)
 local xButton = xBigSlot+xSmallSlot+(0.196*1.2*160*k)+0.2*difButton*1.12+(30*k)
 local xSmallButton = xButton+30*k+0.15*k*120+0.05*difButton
 
+function skills:init()
+     for skillIndex, skill in pairs(Player.Skills) do
+        if (skill.isOpened~=nil) then 
+            if (skill.isOpened == true) then
+                table.insert(playerSkills,skill)
+            end
+        else
+            for atackSkillIndex, atackSkill in pairs(skill) do
+                if (atackSkill.isOpened == true) then
+                    table.insert(playerSkills,atackSkill)
+                end
+            end
+        end
+    end
+end
 
 function skills:update(dt)
     mouse.x,mouse.y=love.mouse.getPosition()
@@ -241,7 +241,8 @@ end
 
 if ( playerSkills[indexR+4]) then 
     if ( speedR == 0 ) then 
-        textUpdate(textMas[playerSkills[indexR+4].numb],1,dt) 
+      --  print(playerSkills[1])
+       -- textUpdate(playerSkills[indexR+4].text,1,dt) 
     else
         texti = 0 
         textL = ""
@@ -443,6 +444,34 @@ end
 function text(x,y,scale)
     love.graphics.setColor(1,1,1,lightKoff)
     love.graphics.print(textL,x,y,-3.14/2,scale*k,scale*k)
+end
+
+function slot(img,x,y,ox,oy,scale,light)
+    if ( light == nil ) then
+        light = 1 
+    end
+    UIBatch:setColor(light,light,light,light)
+    skillBatch:setColor(light,light,light,light)
+    if (img and playerSkills[img].image ) then
+--        if ( playerSkills[img].numb  > 11 ) then 
+            UIBatch:add(UIQuads.tableSkillLegend,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)       
+            skillBatch:add(playerSkills[img].image,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+    --[[    else
+            if ( playerSkills[img].numb  > 7 ) then 
+                UIBatch:add(UIQuads.tableSkillRare,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)    
+                skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+            else
+                UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)      
+                skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
+            end
+        end
+        ]]--
+        skillBatch:add(playerSkills[img].image,x,y,-math.pi/2,k*scale,k2*scale,ox,oy)
+    else
+        UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
+    end
+    UIBatch:setColor(1,1,1,1)
+    skillBatch:setColor(1,1,1,1)
 end
 
 function speedRUpdate(dt)

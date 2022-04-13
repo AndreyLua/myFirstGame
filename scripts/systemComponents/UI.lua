@@ -257,32 +257,6 @@ function rewardSlot(img,x,y,scale,money)
         end
     end    
 end
-function slot(img,x,y,ox,oy,scale,light)
-    if ( light == nil ) then
-        light = 1 
-    end
-    UIBatch:setColor(light,light,light,light)
-    skillBatch:setColor(light,light,light,light)
-    if (img and playerSkills[img].img ) then
-        if ( playerSkills[img].numb  > 11 ) then 
-            UIBatch:add(UIQuads.tableSkillLegend,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)       
-            skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
-        else
-            if ( playerSkills[img].numb  > 7 ) then 
-                UIBatch:add(UIQuads.tableSkillRare,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)    
-                skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
-            else
-                UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)      
-                skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
-            end
-        end
-        skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,ox,oy)
-    else
-        UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
-    end
-    UIBatch:setColor(1,1,1,1)
-    skillBatch:setColor(1,1,1,1)
-end
 
 function noRes(x,y,scale,par,dt,flag)
     if (par~= nil and flag~=nil and par >= 0) then 

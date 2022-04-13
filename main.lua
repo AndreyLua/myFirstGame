@@ -55,8 +55,8 @@ uiClose = love.audio.newSource("sounds/ui/close/11.ogg", "static",false)
 uiSwitch = love.audio.newSource("sounds/ui/switch/4.ogg" , "static",false)
 uiScroll = love.audio.newSource("sounds/ui/scroll/2.wav", "static",false)
 uiError = love.audio.newSource( "sounds/ui/error/1.ogg", "static",false)
-uiParticl =love.audio.newSource("sounds/ui/particl/1.ogg","static",false)
-uiParticlDestroy =love.audio.newSource("sounds/ui/particl/3.ogg","static",false)
+uiParticle =love.audio.newSource("sounds/ui/particl/1.ogg","static",false)
+uiParticleDestroy =love.audio.newSource("sounds/ui/particl/3.ogg","static",false)
 
 pickUp = love.audio.newSource("sounds/player/pickUp/1.wav", "static",false)
 enExpl = love.audio.newSource("sounds/en/atack/expl.wav", "static",false)
@@ -132,12 +132,6 @@ UI= require "scripts/systemComponents/UI"
 game = require "scripts/gameStates/gameLoop/game"
 
 ----------------------------------
-inv = Timer.new()
-hp1 = Timer.new()
-hp2 = Timer.new()
-hp3 = Timer.new()
-boost1 = Timer.new()
-boost2 = Timer.new()
 
 ----------------------------------
 

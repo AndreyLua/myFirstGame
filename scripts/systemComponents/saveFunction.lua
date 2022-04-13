@@ -1,5 +1,7 @@
 local saveFunction = {}
 
+local convert = require "scripts/gameStates/menuSections/convert"
+
 function loadSave()
     if love.filesystem.getInfo('save.lua') then
         local TableSave = love.filesystem.read('save.lua')
@@ -29,7 +31,7 @@ function loadSave()
             loadPlayerSkills(TableSave[4])
         end
         if ( TableSave[5]) then 
-            loadParticl(TableSave[5])
+            loadParticle(TableSave[5])
         end
         if ( TableSave[6]) then 
             local usedSkills = TableSave[6]
@@ -43,7 +45,7 @@ end
 
 function makeSave()
     local playerSettings = {MusicVolume, SoundsVolume, Sensitivity, controllerChoose}
-    local particlSaveMas = saveParticl() 
+    local particlSaveMas = saveParticle() 
     local playerSkillsSaveMas = savePlayerSkills()
     local usedSkills = { Player.Skills.SpecialAtack.Wave.waveAtFlag,Player.Skills.SpecialAtack.Bloody.bloodAtFlag,Player.Skills.SpecialAtack.Electric.sealAtFlag,Player.Skills.SpecialAtack.Vampir.vampirFlag}
     save = {score,Wave.number,playerSettings,playerSkillsSaveMas,particlSaveMas,usedSkills}
@@ -62,24 +64,24 @@ function savePlayerSkills()
     return playerSkillsSaveMas
 end
 
-function saveParticl()
+function saveParticle()
     local particlSaveMas = {}
-    for i =1, #particl do
-        local saveParticl ={
-            x = particl[i].x,
-            y = particl[i].y,
-            side = particl[i].side,
-            ran = particl[i].ran,
-            ax = particl[i].ax,
-            ay = particl[i].ay,
+    for i =1, #Particle.list do
+        local saveParticle ={
+            x = Particle.list[i].x,
+            y = Particle.list[i].y,
+            side = Particle.list[i].side,
+            ran = Particle.list[i].ran,
+            ax = Particle.list[i].ax,
+            ay = Particle.list[i].ay,
         }
-        table.insert(particlSaveMas,saveParticl)
+        table.insert(particlSaveMas,saveParticle)
     end
     return particlSaveMas
 end
 
-function loadParticl(particlSaveMas)
-    particl = {}
+function loadParticle(particlSaveMas)
+    Particle.list = {}
     for i =1, #particlSaveMas do
         local Color1,Color2,Color3  = particlColor() 
         local e = {
@@ -97,7 +99,7 @@ function loadParticl(particlSaveMas)
             ax = particlSaveMas[i].ax,
             ay = particlSaveMas[i].ay, 
         }
-        table.insert(particl,e)
+        table.insert(Particle.list,e)
     end
 end
 

@@ -3,7 +3,7 @@ local loadGame = {}
 function loadPlayerParametrsAndImg()
     loadPlayerParametrs()
     loadPlayerImg()
-    
+  --[[  
     playerSkills = {}
     playerSkills[1] ={
     img =skillQuads.hp,
@@ -80,6 +80,7 @@ function loadPlayerParametrsAndImg()
     lvl = 1,
     numb = 14 ,
   }
+  ]]--
 end
 
 function loadPlayerParametrs()

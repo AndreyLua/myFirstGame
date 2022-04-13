@@ -3,7 +3,17 @@ local playerFunction = {}
 local playerSkills = require "scripts/playerGameObject/playerSkills" 
 local die = require "scripts/gameStates/gameLoop/die" 
 local saveFunction = require "scripts/systemComponents/saveFunction" 
+local loadGame = require "scripts/systemComponents/loadGame" 
+loadPlayerImg()
 
+local Skill = Class{
+    lvl = 1, 
+    value = 0,
+    isOpened = true,
+    text = "",
+    image,
+}
+ 
 Player = {
     tip =1 , 
     x = borderWidth/2+40*k/2, 
@@ -70,73 +80,79 @@ Player = {
         y = borderHeight/2+40*k2/2
     },
     Skills = {
-        Hp = {
-            hpK = 0, -- common1
+        Hp =Class{__includes =Skill, 
             text = 'Increasing the amount of health',
+            image = skillQuads.hp,
         },
-        Energy = {
-            enK = 0, -- common2
+        Energy = Class{__includes =Skill, 
             text = 'Increasing the amount of energy',
+            image =skillQuads.energy,
         },
-        MeleeDefense = {
-            meleeDefK = 0, -- common3
+        MeleeDefense = Class{__includes =Skill, 
             text = 'Increased resistance to melee attacks',
+            image =skillQuads.hp,
         },
-        RangeDefense = {
-            rangeDefK = 0, -- common4
+        RangeDefense = Class{__includes =Skill, 
             text = 'Increased resistance to range attacks',
+            image =skillQuads.hp,
         },
-        Damage = {
-            damageK = 1, -- common5
+        Damage = Class{__includes =Skill, 
+            value = 1,
             text = 'Increased attack power',
+            image =skillQuads.hp,
         },
-        Speed = {
-            speedK = 1, -- common6
+        Speed = Class{__includes =Skill, 
+            value = 1,
             text = 'Speed increase',
+            image =skillQuads.hp,
         },
-        Collect = {
-            collectRangeK = 1, -- common7
+        Collect = Class{__includes =Skill, 
+            value =1,
             text = 'Increasing the resource collection radius',
+            image =skillQuads.hp,
         },
         SpecialAtack = {
-            Wave = {
-                waveAt = 0.2, -- rare8
-                waveAtFlag = false,  
+            Wave = Class{__includes =Skill, 
+                value = 0.2,
+                isUsed = false,  
                 text = 'Wave attack modifier (expends energy)',
+                image =skillQuads.hp,
             },
-            Bloody = {
-                bloodAt = 0.2, -- rare9
-                bloodAtFlag = false,
+            Bloody = Class{__includes =Skill,
+                value = 0.2,
+                isUsed = false,  
                 text = 'Bloody attack modifier (expends energy)',
+                image =skillQuads.hp,
             },
-            Electric = {
-                sealAt = 0.2, -- rare10
-                sealAtFlag = false,
+            Electric = Class{__includes =Skill,
+                value = 0.2,
+                isUsed = false,  
                 text = 'Electric attack modifier (expends energy)',
+                image =skillQuads.hp,
             },
-            Vampir = {
-                vampirK = 0.1, -- legend14
-                vampirFlag = false,
+            Vampir = Class{__includes =Skill,
+                value = 0.1,
+                isUsed = false,   
                 text = 'Steals part of the life of enemies',
+                image =skillQuads.hp,
             },
         },
-        SpikeArmor = {
-            spike = 0, -- rare11
-            spikeFlag = false,
+        SpikeArmor = Class{__includes =Skill,
+            value = 0, -- rare11
             text = 'The armor returns the damage received',
+            image =skillQuads.hp,
         },
-        EnergyArmor = {
-            dopEn = 0.1, -- legend12
-            dopEnflag = false,
+        EnergyArmor = Class{__includes =Skill,
+            value = 0.1, -- legend12
             text = 'Increase the energy reserve for defense',
+            image =skillQuads.hp,
         },
-        Trade = {
-            tradeK = 0.1, -- legend13
-            tradeFlag = false,
+        Trade = Class{__includes =Skill,
+            value = 0.1, -- legend13
             text = 'Exchanges energy for health',
+            image =skillQuads.hp,
         },
     },
-
 }
 
 function Player:refreshParameters()
@@ -233,11 +249,11 @@ function Player:move(dt)
     end
     
     if ( self.a==1) then
-        self.x = self.x + self.ax*dt*self.speed*self.speedA*k*self.debaffStrenght*self.Skills.Speed.speedK
-        self.y = self.y + self.ay*dt*self.speed*self.speedA*k2*self.debaffStrenght*self.Skills.Speed.speedK
+        self.x = self.x + self.ax*dt*self.speed*self.speedA*k*self.debaffStrenght*self.Skills.Speed.value
+        self.y = self.y + self.ay*dt*self.speed*self.speedA*k2*self.debaffStrenght*self.Skills.Speed.value
     else
-        self.x = self.x + self.ax*dt*k*self.speed*self.debaffStrenght*self.Skills.Speed.speedK
-        self.y = self.y + self.ay*dt*k2*self.speed*self.debaffStrenght*self.Skills.Speed.speedK
+        self.x = self.x + self.ax*dt*k*self.speed*self.debaffStrenght*self.Skills.Speed.value
+        self.y = self.y + self.ay*dt*k2*self.speed*self.debaffStrenght*self.Skills.Speed.value
     end
     self.body:moveTo(self.x,self.y)
 end
@@ -281,7 +297,7 @@ function Player:draw(dt)
       playerBatch:add(playerQuads[self.tip].cristal,xDraw,yDraw,-self.angleBody+math.pi,k/7,k2/7,playerDrawPar[self.tip].cristalW/2, playerDrawPar[self.tip].cristalH/2-playerDrawPar[self.tip].cristalX)
       
     playerBatch:setColor(1,1,1,1)
-    if (self.Skills.SpecialAtack.Bloody.bloodAtFlag == true ) then
+    if (self.Skills.SpecialAtack.Bloody.isUsed == true ) then
         playerBatch:setColor(1,0.7,0.7,1)  
     end
       playerBatch:add(playerQuads[self.tip].clow1,clow1X,clow1Y,-self.angleBody+math.pi+self.Clows.angle,k/7*self.Clows.L.scale,k2/7*self.Clows.L.scale,playerDrawPar[self.tip].clowW1, playerDrawPar[self.tip].clowH)
@@ -318,15 +334,15 @@ end
 function Player:takeDamage(dmg,tip,atacker)
     self.flagInv = false
     AddSound(playerHurtSounds,0.3)
-    dmg = dmg- self.Skills.Hp.hpK*dmg
+    dmg = dmg- self.Skills.Hp.value*dmg
     boostDop.recovery =boostDop.recoveryTimer - 0.0000001
     if (boostDop.long>0) then 
-        boostDop.long = boostDop.long - (dmg-(dmg*self.Skills.EnergyArmor.dopEn))*4
+        boostDop.long = boostDop.long - (dmg-(dmg*self.Skills.EnergyArmor.value))*4
         boostDop.shakeK = 20
     else
         if ( tip=='m') then
             newPlayerGetDamageEffect(self.x,self.y,7)
-            self.Hp.value = self.Hp.value - dmg*(1-self.Skills.MeleeDefense.meleeDefK)
+            self.Hp.value = self.Hp.value - dmg*(1-self.Skills.MeleeDefense.value)
             if (self.Skills.SpikeArmor.spikeFlag == true) then 
                 newDeffenseEffect(atacker)
             end
@@ -336,7 +352,7 @@ function Player:takeDamage(dmg,tip,atacker)
         end
          if ( tip=='r') then
             newPlayerGetDamageEffect(self.x,self.y,7)
-            self.Hp.value = self.Hp.value - dmg*(1-self.Skills.RangeDefense.rangeDefK)
+            self.Hp.value = self.Hp.value - dmg*(1-self.Skills.RangeDefense.value)
             if (self.Skills.SpikeArmor.spikeFlag == true) then 
                 newDeffenseEffect(atacker)
             end
@@ -357,27 +373,27 @@ function Player:rechargeEnergy(value)
 end
 
 function Player:atack(target,dt)
-    if (self.Skills.SpecialAtack.Wave.waveAtFlag or self.Skills.SpecialAtack.Bloody.bloodAtFlag or self.Skills.SpecialAtack.Electric.sealAtFlag or self.Skills.SpecialAtack.Vampir.vampirFlag) then 
-        self.Energy.value = self.Energy.value - (self.Energy.wasteSpecialAtack-(self.Energy.wasteSpecialAtack*self.Skills.Energy.enK))*self.Energy.wasteAtack*dt
+    if (self.Skills.SpecialAtack.Wave.isUsed or self.Skills.SpecialAtack.Bloody.isUsed or self.Skills.SpecialAtack.Electric.isUsed or self.Skills.SpecialAtack.Vampir.isUsed) then 
+        self.Energy.value = self.Energy.value - (self.Energy.wasteSpecialAtack-(self.Energy.wasteSpecialAtack*self.Skills.Energy.value))*self.Energy.wasteAtack*dt
     end
         
     AddSound(playerHitSounds,0.3)
     self.Clows:scale()
-    self.Energy.value = self.Energy.value - (self.Energy.wasteBoost-(self.Energy.wasteBoost*self.Skills.Energy.enK))*     self.Energy.wasteAtack*dt
-    target.health  =  target.health - self.damage*self.Skills.Damage.damageK
+    self.Energy.value = self.Energy.value - (self.Energy.wasteBoost-(self.Energy.wasteBoost*self.Skills.Energy.value))*     self.Energy.wasteAtack*dt
+    target.health  =  target.health - self.damage*self.Skills.Damage.value
     
-    if (self.Skills.SpecialAtack.Vampir.vampirFlag == true) then 
+    if (self.Skills.SpecialAtack.Vampir.isUsed == true) then 
         newVampirEffect(target)
     end
-    if (self.Skills.SpecialAtack.Wave.waveAtFlag == true) then 
+    if (self.Skills.SpecialAtack.Wave.isUsed == true) then 
         newWaveEffect(self.x,self.y) -- damage
     end
-    if (self.Skills.SpecialAtack.Bloody.bloodAtFlag == true) then 
+    if (self.Skills.SpecialAtack.Bloody.isUsed == true) then 
         newBloodEffect(target)  -- damage
     end
-    if (self.Skills.SpecialAtack.Electric.sealAtFlag == true) then 
+    if (self.Skills.SpecialAtack.Electric.isUsed == true) then 
         table.insert(masli,{table = target, timer = 10,flag = nil})
-        target.health  =  target.health - self.damage*self.Skills.Damage.damageK*self.Skills.SpecialAtack.Electric.sealAt 
+        target.health  =  target.health - self.damage*self.Skills.Damage.value*self.Skills.SpecialAtack.Electric.sealAt 
     end
     
 end
@@ -579,7 +595,7 @@ function Player.Energy:update(dt)
     end
     
     if ( Player.a==1) then
-        self.value = self.value - (self.wasteBoost-(self.wasteBoost*Player.Skills.Energy.enK))*dt
+        self.value = self.value - (self.wasteBoost-(self.wasteBoost*Player.Skills.Energy.value))*dt
     else
         self.value = self.value + self.regen *dt
     end
@@ -587,9 +603,9 @@ function Player.Energy:update(dt)
     ---------------------------------
     if  (self.value>self.maxValue) then
         self.value = self.maxValue
-        if (Player.Skills.Trade.tradeFlag == true and Player.Hp.value<Player.Hp.maxValue and Player.flagInv == true) then 
+        if (Player.Skills.Trade.isOpened == true and Player.Hp.value<Player.Hp.maxValue and Player.flagInv == true) then 
             newTradeEffect()
-            Player.Hp.value = self.Hp.value +10*dt
+            Player.Hp.value = Player.Hp.value +10*dt
         end --skill
     end
     ----------------------------------
@@ -622,7 +638,7 @@ function Player:drawUI()
     love.graphics.setColor(0,0.643,0.502,1)
     love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,(-self.Energy.value/self.Energy.maxValue*720/11)*k)     
    
-    if ( self.Skills.EnergyArmor.dopEnFlag == true) then 
+    if ( self.Skills.EnergyArmor.isOpened == true) then 
         love.graphics.setLineWidth(2*k)
         love.graphics.setColor(0,1,1,boostDop.long/720)
         local kek1 =  love.math.newBezierCurve(self.x-(self.scaleBody/2)*k,self.y-(self.scaleBody+2)*k, self.x,self.y-(self.scaleBody+10)*k,self.x+(self.scaleBody/2)*k,self.y-(self.scaleBody+2)*k) 

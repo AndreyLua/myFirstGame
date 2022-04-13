@@ -1,6 +1,5 @@
 local playerSkills = {}
 
-
 function playerLiDraw(dt)
     if (Player.Skills.SpecialAtack.Electric.sealAtFlag == true) then 
         for i=#masli,1,-1 do

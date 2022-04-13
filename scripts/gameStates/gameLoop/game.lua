@@ -93,7 +93,7 @@ playerSledi = {}
 masli= {} 
 
 --loadSave()
-lvlParametrs()
+--lvlParametrs()
 end
 
 function gamestate.focus(v)
@@ -131,8 +131,8 @@ explUpdate2(dt)
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
-Player.Energy.value = 1000
-Player.Hp.value = 1000 
+--Player.Energy.value = 1000
+--Player.Hp.value = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
