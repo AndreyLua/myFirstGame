@@ -1,5 +1,7 @@
 local skills = {}
 
+local playerSkillsInterface = require "scripts/playerGameObject/playerSkillsInterface" 
+
 local playerSkills= {}
 
 local but1 = false
@@ -241,8 +243,7 @@ end
 
 if ( playerSkills[indexR+4]) then 
     if ( speedR == 0 ) then 
-      --  print(playerSkills[1])
-       -- textUpdate(playerSkills[indexR+4].text,1,dt) 
+        textUpdate(playerSkills[indexR+4].Interface.text,1,dt) 
     else
         texti = 0 
         textL = ""
@@ -350,7 +351,7 @@ if ( indexR~= indexRSave) then
 end
 if ( playerSkills[indexR+4]) then 
     text(xTextPanel-(160/3*k)+20*k,screenHeight/2+140*k,0.42)
-    --textPar(playerSkills[indexR+4].numb,xTextPanel-(160/3*k)+20*k,screenHeight/2-60*k,0.43)
+    textPar(xTextPanel-(160/3*k)+20*k,screenHeight/2-60*k,0.43)
     local fontWidth = font:getWidth(tostring(playerSkills[indexR+4].lvl))
     love.graphics.setColor(0,0,0,0.5) 
     xBigSlot = (xTextPanel+ 160/3*k)+0.2*difButton+(0.4*1.2*160*k)
@@ -371,7 +372,7 @@ love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k
 indexRSave = indexR
 end
 
-function textPar(i,x,y,scale)
+function textPar(x,y,scale)
     local indexR = xR / (math.pi/6)
     if ( xR%(math.pi/6) > math.pi/12) then
         indexR = math.ceil(xR / (math.pi/6))
@@ -379,48 +380,8 @@ function textPar(i,x,y,scale)
         indexR = math.floor(xR / (math.pi/6))
     end
     if (playerSkills[indexR+4]) then 
-        love.graphics.print("COST "..tostring(skillCostUpgrade[i]*(playerSkills[indexR+4].lvl)),x+30*k,y,-3.14/2,scale*k,scale*k) end
-    if (i == 1 ) then 
-        love.graphics.print("HP "..tostring(math.ceil(100/(1-playerSkillParametrs.hpK))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 2 ) then 
-        love.graphics.print("EN "..tostring(math.ceil(100/(1-playerSkillParametrs.enK))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 3 ) then 
-        love.graphics.print("RES "..tostring(math.ceil(100*(playerSkillParametrs.meleeDefK))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 4 ) then 
-        love.graphics.print("RES "..tostring(math.ceil(100*(playerSkillParametrs.rangeDefK))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 5 ) then 
-        love.graphics.print("AT "..tostring(math.ceil(100*(playerSkillParametrs.damageK))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 6 ) then 
-        love.graphics.print("SP "..tostring(math.ceil(100*(playerSkillParametrs.speedK))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 7 ) then 
-        love.graphics.print("RAN "..tostring(math.ceil(100*(playerSkillParametrs.collectRangeK))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 8 ) then 
-        love.graphics.print("AT "..tostring(math.ceil(100*(playerSkillParametrs.waveAt))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 9 ) then 
-        love.graphics.print("AT "..tostring(math.ceil(100*(playerSkillParametrs.bloodAt))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 10 ) then 
-        love.graphics.print("AT "..tostring(math.ceil(100*(playerSkillParametrs.sealAt))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 11 ) then 
-        love.graphics.print("REF "..tostring(math.ceil(100*(playerSkillParametrs.spike))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 12 ) then 
-        love.graphics.print("EN "..tostring(math.ceil(100*(playerSkillParametrs.dopEn))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 13 ) then 
-        love.graphics.print("SW "..tostring(math.ceil(100*(playerSkillParametrs.tradeK))).."%",x,y,-3.14/2,scale*k,scale*k)
-    end
-    if (i == 14 ) then 
-        love.graphics.print("VP "..tostring(math.ceil(100*(playerSkillParametrs.vampirK))).."%",x,y,-3.14/2,scale*k,scale*k)
+        love.graphics.print("COST "..tostring(playerSkills[indexR+4].Interface.cost*(playerSkills[indexR+4].lvl)),x+30*k,y,-3.14/2,scale*k,scale*k)
+        playerSkills[indexR+4].Interface:print(x,y,scale)
     end
 end
 
@@ -452,21 +413,17 @@ function slot(img,x,y,ox,oy,scale,light)
     end
     UIBatch:setColor(light,light,light,light)
     skillBatch:setColor(light,light,light,light)
-    if (img and playerSkills[img].image ) then
---        if ( playerSkills[img].numb  > 11 ) then 
+    if (img and playerSkills[img].Interface.image ) then
+        if ( playerSkills[img].rarity == "legend" ) then 
             UIBatch:add(UIQuads.tableSkillLegend,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)       
-            skillBatch:add(playerSkills[img].image,x,y,-math.pi/2,k*scale,k2*scale,160,160)
-    --[[    else
-            if ( playerSkills[img].numb  > 7 ) then 
+        else
+            if ( playerSkills[img].rarity == "rare" ) then 
                 UIBatch:add(UIQuads.tableSkillRare,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)    
-                skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
             else
                 UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)      
-                skillBatch:add(playerSkills[img].img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
             end
         end
-        ]]--
-        skillBatch:add(playerSkills[img].image,x,y,-math.pi/2,k*scale,k2*scale,ox,oy)
+        skillBatch:add(playerSkills[img].Interface.image,x,y,-math.pi/2,k*scale,k2*scale,ox,oy)
     else
         UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
     end

@@ -1,6 +1,7 @@
 local convert = {}
 
 local UI = require "scripts/systemComponents/UI"
+--tlocal playerFunction = require "scripts/playerGameObject/playerFunction"
 
 local buttonAdd = Button(0,0,120*k,120*k)  
 function buttonAdd:draw()
@@ -67,9 +68,23 @@ local Reward = {
     skill  = 0,
     slotScale = 0,  
 }
+local playerSkills = {}
 
 function convert:init()
     Colba.Borders:init()
+    for skillIndex, skill in pairs(Player.Skills) do
+        if (skill.isOpened~=nil) then 
+            if (skill.isOpened == true) then
+                table.insert(playerSkills,skill)
+            end
+        else
+            for atackSkillIndex, atackSkill in pairs(skill) do
+                if (atackSkill.isOpened == true) then
+                    table.insert(playerSkills,atackSkill)
+                end
+            end
+        end
+    end
 end
 
 function convert:update(dt)
