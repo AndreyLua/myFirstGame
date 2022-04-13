@@ -2,9 +2,33 @@ local skills = {}
 
 local playerSkillsInterface = require "scripts/playerGameObject/playerSkillsInterface" 
 
+local difButton = (screenWidth-35*k-0.4*1.2*320*k-60*k-0.196*1.2*320*k-320*k/3-0.15*k*240)
+
+local xTextPanel = (35*k)+0.2*difButton*1.12+(160/3*k)
+local xBigSlot = (xTextPanel+ 160/3*k)+0.2*difButton*1.12+(0.4*1.2*160*k)
+local xSmallSlot =(0.4*1.2*160*k)+0.2*difButton*1.12+(0.196*1.2*160*k)
+local xButton = xBigSlot+xSmallSlot+(0.196*1.2*160*k)+0.2*difButton*1.12+(30*k)
+local xSmallButton = xButton+30*k+0.15*k*120+0.05*difButton
+
+local buttonAdd = Button(0,0,120*k,120*k)  
+function buttonAdd:draw()
+    add()
+end
+
+local buttonUpdateX = xButton
+local buttonUpdateY = screenHeight/2-math.cos(-math.pi/2)*310*k
+local buttonUpdateWidth = 60*k
+local buttonUpdateHeight = 250*k2
+local buttonUpdate = Button(buttonUpdateX,buttonUpdateY,buttonUpdateWidth,buttonUpdateHeight)
+function buttonUpdate:draw()
+    bodyButton(buttonUpdate.x,buttonUpdate.y,buttonUpdate.isTappedFlag)
+end
+
+
+
+
 local playerSkills= {}
 
-local but1 = false
 local but2 = false
 local but3 = false
 local butSmall = false
@@ -26,15 +50,6 @@ local butNo = false
 local flagRes = -0.1
 local flagResBool = true
 
-
-local difButton = (screenWidth-35*k-0.4*1.2*320*k-60*k-0.196*1.2*320*k-320*k/3-0.15*k*240)
-
-local xTextPanel = (35*k)+0.2*difButton*1.12+(160/3*k)
-local xBigSlot = (xTextPanel+ 160/3*k)+0.2*difButton*1.12+(0.4*1.2*160*k)
-local xSmallSlot =(0.4*1.2*160*k)+0.2*difButton*1.12+(0.196*1.2*160*k)
-local xButton = xBigSlot+xSmallSlot+(0.196*1.2*160*k)+0.2*difButton*1.12+(30*k)
-local xSmallButton = xButton+30*k+0.15*k*120+0.05*difButton
-
 function skills:init()
      for skillIndex, skill in pairs(Player.Skills) do
         if (skill.isOpened~=nil) then 
@@ -52,22 +67,51 @@ function skills:init()
 end
 
 function skills:update(dt)
-    mouse.x,mouse.y=love.mouse.getPosition()
+    if (buttonAdd:isTapped()) then
+        exp = {}
+        AddSound(uiClick,0.3)
+        gamestate.switch(menu)
+    end 
+    
+    if (buttonUpdate:isTapped()) then
+        if ( flagAcceptMenu == false) then 
+            local indexR = xR / (math.pi/6)
+            if ( xR%(math.pi/6) > math.pi/12) then
+                indexR = math.ceil(xR / (math.pi/6))
+            else
+                indexR = math.floor(xR / (math.pi/6))
+            end
+            if (speedR == 0 and playerSkills[indexR+4] and playerSkills[indexR+4].Interface.cost<= score) then
+                AddSound(uiSelect,0.3)
+                flagAcceptMenu = true
+                flagRes = -0.1
+                flagResBool = true
+            else
+                AddSound(uiError,0.3)
+                if ( playerSkills[indexR+4]) then 
+                    if (flagRes == nil or  flagRes < 0) then 
+                        flagRes = 0
+                    end
+                    flagResBool = true
+                end
+            end
+        end
+    end
+    
     local indexR = xR / (math.pi/6)
     if ( xR%(math.pi/6) > math.pi/12) then
         indexR = math.ceil(xR / (math.pi/6))
     else
         indexR = math.floor(xR / (math.pi/6))
     end
+    
     if love.mouse.isDown(1)  then
         if ( flagtouch3 == false) then 
             mousePosX = mouse.x
             mousePosY = mouse.y
         end 
         if (flagAcceptMenu == false) then 
-            if (mouse.x > xButton-k2/4*120 and  mouse.x <xButton+ k2/4*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-500*k/4 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+500*k/4) then
-                but1 = true
-            end
+            --
             if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3) then
                 but2 = true
             end
@@ -127,38 +171,9 @@ function skills:update(dt)
                 end
             end
         end
-        if ( mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60*k2 and flagtouch3 == true) then
-            exp = {}
-            AddSound(uiClick,0.3)
-            gamestate.switch(menu)
-        end 
+     
         if ( flagAcceptMenu == false) then 
-          
-            if (mouse.x > xButton-k2/4*120 and  mouse.x <xButton+ k2/4*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-500*k/4 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+500*k/4 and but1 == true) then
-                local indexR = xR / (math.pi/6)
-                if ( xR%(math.pi/6) > math.pi/12) then
-                    indexR = math.ceil(xR / (math.pi/6))
-                else
-                    indexR = math.floor(xR / (math.pi/6))
-                end
-                if (speedR == 0 and playerSkills[indexR+4] and  ((playerSkills[indexR+4].lvl)*skillCostUpgrade[(playerSkills[indexR+4].numb)])<= score) then
-                    AddSound(uiSelect,0.3)
-                    flagAcceptMenu = true
-                    flagRes = -0.1
-                    flagResBool = true
-                else
-                    AddSound(uiError,0.3)
-                    ---------------------------------
-                    if ( playerSkills[indexR+4]) then 
-                        if (flagRes == nil or  flagRes < 0) then 
-                            flagRes = 0
-                        end
-                        flagResBool = true
-                    end
-                  ---------------------------------
-                end
-            end
-            
+        
             if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3 and but2 == true) then
                 speedR =2.2
                 texti = 0 
@@ -211,13 +226,11 @@ function skills:update(dt)
         butYes = false
         but3 = false
         but2 = false
-        but1 = false
         flagtouch3 =false
     end
     if ( flagAcceptMenu == true) then
         lightKoff = 0.2
     end
-   
 end
 
 function skills:draw()
@@ -230,7 +243,7 @@ love.graphics.draw(fon1,0,0,0,k,k2)
 love.graphics.draw(fon2,0,0,0,k,k2)
 love.graphics.draw(fon3,0,0,0,k,k2)
 
-add(0,0)
+buttonAdd:draw()
 love.graphics.setColor(1,1,1,lightKoff)
 sc(0,screenHeight/2)
 
@@ -289,7 +302,7 @@ love.graphics.setColor(1,1,1,lightKoff)
 bodyTextPanel(xTextPanel,screenHeight/2)
 bodyButtonDirect((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/1.4)*300*k,but2,'left')
 bodyButtonDirect((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/3.5)*300*k,but3,'right')
-bodyButton(xButton,screenHeight/2-math.cos(-math.pi/2)*310*k,but1)
+buttonUpdate:draw()
 
 if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
     bodyButtonScale(xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.15)
@@ -302,7 +315,7 @@ UIBatch:clear()
 skillBatch:clear()
 if (flagAcceptMenu == true) then 
     love.graphics.setColor(1,1,1,1)
-    add()
+    buttonAdd:draw()
     slot(indexR+4,xBigSlot,screenHeight/2,160,160,0.4) 
     acceptBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/1.4)*120*k,0.4,butYes) 
     rejectBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/3.5)*120*k,0.4,butNo)
@@ -310,7 +323,7 @@ if (flagAcceptMenu == true) then
     love.graphics.draw(skillBatch)
     love.graphics.setColor(1,1,1,lightKoff)
 end
-textButton("Update",xButton,screenHeight/2-math.cos(-math.pi/2)*310*k,but1,0.9)
+textButton("Update",xButton,screenHeight/2-math.cos(-math.pi/2)*310*k,buttonUpdate.isTappedFlag,0.9)
 
 if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
     if ( playerSkills[indexR+4].numb == 8) then 
@@ -361,8 +374,8 @@ if ( playerSkills[indexR+4]) then
         fontWidth = font:getWidth(tostring(playerSkills[indexR+4].lvl+1))
         love.graphics.print('^',xBigSlot-(0.4*1.2*160*k)+47*k,screenHeight/2-160*k*0.4*1.2+16*k,math.pi/2,k/2,k2/2)
         love.graphics.print(tostring(playerSkills[indexR+4].lvl+1),xBigSlot-(0.4*1.2*160*k)+40*k,screenHeight/2-160*k*0.4*1.2+fontWidth*k2/2+14*k,-math.pi/2,k/2,k2/2)
-        fontWidth = font:getWidth("Cost of upgrade "..tostring(skillCostUpgrade[(playerSkills[indexR+4].numb)]*(playerSkills[indexR+4].lvl)))
-        love.graphics.print("Cost of upgrade "..tostring(skillCostUpgrade[(playerSkills[indexR+4].numb)]*(playerSkills[indexR+4].lvl)),xBigSlot-(0.4*1.2*160*k)-70*k,screenHeight/2+fontWidth*k2/3,-math.pi/2,k/1.5,k2/1.5)
+        fontWidth = font:getWidth("Cost of upgrade "..tostring(playerSkills[indexR+4].Interface.cost))
+        love.graphics.print("Cost of upgrade "..tostring(playerSkills[indexR+4].Interface.cost),xBigSlot-(0.4*1.2*160*k)-70*k,screenHeight/2+fontWidth*k2/3,-math.pi/2,k/1.5,k2/1.5)
     end
 end
 
@@ -414,15 +427,8 @@ function slot(img,x,y,ox,oy,scale,light)
     UIBatch:setColor(light,light,light,light)
     skillBatch:setColor(light,light,light,light)
     if (img and playerSkills[img].Interface.image ) then
-        if ( playerSkills[img].rarity == "legend" ) then 
-            UIBatch:add(UIQuads.tableSkillLegend,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)       
-        else
-            if ( playerSkills[img].rarity == "rare" ) then 
-                UIBatch:add(UIQuads.tableSkillRare,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)    
-            else
-                UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)      
-            end
-        end
+        local x2, y2, w, h = playerSkills[img].Interface.slotRarityImage:getViewport()
+        UIBatch:add(playerSkills[img].Interface.slotRarityImage,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,w/2,h/2)    
         skillBatch:add(playerSkills[img].Interface.image,x,y,-math.pi/2,k*scale,k2*scale,ox,oy)
     else
         UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
