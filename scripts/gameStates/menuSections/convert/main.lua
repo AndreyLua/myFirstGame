@@ -77,6 +77,9 @@ function convert:update(dt)
         Reward.flagMenu = false
         AddSound(uiSelect,0.3,false)
         Reward:give(playerSkills)
+        playerSkills = {} 
+        Player.Skills:skillsTable(playerSkills)
+        Player.Skills:sortSkillsTable(playerSkills)
     end
     
     if ( Reward.flagMenu == false and buttonConvert:isTapped()) then

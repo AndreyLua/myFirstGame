@@ -46,24 +46,42 @@ end
 function makeSave()
     local playerSettings = {MusicVolume, SoundsVolume, Sensitivity, controllerChoose}
     local particlSaveMas = saveParticle() 
-    local playerSkillsSaveMas = savePlayerSkills()
+    local playerSkillsSaveMas ={}
+    savePlayerSkills(playerSkillsSaveMas)
+  --  print(#playerSkillsSaveMas)
     local usedSkills = { Player.Skills.SpecialAtack.Wave.waveAtFlag,Player.Skills.SpecialAtack.Bloody.bloodAtFlag,Player.Skills.SpecialAtack.Electric.sealAtFlag,Player.Skills.SpecialAtack.Vampir.vampirFlag}
     save = {score,Wave.number,playerSettings,playerSkillsSaveMas,particlSaveMas,usedSkills}
     love.filesystem.write('save.lua',  binser.serialize(save))
 end
 
-function savePlayerSkills()
-    local playerSkillsSaveMas = {}
-    for i =1, #Player.Skills do
-        local savePlayerSkill ={
-            link = Player.Skills[i],
-            lvl = Player.Skills[i].lvl,
-            numb = Player.Skills[i].numb,
-            value = Player.Skills[i].value,
-        }
-        table.insert(playerSkillsSaveMas,savePlayerSkill)
+function savePlayerSkills(playerSkillsSaveMas)
+    for skillIndex, skill in pairs(Player.Skills) do
+        if ( type(skill)=='table') then 
+            if (skill.isOpened~=nil) then 
+                if (skill.isOpened == true) then
+                    local savePlayerSkill ={
+                     --   link = skill,
+                        lvl = skill.lvl,
+                        numb = skill.numb,
+                        value = skill.value,
+                    }
+                    table.insert(playerSkillsSaveMas,savePlayerSkill)
+                end
+            else
+                for atackSkillIndex, atackSkill in pairs(skill) do
+                    if (atackSkill.isOpened == true) then
+                        local savePlayerSkill ={
+                     --       link = skill,
+                            lvl = skill.lvl,
+                            numb = skill.numb,
+                            value = skill.value,
+                        }
+                        table.insert(playerSkillsSaveMas,savePlayerSkill)
+                    end
+                end
+            end
+        end
     end
-    return playerSkillsSaveMas
 end
 
 function saveParticle()
@@ -106,10 +124,11 @@ function loadParticle(particlSaveMas)
 end
 
 function loadPlayerSkills(playerSkillsSaveMas)
+ -- print(#playerSkillsSaveMas)
     for i =1, #playerSkillsSaveMas do
-        playerSkillsSaveMas[i].link.value = playerSkillsSaveMas[i].value
-        playerSkillsSaveMas[i].link.number = playerSkillsSaveMas[i].number
-        playerSkillsSaveMas[i].link.lvl = playerSkillsSaveMas[i].lvl
+        Player.Skills[i].link.value = playerSkillsSaveMas[i].value
+        Player.Skills[i].link.number = playerSkillsSaveMas[i].number
+        Player.Skills[i].link.lvl = playerSkillsSaveMas[i].lvl
     end
 end
 return saveFunction

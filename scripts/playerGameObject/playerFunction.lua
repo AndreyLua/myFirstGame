@@ -12,7 +12,7 @@ local Skill = Class{
     value = 0,
     number = 2000,
     rare ="common",
-    isOpened = true,
+    isOpened = false,
 }
  
 Player = {
@@ -160,6 +160,7 @@ Player = {
                     slotRarityImage = UIQuads.tableSkillRare,
                 },
                 value = 0.2,
+                rare ="rare",
                 isUsed = false,  
             },
             Bloody = Class{__includes =Skill,
@@ -170,6 +171,7 @@ Player = {
                     slotRarityImage = UIQuads.tableSkillRare,
                 },
                 value = 0.2,
+                rare ="rare",
                 isUsed = false,  
             },
             Electric = Class{__includes =Skill,
@@ -180,6 +182,7 @@ Player = {
                     slotRarityImage = UIQuads.tableSkillRare,
                 },
                 value = 0.2,
+                rare ="rare",
                 isUsed = false,  
             },
             Vampir = Class{__includes =Skill,
@@ -190,6 +193,7 @@ Player = {
                     slotRarityImage = UIQuads.tableSkillLegend,
                 },
                 value = 0.1,
+                rare ="legend",
                 isUsed = false,   
             },
         },
@@ -200,6 +204,7 @@ Player = {
                 image =skillQuads.spikeArmor,
                 slotRarityImage = UIQuads.tableSkillRare,
             },
+            rare ="rare",
             value = 0, -- rare11
         },
         EnergyArmor = Class{__includes =Skill,
@@ -209,6 +214,7 @@ Player = {
                 image =skillQuads.dopEnergy,
                 slotRarityImage = UIQuads.tableSkillLegend,
             },
+            rare ="legend",
             value = 0.1, -- legend12
         },
         Trade = Class{__includes =Skill,
@@ -218,6 +224,7 @@ Player = {
                 image =skillQuads.swapHpAndEn,
                 slotRarityImage = UIQuads.tableSkillLegend,
             },
+            rare ="legend",
             value = 0.1, -- legend13
         },
     },

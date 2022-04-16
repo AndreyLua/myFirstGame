@@ -65,7 +65,8 @@ local butNo = false
 local flagRes = -0.1
 local flagResBool = true
 
-function skills:init()
+function skills:enter()
+    playerSkills= {}
     Player.Skills:skillsTable(playerSkills)
     Player.Skills:sortSkillsTable(playerSkills)
 end

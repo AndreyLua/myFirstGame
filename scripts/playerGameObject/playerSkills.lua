@@ -23,8 +23,8 @@ end
 function Player.Skills:sortSkillsTable(table)
     for i =1,#table do
         for j =1,#table-i do
-            if (table[i].number< table[j].number) then 
-                table[i],table[j]=table[j],table[i]
+            if (table[j].number > table[j+1].number) then 
+                table[j],table[j+1]=table[j+1],table[j]
             end
         end
     end
