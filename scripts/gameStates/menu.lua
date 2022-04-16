@@ -2,7 +2,7 @@ local menu = {}
 
 local UI= require "scripts/systemComponents/UI"
 local skills = require "scripts/gameStates/menuSections/skills" 
-local convert = require "scripts/gameStates/menuSections/convert"
+local convert = require "scripts/gameStates/menuSections/convert/main"
 local character = require "scripts/gameStates/menuSections/character"
 local settings = require "scripts/gameStates/menuSections/settings" 
 

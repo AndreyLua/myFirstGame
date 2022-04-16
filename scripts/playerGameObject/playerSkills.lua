@@ -1,5 +1,38 @@
 local playerSkills = {}
 
+local playerFunction = require "scripts/playerGameObject/playerFunction"
+
+function Player.Skills:skillsTable(tableSkills)
+    for skillIndex, skill in pairs(self) do
+        if ( type(skill)=='table') then 
+            if (skill.isOpened~=nil) then 
+                if (skill.isOpened == true) then
+                    table.insert(tableSkills,skill)
+                end
+            else
+                for atackSkillIndex, atackSkill in pairs(skill) do
+                    if (atackSkill.isOpened == true) then
+                        table.insert(tableSkills,atackSkill)
+                    end
+                end
+            end
+        end
+    end
+end
+
+function Player.Skills:sortSkillsTable(table)
+    for i =1,#table do
+        for j =1,#table-i do
+            if (table[i].number< table[j].number) then 
+                table[i],table[j]=table[j],table[i]
+            end
+        end
+    end
+end
+
+
+
+
 function playerLiDraw(dt)
     if (Player.Skills.SpecialAtack.Electric.sealAtFlag == true) then 
         for i=#masli,1,-1 do

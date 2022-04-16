@@ -132,56 +132,6 @@ function particlColor()
     end 
 end
 
-function lvlParametrs()
-    for i =1, #playerSkills do 
-        local masSkill = playerSkills[i] 
-        ----------------------------------------------------------------------------
-        if (masSkill.numb == 1 ) then 
-            Player.Skills.Hp.value =0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 2 ) then 
-            Player.Skills.Energy.value =0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 3 ) then 
-            Player.Skills.MeleeDefense.value=0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 4 ) then 
-            Player.Skills.RangeDefense.value=0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 5 ) then 
-            Player.Skills.Damage.value =1+0.03*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 6 ) then 
-            Player.Skills.Speed.value =1+0.015*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 7 ) then 
-            Player.Skills.Collect.value =1+0.02*(masSkill.lvl-1)
-        end
-        ----------------------------------------------------------------------------
-        if (masSkill.numb == 8 ) then 
-            Player.Skills.SpecialAtack.Wave.value =0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 9 ) then 
-            Player.Skills.SpecialAtack.Bloody.value =0.02*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 10 ) then 
-            Player.Skills.SpecialAtack.Electric.value =0.04*(masSkill.lvl-1)
-        end
-        if (masSkill.numb == 11 ) then 
-            Player.Skills.SpikeArmor.value =0.01*math.log(masSkill.lvl,2)
-        end
-        ----------------------------------------------------------------------------
-        if (masSkill.numb == 12 ) then 
-            Player.Skills.EnergyArmor.value =0.01*math.log(masSkill.lvl,2)
-        end
-        if (masSkill.numb == 13 ) then 
-            Player.Skills.Trade.value =0.01*math.log(masSkill.lvl,2)
-        end
-        if (masSkill.numb == 14 ) then 
-            Player.Skills.SpecialAtack.Vampir.value =0.01*math.log(masSkill.lvl,2)
-        end
-        
-    end
-end
+
 
 return system 

@@ -1,6 +1,6 @@
 local saveFunction = {}
 
-local convert = require "scripts/gameStates/menuSections/convert"
+--local convert = require "scripts/gameStates/menuSections/convert"
 
 function loadSave()
     if love.filesystem.getInfo('save.lua') then
@@ -54,10 +54,12 @@ end
 
 function savePlayerSkills()
     local playerSkillsSaveMas = {}
-    for i =1, #playerSkills do
+    for i =1, #Player.Skills do
         local savePlayerSkill ={
-            lvl = playerSkills[i].lvl,
-            numb = playerSkills[i].numb
+            link = Player.Skills[i],
+            lvl = Player.Skills[i].lvl,
+            numb = Player.Skills[i].numb,
+            value = Player.Skills[i].value,
         }
         table.insert(playerSkillsSaveMas,savePlayerSkill)
     end
@@ -104,14 +106,10 @@ function loadParticle(particlSaveMas)
 end
 
 function loadPlayerSkills(playerSkillsSaveMas)
-    playerSkills = {} 
     for i =1, #playerSkillsSaveMas do
-        local skill = {
-            img = allSkills[playerSkillsSaveMas[i].numb],
-            numb = playerSkillsSaveMas[i].numb,
-            lvl = playerSkillsSaveMas[i].lvl
-        }
-        table.insert(playerSkills,skill)
+        playerSkillsSaveMas[i].link.value = playerSkillsSaveMas[i].value
+        playerSkillsSaveMas[i].link.number = playerSkillsSaveMas[i].number
+        playerSkillsSaveMas[i].link.lvl = playerSkillsSaveMas[i].lvl
     end
 end
 return saveFunction

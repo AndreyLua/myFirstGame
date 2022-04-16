@@ -1,6 +1,6 @@
 local playerFunction = {} 
 
-local playerSkills = require "scripts/playerGameObject/playerSkills" 
+--local playerSkills = require "scripts/playerGameObject/playerSkills" 
 local die = require "scripts/gameStates/gameLoop/die" 
 local saveFunction = require "scripts/systemComponents/saveFunction" 
 local loadGame = require "scripts/systemComponents/loadGame" 
@@ -8,10 +8,10 @@ loadPlayerImg()
 
 local Skill = Class{
     lvl = 1, 
+    perUpgrade = 0.2,
     value = 0,
+    number = 2000,
     isOpened = true,
-    text = "",
-    image,
 }
  
 Player = {
@@ -34,7 +34,8 @@ Player = {
     speedA  = 1.8,
     speed = 6,
     debaffStrenght =0.2,
-
+    maxLvlSkills = 10,
+    
     Energy = {
         value = 1000,
         maxValue = 1000,
@@ -87,6 +88,7 @@ Player = {
                 image = skillQuads.hp,
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            number = 1,
             isOpened = true,
         },
         Energy = Class{__includes =Skill,
@@ -96,6 +98,7 @@ Player = {
                 image =skillQuads.energy,
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            number =2,
             isOpened = true,
         },
         MeleeDefense = Class{__includes =Skill, 
@@ -105,6 +108,7 @@ Player = {
                 image =skillQuads.meleeDef,
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            number = 3,
             isOpened = true,
         },
         RangeDefense = Class{__includes =Skill, 
@@ -114,6 +118,7 @@ Player = {
                 image =skillQuads.rangeDef,
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            number = 4,
             isOpened = true,
         },
         Damage = Class{__includes =Skill, 
@@ -123,6 +128,7 @@ Player = {
                 text = 'Increased attack power',
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            number = 5,
             value = 1,
         },
         Speed = Class{__includes =Skill, 
@@ -132,6 +138,7 @@ Player = {
                 text = 'Speed increase',
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            number = 6,
             value = 1,
         },
         Collect = Class{__includes =Skill, 

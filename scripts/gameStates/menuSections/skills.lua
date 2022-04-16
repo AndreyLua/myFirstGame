@@ -1,6 +1,7 @@
 local skills = {}
 
 local playerSkillsInterface = require "scripts/playerGameObject/playerSkillsInterface" 
+local playerSkillsFunction = require "scripts/playerGameObject/playerSkills" 
 
 local difButton = (screenWidth-35*k-0.4*1.2*320*k-60*k-0.196*1.2*320*k-320*k/3-0.15*k*240)
 
@@ -24,13 +25,27 @@ function buttonUpdate:draw()
     bodyButton(buttonUpdate.x,buttonUpdate.y,buttonUpdate.isTappedFlag)
 end
 
+local buttonLeftX = (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)
+local buttonLeftY = screenHeight/2-math.cos(-math.pi/1.4)*300*k
+local buttonLeftWidth = 70*k
+local buttonLeftHeight = 70*k2
+local buttonLeft = Button(buttonLeftX,buttonLeftY,buttonLeftWidth,buttonLeftHeight)
+function buttonLeft:draw()
+    bodyButtonDirect(buttonLeft.x,buttonLeft.y,buttonLeft.isTappedFlag,'left')
+end
 
+local buttonRightX = (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)
+local buttonRightY = screenHeight/2-math.cos(-math.pi/3.5)*300*k
+local buttonRightWidth = 70*k
+local buttonRightHeight = 70*k2
+local buttonRight = Button(buttonRightX,buttonRightY,buttonRightWidth,buttonRightHeight)
+function buttonRight:draw()
+    bodyButtonDirect(buttonRight.x,buttonRight.y,buttonRight.isTappedFlag,'right')
+end
 
 
 local playerSkills= {}
 
-local but2 = false
-local but3 = false
 local butSmall = false
 local masSkill = {}
 local mousePosX = 0 
@@ -51,19 +66,8 @@ local flagRes = -0.1
 local flagResBool = true
 
 function skills:init()
-     for skillIndex, skill in pairs(Player.Skills) do
-        if (skill.isOpened~=nil) then 
-            if (skill.isOpened == true) then
-                table.insert(playerSkills,skill)
-            end
-        else
-            for atackSkillIndex, atackSkill in pairs(skill) do
-                if (atackSkill.isOpened == true) then
-                    table.insert(playerSkills,atackSkill)
-                end
-            end
-        end
-    end
+    Player.Skills:skillsTable(playerSkills)
+    Player.Skills:sortSkillsTable(playerSkills)
 end
 
 function skills:update(dt)
@@ -72,9 +76,8 @@ function skills:update(dt)
         AddSound(uiClick,0.3)
         gamestate.switch(menu)
     end 
-    
-    if (buttonUpdate:isTapped()) then
-        if ( flagAcceptMenu == false) then 
+    if ( flagAcceptMenu == false) then 
+        if (buttonUpdate:isTapped()) then
             local indexR = xR / (math.pi/6)
             if ( xR%(math.pi/6) > math.pi/12) then
                 indexR = math.ceil(xR / (math.pi/6))
@@ -96,7 +99,21 @@ function skills:update(dt)
                 end
             end
         end
+        
+        if (buttonLeft:isTapped()) then 
+            speedR =2.2
+            texti = 0 
+            textL = ""
+            textK = 0 
+        end
+        if (buttonRight:isTapped()) then 
+            speedR =-2.2
+            texti = 0 
+            textL = ""
+            textK = 0 
+        end
     end
+    
     
     local indexR = xR / (math.pi/6)
     if ( xR%(math.pi/6) > math.pi/12) then
@@ -112,12 +129,7 @@ function skills:update(dt)
         end 
         if (flagAcceptMenu == false) then 
             --
-            if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3) then
-                but2 = true
-            end
-            if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*300*k-90*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*300*k+160*k/3) then
-                but3 = true
-            end
+        
             if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
                 if (  mouse.x > xSmallButton-0.15*k*120 and  mouse.x <xSmallButton+0.15*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-0.15*k*500 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+0.15*k*500) then
                     butSmall = true
@@ -173,20 +185,7 @@ function skills:update(dt)
         end
      
         if ( flagAcceptMenu == false) then 
-        
-            if (  mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*300*k-160*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*300*k+90*k/3 and but2 == true) then
-                speedR =2.2
-                texti = 0 
-                textL = ""
-                textK = 0 
-            end
-            if ( mouse.x > (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-k2/3*160 and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)+ k2/3*70 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*300*k-90*k/3 and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*300*k+160*k/3 and but3 == true ) then
-                speedR =-2.2
-                texti = 0 
-                textL = ""
-                textK = 0 
-            end
-            
+          
             if (flagtouch3 == true and  math.abs( mouse.y - mousePosY ) > 40*k and mouse.x > xBigSlot and  mouse.x < xButton   ) then 
                 texti = 0 
                 textL = ""
@@ -209,10 +208,12 @@ function skills:update(dt)
                 else
                     indexR = math.floor(xR / (math.pi/6))
                 end
-                if (speedR == 0 and playerSkills[indexR+4] and  skillCostUpgrade[(playerSkills[indexR+4].numb)]*(playerSkills[indexR+4].lvl)<= score) then
-                    score = score -skillCostUpgrade[(playerSkills[indexR+4].numb)]*(playerSkills[indexR+4].lvl)
+                if (speedR == 0 and playerSkills[indexR+4] and  playerSkills[indexR+4].Interface.cost <= score and playerSkills[indexR+4].lvl < Player.maxLvlSkills) then
+                    score = score -playerSkills[indexR+4].Interface.cost
                     playerSkills[indexR+4].lvl = playerSkills[indexR+4].lvl+1
-                    lvlParametrs()
+                    playerSkills[indexR+4].value = playerSkills[indexR+4].value+playerSkills[indexR+4].value*playerSkills[indexR+4].perUpgrade
+                else
+                    AddSound(uiError,0.3)
                 end
             end
             if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*120*k+0.4*k*120 and butNo == true) then
@@ -224,8 +225,6 @@ function skills:update(dt)
         butSmall = false
         butNo = false
         butYes = false
-        but3 = false
-        but2 = false
         flagtouch3 =false
     end
     if ( flagAcceptMenu == true) then
@@ -300,8 +299,8 @@ for i = 1 , 20 do
 end
 love.graphics.setColor(1,1,1,lightKoff)
 bodyTextPanel(xTextPanel,screenHeight/2)
-bodyButtonDirect((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/1.4)*300*k,but2,'left')
-bodyButtonDirect((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/3.5)*300*k,but3,'right')
+buttonLeft:draw()
+buttonRight:draw()
 buttonUpdate:draw()
 
 if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
@@ -371,9 +370,11 @@ if ( playerSkills[indexR+4]) then
     love.graphics.setColor(1,1,1,1)
     love.graphics.print(tostring(playerSkills[indexR+4].lvl),xBigSlot-(0.4*1.2*160*k)+10*k,screenHeight/2-160*k*0.4*1.2+fontWidth*k2/2+14*k,-math.pi/2,k/2,k2/2)
     if (  flagAcceptMenu == true) then 
-        fontWidth = font:getWidth(tostring(playerSkills[indexR+4].lvl+1))
-        love.graphics.print('^',xBigSlot-(0.4*1.2*160*k)+47*k,screenHeight/2-160*k*0.4*1.2+16*k,math.pi/2,k/2,k2/2)
-        love.graphics.print(tostring(playerSkills[indexR+4].lvl+1),xBigSlot-(0.4*1.2*160*k)+40*k,screenHeight/2-160*k*0.4*1.2+fontWidth*k2/2+14*k,-math.pi/2,k/2,k2/2)
+        if ( playerSkills[indexR+4].lvl < Player.maxLvlSkills) then 
+            fontWidth = font:getWidth(tostring(playerSkills[indexR+4].lvl+1))
+            love.graphics.print('^',xBigSlot-(0.4*1.2*160*k)+47*k,screenHeight/2-160*k*0.4*1.2+16*k,math.pi/2,k/2,k2/2)
+            love.graphics.print(tostring(playerSkills[indexR+4].lvl+1),xBigSlot-(0.4*1.2*160*k)+40*k,screenHeight/2-160*k*0.4*1.2+fontWidth*k2/2+14*k,-math.pi/2,k/2,k2/2)
+        end
         fontWidth = font:getWidth("Cost of upgrade "..tostring(playerSkills[indexR+4].Interface.cost))
         love.graphics.print("Cost of upgrade "..tostring(playerSkills[indexR+4].Interface.cost),xBigSlot-(0.4*1.2*160*k)-70*k,screenHeight/2+fontWidth*k2/3,-math.pi/2,k/1.5,k2/1.5)
     end
@@ -393,7 +394,7 @@ function textPar(x,y,scale)
         indexR = math.floor(xR / (math.pi/6))
     end
     if (playerSkills[indexR+4]) then 
-        love.graphics.print("COST "..tostring(playerSkills[indexR+4].Interface.cost*(playerSkills[indexR+4].lvl)),x+30*k,y,-3.14/2,scale*k,scale*k)
+        love.graphics.print("COST "..tostring(playerSkills[indexR+4].Interface.cost),x+30*k,y,-3.14/2,scale*k,scale*k)
         playerSkills[indexR+4].Interface:print(x,y,scale)
     end
 end
