@@ -11,6 +11,7 @@ local Skill = Class{
     perUpgrade = 0.2,
     value = 0,
     number = 2000,
+    rare ="common",
     isOpened = true,
 }
  

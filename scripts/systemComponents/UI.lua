@@ -233,22 +233,10 @@ end
 
 
 function rewardSlot(img,x,y,scale,money)
-    if (img) then 
-        if ( img > 11 ) then 
-            img = allSkills[img]
-            UIBatch:add(UIQuads.tableSkillLegend,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)      
-            skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
-        else
-            if ( img > 7 ) then 
-                img = allSkills[img]
-                UIBatch:add(UIQuads.tableSkillRare,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,180,180)         
-                skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
-            else
-                img = allSkills[img]
-                UIBatch:add(UIQuads.tableSkillNormal,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)       
-                skillBatch:add(img,x,y,-math.pi/2,k*scale,k2*scale,160,160)
-            end
-        end
+    if (img~=nil) then 
+        local x2, y2, w, h = img.Interface.slotRarityImage:getViewport()
+        UIBatch:add(img.Interface.slotRarityImage,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,w/2,h/2)      
+        skillBatch:add(img.Interface.image,x,y,-math.pi/2,k*scale,k2*scale,160,160)
     else
         if ( money == 0) then 
             UIBatch:add(UIQuads.tableSkillDestr,x,y,-math.pi/2,k*scale*1.2,k2*scale*1.2,160,160)

@@ -30,6 +30,24 @@ function Player.Skills:sortSkillsTable(table)
     end
 end
 
+function Player.Skills:raritySkills(tableSkills,rare)
+    for skillIndex, skill in pairs(self) do
+        if ( type(skill)=='table') then 
+            if (skill.rare~=nil) then  
+                if (skill.rare==rare) then 
+                    table.insert(tableSkills,skill)
+                end
+            else
+                for atackSkillIndex, atackSkill in pairs(skill) do
+                    if (skill.rare==rare) then 
+                        table.insert(tableSkills,atackSkill)
+                    end
+                end
+            end
+        end
+    end
+end
+
 
 
 

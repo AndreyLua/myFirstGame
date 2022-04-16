@@ -76,7 +76,7 @@ function convert:update(dt)
     if (Reward.flagMenu == true and buttonOk:isTapped()) then
         Reward.flagMenu = false
         AddSound(uiSelect,0.3,false)
-        Reward:give()
+        Reward:give(playerSkills)
     end
     
     if ( Reward.flagMenu == false and buttonConvert:isTapped()) then
@@ -166,7 +166,7 @@ function convert:draw()
         love.graphics.setColor(1,1,1,1) 
         textButton("Ok",screenWidth/2+200*k,screenHeight/2,flagButton2)  
         love.graphics.setColor(0.125,0.251,0.302,1) 
-        if ( Reward.money > 0 and Reward.skill == 0) then 
+        if ( Reward.money > 0 and Reward.skill == nil) then 
             textButton(Reward.money,screenWidth/2,screenHeight/2,false,1.6*Reward.slotScale)  
         end
     end
