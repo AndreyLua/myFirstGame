@@ -8,12 +8,12 @@ Particle = {
     delaySound = 0,    
 }
 
-function Particle:update(Colba,dt)
+function Particle:update(Flask,dt)
     Particle.regulS = {}
     if ( Particle.flagClear == true) then
         Particle.clearX = Particle.clearX + 300 * dt 
     end
-    if ( Particle.clearX > 200 * k ) then 
+    if ( Particle.clearX > 200 * k) then 
         Particle.flagClear = false
         Particle.clearX  = 0 
         Reward.slotScale = 0 
@@ -23,7 +23,7 @@ function Particle:update(Colba,dt)
     for i=#Particle.list,1, -1  do
         Particle:move(Particle.list[i],dt)
         Particle:addToRegulS(i)
-        Particle:collisionWithColba(i,Colba,dt)
+        Particle:collisionWithFlask(i,Flask,dt)
         Particle:clear(i,dt)
     end
 end
@@ -180,23 +180,23 @@ function Particle:move(particl,dt)
         particl.body:moveTo(particl.x+6.5*k,particl.y+6.5*k2)
     end
 end
-function Particle:collisionWithColba(i,Colba,dt)
+function Particle:collisionWithFlask(i,Flask,dt)
     if (Particle.list[i].flag ==  false) then
-        for leftBorder, body in pairs(Colba.Borders.L) do
+        for leftBorder, body in pairs(Flask.Borders.L) do
             local collisFlag, intVectorX ,intVectorY = Particle.list[i].body:collidesWith(body)
             if (collisFlag) then
                 Particle.list[i].x = Particle.list[i].x + intVectorX*dt*20*k
                 Particle.list[i].y = Particle.list[i].y +  intVectorY*dt*20*k2
             end
         end
-        for rightBorder, body in pairs(Colba.Borders.R) do 
+        for rightBorder, body in pairs(Flask.Borders.R) do 
             local collisFlag, intVectorX ,intVectorY = Particle.list[i].body:collidesWith(body)
             if (collisFlag) then 
                 Particle.list[i].x = Particle.list[i].x + intVectorX*dt*20*k
                 Particle.list[i].y = Particle.list[i].y +  intVectorY*dt*20*k2
             end
         end
-        if (Particle.list[i].body:collidesWith(Colba.body)) then 
+        if (Particle.list[i].body:collidesWith(Flask.body)) then 
             Particle.list[i].flag = true 
             Particle.list[i].ax =Particle.list[i].ax / 200
             Particle.list[i].ay =Particle.list[i].ay / 200 

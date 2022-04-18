@@ -62,10 +62,8 @@ local lightKoff = 1
 local butYes = false
 local butNo = false
 
-local flagRes = -0.1
-local flagResBool = true
-
 function skills:enter()
+    NeedResourcesText:reset()
     playerSkills= {}
     Player.Skills:skillsTable(playerSkills)
     Player.Skills:sortSkillsTable(playerSkills)
@@ -88,15 +86,14 @@ function skills:update(dt)
             if (speedR == 0 and playerSkills[indexR+4] and playerSkills[indexR+4].Interface.cost<= score) then
                 AddSound(uiSelect,0.3)
                 flagAcceptMenu = true
-                flagRes = -0.1
-                flagResBool = true
             else
                 AddSound(uiError,0.3)
                 if ( playerSkills[indexR+4]) then 
-                    if (flagRes == nil or  flagRes < 0) then 
-                        flagRes = 0
+                  
+                    if (NeedResourcesText.timer == nil or  NeedResourcesText.timer < 0) then 
+                        NeedResourcesText.timer = 0
                     end
-                    flagResBool = true
+                    NeedResourcesText.flag = true
                 end
             end
         end
@@ -381,7 +378,7 @@ if ( playerSkills[indexR+4]) then
     end
 end
 
-flagRes,flagResBool = noRes(xBigSlot-(0.4*1.2*160*k)-difButton*0.16 ,screenHeight/2,0.4,flagRes,dt,flagResBool)
+NeedResourcesText:print(xBigSlot-(0.4*1.2*160*k)-difButton*0.16 ,screenHeight/2,0.4,dt)
 love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 
 indexRSave = indexR

@@ -55,4 +55,5 @@ end
 function Player.Skills.SpecialAtack.Vampir.Interface:print(x,y,scale)
     love.graphics.print("VP "..tostring(math.ceil(100*(Player.Skills.SpecialAtack.Vampir.value))).."%",x,y,-3.14/2,scale*k,scale*k)
 end  
+
 return playerSkillsInterface

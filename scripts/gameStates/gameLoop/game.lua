@@ -6,7 +6,7 @@ function buttonAdd:draw()
 end
 
 
-score = 9999999
+score = 0
 borderWidth =screenWidth/2
 borderHeight = screenHeight/2
 numberCleaner = 0 

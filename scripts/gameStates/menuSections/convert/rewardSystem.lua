@@ -31,6 +31,14 @@ function Reward:updateSlotScale(dt)
     end
 end
 
+function Reward:draw()
+    if (self.skill == 0) then 
+        rewardSlot(nil,screenWidth/2,screenHeight/2,self.slotScale,self.money)
+    else
+        rewardSlot(self.skill,screenWidth/2,screenHeight/2,self.slotScale,self.money)
+    end
+end
+
 function Reward:get(count)
     self.flagMenu = true 
     if ( count == 140) then 
@@ -66,7 +74,7 @@ end
 
 
 function Reward:getSmall(count)
-    if ( math.random(1,100) >0) then 
+    if ( math.random(1,100) >70) then 
         local playerCommonSkills = {}
         Player.Skills:raritySkills(playerCommonSkills,"common")
         self.skill  = playerCommonSkills[math.random(1,#playerCommonSkills)]

@@ -39,7 +39,7 @@ function Player.Skills:raritySkills(tableSkills,rare)
                 end
             else
                 for atackSkillIndex, atackSkill in pairs(skill) do
-                    if (skill.rare==rare) then 
+                    if (atackSkill.rare==rare) then 
                         table.insert(tableSkills,atackSkill)
                     end
                 end

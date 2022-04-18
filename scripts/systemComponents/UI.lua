@@ -94,7 +94,36 @@ Slider = Class{
     end;
 } 
 
+NeedResourcesText = {
+    timer = -0.1,
+    flag = true,
+}
+function NeedResourcesText:reset()
+    self.timer = -0.1
+    self.flag = true
+end
 
+function NeedResourcesText:print(x,y,scale,dt)
+    if (self.timer~= nil and self.flag~=nil and self.timer >= 0) then 
+        local fontWidth = font:getWidth('Need more resources')
+        love.graphics.setColor(1,1,1,self.timer) 
+        love.graphics.print('Need more resources',x,y+fontWidth*k2*scale/2,-math.pi/2,k*scale,k2*scale)
+        love.graphics.setColor(1,1,1,1)
+        if ( self.timer <=3 and self.flag ==true ) then
+            self.timer = self.timer+1*dt
+        else
+            if ( self.timer > 2 and self.flag ==true ) then 
+                self.timer = self.timer-1*dt
+                self.flag = false
+            else
+                if (self.flag ==false and self.timer >=0 ) then 
+                    self.timer = self.timer-1*dt
+                    self.flag = false
+                end
+            end
+        end
+    end
+end
 
 
 function butChange(x,y,xPoint,maxPointX)
@@ -246,25 +275,6 @@ function rewardSlot(img,x,y,scale,money)
     end    
 end
 
-function noRes(x,y,scale,par,dt,flag)
-    if (par~= nil and flag~=nil and par >= 0) then 
-        local fontWidth = font:getWidth('Need more resources')
-        love.graphics.setColor(1,1,1,par) 
-        love.graphics.print('Need more resources', x,y+fontWidth*k2*scale/2,-math.pi/2,k*scale,k2*scale)
-        love.graphics.setColor(1,1,1,1)
-        if ( par <=3 and flag ==true ) then
-            return par+1*dt, flag
-        else
-            if ( par > 2 and flag ==true ) then 
-                return par-1*dt,false
-            else
-                if (flag ==false and par >=0 ) then 
-                    return par-1*dt,false
-                end
-            end
-        end
-    end
-end
 
 function sc(x,y)
     love.graphics.setLineWidth(2*k)
