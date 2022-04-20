@@ -51,10 +51,12 @@ end
 function Player.Skills:upgrade(playerSkill)
     playerSkill.lvl = playerSkill.lvl+1
     playerSkill.value = playerSkill.value+playerSkill.value*playerSkill.perUpgrade
+    Player.Energy.maxValue = Player.Skills.Energy.value
+    Player.Hp.maxValue = Player.Skills.Hp.value
 end
 
 function playerLiDraw(dt)
-    if (Player.Skills.SpecialAtack.Electric.sealAtFlag == true) then 
+    if (Player.Skills.SpecialAtack.Electric.isUsed) then 
         for i=#masli,1,-1 do
             if (masli[i].table and masli[i].timer > 0  ) then
                 masli[i].timer = masli[i].timer - 50*dt
@@ -69,6 +71,27 @@ function playerLiDraw(dt)
             light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody)+math.random(-2,2)*k,Player.x+35*k2*math.sin(Player.angleBody-math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody-math.pi/4)+math.random(-2,2)*k,4))
         end
     end
+end
+
+function Player.Skills.SpecialAtack.Wave:atack(target)
+    newWaveEffect(Player.x,Player.y) -- damage
+    Player.Energy.value = Player.Energy.value  - Player.Energy.wasteSpecialAtack
+end
+
+function Player.Skills.SpecialAtack.Bloody:atack(target)
+    newBloodEffect(target)  -- damage
+    Player.Energy.value = Player.Energy.value - Player.Energy.wasteSpecialAtack
+end
+
+function Player.Skills.SpecialAtack.Vampir:atack(target)
+    newVampirEffect(target)
+    Player.Energy.value = Player.Energy.value - Player.Energy.wasteSpecialAtack
+end
+
+function Player.Skills.SpecialAtack.Electric:atack(target)
+    table.insert(masli,{table = target, timer = 10,flag = nil})
+    target.health  =  target.health - Player.damage*Player.Skills.Damage.value*Player.Skills.SpecialAtack.Electric.value 
+    Player.Energy.value = Player.Energy.value - Player.Energy.wasteSpecialAtack
 end
 
 function playerBoostDop(dt)

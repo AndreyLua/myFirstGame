@@ -38,9 +38,7 @@ function game:init()
 Wave:refreshNotionParameters()
 Player:refreshParameters()
 exp =  {}
-
---#####################################################
---effects   
+  
 waveEffects = {} 
 bloodEffects = {} 
 tradeEffects = {} 
@@ -50,19 +48,6 @@ greenPlayerEffect = {}
 playerGerDamageEffect = {} 
 
 stars = {} 
---effects
---#####################################################
--------------------gameParametrs
-
--------------------gameParametrs
---#####################################################
--------------------playerParametrs
--------------------playerParametrs
---#####################################################
--------------------WaveParametrs
--------------------WaveParametrs
-
-
 
 boostDop = {
     long = 0,
@@ -225,11 +210,11 @@ for i = #res, 1, -1 do
         end
     end
 end
-Player.Energy:update(dt)
 playerBoostDop(dt) -- skill
 Wave:spawn()
 Player:move(dt)
 Player:collision(dt)
+Player.Energy:update(dt)
 Player:debaff(dt)
 bulletsUpdate(dt)
 self:movement(dt)

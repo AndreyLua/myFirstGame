@@ -21,20 +21,22 @@ Player = {
     y = borderHeight/2+40*k2/2,  
     scaleBody = 35,
     angleBody = 0,
-    body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,35*k),
+    body = HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,35*k),
     a = 0 , 
     ax = 0,
     ay = 0,
-    mass =200,
+    mass = 200,
     radiusCollect = 100,
     damage = 1,
+    criticalDamage = 2,
+    criticalChance = 0.7,
     flagInv = true,
     inv = 2,
     invTimer = 2,
     maxSpeed = 30,
     speedA  = 1.8,
     speed = 6,
-    debaffStrenght =0.2,
+    debaffStrenght = 0.2,
     maxLvlSkills = 10,
     
     Energy = {
@@ -42,10 +44,10 @@ Player = {
         maxValue = 1000,
         lengthBar = 1000,
         flag = true,
-        regen = 100,
+        regen = 0.1,--%
         wasteBoost = 150,
-        wasteAtack = 5,
-        wasteSpecialAtack =500,
+        wasteAtack = 30,
+        wasteSpecialAtack = 70,
     },
     Hp = {
         value = 1000, 
@@ -96,7 +98,7 @@ Player = {
             Interface = {
                 cost = 100,
                 text = 'Increasing the amount of energy',
-                image =skillQuads.energy,
+                image = skillQuads.energy,
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
             number =2,
@@ -229,10 +231,16 @@ Player = {
         },
     },
 }
+Player.Skills.Hp.value = Player.Hp.maxValue
+Player.Skills.Energy.value = Player.Energy.maxValue
 
 function Player:refreshParameters()
     self.x = borderWidth/2+40*k/2 
     self.y = borderHeight/2+40*k2/2
+    
+    self.Camera.x = borderWidth/2+40*k/2 
+    self.Camera.y = borderHeight/2+40*k2/2
+      
     self.body =HC.circle(borderWidth/2+40*k/2,borderHeight/2+40*k2/2,self.scaleBody)
     self.a = 0 
     self.ax = 0
@@ -409,8 +417,9 @@ end
 function Player:takeDamage(dmg,tip,atacker)
     self.flagInv = false
     AddSound(playerHurtSounds,0.3)
-    dmg = dmg- self.Skills.Hp.value*dmg
+    
     boostDop.recovery =boostDop.recoveryTimer - 0.0000001
+    
     if (boostDop.long>0) then 
         boostDop.long = boostDop.long - (dmg-(dmg*self.Skills.EnergyArmor.value))*4
         boostDop.shakeK = 20
@@ -448,29 +457,21 @@ function Player:rechargeEnergy(value)
 end
 
 function Player:atack(target,dt)
-    if (self.Skills.SpecialAtack.Wave.isUsed or self.Skills.SpecialAtack.Bloody.isUsed or self.Skills.SpecialAtack.Electric.isUsed or self.Skills.SpecialAtack.Vampir.isUsed) then 
-        self.Energy.value = self.Energy.value - (self.Energy.wasteSpecialAtack-(self.Energy.wasteSpecialAtack*self.Skills.Energy.value))*self.Energy.wasteAtack*dt
-    end
-        
     AddSound(playerHitSounds,0.3)
     self.Clows:scale()
-    self.Energy.value = self.Energy.value - (self.Energy.wasteBoost-(self.Energy.wasteBoost*self.Skills.Energy.value))*     self.Energy.wasteAtack*dt
+    self.Energy.value = self.Energy.value -self.Energy.wasteAtack
     target.health  =  target.health - self.damage*self.Skills.Damage.value
-    
-    if (self.Skills.SpecialAtack.Vampir.isUsed == true) then 
-        newVampirEffect(target)
+    Player:SpecialAtack(target)
+end
+
+function Player:SpecialAtack(target)
+    for atackSkillIndex, atackSkill in pairs(self.Skills.SpecialAtack) do
+        if ( type(atackSkill)=='table') then 
+            if (atackSkill.isUsed) then 
+                atackSkill:atack(target)
+            end
+        end
     end
-    if (self.Skills.SpecialAtack.Wave.isUsed == true) then 
-        newWaveEffect(self.x,self.y) -- damage
-    end
-    if (self.Skills.SpecialAtack.Bloody.isUsed == true) then 
-        newBloodEffect(target)  -- damage
-    end
-    if (self.Skills.SpecialAtack.Electric.isUsed == true) then 
-        table.insert(masli,{table = target, timer = 10,flag = nil})
-        target.health  =  target.health - self.damage*self.Skills.Damage.value*self.Skills.SpecialAtack.Electric.value 
-    end
-    
 end
 
 function Player:isFrontOf(target) 
@@ -656,10 +657,7 @@ function Player.Energy:update(dt)
     if ( self.lengthBar>self.value) then
         self.lengthBar = self.lengthBar-self.maxValue/100*8*dt
     end
-    if ( self.lengthBar<self.value) then
-        self.lengthBar = self.value
-    end
-    
+ 
     if ( self.value > self.maxValue/100*15) then
         self.flag = true
     end
@@ -670,9 +668,13 @@ function Player.Energy:update(dt)
     end
     
     if ( Player.a==1) then
-        self.value = self.value - (self.wasteBoost-(self.wasteBoost*Player.Skills.Energy.value))*dt
+        self.value = self.value - self.wasteBoost*dt
     else
-        self.value = self.value + self.regen *dt
+        self.value = self.value + self.maxValue*self.regen *dt
+    end
+    
+    if ( self.lengthBar<self.value) then
+        self.lengthBar = self.value
     end
     
     ---------------------------------
