@@ -106,7 +106,7 @@ end
  
 
 function Particle:spawn(x,y,kol)
-    local Color1,Color2,Color3  = particlColor() 
+    local Color1,Color2,Color3  = self:color() 
     local part = {
         side = math.random(1,2), 
         ran = math.random(100,180), 
@@ -180,6 +180,7 @@ function Particle:move(particl,dt)
         particl.body:moveTo(particl.x+6.5*k,particl.y+6.5*k2)
     end
 end
+
 function Particle:collisionWithFlask(i,Flask,dt)
     if (Particle.list[i].flag ==  false) then
         for leftBorder, body in pairs(Flask.Borders.L) do
@@ -204,9 +205,29 @@ function Particle:collisionWithFlask(i,Flask,dt)
     end
 end
 
+function Particle:color() 
+    local randomNumber = math.random(1,5)
+    if ( randomNumber ==  1 ) then 
+        return 0.008,0.298,0.408
+    end 
+    if ( randomNumber ==  2 ) then 
+        return 0.133,0.376,0.471
+    end 
+    if ( randomNumber ==  3 ) then 
+        return 0.027,0.463,0.627
+    end 
+    if ( randomNumber ==  4 ) then 
+        return 0.227,0.651,0.816
+    end 
+    if ( randomNumber == 5 ) then 
+        return 0.384,0.694,0.816
+    end 
+end
+
 function Particle:clear(i,dt)
     if (Particle.flagClear == true and Particle.list[i].x >screenWidth/1.7+80*k-Particle.clearX ) then
-        expl(Particle.list[i].x,Particle.list[i].y,3)
+        local colorR,colorG,colorB = self.color()
+        explosionEffect:new(Particle.list[i].x,Particle.list[i].y,3,colorR,colorG,colorB)
         table.remove(Particle.list,i)
     end 
 end

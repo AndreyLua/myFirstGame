@@ -153,7 +153,7 @@ resClass = Class {
                 end
                 if ( self.tip == 6 ) then
                     newGreenPlayerEffect()
-                    Player:heal(Player.Skills.SpecialAtack.Vampir.vampirK*Player.Skills.Damage.damageK*50) -- skill
+                    Player:heal(Player.Skills.SpecialAtack.Vampir.value*Player.Skills.Damage.value*50) -- skill
                     resRemove(i)
                 end
             else

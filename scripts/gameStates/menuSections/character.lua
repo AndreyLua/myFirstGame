@@ -164,8 +164,8 @@ function playerDrawCharacter(x,y,dt,tip)
     local clow1Y =yDraw +playerDrawPar[tip].clowX*k2*math.cos(-math.pi/2+playerDrawPar[tip].clowR)*7/3
     local clow2X =xDraw +playerDrawPar[tip].clowX*k2*math.sin(-math.pi/2-playerDrawPar[tip].clowR)*7/3
     local clow2Y =yDraw+playerDrawPar[tip].clowX*k2*math.cos(-math.pi/2-playerDrawPar[tip].clowR)*7/3
-    playerBatch:add(playerQuads[tip].clow1,clow1X,clow1Y,math.pi/2+math.pi+Player.clowR,k/3,k2/3,playerDrawPar[tip].clowW1, playerDrawPar[tip].clowH)
-    playerBatch:add(playerQuads[tip].clow2,clow2X,clow2Y,math.pi/2+math.pi-Player.clowR,k/3,k2/3,playerDrawPar[tip].clowW2, playerDrawPar[tip].clowH)
+    playerBatch:add(playerQuads[tip].clow1,clow1X,clow1Y,math.pi/2+math.pi+Player.Clows.angle,k/3,k2/3,playerDrawPar[tip].clowW1, playerDrawPar[tip].clowH)
+    playerBatch:add(playerQuads[tip].clow2,clow2X,clow2Y,math.pi/2+math.pi-Player.Clows.angle,k/3,k2/3,playerDrawPar[tip].clowW2, playerDrawPar[tip].clowH)
     playerSledDrawCharacter(xDraw,yDraw ,dt,tip,opened)
     playerBatch:add(playerQuads[tip].body,xDraw,yDraw,math.pi/2+math.pi,k/3,k2/3,playerDrawPar[tip].bodyW/2, playerDrawPar[tip].bodyH/2)
     playerBatch:setColor(1,1,1,1)

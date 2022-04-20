@@ -12,7 +12,7 @@ local Skill = Class{
     value = 0,
     number = 2000,
     rare ="common",
-    isOpened = false,
+    isOpened = true,
 }
  
 Player = {
@@ -468,7 +468,7 @@ function Player:atack(target,dt)
     end
     if (self.Skills.SpecialAtack.Electric.isUsed == true) then 
         table.insert(masli,{table = target, timer = 10,flag = nil})
-        target.health  =  target.health - self.damage*self.Skills.Damage.value*self.Skills.SpecialAtack.Electric.sealAt 
+        target.health  =  target.health - self.damage*self.Skills.Damage.value*self.Skills.SpecialAtack.Electric.value 
     end
     
 end

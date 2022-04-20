@@ -112,26 +112,5 @@ function checkCircle(x,y,scale1,scale2,x2,y2,r)
     end
 end
 
-function particlColor() 
-    local randomNumber = math.random(1,5)
-    
-    if ( randomNumber ==  1 ) then 
-        return 0.008,0.298,0.408
-    end 
-    if ( randomNumber ==  2 ) then 
-        return 0.133,0.376,0.471
-    end 
-    if ( randomNumber ==  3 ) then 
-        return 0.027,0.463,0.627
-    end 
-    if ( randomNumber ==  4 ) then 
-        return 0.227,0.651,0.816
-    end 
-    if ( randomNumber == 5 ) then 
-        return 0.384,0.694,0.816
-    end 
-end
-
-
 
 return system 

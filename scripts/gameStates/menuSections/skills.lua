@@ -43,10 +43,38 @@ function buttonRight:draw()
     bodyButtonDirect(buttonRight.x,buttonRight.y,buttonRight.isTappedFlag,'right')
 end
 
+local buttonUseX = xSmallButton
+local buttonUseY = screenHeight/2-math.cos(-math.pi/2)*310*k
+local buttonUseWidth = 0.15*k*240
+local buttonUseHeight = 0.15*k*1000
+local buttonUse = Button(buttonUseX,buttonUseY,buttonUseWidth,buttonUseHeight)
+function buttonUse:draw()
+    bodyButtonScale(buttonUseX,buttonUseY,buttonUse.isTappedFlag,0.15)
+end
+
+
+local buttonYesX =(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)
+local buttonYesY = screenHeight/2-math.cos(-math.pi/1.4)*120*k
+local buttonYesScale =0.4
+local buttonYesSize = buttonYesScale*k*240
+local buttonYes = Button(buttonYesX,buttonYesY,buttonYesSize,buttonYesSize)
+function buttonYes:draw()
+    acceptBut(buttonYes.x,buttonYes.y,buttonYesScale,buttonYes.isTappedFlag) 
+end
+
+local buttonNoX = (xBigSlot)+xSmallSlot+(0.196*1.2*160*k)
+local buttonNoY = screenHeight/2-math.cos(-math.pi/3.5)*120*k
+local buttonNoScale =0.4
+local buttonNoSize = buttonNoScale*k*240
+local buttonNo = Button(buttonNoX,buttonNoY,buttonNoSize,buttonNoSize)
+function buttonNo:draw()
+    rejectBut(buttonNo.x,buttonNo.y,buttonNoScale,buttonNo.isTappedFlag) 
+end
+
+
 
 local playerSkills= {}
 
-local butSmall = false
 local masSkill = {}
 local mousePosX = 0 
 local mousePosY = 0 
@@ -59,8 +87,6 @@ local textK = 0
 
 local flagAcceptMenu  = false
 local lightKoff = 1
-local butYes = false
-local butNo = false
 
 function skills:enter()
     NeedResourcesText:reset()
@@ -70,19 +96,44 @@ function skills:enter()
 end
 
 function skills:update(dt)
+  
+    local indexR = xR / (math.pi/6)
+    if ( xR%(math.pi/6) > math.pi/12) then
+        indexR = math.ceil(xR / (math.pi/6))
+    else
+        indexR = math.floor(xR / (math.pi/6))
+    end
+    
+    if (playerSkills[indexR+4] and playerSkills[indexR+4].isUsed~=nil and buttonUse:isTapped()) then 
+        AddSound(uiSelect,0.3)
+        playerSkills[indexR+4].isUsed = not(playerSkills[indexR+4].isUsed)
+    end
+    
+    
+    if (flagAcceptMenu == true and buttonYes:isTapped()) then
+        AddSound(uiSelect,0.3)
+        if (speedR == 0 and playerSkills[indexR+4] and  playerSkills[indexR+4].Interface.cost <= score and playerSkills[indexR+4].lvl < Player.maxLvlSkills) then
+            score = score -playerSkills[indexR+4].Interface.cost
+            Player.Skills:upgrade(playerSkills[indexR+4])
+        else
+            AddSound(uiError,0.3)
+        end
+    end
+    
+    if (flagAcceptMenu == true and buttonNo:isTapped()) then
+        AddSound(uiClose,0.2)
+        flagAcceptMenu = false
+        lightKoff = 1
+    end
+    
     if (buttonAdd:isTapped()) then
         exp = {}
         AddSound(uiClick,0.3)
         gamestate.switch(menu)
     end 
+    
     if ( flagAcceptMenu == false) then 
         if (buttonUpdate:isTapped()) then
-            local indexR = xR / (math.pi/6)
-            if ( xR%(math.pi/6) > math.pi/12) then
-                indexR = math.ceil(xR / (math.pi/6))
-            else
-                indexR = math.floor(xR / (math.pi/6))
-            end
             if (speedR == 0 and playerSkills[indexR+4] and playerSkills[indexR+4].Interface.cost<= score) then
                 AddSound(uiSelect,0.3)
                 flagAcceptMenu = true
@@ -110,80 +161,19 @@ function skills:update(dt)
             textL = ""
             textK = 0 
         end
+        
     end
     
-    
-    local indexR = xR / (math.pi/6)
-    if ( xR%(math.pi/6) > math.pi/12) then
-        indexR = math.ceil(xR / (math.pi/6))
-    else
-        indexR = math.floor(xR / (math.pi/6))
-    end
     
     if love.mouse.isDown(1)  then
         if ( flagtouch3 == false) then 
             mousePosX = mouse.x
             mousePosY = mouse.y
         end 
-        if (flagAcceptMenu == false) then 
-            --
-        
-            if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
-                if (  mouse.x > xSmallButton-0.15*k*120 and  mouse.x <xSmallButton+0.15*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-0.15*k*500 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+0.15*k*500) then
-                    butSmall = true
-                end
-            end
-            
-        else
-            if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*120*k+0.4*k*120 ) then
-                butYes = true
-            end
-            if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*120*k+0.4*k*120 ) then
-                butNo = true
-            end
-        end
+      
         flagtouch3 =true
     else
-        if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
-            if ( ( mouse.x > xSmallButton-0.15*k*120 and  mouse.x <xSmallButton+0.15*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/2)*310*k-0.15*k*500 and  mouse.y <screenHeight/2-math.cos(-math.pi/2)*310*k+0.15*k*500) and butSmall == true ) then
-                AddSound(uiSelect,0.3)
-                if (playerSkills[indexR+4].numb == 8 ) then
-                    playerSkillParametrs.waveAtFlag = not(playerSkillParametrs.waveAtFlag)
-                    if ( playerSkillParametrs.waveAtFlag == true) then
-                        playerSkillParametrs.bloodAtFlag  =  false
-                        playerSkillParametrs.sealAtFlag = false
-                        playerSkillParametrs.vampirFlag = false
-                    end
-                end
-                if (playerSkills[indexR+4].numb == 9 ) then
-                    playerSkillParametrs.bloodAtFlag = not(playerSkillParametrs.bloodAtFlag)
-                    if ( playerSkillParametrs.bloodAtFlag == true) then
-                        playerSkillParametrs.waveAtFlag  =  false
-                        playerSkillParametrs.sealAtFlag = false
-                        playerSkillParametrs.vampirFlag = false
-                    end
-                end
-                if (playerSkills[indexR+4].numb == 10 ) then
-                    playerSkillParametrs.sealAtFlag = not(playerSkillParametrs.sealAtFlag)
-                    if ( playerSkillParametrs.sealAtFlag == true) then
-                        playerSkillParametrs.waveAtFlag  =  false
-                        playerSkillParametrs.bloodAtFlag = false
-                        playerSkillParametrs.vampirFlag = false
-                    end
-                end
-                if (playerSkills[indexR+4].numb == 14 ) then
-                    playerSkillParametrs.vampirFlag = not(playerSkillParametrs.vampirFlag)
-                    if ( playerSkillParametrs.vampirFlag == true) then
-                        playerSkillParametrs.waveAtFlag  =  false
-                        playerSkillParametrs.bloodAtFlag = false
-                        playerSkillParametrs.sealAtFlag = false
-                    end
-                end
-            end
-        end
-     
         if ( flagAcceptMenu == false) then 
-          
             if (flagtouch3 == true and  math.abs( mouse.y - mousePosY ) > 40*k and mouse.x > xBigSlot and  mouse.x < xButton   ) then 
                 texti = 0 
                 textL = ""
@@ -197,32 +187,7 @@ function skills:update(dt)
                     speedR =2.2* speedR / math.abs( speedR)
                 end
             end
-        else
-            if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/1.4)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/1.4)*120*k+0.4*k*120 and butYes == true ) then
-                AddSound(uiSelect,0.3)
-                local indexR = xR / (math.pi/6)
-                if ( xR%(math.pi/6) > math.pi/12) then
-                    indexR = math.ceil(xR / (math.pi/6))
-                else
-                    indexR = math.floor(xR / (math.pi/6))
-                end
-                if (speedR == 0 and playerSkills[indexR+4] and  playerSkills[indexR+4].Interface.cost <= score and playerSkills[indexR+4].lvl < Player.maxLvlSkills) then
-                    score = score -playerSkills[indexR+4].Interface.cost
-                    playerSkills[indexR+4].lvl = playerSkills[indexR+4].lvl+1
-                    playerSkills[indexR+4].value = playerSkills[indexR+4].value+playerSkills[indexR+4].value*playerSkills[indexR+4].perUpgrade
-                else
-                    AddSound(uiError,0.3)
-                end
-            end
-            if (mouse.x >(xBigSlot)+xSmallSlot+(0.196*1.2*160*k)-0.4*k*120  and  mouse.x <(xBigSlot)+xSmallSlot+(0.196*1.2*160*k) +0.4*k*120 and mouse.y > screenHeight/2-math.cos(-math.pi/3.5)*120*k -0.4*k*120  and  mouse.y <screenHeight/2-math.cos(-math.pi/3.5)*120*k+0.4*k*120 and butNo == true) then
-                AddSound(uiClose,0.2)
-                flagAcceptMenu = false
-                lightKoff = 1
-            end
         end
-        butSmall = false
-        butNo = false
-        butYes = false
         flagtouch3 =false
     end
     if ( flagAcceptMenu == true) then
@@ -300,11 +265,9 @@ bodyTextPanel(xTextPanel,screenHeight/2)
 buttonLeft:draw()
 buttonRight:draw()
 buttonUpdate:draw()
-
-if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
-    bodyButtonScale(xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.15)
+if ( playerSkills[indexR+4] and playerSkills[indexR+4].isUsed ~= nil)  then
+    buttonUse:draw()
 end
-
 love.graphics.setColor(1,1,1,lightKoff)
 love.graphics.draw(UIBatch)
 love.graphics.draw(skillBatch)
@@ -314,42 +277,19 @@ if (flagAcceptMenu == true) then
     love.graphics.setColor(1,1,1,1)
     buttonAdd:draw()
     slot(indexR+4,xBigSlot,screenHeight/2,160,160,0.4) 
-    acceptBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/1.4)*120*k,0.4,butYes) 
-    rejectBut((xBigSlot)+xSmallSlot+(0.196*1.2*160*k),screenHeight/2-math.cos(-math.pi/3.5)*120*k,0.4,butNo)
+    buttonYes:draw()
+    buttonNo:draw()
     love.graphics.draw(UIBatch)
     love.graphics.draw(skillBatch)
     love.graphics.setColor(1,1,1,lightKoff)
 end
 textButton("Update",xButton,screenHeight/2-math.cos(-math.pi/2)*310*k,buttonUpdate.isTappedFlag,0.9)
 
-if ( playerSkills[indexR+4] and (playerSkills[indexR+4].numb == 8 or playerSkills[indexR+4].numb == 9 or playerSkills[indexR+4].numb == 10 or playerSkills[indexR+4].numb == 14))  then
-    if ( playerSkills[indexR+4].numb == 8) then 
-        if ( playerSkillParametrs.waveAtFlag == true) then
-            textButton("Used",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
-        else
-            textButton("Use",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
-        end
-    end
-    if ( playerSkills[indexR+4].numb ==9) then 
-        if ( playerSkillParametrs.bloodAtFlag == true) then
-            textButton("Used",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
-        else
-            textButton("Use",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
-        end
-    end
-    if ( playerSkills[indexR+4].numb ==10) then 
-        if ( playerSkillParametrs.sealAtFlag == true) then
-            textButton("Used",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
-        else
-            textButton("Use",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
-        end
-    end
-    if ( playerSkills[indexR+4].numb ==14) then 
-        if ( playerSkillParametrs.vampirFlag == true) then
-            textButton("Used",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
-        else
-            textButton("Use",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,butSmall,0.4)
-        end
+if ( playerSkills[indexR+4] and playerSkills[indexR+4].isUsed ~= nil)  then
+    if (playerSkills[indexR+4].isUsed) then
+        textButton("Used",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,buttonUse.isTappedFlag,0.4)
+    else
+        textButton("Use",xSmallButton,screenHeight/2-math.cos(-math.pi/2)*310*k,buttonUse.isTappedFlag,0.4)
     end
 end
 

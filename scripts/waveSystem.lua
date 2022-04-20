@@ -176,8 +176,8 @@ function Wave:progressBarDraw()
 end 
 
 function Wave:progressBarEffect(enValue)
-    expl(54*k,screenHeight/2-(self.countKilledEnemies*250*k2/self.goalKillEnemies)/2,10)
-    expl(54*k,screenHeight/2+(self.countKilledEnemies*250*k2/self.goalKillEnemies)/2,10)
+    explosionEffect:new(54*k,screenHeight/2-(self.countKilledEnemies*250*k2/self.goalKillEnemies)/2,10)
+    explosionEffect:new(54*k,screenHeight/2+(self.countKilledEnemies*250*k2/self.goalKillEnemies)/2,10)
     self.countKilledEnemies =  self.countKilledEnemies - enValue
 end
 

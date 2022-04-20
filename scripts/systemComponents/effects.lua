@@ -55,31 +55,6 @@ function light22Draw(mas)
     end
 end
 
-
-function explUpdate2(dt)
-    for i =1, #exp do
-        if( exp[i]) then
-            exp[i].x= exp[i].x+exp[i].ax*dt*k
-            exp[i].y= exp[i].y+exp[i].ay*dt*k2
-            if (  exp[i].flag ==false) then 
-                if ( exp[i].ax > 0 ) then
-                    exp[i].ax  = exp[i].ax -70*dt*k
-                else
-                    exp[i].ax  = exp[i].ax + 70*dt*k
-                end
-                if ( exp[i].ay > 0 ) then
-                    exp[i].ay  = exp[i].ay -70*dt*k2
-                else
-                    exp[i].ay  = exp[i].ay + 70*dt*k2
-                end
-            end
-            if ( (exp[i].ay<3*k2 and  exp[i].ay>-3*k2) or (exp[i].ax<3*k and  exp[i].ax>-3*k)) then
-                table.remove(exp,i)
-            end
-        end
-    end
-end
-
 function explUpdate(dt)
     for i =1, #exp do
         if( exp[i]) then
@@ -114,26 +89,64 @@ function explUpdate(dt)
     end
 end
 
-function expl(x,y,kol)
-    for kek =0, kol do
-        local Color1,Color2,Color3  = particlColor()
-        local e = {
-        flag  =false,-----new but old
-        tip = 1,
-        r = 0 ,
-        color1 = Color1,--- old 
-        color2= Color2,--- old 
-        color3 =Color3,--- old 
-        f = false,
-        x  = x, 
-        y =  y,  
-        xx  = x, 
-        yy =  y,
-        ax  =math.random(-1.72*k*30,1.73*k*30), 
-        ay = math.random(-1.73*k*30,1.73*k*30), 
-        scale =0.15
+explosionEffect = {
+    particles = {}
+}
+
+function explosionEffect:new(x,y,count,colorR,colorG,colorB)
+    for i =0, count do
+        local particl = {
+            flag  =false,
+            tip = 1,
+            r = 0 ,
+            color1 = colorR,
+            color2 = colorG,
+            color3 = colorB,
+            f = false,
+            x  = x, 
+            y =  y,  
+            xx  = x, 
+            yy =  y,
+            ax = math.random(-1.72*k*30,1.73*k*30), 
+            ay = math.random(-1.73*k*30,1.73*k*30), 
+            scale =0.15
         }
-    table.insert(exp,e)
+        table.insert(self.particles,particl)
+    end
+end
+
+function explosionEffect:update(dt)
+    for i =1, #self.particles do
+        if( self.particles[i]) then
+            self.particles[i].x= self.particles[i].x+self.particles[i].ax*dt*k
+            self.particles[i].y= self.particles[i].y+self.particles[i].ay*dt*k2
+            if (  self.particles[i].flag ==false) then 
+                if ( self.particles[i].ax > 0 ) then
+                    self.particles[i].ax  = self.particles[i].ax -70*dt*k
+                else
+                    self.particles[i].ax  = self.particles[i].ax + 70*dt*k
+                end
+                if ( self.particles[i].ay > 0 ) then
+                    self.particles[i].ay  = self.particles[i].ay -70*dt*k2
+                else
+                    self.particles[i].ay  = self.particles[i].ay + 70*dt*k2
+                end
+            end
+            if ( (self.particles[i].ay<3*k2 and  self.particles[i].ay>-3*k2) or (self.particles[i].ax<3*k and  self.particles[i].ax>-3*k)) then
+                table.remove(self.particles,i)
+            end
+        end
+    end
+end
+
+function explosionEffect:draw()
+    for i=1,#self.particles do 
+        if (self.particles[i].color1) then 
+            love.graphics.setColor(self.particles[i].color1,self.particles[i].color2,self.particles[i].color3,1)
+        else
+            love.graphics.setColor(1,1,1,1)
+        end
+        love.graphics.rectangle("fill",self.particles[i].x,self.particles[i].y,self.particles[i].scale*20*k,self.particles[i].scale*20*k2,4*self.particles[i].scale*k)
     end
 end
 
@@ -206,9 +219,9 @@ function bloodEffect(dt)
         if ( bloodEffects[i].timer > 0 and  bloodEffects[i].en ~=nil ) then 
             if ( bloodEffects[i].timerTick == 10 and bloodEffects[i].en.health >0) then 
                 bloodPartSpawn(bloodEffects[i].en,7)
-                bloodEffects[i].en.health = bloodEffects[i].en.health - Player.damage*Player.Skills.Damage.damageK*dt*Player.Skills.SpecialAtack.Bloody.bloodAt/2 -- damage
-                bloodEffects[i].en.ax = bloodEffects[i].en.ax*(1-Player.Skills.SpecialAtack.Bloody.bloodAt)
-                bloodEffects[i].en.ay = bloodEffects[i].en.ay*(1-Player.Skills.SpecialAtack.Bloody.bloodAt)
+                bloodEffects[i].en.health = bloodEffects[i].en.health - Player.damage*Player.Skills.Damage.value*dt*Player.Skills.SpecialAtack.Bloody.value/2 -- damage
+                bloodEffects[i].en.ax = bloodEffects[i].en.ax*(1-Player.Skills.SpecialAtack.Bloody.value)
+                bloodEffects[i].en.ay = bloodEffects[i].en.ay*(1-Player.Skills.SpecialAtack.Bloody.value)
             end
             bloodEffects[i].timerTick = bloodEffects[i].timerTick - 200*dt
             bloodEffects[i].timer =bloodEffects[i].timer - 5 * dt

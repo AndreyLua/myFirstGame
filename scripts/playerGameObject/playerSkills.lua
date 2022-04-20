@@ -48,8 +48,10 @@ function Player.Skills:raritySkills(tableSkills,rare)
     end
 end
 
-
-
+function Player.Skills:upgrade(playerSkill)
+    playerSkill.lvl = playerSkill.lvl+1
+    playerSkill.value = playerSkill.value+playerSkill.value*playerSkill.perUpgrade
+end
 
 function playerLiDraw(dt)
     if (Player.Skills.SpecialAtack.Electric.sealAtFlag == true) then 

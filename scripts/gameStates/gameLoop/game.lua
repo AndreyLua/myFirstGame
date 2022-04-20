@@ -6,7 +6,7 @@ function buttonAdd:draw()
 end
 
 
-score = 0
+score = 999999
 borderWidth =screenWidth/2
 borderHeight = screenHeight/2
 numberCleaner = 0 
@@ -127,7 +127,9 @@ if (buttonAdd:isTapped()) then
 end
  --en = {en[1]}
 --Player.flagInv =true
-explUpdate2(dt)
+
+explosionEffect:update(dt)
+
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
@@ -338,9 +340,8 @@ function  game:draw()
 
 
     love.graphics.setColor(1,1,1,1)
-    for i=1,#exp do
-        love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*15*k,exp[i].scale*15*k2,4*exp[i].scale*k)
-    end
+    
+    explosionEffect:draw()
     local fontWidth = font:getWidth(tostring(score))
     love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
     

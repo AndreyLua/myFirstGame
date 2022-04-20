@@ -247,7 +247,7 @@ function enCollWithWavesInRegularS(index,j,dt)
                 if (kek[i] and waveEffects[kek[i]] and en[j]) then
                     if (math.abs(waveEffects[kek[i]].x - en[j].x)<waveEffects[kek[i]].r*k+enJScale*k and math.abs(waveEffects[kek[i]].y - en[j].y)<waveEffects[kek[i]].r*k2+enJScale*k2 and  (math.pow((waveEffects[kek[i]].x - en[j].x),2) + math.pow((waveEffects[kek[i]].y - en[j].y),2))<=math.pow((waveEffects[kek[i]].r*k+enJScale*k),2)) then
                         if (en[j].timer == en[j].invTimer ) then 
-                            en[j].health = en[j].health -  Player.damage*playerSkillParametrs.damageK*playerSkillParametrs.waveAt
+                            en[j].health = en[j].health - Player.damage*Player.Skills.Damage.value*Player.Skills.SpecialAtack.Wave.value
                             en[j].timer = en[j].invTimer-0.0001
                         end
                     end

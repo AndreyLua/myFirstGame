@@ -66,7 +66,7 @@ function convert:enter()
 end
 
 function convert:update(dt)
-    explUpdate2(dt)--w
+    explosionEffect:update(dt)
     Particle:update(Flask,dt)
     Reward:updateSlotScale(dt)
     Flask:isFill()
@@ -169,10 +169,7 @@ function convert:draw()
     love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
     love.graphics.print("particl: "..tostring(#Particle.list), 100, 70,0,k/2,k2/2)
     -----------
-    for i=1,#exp do
-        love.graphics.setColor(exp[i].color1,exp[i].color2,exp[i].color3,1) 
-        love.graphics.rectangle("fill",exp[i].x,exp[i].y,exp[i].scale*20*k,exp[i].scale*20*k2,4*exp[i].scale*k)
-    end
+    explosionEffect:draw()
     
     NeedResourcesText:print(100*k,screenHeight/2,0.6,dt)
 end
