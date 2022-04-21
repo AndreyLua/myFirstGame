@@ -15,9 +15,11 @@ resClass = Class {
         self.ay = ay 
         self.traces = traces
     end;
+    
     IndexInRegulS =  function(self,scaleS)
         return math.floor((self.x-scaleS/2*k)/(scaleS*k)) + math.floor((self.y-scaleS/2*k2)/(scaleS*k2))*math.floor((screenWidth/(scaleS*k))+1)
     end;
+    
     move = function(self,dt)
         if (self.tip == 1) then
             self.x= self.x+self.ax*dt*6*k
@@ -66,6 +68,7 @@ resClass = Class {
             self.timer  = self.invTimer
         end
     end;
+    
     GravityWithPlayer = function(self)
         if ( self.timer == self.invTimer and  self.tip == 6 ) then
             local x1 = (Player.x)-self.x+1*k
@@ -94,6 +97,7 @@ resClass = Class {
             end
         end
     end;
+    
     collWithEn = function(self,index,j,dt)
         if ( res[j] and enRegulS[index]) then 
             local kek = enRegulS[index]
@@ -163,14 +167,15 @@ resClass = Class {
             end
         end
     end;
+    
     draw = function(self)
         if ( self.tip == 1) then
             love.graphics.setColor(self.color1,self.color2,self.color3)
             rot('fill',self.x,self.y,4*k,4*k2,1,2*k,2*k2)
         end
         if ( self.tip == 2) then
-              love.graphics.setColor(self.color1,self.color2,self.color3)
-              rot('fill',self.x,self.y,7*k,7*k2,1,3.5*k,3.5*k2)
+            love.graphics.setColor(self.color1,self.color2,self.color3)
+            rot('fill',self.x,self.y,7*k,7*k2,1,3.5*k,3.5*k2)
         end
         if ( self.tip == 3) then
             love.graphics.setColor(self.color1,self.color2,self.color3)
@@ -187,6 +192,7 @@ resClass = Class {
             rot('fill',self.x,self.y,4*k,4*k2,1,2*k,2*k2)
         end
     end;
+    
     traceSpawn = function(self)
         if ( self.tip == 6) then
             local trace = {
@@ -201,30 +207,17 @@ resClass = Class {
                table.remove(self.traces,1)
             end
         end
-       
     end;
     traceDraw = function(self,dt)
-     
         if ( self.tip == 6) then 
             for i = 1, #self.traces do
                 local trace = self.traces[i]
-             --   local radius =self.r/2*i
                 trace.x = trace.x+5*trace.ax*dt
                 trace.y = trace.y+5*trace.ay*dt
                 love.graphics.setColor(self.color1/3*i,self.color2/3*i,self.color3/3*i,0.6) 
-               --  if ( self.tip == 1 ) then
-               --     rot('fill',self.x+trace.x,self.y + trace.y,3.5*k,3.5*k2,self.r,3.5*k/2,3.5*k2/2)
-               -- end
-               -- if ( self.tip == 2 ) then
-               --     rot('fill',self.x+trace.x,self.y + trace.y,6.5*k,5.5*k2,self.r,6.5*k/2,6.5*k2/2)
-              --  end
-              --  if ( self.tip == 3 ) then
-              --      rot('fill',self.x+trace.x,self.y + trace.y,8.5*k,8.5*k2,self.r,8.5*k/2,8.5*k2/2)
-              -- end
                 rot('fill',self.x+trace.x,self.y + trace.y,3.5*k,3.5*k2,self.r,3.5*k/2,3.5*k2/2)
             end
         end
-        
     end;
     
     border = function(self,i)

@@ -114,6 +114,7 @@ end
 --Player.flagInv =true
 
 explosionEffect:update(dt)
+damageVisualizator:update(dt)
 
 objRegulS = {}
 enRegulS = {}
@@ -320,13 +321,15 @@ function  game:draw()
         greenPlayerEffectDraw(dt)
         tradeEffectDraw(dt)
         playerGetDamageEffect(dt)
+        damageVisualizator:draw()
         -----------
     love.graphics.pop()
 
 
     love.graphics.setColor(1,1,1,1)
-    
     explosionEffect:draw()
+   
+    
     local fontWidth = font:getWidth(tostring(score))
     love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
     
@@ -353,10 +356,8 @@ function  game:draw()
     love.graphics.print("Stat  "..tostring(stat.drawcalls), 100, 70,0,k/2,k2/2)
     love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
     love.graphics.print("RES: "..tostring(#res), 100, 150,0,k/2,k2/2)
+    
     vect = {}
- 
-  
-  
 end
                
 

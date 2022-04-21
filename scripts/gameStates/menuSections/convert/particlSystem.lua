@@ -104,7 +104,6 @@ function Particle:CollisionWithParticle(index,j,dt)
     end
 end 
  
-
 function Particle:spawn(x,y,kol)
     local Color1,Color2,Color3  = self:color() 
     local part = {
@@ -124,6 +123,7 @@ function Particle:spawn(x,y,kol)
     }
     table.insert(Particle.list,part)
 end
+
 function Particle:addToRegulS(i)
     if (Particle.list[i] and Particle.list[i].flag == true) then 
         local IparticlRegulS =math.floor((Particle.list[i].x-10*k)/(20*k)) + math.floor((Particle.list[i].y-10*k2)/(20*k2))*math.floor((screenWidth/(20*k))+1)

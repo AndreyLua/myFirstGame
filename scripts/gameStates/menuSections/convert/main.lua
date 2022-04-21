@@ -72,7 +72,7 @@ function convert:update(dt)
     Flask:isFill()
     
     if (buttonAdd:isTapped()) then 
-        exp = {}
+        explosionEffect:reset()
         AddSound(uiClick,0.3)
         gamestate.switch(menu)
     end

@@ -27,7 +27,7 @@ Player = {
     ay = 0,
     mass = 200,
     radiusCollect = 100,
-    damage = 1,
+    damage = 70,
     criticalDamage = 2,
     criticalChance = 0.7,
     flagInv = true,
@@ -457,6 +457,9 @@ function Player:rechargeEnergy(value)
 end
 
 function Player:atack(target,dt)
+    local atackDamage = self.damage*self.Skills.Damage.value
+    atackDamage = math.floor(math.random(atackDamage-atackDamage*0.1,atackDamage+atackDamage*0.1))
+    damageVisualizator:new(atackDamage,target.x,target.y,false)
     AddSound(playerHitSounds,0.3)
     self.Clows:scale()
     self.Energy.value = self.Energy.value -self.Energy.wasteAtack

@@ -18,7 +18,7 @@ controllerChoose = 1
 effect1 = moonshine(moonshine.effects.pixelate)
 effect1.pixelate.size =2
 -- fog типо туман
---effect2 = moonshine(moonshine.effects.crt)
+--effect2 = moonshine(moonshine.effects.fog)
 ---------------------------------------------------
 ------------------SOUNDS---------------------------
 soundEffects = {} 

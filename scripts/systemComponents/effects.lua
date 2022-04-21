@@ -1,5 +1,110 @@
 local effects = {}
 
+explosionEffect = {
+    particles = {}
+}
+
+function explosionEffect:reset()
+    self.particles= {}
+end
+
+function explosionEffect:new(x,y,count,colorR,colorG,colorB)
+    for i =0, count do
+        local particl = {
+            flag  =false,
+            tip = 1,
+            r = 0 ,
+            color1 = colorR,
+            color2 = colorG,
+            color3 = colorB,
+            f = false,
+            x  = x, 
+            y =  y,  
+            xx  = x, 
+            yy =  y,
+            ax = math.random(-1.72*k*30,1.73*k*30), 
+            ay = math.random(-1.73*k*30,1.73*k*30), 
+            scale =0.15
+        }
+        table.insert(self.particles,particl)
+    end
+end
+
+function explosionEffect:update(dt)
+    for i =#self.particles,1,-1 do
+        if( self.particles[i]) then
+            self.particles[i].x= self.particles[i].x+self.particles[i].ax*dt*k
+            self.particles[i].y= self.particles[i].y+self.particles[i].ay*dt*k2
+            if (  self.particles[i].flag ==false) then 
+                if ( self.particles[i].ax > 0 ) then
+                    self.particles[i].ax  = self.particles[i].ax -70*dt*k
+                else
+                    self.particles[i].ax  = self.particles[i].ax + 70*dt*k
+                end
+                if ( self.particles[i].ay > 0 ) then
+                    self.particles[i].ay  = self.particles[i].ay -70*dt*k2
+                else
+                    self.particles[i].ay  = self.particles[i].ay + 70*dt*k2
+                end
+            end
+            if ( (self.particles[i].ay<3*k2 and  self.particles[i].ay>-3*k2) or (self.particles[i].ax<3*k and  self.particles[i].ax>-3*k)) then
+                table.remove(self.particles,i)
+            end
+        end
+    end
+end
+
+damageVisualizator = {
+    timer = 1,
+    printNumbers = {}
+}
+
+function damageVisualizator:new(value,x,y,flagCrit)
+    local number = {
+        value = value,
+        x = x,
+        y = y, 
+        flagCrit =flagCrit,
+        timer = self.timer,
+    }
+    table.insert(self.printNumbers,number)
+end
+
+function damageVisualizator:update(dt)
+    for i=#self.printNumbers, 1,-1 do 
+        if (self.printNumbers[i].timer > 0 ) then 
+            self.printNumbers[i].timer = self.printNumbers[i].timer - 1*dt
+        else
+            table.remove(self.printNumbers,i)
+        end
+    end
+end
+
+function damageVisualizator:draw()
+    for i=#self.printNumbers, 1,-1 do 
+        local printDamageWidth = font:getWidth(tostring(self.printNumbers[i].value))
+        if (self.printNumbers[i].flagCrit) then 
+            love.graphics.setColor(1,0.2,0.2,(self.printNumbers[i].timer)/self.timer)
+            love.graphics.print(self.printNumbers[i].value,self.printNumbers[i].x,self.printNumbers[i].y+printDamageWidth/2*k2/2,-math.pi/2,k*1,k2*1)
+        else
+            love.graphics.setColor(1,1,1,(self.printNumbers[i].timer)/self.timer)
+            love.graphics.print(self.printNumbers[i].value,self.printNumbers[i].x,self.printNumbers[i].y+printDamageWidth/2*k2/2,-math.pi/2,k*0.4,k2*0.4) 
+        end    
+    end
+end
+
+
+function explosionEffect:draw()
+    for i=1,#self.particles do 
+        if (self.particles[i].color1) then 
+            love.graphics.setColor(self.particles[i].color1,self.particles[i].color2,self.particles[i].color3,1)
+        else
+            love.graphics.setColor(1,1,1,1)
+        end
+        love.graphics.rectangle("fill",self.particles[i].x,self.particles[i].y,self.particles[i].scale*20*k,self.particles[i].scale*20*k2,4*self.particles[i].scale*k)
+    end
+end
+
 function light22(x1,y1,x2,y2,kkk)
     local segments = {{{x1,y1},{x2,y2}}}
     local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
@@ -89,68 +194,6 @@ function explUpdate(dt)
     end
 end
 
-explosionEffect = {
-    particles = {}
-}
-
-function explosionEffect:new(x,y,count,colorR,colorG,colorB)
-    for i =0, count do
-        local particl = {
-            flag  =false,
-            tip = 1,
-            r = 0 ,
-            color1 = colorR,
-            color2 = colorG,
-            color3 = colorB,
-            f = false,
-            x  = x, 
-            y =  y,  
-            xx  = x, 
-            yy =  y,
-            ax = math.random(-1.72*k*30,1.73*k*30), 
-            ay = math.random(-1.73*k*30,1.73*k*30), 
-            scale =0.15
-        }
-        table.insert(self.particles,particl)
-    end
-end
-
-function explosionEffect:update(dt)
-    for i =1, #self.particles do
-        if( self.particles[i]) then
-            self.particles[i].x= self.particles[i].x+self.particles[i].ax*dt*k
-            self.particles[i].y= self.particles[i].y+self.particles[i].ay*dt*k2
-            if (  self.particles[i].flag ==false) then 
-                if ( self.particles[i].ax > 0 ) then
-                    self.particles[i].ax  = self.particles[i].ax -70*dt*k
-                else
-                    self.particles[i].ax  = self.particles[i].ax + 70*dt*k
-                end
-                if ( self.particles[i].ay > 0 ) then
-                    self.particles[i].ay  = self.particles[i].ay -70*dt*k2
-                else
-                    self.particles[i].ay  = self.particles[i].ay + 70*dt*k2
-                end
-            end
-            if ( (self.particles[i].ay<3*k2 and  self.particles[i].ay>-3*k2) or (self.particles[i].ax<3*k and  self.particles[i].ax>-3*k)) then
-                table.remove(self.particles,i)
-            end
-        end
-    end
-end
-
-function explosionEffect:draw()
-    for i=1,#self.particles do 
-        if (self.particles[i].color1) then 
-            love.graphics.setColor(self.particles[i].color1,self.particles[i].color2,self.particles[i].color3,1)
-        else
-            love.graphics.setColor(1,1,1,1)
-        end
-        love.graphics.rectangle("fill",self.particles[i].x,self.particles[i].y,self.particles[i].scale*20*k,self.particles[i].scale*20*k2,4*self.particles[i].scale*k)
-    end
-end
-
-
 function newWaveEffect(x,y)
     local waveEff =
     {
@@ -173,6 +216,8 @@ function newWaveEffect(x,y)
         table.insert(waveEffects,waveEff)
     end
 end
+
+
 function waveEffect(dt)
     for i = #waveEffects,1, -1 do
         if ( waveEffects[i].timer > 0 ) then 
