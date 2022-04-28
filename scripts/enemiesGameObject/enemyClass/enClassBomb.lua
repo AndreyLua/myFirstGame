@@ -379,13 +379,13 @@ enemyBombClass = Class{
                 self.timer =  self.invTimer-0.001
                 self.ax =self.ax - Player.ax
                 self.ay =self.ay -  Player.ay
-                spawnResHitEn(i)
+                spawnResourceHitEn(i)
             end  
         end
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 and en[i].flagBomb ~= 1) then
-            spawnResKillEn(i)
+            spawnResourceKillEn(i)
             local clow1X =self.x +17*k*math.sin(self.angleBody+math.pi/5)
             local clow1Y =self.y +17*k2*math.cos(self.angleBody+math.pi/5)
             local clow2X =self.x +17*k*math.sin(self.angleBody-math.pi/5)

@@ -283,13 +283,13 @@ enemyHammerClass = Class{
                 self.dash = self.dashTimer
                 self.ax =self.ax - Player.ax
                 self.ay =self.ay -  Player.ay
-                spawnResHitEn(i)
+                spawnResourceHitEn(i)
             end  
         end
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
-            spawnResKillEn(i)
+            spawnResourceKillEn(i)
             local enDrawDie = {
               timer = 4, 
               quad = enQuads.bodyHammer,

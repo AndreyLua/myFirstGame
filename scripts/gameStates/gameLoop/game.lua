@@ -23,7 +23,7 @@ local enClassShooter = require "scripts/enemiesGameObject/enemyClass/enClassShoo
 local enClassInvader = require "scripts/enemiesGameObject/enemyClass/enClassInvader" 
 local enClassBomb = require "scripts/enemiesGameObject/enemyClass/enClassBomb" 
 local enClassСleaner = require "scripts/enemiesGameObject/enemyClass/enClassCleaner" 
-local resSimpleClass =  require "scripts/resourcesGameObject/resSimpleClass" 
+local resSimpleClass =  require "scripts/resourcesGameObject/resourceClass" 
 local resFunction = require "scripts/resourcesGameObject/resFunction" 
 local objFunction = require "scripts/meteoritesGameObject/objFunction" 
 local waveSystem = require "scripts/waveSystem" 
@@ -58,14 +58,14 @@ boostDop = {
     shakeK = 1,
 }
 
-
-
 playerLiRan = {} 
 enBoomAnimat = {}
-removeEn = {}
+
+resourcesReceiveText = {}
+
 en = {}
 obj = {}
-res = {}
+resource = {}
 objRegulS  = {}
 enRegulS  = {}
 enAfterDieTex = {} 
@@ -115,6 +115,8 @@ end
 
 explosionEffect:update(dt)
 damageVisualizator:update(dt)
+VampirEffect:update(dt)
+
 
 objRegulS = {}
 enRegulS = {}
@@ -168,44 +170,44 @@ for i = #en, 1, -1 do
     end
 end
 
-for i = #res, 1, -1 do
-    if (res[i]) then 
-        res[i]:GravityWithPlayer()
-        res[i]:move(dt)
-        res[i]:border(i)
-        if (res[i] and res[i].tip == 6) then  
-            res[i]:traceSpawn()
+for i = #resource, 1, -1 do
+    if (resource[i]) then 
+        resource[i]:GravityWithPlayer()
+        resource[i]:update(dt)
+        resource[i]:border(i)
+        if (resource[i] and resource[i].tip == 6) then  
+            resource[i]:traceSpawn()
         end
-        if (res[i]) then  
-            res[i]:collWithPlayer(i)
+        if (resource[i]) then  
+            resource[i]:collWithPlayer(i)
         end
-        if (res[i]) then  
-            local indexResInRegS = res[i]:IndexInRegulS(80)
-            res[i]:collWithEn(indexResInRegS,i,dt)
+        if (resource[i]) then  
+            local indexResInRegS = resource[i]:IndexInRegulS(80)
+            resource[i]:collWithEn(indexResInRegS,i,dt)
             if (numberCleaner > 0) then 
-                if (res[i]) then  
-                    res[i]:collWithEn(indexResInRegS-1,i,dt)
+                if (resource[i]) then  
+                    resource[i]:collWithEn(indexResInRegS-1,i,dt)
                 end
-                if (res[i]) then
-                    res[i]:collWithEn(indexResInRegS+1,i,dt)
+                if (resource[i]) then
+                    resource[i]:collWithEn(indexResInRegS+1,i,dt)
                 end
-                if (res[i]) then
-                    res[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1),i,dt)
+                if (resource[i]) then
+                    resource[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1),i,dt)
                 end
-                if (res[i]) then
-                    res[i]:collWithEn(indexResInRegS+math.floor((screenWidth/(80*k))+1),i,dt)
+                if (resource[i]) then
+                    resource[i]:collWithEn(indexResInRegS+math.floor((screenWidth/(80*k))+1),i,dt)
                 end
-                if (res[i]) then
-                    res[i]:collWithEn(indexResInRegS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
+                if (resource[i]) then
+                    resource[i]:collWithEn(indexResInRegS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
                 end
-                if (res[i]) then
-                    res[i]:collWithEn(indexResInRegS+math.floor((screenWidth/(80*k))+1)-1,i,dt)
+                if (resource[i]) then
+                    resource[i]:collWithEn(indexResInRegS+math.floor((screenWidth/(80*k))+1)-1,i,dt)
                 end
-                if (res[i]) then
-                    res[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1)+1,i,dt)
+                if (resource[i]) then
+                    resource[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1)+1,i,dt)
                 end
-                if (res[i]) then
-                    res[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1)-1,i,dt)
+                if (resource[i]) then
+                    resource[i]:collWithEn(indexResInRegS-math.floor((screenWidth/(80*k))+1)-1,i,dt)
                 end
             end
         end
@@ -272,6 +274,8 @@ function  game:draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.push()
         love.graphics.translate(-Player.Camera.x+40*k/2+screenWidth/2,-Player.Camera.y+40*k2/2+screenHeight/2)
+        
+        VampirEffect:draw(dt)
         waveEffect(dt)
         bloodEffect(dt)
         allDraw(dt)
@@ -315,7 +319,7 @@ function  game:draw()
         love.graphics.setColor(1,1,1,1)
         playerLiDraw(dt)
         love.graphics.draw(boomBatch)
-        resAfterDie(dt)
+        resourceAfterDie(dt)
         ----------
         deffenseEffect(dt)
         greenPlayerEffectDraw(dt)
@@ -355,7 +359,7 @@ function  game:draw()
     love.graphics.print("EN: "..tostring(#en), 100, 40,0,k/2,k2/2)
     love.graphics.print("Stat  "..tostring(stat.drawcalls), 100, 70,0,k/2,k2/2)
     love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
-    love.graphics.print("RES: "..tostring(#res), 100, 150,0,k/2,k2/2)
+    love.graphics.print("Resource: "..tostring(#resource), 100, 150,0,k/2,k2/2)
     
     vect = {}
 end
@@ -490,11 +494,11 @@ function allInvTimer(i,mas,dt)
 end
 
 function allDraw(dt)
-    for i= 1,#res do
-        if (res[i] and res[i].x>Player.Camera.x-screenWidth/2-30*k and  res[i].x<Player.Camera.x+screenWidth/2+30*k and  res[i].y>Player.Camera.y-screenHeight/2-30*k2 and res[i].y<Player.Camera.y + screenHeight/2+30*k2) then
-            res[i]:draw()
-            if ( res[i].tip == 6 ) then 
-                res[i]:traceDraw(dt)
+    for i= 1,#resource do
+        if (resource[i] and resource[i].x>Player.Camera.x-screenWidth/2-30*k and  resource[i].x<Player.Camera.x+screenWidth/2+30*k and  resource[i].y>Player.Camera.y-screenHeight/2-30*k2 and resource[i].y<Player.Camera.y + screenHeight/2+30*k2) then
+            resource[i]:draw()
+            if ( resource[i].tip == 6 ) then 
+                resource[i]:traceDraw(dt)
             end
         end
     end 

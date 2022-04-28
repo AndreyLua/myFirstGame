@@ -60,38 +60,38 @@ function playerLiDraw(dt)
         for i=#masli,1,-1 do
             if (masli[i].table and masli[i].timer > 0  ) then
                 masli[i].timer = masli[i].timer - 50*dt
-                light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody+math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(Player.angleBody+math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
-                light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody-math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(Player.angleBody-math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
+                LightEffect:draw(LightEffect:get(Player.x+35*k2*math.sin(Player.angleBody+math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(Player.angleBody+math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
+                LightEffect:draw(LightEffect:get(Player.x+35*k2*math.sin(Player.angleBody-math.pi/8)+math.random(-4,4)*k,Player.y+35*k2*math.cos(Player.angleBody-math.pi/8)+math.random(-4,4)*k,masli[i].table.x+math.random(-10,10)*k,masli[i].table.y+math.random(-10,10)*k,5))
             else
                 table.remove(masli,i)
             end
         end
         if ( Player.a == 1 and #masli == 0 ) then 
-            light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody)+math.random(-2,2)*k,Player.x+35*k2*math.sin(Player.angleBody+math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody+math.pi/4)+math.random(-2,2)*k,4))
-            light22Draw(light22(Player.x+35*k2*math.sin(Player.angleBody)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody)+math.random(-2,2)*k,Player.x+35*k2*math.sin(Player.angleBody-math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody-math.pi/4)+math.random(-2,2)*k,4))
+            LightEffect:draw(LightEffect:get(Player.x+35*k2*math.sin(Player.angleBody)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody)+math.random(-2,2)*k,Player.x+35*k2*math.sin(Player.angleBody+math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody+math.pi/4)+math.random(-2,2)*k,4))
+            LightEffect:draw(LightEffect:get(Player.x+35*k2*math.sin(Player.angleBody)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody)+math.random(-2,2)*k,Player.x+35*k2*math.sin(Player.angleBody-math.pi/4)+math.random(-2,2)*k,Player.y+35*k2*math.cos(Player.angleBody-math.pi/4)+math.random(-2,2)*k,4))
         end
     end
 end
 
 function Player.Skills.SpecialAtack.Wave:atack(target)
     newWaveEffect(Player.x,Player.y) -- damage
-    Player.Energy.value = Player.Energy.value  - Player.Energy.wasteSpecialAtack
 end
 
 function Player.Skills.SpecialAtack.Bloody:atack(target)
     newBloodEffect(target)  -- damage
-    Player.Energy.value = Player.Energy.value - Player.Energy.wasteSpecialAtack
 end
 
 function Player.Skills.SpecialAtack.Vampir:atack(target)
-    newVampirEffect(target)
-    Player.Energy.value = Player.Energy.value - Player.Energy.wasteSpecialAtack
+    VampirEffect:new(target)
+end
+
+function Player.Skills.SpecialAtack.Vampir:atack(target)
+  -------------------!!!!!!!!!!!
 end
 
 function Player.Skills.SpecialAtack.Electric:atack(target)
     table.insert(masli,{table = target, timer = 10,flag = nil})
     target.health  =  target.health - Player.damage*Player.Skills.Damage.value*Player.Skills.SpecialAtack.Electric.value 
-    Player.Energy.value = Player.Energy.value - Player.Energy.wasteSpecialAtack
 end
 
 function playerBoostDop(dt)

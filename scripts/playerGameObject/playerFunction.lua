@@ -29,7 +29,7 @@ Player = {
     radiusCollect = 100,
     damage = 70,
     criticalDamage = 2,
-    criticalChance = 0.7,
+    criticalChance = 0.1,
     flagInv = true,
     inv = 2,
     invTimer = 2,
@@ -449,6 +449,9 @@ function Player:takeDamage(dmg,tip,atacker)
 end
 
 function Player:heal(value)
+    for i =1,math.random(3,5) do 
+        newGreenPlayerEffect()
+    end
     self.Hp.value=self.Hp.value+value
 end
 
@@ -458,8 +461,14 @@ end
 
 function Player:atack(target,dt)
     local atackDamage = self.damage*self.Skills.Damage.value
+    local isCrit = false
+    if ( math.random()<self.criticalChance) then
+        isCrit = true
+        atackDamage = atackDamage*self.criticalDamage
+    end
     atackDamage = math.floor(math.random(atackDamage-atackDamage*0.1,atackDamage+atackDamage*0.1))
-    damageVisualizator:new(atackDamage,target.x,target.y,false)
+    
+    damageVisualizator:new(atackDamage,target.x,target.y,isCrit)
     AddSound(playerHitSounds,0.3)
     self.Clows:scale()
     self.Energy.value = self.Energy.value -self.Energy.wasteAtack
@@ -471,6 +480,7 @@ function Player:SpecialAtack(target)
     for atackSkillIndex, atackSkill in pairs(self.Skills.SpecialAtack) do
         if ( type(atackSkill)=='table') then 
             if (atackSkill.isUsed) then 
+                self.Energy.value = self.Energy.value - self.Energy.wasteSpecialAtack
                 atackSkill:atack(target)
             end
         end

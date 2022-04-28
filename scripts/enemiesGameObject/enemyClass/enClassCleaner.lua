@@ -339,14 +339,14 @@ enemyСleanerClass = Class{
                 self.timer =  self.invTimer-0.001
                 self.ax =self.ax - Player.ax
                 self.ay =self.ay -  Player.ay
-                spawnResHitEn(i)
+                spawnResourceHitEn(i)
             end  
         end
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
             numberCleaner = numberCleaner-1
-            spawnResKillEn(i)
+            spawnResourceKillEn(i)
           
             local enDrawDie = {
               timer = 4, 

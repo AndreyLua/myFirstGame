@@ -54,6 +54,17 @@ function explosionEffect:update(dt)
     end
 end
 
+function explosionEffect:draw()
+    for i=1,#self.particles do 
+        if (self.particles[i].color1) then 
+            love.graphics.setColor(self.particles[i].color1,self.particles[i].color2,self.particles[i].color3,1)
+        else
+            love.graphics.setColor(1,1,1,1)
+        end
+        love.graphics.rectangle("fill",self.particles[i].x,self.particles[i].y,self.particles[i].scale*20*k,self.particles[i].scale*20*k2,4*self.particles[i].scale*k)
+    end
+end
+
 damageVisualizator = {
     timer = 1,
     printNumbers = {}
@@ -85,7 +96,7 @@ function damageVisualizator:draw()
         local printDamageWidth = font:getWidth(tostring(self.printNumbers[i].value))
         if (self.printNumbers[i].flagCrit) then 
             love.graphics.setColor(1,0.2,0.2,(self.printNumbers[i].timer)/self.timer)
-            love.graphics.print(self.printNumbers[i].value,self.printNumbers[i].x,self.printNumbers[i].y+printDamageWidth/2*k2/2,-math.pi/2,k*1,k2*1)
+            love.graphics.print(self.printNumbers[i].value,self.printNumbers[i].x,self.printNumbers[i].y+printDamageWidth/2*k2/2,-math.pi/2,k*0.5+math.random()/4,k2*0.5+math.random()/4)
         else
             love.graphics.setColor(1,1,1,(self.printNumbers[i].timer)/self.timer)
             love.graphics.print(self.printNumbers[i].value,self.printNumbers[i].x,self.printNumbers[i].y+printDamageWidth/2*k2/2,-math.pi/2,k*0.4,k2*0.4) 
@@ -93,57 +104,49 @@ function damageVisualizator:draw()
     end
 end
 
+LightEffect = {
+    minLength = 100*k,
+}
 
-function explosionEffect:draw()
-    for i=1,#self.particles do 
-        if (self.particles[i].color1) then 
-            love.graphics.setColor(self.particles[i].color1,self.particles[i].color2,self.particles[i].color3,1)
-        else
-            love.graphics.setColor(1,1,1,1)
-        end
-        love.graphics.rectangle("fill",self.particles[i].x,self.particles[i].y,self.particles[i].scale*20*k,self.particles[i].scale*20*k2,4*self.particles[i].scale*k)
-    end
-end
-
-function light22(x1,y1,x2,y2,kkk)
+function LightEffect:get(x1,y1,x2,y2,numberSegments)
     local segments = {{{x1,y1},{x2,y2}}}
     local length = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-    if ( length < 100*k) then 
-    local offset =length/5
-    for i=1,kkk do
-        for j =1,#segments do
-            local segment = segments[j]
-            local beginSegm = segment[1]
-            local endSegm = segment[2]
-            local ran =offset
-            if ( math.random(1,2) == 1 ) then 
-                ran = -ran 
+    if ( length < self.minLength) then 
+        local offset =length/5
+        for i=1,numberSegments do
+            for j =1,#segments do
+                local segment = segments[j]
+                local beginSegm = segment[1]
+                local endSegm = segment[2]
+                local ran =offset
+                if ( math.random(1,2) == 1 ) then 
+                    ran = -ran 
+                end
+                local angle =math.pi-math.atan2((endSegm[1] -beginSegm[1]),(endSegm[2] -beginSegm[2]))
+                local midX  =(beginSegm[1]+endSegm[1])/2+math.cos(angle)*ran
+                local midY  =(beginSegm[2]+endSegm[2])/2+math.sin(angle)*ran
+                if ( math.random(1,4) == 1  )then 
+                    local lengthDopPoint = math.sqrt((midX-beginSegm[1])*(midX-beginSegm[1])+(midY-beginSegm[2])*(midY-beginSegm[2]))
+                    local dopAngle = -math.atan2((endSegm[1]-beginSegm[1]),(endSegm[2]-beginSegm[2]))
+                    local dopPointX = midX+math.cos(dopAngle+math.pi/2-math.random()*1.2*math.random(-1,1))*lengthDopPoint*0.7
+                    local dopPointY = midY+math.sin(dopAngle+math.pi/2-math.random()*1.2*math.random(-1,1))*lengthDopPoint*0.7
+                    table.insert(segments,{{midX,midY},{dopPointX,dopPointY}})
+                end
+                table.remove(segments,j)
+                table.insert(segments,{{beginSegm[1],beginSegm[2]},{midX,midY}})
+                table.insert(segments,{{midX,midY},{endSegm[1],endSegm[2]}})
             end
-            local angle =math.pi-math.atan2((endSegm[1] -beginSegm[1]),(endSegm[2] -beginSegm[2]))
-            local midX  =(beginSegm[1]+endSegm[1])/2+math.cos(angle)*ran
-            local midY  =(beginSegm[2]+endSegm[2])/2+math.sin(angle)*ran
-            if ( math.random(1,4) == 1  )then 
-                local lengthDopPoint = math.sqrt((midX-beginSegm[1])*(midX-beginSegm[1])+(midY-beginSegm[2])*(midY-beginSegm[2]))
-                local dopAngle = -math.atan2((endSegm[1]-beginSegm[1]),(endSegm[2]-beginSegm[2]))
-                local dopPointX = midX+math.cos(dopAngle+math.pi/2-math.random()*1.2*math.random(-1,1))*lengthDopPoint*0.7
-                local dopPointY = midY+math.sin(dopAngle+math.pi/2-math.random()*1.2*math.random(-1,1))*lengthDopPoint*0.7
-                table.insert(segments,{{midX,midY},{dopPointX,dopPointY}})
-            end
-            table.remove(segments,j)
-            table.insert(segments,{{beginSegm[1],beginSegm[2]},{midX,midY}})
-            table.insert(segments,{{midX,midY},{endSegm[1],endSegm[2]}})
+            offset = offset/2
         end
-        offset = offset/2
-    end
-    return segments
+        return segments
     end
 end
 
-function light22Draw(mas) 
-    if ( mas~=nil) then 
-        for i = 1 , #mas do
+function LightEffect:draw(segments) 
+    if ( segments~=nil) then 
+        for i = 1,#segments do
             local vert = {}
-            local mouth =  mas[i]
+            local mouth =  segments[i]
             local versh = mouth[1]
             local versh2 = mouth[2]
             table.insert(vert,versh[1])
@@ -353,35 +356,101 @@ function deffenseEffect(dt)
     end
 end
 
-function newVampirEffect(self)
+VampirEffect = {
+    particls = {}
+}
+
+function VampirEffect:new(target)
     for i =1, math.random(3,5) do
-        local masPoint = {
-            10-0.00001, --timer
-            10, --invTimer
-            6, -- tip
-            math.random(-1,1), --r
-            0, -- color1
-            1, -- color2
-            0.67, -- color3
-            self.x,--x
-            self.y,--y
-            math.random(-2*k,2*k2)*1.5,  --ax
-            math.random(-2*k,2*k2)*1.5,  --ay
-            {},
+        local vampirParticl = {
+            timer = 10-0.00001, 
+            invTimer = 10, 
+            angle = math.random(-1,1),
+            colorR = 0, 
+            colorG = 1,
+            colorB = 0.67,
+            x = target.x,
+            y = target.y,
+            ax = math.random(-2*k,2*k2)*1.5, 
+            ay = math.random(-2*k,2*k2)*1.5,  
+            traces = {},
         }
-        local resClone = resClass(unpack(masPoint))
-        table.insert(res,resClone)
+        table.insert(self.particls,vampirParticl)
     end
 end
 
+function VampirEffect:update(dt)
+    for i=1, #self.particls do 
+        self:timerUpdate(self.particls[i],dt)
+        self:move(self.particls[i],dt)
+        self:traceSpawn(self.particls[i])
+    end
+end
+
+function VampirEffect:move(particl,dt)
+    if ( particl.timer == particl.invTimer) then
+        local distanceX = (Player.x)-particl.x+1*k
+        local distanceY = (Player.y)-particl.y+1*k2          
+        local angle = math.atan2(distanceX,distanceY) -0.8 * particl.angle
+        particl.ax = 23*k*math.sin(angle)
+        particl.ay = 23*k*math.cos(angle)
+        
+        particl.x= particl.x+particl.ax*dt*15*k
+        particl.y= particl.y+particl.ay*dt*15*k2
+    else
+        particl.x= particl.x+particl.ax*dt*30*k
+        particl.y= particl.y+particl.ay*dt*30*k2
+    end
+end;
+
+function VampirEffect:timerUpdate(particl,dt)
+    if ( particl.timer < particl.invTimer) then
+        particl.timer  = particl.timer - dt* 40
+    end
+    if ( particl.timer < 0) then
+        particl.timer  = particl.invTimer
+    end 
+end;
+
+function VampirEffect:draw(dt)
+    for i=1, #self.particls do 
+        love.graphics.setColor(self.particls[i].colorR,self.particls[i].colorG,self.particls[i].colorB)
+        rot('fill',self.particls[i].x,self.particls[i].y,4*k,4*k2,1,2*k,2*k2)
+        self:traceDraw(self.particls[i],dt)
+    end
+end;
+
+function VampirEffect:traceSpawn(particl)
+    local trace = {
+        ax =-math.sin(math.atan2(particl.ax,particl.ay))*k*math.abs(particl.ax),
+        ay =-math.cos(math.atan2(particl.ax,particl.ay))*k2*math.abs(particl.ay),
+        x = 0 ,
+        y = 0 , 
+        r = 2*k ,
+    }
+    table.insert(particl.traces,trace)
+    if ( #particl.traces >7) then
+        table.remove(particl.traces,1)
+    end
+end;
+
+function VampirEffect:traceDraw(particl,dt)
+    for i = 1, #particl.traces do
+        local trace = particl.traces[i]
+        trace.x = trace.x+5*trace.ax*dt
+        trace.y = trace.y+5*trace.ay*dt
+        love.graphics.setColor(particl.colorR/3*i,particl.colorG/3*i,particl.colorB/3*i,0.6) 
+        rot('fill',particl.x+trace.x,particl.y + trace.y,3.5*k,3.5*k2,particl.angle,3.5*k/2,3.5*k2/2)
+    end
+end;
+
 function newGreenPlayerEffect()
    
-      local greenEff =
-      {
-        x =math.random(-20*k,20*k2)*1.5, 
-        y =math.random(-20*k,20*k2)*1.5,  
-        scale = math.random()*7, 
-        timer = 10,
+      local greenEff = {
+          x =math.random(-20*k,20*k2)*1.5, 
+          y =math.random(-20*k,20*k2)*1.5,  
+          scale = math.random()*7, 
+          timer = 10,
       }
       table.insert(greenPlayerEffect,greenEff)
     

@@ -106,7 +106,7 @@ function objDestroy(mas,i)
             kolMeteor = 8
         end
         if (#masGl>kolMeteor) then
-            spawnResCrackMet(i)
+            spawnResourceCrackMet(i)
             for kkl = 1, #masGl/2-1 do 
                 if ( #masGl> 8) then
                     finish = finish+4 

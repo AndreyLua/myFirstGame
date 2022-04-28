@@ -301,13 +301,13 @@ enemyShooterClass = Class{
                 self.timer =  self.invTimer-0.001
                 self.ax =self.ax - Player.ax
                 self.ay =self.ay -  Player.ay
-                spawnResHitEn(i)
+                spawnResourceHitEn(i)
             end  
         end
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
-            spawnResKillEn(i)
+            spawnResourceKillEn(i)
             local clow1X =self.x +10*k*math.sin(self.angleBody+math.pi/6)
             local clow1Y =self.y +10*k2*math.cos(self.angleBody+math.pi/6)
             local clow2X =self.x +10*k*math.sin(self.angleBody-math.pi/6)

@@ -383,7 +383,7 @@ enemyMeleeClass = Class{
                 self.dash = self.dashTimer
                 self.ax =self.ax - Player.ax
                 self.ay =self.ay -  Player.ay
-                spawnResHitEn(i)
+                spawnResourceHitEn(i)
             end  
             if (self.invTimer and  self.invTimer ==self.timer) then
                 self.climbFlag = 0
@@ -394,7 +394,7 @@ enemyMeleeClass = Class{
     end;
     kill =  function(self,i) 
         if (en[i].health and en[i].health<=0 ) then
-            spawnResKillEn(i)
+            spawnResourceKillEn(i)
             local clow1X =self.x +15*k*math.sin(self.angleBody+math.pi/8)
             local clow1Y =self.y +15*k2*math.cos(self.angleBody+math.pi/8)
             local clow2X =self.x +15*k*math.sin(self.angleBody-math.pi/8)
