@@ -194,7 +194,7 @@ Player = {
                     image =skillQuads.vampir,
                     slotRarityImage = UIQuads.tableSkillLegend,
                 },
-                value = 0.1,
+                value = 0.03,
                 rare ="legend",
                 isUsed = false,   
             },
@@ -449,10 +449,10 @@ function Player:takeDamage(dmg,tip,atacker)
 end
 
 function Player:heal(value)
-    for i =1,math.random(3,5) do 
+    for i =1,math.random(value*10*3,value*10*5) do 
         newGreenPlayerEffect()
     end
-    self.Hp.value=self.Hp.value+value
+    self.Hp.value=self.Hp.value+self.Hp.maxValue*value
 end
 
 function Player:rechargeEnergy(value)

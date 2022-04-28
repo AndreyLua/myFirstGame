@@ -85,8 +85,8 @@ function Player.Skills.SpecialAtack.Vampir:atack(target)
     VampirEffect:new(target)
 end
 
-function Player.Skills.SpecialAtack.Vampir:atack(target)
-  -------------------!!!!!!!!!!!
+function Player.Skills.SpecialAtack.Vampir:getHeal()
+    Player:heal(Player.Skills.SpecialAtack.Vampir.value) 
 end
 
 function Player.Skills.SpecialAtack.Electric:atack(target)

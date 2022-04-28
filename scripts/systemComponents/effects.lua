@@ -380,10 +380,11 @@ function VampirEffect:new(target)
 end
 
 function VampirEffect:update(dt)
-    for i=1, #self.particls do 
+    for i=#self.particls,1,-1 do 
         self:timerUpdate(self.particls[i],dt)
         self:move(self.particls[i],dt)
         self:traceSpawn(self.particls[i])
+        self:collWithPlayer(self.particls[i],i)
     end
 end
 
@@ -402,6 +403,13 @@ function VampirEffect:move(particl,dt)
         particl.y= particl.y+particl.ay*dt*30*k2
     end
 end;
+
+function VampirEffect:collWithPlayer(particl,i)
+    if (particl.timer == particl.invTimer and  checkCollision(Player.x-20*k,Player.y-20*k2, 40*k, 40*k2, particl.x,particl.y,1*k,1*k2)) then
+        Player.Skills.SpecialAtack.Vampir:getHeal()
+        table.remove(self.particls,i)
+    end   
+end
 
 function VampirEffect:timerUpdate(particl,dt)
     if ( particl.timer < particl.invTimer) then
