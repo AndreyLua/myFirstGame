@@ -65,12 +65,12 @@ function explosionEffect:draw()
     end
 end
 
-damageVisualizator = {
+DamageVisualizator = {
     timer = 1,
     printNumbers = {}
 }
 
-function damageVisualizator:new(value,x,y,flagCrit)
+function DamageVisualizator:new(value,x,y,flagCrit)
     local number = {
         value = value,
         x = x,
@@ -81,7 +81,7 @@ function damageVisualizator:new(value,x,y,flagCrit)
     table.insert(self.printNumbers,number)
 end
 
-function damageVisualizator:update(dt)
+function DamageVisualizator:update(dt)
     for i=#self.printNumbers, 1,-1 do 
         if (self.printNumbers[i].timer > 0 ) then 
             self.printNumbers[i].timer = self.printNumbers[i].timer - 1*dt
@@ -91,7 +91,7 @@ function damageVisualizator:update(dt)
     end
 end
 
-function damageVisualizator:draw()
+function DamageVisualizator:draw()
     for i=#self.printNumbers, 1,-1 do 
         local printDamageWidth = font:getWidth(tostring(self.printNumbers[i].value))
         if (self.printNumbers[i].flagCrit) then 
@@ -163,91 +163,68 @@ function LightEffect:draw(segments)
     end
 end
 
-function explUpdate(dt)
-    for i =1, #exp do
-        if( exp[i]) then
-            exp[i].x= exp[i].x+exp[i].ax*dt*2*k
-            exp[i].y= exp[i].y+exp[i].ay*dt*2*k2
-            if (  exp[i].flag ==false) then 
-                if ( exp[i].ax > 0 ) then
-                    exp[i].ax  = exp[i].ax - 50*dt*k
-                else
-                    exp[i].ax  = exp[i].ax + 50*dt*k
-                end
-                if ( exp[i].ay > 0 ) then
-                    exp[i].ay  = exp[i].ay - 50*dt*k2
-                else
-                    exp[i].ay  = exp[i].ay + 50*dt*k2
-                end
-            end
-            if ( (exp[i].ay<10*k2 and  exp[i].ay>-10*k2) or (exp[i].ax<10*k and  exp[i].ax>-10*k)) then
-                exp[i].flag =true
-            end
-            if ( exp[i].flag == true) then
-                local x1 = exp[i].x - exp[i].xx
-                local y1 = exp[i].y - exp[i].yy
-                local ugol = math.atan2(x1,y1)
-                exp[i].ax=90*k*math.sin(ugol+2)
-                exp[i].ay=90*k2*math.cos(ugol+2)
-            end
-            if ( ((exp[i].y<exp[i].yy+200*k2*dt and  exp[i].y>exp[i].yy-200*k2*dt) and (exp[i].x<exp[i].xx+200*k*dt and  exp[i].x>exp[i].xx-200*k*dt)) and exp[i].flag == true ) then
-                table.remove(exp,i)
-            end
-        end
-    end
-end
-
-function newWaveEffect(x,y)
-    local waveEff =
+WaveEffect = {
+    particls = {},
+    regulNetwork = {},
+    timer = 10,
+    numberCopies  =3,
+}
+function WaveEffect:new(x,y)
+    local waveParticl =
     {
       x =x ,
       y =y, 
       r = 1*k,
-      timer =  10,
-      count =3,
+      timer =  self.timer,
+      count =self.numberCopies,
     }
-    table.insert(waveEffects,waveEff)
+    table.insert(self.particls,waveParticl)
     for i = 1, math.random(1,3) do
-        waveEff =
+        waveParticl =
         {
           x =x+math.random(-50,50)*k ,
           y =y+math.random(-50,50)*k , 
           r = 0.1*k,
-          timer =  5,
-          count =3,
+          timer =  self.timer/2,
+          count =self.numberCopies,
         }
-        table.insert(waveEffects,waveEff)
+        table.insert(self.particls,waveParticl)
     end
 end
 
-
-function waveEffect(dt)
-    for i = #waveEffects,1, -1 do
-        if ( waveEffects[i].timer > 0 ) then 
-            love.graphics.setColor(0.6,1,1,waveEffects[i].timer/8)
-            love.graphics.circle('line',waveEffects[i].x,waveEffects[i].y,waveEffects[i].r/2*waveEffects[i].count)
-            love.graphics.circle('line',waveEffects[i].x,waveEffects[i].y,waveEffects[i].r/1.5*waveEffects[i].count)
-            love.graphics.circle('line',waveEffects[i].x,waveEffects[i].y,waveEffects[i].r/1.2*waveEffects[i].count)
-            love.graphics.circle('line',waveEffects[i].x,waveEffects[i].y,waveEffects[i].r*waveEffects[i].count)
-            waveEffects[i].r = waveEffects[i].r + 30*k* dt
-            waveEffects[i].timer  = waveEffects[i].timer - 30*dt
+function WaveEffect:update(dt)
+    for i = #self.particls,1, -1 do
+        if ( self.particls[i].timer > 0 ) then 
+            self.particls[i].r = self.particls[i].r + 30*k*dt
+            self.particls[i].timer  = self.particls[i].timer - 30*dt
         else
-           if (waveEffects[i].count >1 ) then
-                waveEffects[i].count = waveEffects[i].count - 1 
-                waveEffects[i].r = 0 *k 
-                waveEffects[i].timer = 10
+           if (self.particls[i].count >1 ) then
+                self.particls[i].count = self.particls[i].count - 1 
+                self.particls[i].r = 0 *k 
+                self.particls[i].timer = 10
             else
-                table.remove(waveEffects,i)  
+                table.remove(self.particls,i)  
             end
         end
-        if ( waveEffects[i]) then 
-            local IwaveRegulS =math.floor((waveEffects[i].x-40*k)/(80*k)) + math.floor((waveEffects[i].y-40*k2)/(80*k2))*math.floor((screenWidth/(80*k))+1)
-            if (objRegulS[IobjRegulS]) then
-                table.insert(waveRegulS[IwaveRegulS],i)
+        
+        if ( self.particls[i]) then 
+            local indexInRegulNetwork =math.floor((self.particls[i].x-40*k)/(80*k)) + math.floor((self.particls[i].y-40*k2)/(80*k2))*math.floor((screenWidth/(80*k))+1)
+            if (self.regulNetwork[indexInRegulNetwork]) then
+                table.insert(self.regulNetwork[indexInRegulNetwork],i)
             else
-                waveRegulS[IwaveRegulS] = {i}
+                self.regulNetwork[indexInRegulNetwork] = {i}
             end
         end
+    end  
+end
+
+function WaveEffect:draw()
+    for i = #self.particls,1, -1 do
+        love.graphics.setColor(0.6,1,1,self.particls[i].timer/8)
+        love.graphics.circle('line',self.particls[i].x,self.particls[i].y,self.particls[i].r/2*self.particls[i].count)
+        love.graphics.circle('line',self.particls[i].x,self.particls[i].y,self.particls[i].r/1.5*self.particls[i].count)
+        love.graphics.circle('line',self.particls[i].x,self.particls[i].y,self.particls[i].r/1.2*self.particls[i].count)
+        love.graphics.circle('line',self.particls[i].x,self.particls[i].y,self.particls[i].r*self.particls[i].count)
     end
 end
 
@@ -337,29 +314,30 @@ function BloodyEffect:newPart(particl,amount)
     end
 end
 
-function newDeffenseEffect(self)
-    if ( self~= nil) then
-        local deffenseEff  ={
-            en = self,
+SpikeArmorEffect = {
+    particls = {},
+}
+
+function SpikeArmorEffect:new(target)
+    if ( target~= nil) then
+        local SpikeArmorParticl  ={
+            enemy = target,
             x = Player.x, 
             y = Player.y,
             speed =math.random(200,260)*k,
         }
-        table.insert(deffenseEffects,deffenseEff)
+        table.insert(self.particls,SpikeArmorParticl)
     end 
 end
 
-function deffenseEffect(dt) 
+function SpikeArmorEffect:update(dt) 
     for i = #deffenseEffects,1, -1 do
         if ( deffenseEffects[i] and deffenseEffects[i].en ~= nil and deffenseEffects[i].en.health>0 ) then 
-            love.graphics.setColor(0.27,0.80,0.63,1)
-            love.graphics.circle('fill',deffenseEffects[i].x,deffenseEffects[i].y,3*k)
+
             local angle = math.atan2( deffenseEffects[i].en.x -  deffenseEffects[i].x, deffenseEffects[i].en.y -  deffenseEffects[i].y)
             
             
-            love.graphics.circle('fill',deffenseEffects[i].x-deffenseEffects[i].speed*math.sin(angle)*0.04*math.random() *2,deffenseEffects[i].y-deffenseEffects[i].speed*math.cos(angle)*0.04*math.random()*2,1*k)
-            love.graphics.circle('fill',deffenseEffects[i].x-deffenseEffects[i].speed*math.sin(angle)*0.02*math.random()*2 ,deffenseEffects[i].y-deffenseEffects[i].speed*math.cos(angle)*0.02*math.random()*2,2*k)
-             
+        
              
             deffenseEffects[i].x = deffenseEffects[i].x +deffenseEffects[i].speed*math.sin(angle)*dt 
             deffenseEffects[i].y = deffenseEffects[i].y +deffenseEffects[i].speed*math.cos(angle)*dt 
@@ -373,6 +351,16 @@ function deffenseEffect(dt)
         end
     end
 end
+----------------------------------------!!!!!!!!!!!!!!!!!!!!!!
+function SpikeArmorEffect:draw() 
+    local angle = math.atan2( deffenseEffects[i].en.x -  deffenseEffects[i].x, deffenseEffects[i].en.y -  deffenseEffects[i].y)
+    love.graphics.setColor(0.27,0.80,0.63,1)
+    love.graphics.circle('fill',deffenseEffects[i].x,deffenseEffects[i].y,3*k)
+    love.graphics.circle('fill',deffenseEffects[i].x-deffenseEffects[i].speed*math.sin(angle)*0.04*math.random() *2,deffenseEffects[i].y-deffenseEffects[i].speed*math.cos(angle)*0.04*math.random()*2,1*k)
+    love.graphics.circle('fill',deffenseEffects[i].x-deffenseEffects[i].speed*math.sin(angle)*0.02*math.random()*2 ,deffenseEffects[i].y-deffenseEffects[i].speed*math.cos(angle)*0.02*math.random()*2,2*k)
+             
+end
+
 
 VampirEffect = {
     particls = {}
@@ -513,71 +501,74 @@ function HealEffect:draw()
     end
 end
 
-function newTradeEffect()
-    for i = 1 , 1 do 
-        local tradeEff =
-            {
-                x =math.random()*k*math.random(-1,1)/1.3, 
-                y =math.random()*k*math.random(-1,1)/1.3,  
-                speed = math.random(),
-                color1 =0.82,
-                color2 =1,
-                color3 = 0.59,
-                timer = 10,
-                trace = {},
-            }
-        table.insert(tradeEffects,tradeEff)  
-    end
+TradeEffect = {
+    particls = {},
+    timer = 10,
+}
+
+function TradeEffect:new()
+    local tradeParticl = {
+        x =math.random()*k*math.random(-1,1)/1.3, 
+        y =math.random()*k*math.random(-1,1)/1.3,  
+        speed = math.random(),
+        colorR =0.82,
+        colorG =1,
+        colorB = 0.59,
+        timer = self.timer,
+        trace = {},
+    }
+    table.insert(self.particls,tradeParticl)  
 end
 
-function tradeEffectDraw(dt)
-    for i = #tradeEffects,1,-1 do
-        if ( tradeEffects[i].timer > 0 ) then
+function TradeEffect:draw(dt)
+    for i = #self.particls,1,-1 do
+        if ( self.particls[i].timer > 0 ) then
             local trace = {
-                x = tradeEffects[i].x,
-                y= tradeEffects[i].y,
+                x = self.particls[i].x,
+                y = self.particls[i].y,
             }
-            table.insert(tradeEffects[i].trace,trace)
-            for j =#tradeEffects[i].trace,1,-1 do
-                local sled = tradeEffects[i].trace
-                love.graphics.setColor(tradeEffects[i].color1*tradeEffects[i].speed,tradeEffects[i].color2*tradeEffects[i].speed,tradeEffects[i].color3*tradeEffects[i].speed,0.25*j*tradeEffects[i].timer/10)
+            table.insert(self.particls[i].trace,trace)
+            for j =#self.particls[i].trace,1,-1 do
+                local sled = self.particls[i].trace
+                love.graphics.setColor(self.particls[i].colorR*self.particls[i].speed,self.particls[i].colorG*self.particls[i].speed,self.particls[i].colorB*self.particls[i].speed,0.25*j*self.particls[i].timer/10)
                 love.graphics.circle('fill',Player.x+62*math.sin(-math.pi/2-math.pi/4.3)*k+ sled[j].x,Player.y+62*math.cos(-math.pi/2-math.pi/4.3)*k +  sled[j].y,1.2*k)    
             end
-            if ( #tradeEffects[i].trace > 4) then 
-                table.remove(tradeEffects[i].trace,1) 
+            if ( #self.particls[i].trace > 4) then 
+                table.remove(self.particls[i].trace,1) 
             end
-            love.graphics.setColor(tradeEffects[i].color1*tradeEffects[i].speed,tradeEffects[i].color2*tradeEffects[i].speed,tradeEffects[i].color3*tradeEffects[i].speed,tradeEffects[i].timer/10)
+            love.graphics.setColor(self.particls[i].colorR*self.particls[i].speed,self.particls[i].colorG*self.particls[i].speed,self.particls[i].colorB*self.particls[i].speed,self.particls[i].timer/10)
             
-            local angle = math.atan2( -tradeEffects[i].x,-tradeEffects[i].y)+1.5
-            tradeEffects[i].x = tradeEffects[i].x +80*math.sin(angle)*dt*k * (1+tradeEffects[i].speed)/3
-            tradeEffects[i].y =tradeEffects[i].y +80*math.cos(angle)*dt*k * (1+tradeEffects[i].speed)/3
+            local angle = math.atan2( -self.particls[i].x,-self.particls[i].y)+1.5
+            self.particls[i].x = self.particls[i].x +80*math.sin(angle)*dt*k * (1+self.particls[i].speed)/3
+            self.particls[i].y =self.particls[i].y +80*math.cos(angle)*dt*k * (1+self.particls[i].speed)/3
             
-            love.graphics.circle('fill',Player.x+62*math.sin(-math.pi/2-math.pi/4.3)*k+tradeEffects[i].x,Player.y +62*math.cos(-math.pi/2-math.pi/4.3)*k+  tradeEffects[i].y,1.2*k)
+            love.graphics.circle('fill',Player.x+62*math.sin(-math.pi/2-math.pi/4.3)*k+self.particls[i].x,Player.y +62*math.cos(-math.pi/2-math.pi/4.3)*k+  self.particls[i].y,1.2*k)
             
-            tradeEffects[i].timer =  tradeEffects[i].timer -4*dt  
+            self.particls[i].timer =  self.particls[i].timer -4*dt  
         else
-            table.remove(tradeEffects,i)
+            table.remove(self.particls,i)
         end
     end
 end
 
 GetDamageEffect = {
     particls = {},
+    timer = 10,
 }
 
-function GetDamageEffect:new(x,y,kol)
-    local angleEnPl = math.atan2(Player.x-x,Player.y-y)-math.pi
-    for kek =0, kol do
+function GetDamageEffect:new(x,y,amount)
+    local angleToPlayer = math.atan2(Player.x-x,Player.y-y)-math.pi
+    for n =0, amount do
         local getDamageParticl = {
             colorR =Player.Color.colorR,
             colorG= Player.Color.colorG,
             colorB =Player.Color.colorB,
-            x = Player.x+(Player.scaleBody-5)*k*math.sin(angleEnPl), 
-            y = Player.y+(Player.scaleBody-5)*k*math.cos(angleEnPl), 
-            ax  =60*k*math.sin(angleEnPl+math.random()*1.6), 
-            ay = 60*k*math.cos(angleEnPl+math.random()*1.6), 
+            x = Player.x+(Player.scaleBody-5)*k*math.sin(angleToPlayer), 
+            y = Player.y+(Player.scaleBody-5)*k*math.cos(angleToPlayer), 
+            ax  =60*k*math.sin(angleToPlayer+math.random()*1.6), 
+            ay = 60*k*math.cos(angleToPlayer+math.random()*1.6), 
             scale =math.random()*1.5,
-            timer = 10,
+            timer = self.timer,
         }
         table.insert(self.particls,getDamageParticl)
     end
@@ -612,40 +603,6 @@ function GetDamageEffect:draw(dt)
         love.graphics.rectangle("fill",self.particls[i].x,self.particls[i].y,self.particls[i].scale*3*k,self.particls[i].scale*3*k2,4*k)
     end  
 end
-
-function newStar()
-    local star = {
-        x = -borderWidth-200*k,
-        y = math.random(-borderHeight,borderHeight*2),
-        speed = math.random(1,3)/2+0.2,
-        speedA = math.random(1,3),
-        color = math.random()+0.4,
-        angleFall =0.4+math.random(-1,1)*0.8,
-        
-    }
-    star.x,star.y,speed = objGeo(math.random(1,4))
-    table.insert(stars,star)
-end
-
-function drawStar(dt)
-    love.graphics.setColor(0.8,0.9,0.9,0.5)
-    for i =#stars, 1,-1 do
-        stars[i].x = stars[i].x+stars[i].speed*dt*200*k*math.cos(stars[i].angleFall)*stars[i].speedA
-        stars[i].y = stars[i].y+stars[i].speed*dt*200*k*math.sin(stars[i].angleFall)*stars[i].speedA
-        stars[i].speedA = stars[i].speedA -0.5*dt
-        if ( stars[i].speedA < 1 ) then 
-            stars[i].speedA = 1
-        end
-        love.graphics.circle('fill',stars[i].x,stars[i].y,1.5*k)
-        for j =1, 10 do 
-            love.graphics.setColor(0.8/(1+j/6)*stars[i].color,0.9,0.9,(1*stars[i].speedA)/(1+j/6)*1)
-            love.graphics.circle('fill',stars[i].x-j*1*k*math.cos(stars[i].angleFall),stars[i].y-j*1*k*math.sin(stars[i].angleFall),1.8*k/(1+j/4))
-        end
-        allBorder(i,stars)
-    end
-end
-
-
 
 function gradient(dt)
     if (gradientI == 1 ) then

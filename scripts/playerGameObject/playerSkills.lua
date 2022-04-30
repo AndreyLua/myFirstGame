@@ -74,8 +74,35 @@ function playerLiDraw(dt)
 end
 
 function Player.Skills.SpecialAtack.Wave:atack(target)
-    newWaveEffect(Player.x,Player.y) -- damage
+    WaveEffect:new(Player.x,Player.y) -- damage
 end
+
+function Player.Skills.SpecialAtack.Wave:damage(target)
+    target.health = target.health - Player.damage*Player.Skills.Damage.value*Player.Skills.SpecialAtack.Wave.value
+    target.timer = target.invTimer-0.0001
+end
+
+function Player.Skills.SpecialAtack.Wave:collision(index,j,dt)
+    if ( WaveEffect.regulNetwork[index]) then 
+        local regulNetworkElement = WaveEffect.regulNetwork[index]
+        local enemyScale = 0
+        if (regulNetworkElement) then
+            if ( en[j]) then
+                enemyScale = math.max(en[j].w,en[j].h)/2
+            end
+            for i = #regulNetworkElement, 1, -1 do
+                if (regulNetworkElement[i] and WaveEffect.particls[regulNetworkElement[i]] and en[j]) then
+                    if (math.abs(WaveEffect.particls[regulNetworkElement[i]].x - en[j].x)<WaveEffect.particls[regulNetworkElement[i]].r*k+enemyScale*k and math.abs(WaveEffect.particls[regulNetworkElement[i]].y - en[j].y)<WaveEffect.particls[regulNetworkElement[i]].r*k2+enemyScale*k2 and  (math.pow((WaveEffect.particls[regulNetworkElement[i]].x - en[j].x),2) + math.pow((WaveEffect.particls[regulNetworkElement[i]].y - en[j].y),2))<=math.pow((WaveEffect.particls[regulNetworkElement[i]].r*k+enemyScale*k),2)) then
+                        if (en[j].timer == en[j].invTimer ) then 
+                            self:damage(en[j])
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 
 function Player.Skills.SpecialAtack.Bloody:atack(target)
     BloodyEffect:new(target)  -- damage

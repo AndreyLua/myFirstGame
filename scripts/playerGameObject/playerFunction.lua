@@ -163,7 +163,7 @@ Player = {
                 },
                 value = 0.2,
                 rare ="rare",
-                isUsed = false,  
+                isUsed = true,  
             },
             Bloody = Class{__includes =Skill,
                 Interface = {
@@ -468,7 +468,7 @@ function Player:atack(target,dt)
     end
     atackDamage = math.floor(math.random(atackDamage-atackDamage*0.1,atackDamage+atackDamage*0.1))
     
-    damageVisualizator:new(atackDamage,target.x,target.y,isCrit)
+    DamageVisualizator:new(atackDamage,target.x,target.y,isCrit)
     AddSound(playerHitSounds,0.3)
     self.Clows:scale()
     self.Energy.value = self.Energy.value -self.Energy.wasteAtack

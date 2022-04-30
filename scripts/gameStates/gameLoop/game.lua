@@ -39,12 +39,10 @@ Wave:refreshNotionParameters()
 Player:refreshParameters()
 exp =  {}
   
-waveEffects = {} 
 tradeEffects = {} 
 deffenseEffects = {} 
 
 
-stars = {} 
 
 boostDop = {
     long = 0,
@@ -111,15 +109,16 @@ end
 --Player.flagInv =true
 
 explosionEffect:update(dt)
-damageVisualizator:update(dt)
+DamageVisualizator:update(dt)
 VampirEffect:update(dt)
+WaveEffect:update(dt)
 GetDamageEffect:update(dt)
 HealEffect:update(dt)
 BloodyEffect:update(dt)
 
 objRegulS = {}
 enRegulS = {}
-waveRegulS = {}
+
 --Player.Energy.value = 1000
 Player.Hp.value = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
@@ -263,7 +262,6 @@ function  game:draw()
     love.graphics.clear()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon1,0,0,0,k,k2)
-    drawStar(dt)
        love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon2,(-Player.x+40*k/2+screenWidth/2)/20,(-Player.y+40*k2/2+screenHeight/2)/40,0,k,k2)
     love.graphics.draw(fon3,(-Player.x+40*k/2+screenWidth/2)/7,(-Player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
@@ -275,7 +273,7 @@ function  game:draw()
         love.graphics.translate(-Player.Camera.x+40*k/2+screenWidth/2,-Player.Camera.y+40*k2/2+screenHeight/2)
         
         VampirEffect:draw(dt)
-        waveEffect(dt)
+        WaveEffect:draw()
         BloodyEffect:draw(dt)
         allDraw(dt)
         love.graphics.setColor(1,1,1,1)
@@ -322,9 +320,9 @@ function  game:draw()
         ----------
         deffenseEffect(dt)
         HealEffect:draw()
-        tradeEffectDraw(dt)
+        TradeEffect:draw(dt)
         GetDamageEffect:draw(dt)
-        damageVisualizator:draw()
+        DamageVisualizator:draw()
         -----------
     love.graphics.pop()
 
@@ -541,15 +539,15 @@ function allDraw(dt)
             local IenRegulS =en[i]:IndexInRegulS(80)
             en[i]:collWithEn(IenRegulS,i,dt)
             ---------------------------
-            enCollWithWavesInRegularS(IenRegulS,i,dt)
-            enCollWithWavesInRegularS(IenRegulS-1,i,dt)
-            enCollWithWavesInRegularS(IenRegulS+1,i,dt)
-            enCollWithWavesInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1),i,dt)
-            enCollWithWavesInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1),i,dt)
-            enCollWithWavesInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
-            enCollWithWavesInRegularS(IenRegulS+math.floor((screenWidth/(80*k))+1)-1,i,dt)
-            enCollWithWavesInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)
-            enCollWithWavesInRegularS(IenRegulS-math.floor((screenWidth/(80*k))+1)-1,i,dt)
+            Player.Skills.SpecialAtack.Wave:collision(IenRegulS,i,dt)
+            Player.Skills.SpecialAtack.Wave:collision(IenRegulS-1,i,dt)
+            Player.Skills.SpecialAtack.Wave:collision(IenRegulS+1,i,dt)
+            Player.Skills.SpecialAtack.Wave:collision(IenRegulS-math.floor((screenWidth/(80*k))+1),i,dt)
+            Player.Skills.SpecialAtack.Wave:collision(IenRegulS+math.floor((screenWidth/(80*k))+1),i,dt)
+            Player.Skills.SpecialAtack.Wave:collision(IenRegulS+math.floor((screenWidth/(80*k))+1)+1,i,dt)
+            Player.Skills.SpecialAtack.Wave:collision(IenRegulS+math.floor((screenWidth/(80*k))+1)-1,i,dt)
+            Player.Skills.SpecialAtack.Wave:collision(IenRegulS-math.floor((screenWidth/(80*k))+1)+1,i,dt)
+            Player.Skills.SpecialAtack.Wave:collision(IenRegulS-math.floor((screenWidth/(80*k))+1)-1,i,dt)
             ----------------------------
             local IenRegulS2 =en[i]:IndexInRegulS(120)   
             en[i]:collWithObj(IenRegulS2,i,dt)

@@ -235,29 +235,6 @@ function enPreFire(x,y,x2,y2,angleEn,damage,scale,self)
     table.insert(enemyBullets,bullet)
 end
 
-function enCollWithWavesInRegularS(index,j,dt)
-    if ( waveRegulS[index]) then 
-        local kek = waveRegulS[index]
-        local enJScale = 0
-        if (kek) then
-            if ( en[j]) then
-                enJScale = math.max(en[j].w,en[j].h)/2
-            end
-            for i = #kek, 1, -1 do
-                if (kek[i] and waveEffects[kek[i]] and en[j]) then
-                    if (math.abs(waveEffects[kek[i]].x - en[j].x)<waveEffects[kek[i]].r*k+enJScale*k and math.abs(waveEffects[kek[i]].y - en[j].y)<waveEffects[kek[i]].r*k2+enJScale*k2 and  (math.pow((waveEffects[kek[i]].x - en[j].x),2) + math.pow((waveEffects[kek[i]].y - en[j].y),2))<=math.pow((waveEffects[kek[i]].r*k+enJScale*k),2)) then
-                        if (en[j].timer == en[j].invTimer ) then 
-                            en[j].health = en[j].health - Player.damage*Player.Skills.Damage.value*Player.Skills.SpecialAtack.Wave.value
-                            en[j].timer = en[j].invTimer-0.0001
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-
 function enBoomAfterDieDraw(dt)
     for i = #enBoomAnimat, 1, -1 do
       enBoomAnimat[i].timer =  enBoomAnimat[i].timer -80*dt
