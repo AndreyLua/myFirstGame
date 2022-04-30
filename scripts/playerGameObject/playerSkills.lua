@@ -78,9 +78,15 @@ function Player.Skills.SpecialAtack.Wave:atack(target)
 end
 
 function Player.Skills.SpecialAtack.Bloody:atack(target)
-    newBloodEffect(target)  -- damage
+    BloodyEffect:new(target)  -- damage
 end
 
+function Player.Skills.SpecialAtack.Bloody:debaff(target)
+    target.ax = target.ax*(1-Player.Skills.SpecialAtack.Bloody.value)
+    target.ay = target.ay*(1-Player.Skills.SpecialAtack.Bloody.value)
+    target.health = target.health -Player.Skills.SpecialAtack.Bloody.value
+    target.timer = target.invTimer / 2
+end
 function Player.Skills.SpecialAtack.Vampir:atack(target)
     VampirEffect:new(target)
 end

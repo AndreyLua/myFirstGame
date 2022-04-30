@@ -40,12 +40,9 @@ Player:refreshParameters()
 exp =  {}
   
 waveEffects = {} 
-bloodEffects = {} 
 tradeEffects = {} 
 deffenseEffects = {} 
-bloodPart = {}
-greenPlayerEffect = {} 
-playerGerDamageEffect = {} 
+
 
 stars = {} 
 
@@ -116,13 +113,15 @@ end
 explosionEffect:update(dt)
 damageVisualizator:update(dt)
 VampirEffect:update(dt)
-
+GetDamageEffect:update(dt)
+HealEffect:update(dt)
+BloodyEffect:update(dt)
 
 objRegulS = {}
 enRegulS = {}
 waveRegulS = {}
 --Player.Energy.value = 1000
---Player.Hp.value = 1000 
+Player.Hp.value = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -277,7 +276,7 @@ function  game:draw()
         
         VampirEffect:draw(dt)
         waveEffect(dt)
-        bloodEffect(dt)
+        BloodyEffect:draw(dt)
         allDraw(dt)
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(enBatchAfterDie)
@@ -322,9 +321,9 @@ function  game:draw()
         resourceAfterDie(dt)
         ----------
         deffenseEffect(dt)
-        greenPlayerEffectDraw(dt)
+        HealEffect:draw()
         tradeEffectDraw(dt)
-        playerGetDamageEffect(dt)
+        GetDamageEffect:draw(dt)
         damageVisualizator:draw()
         -----------
     love.graphics.pop()

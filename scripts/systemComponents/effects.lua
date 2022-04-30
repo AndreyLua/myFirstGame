@@ -251,71 +251,89 @@ function waveEffect(dt)
     end
 end
 
-function newBloodEffect(self)
-    if ( self~= nil) then 
-        local bloodEff  ={
-            en = self,
-            timer = 10,
-            timerTick = 10,
+BloodyEffect = {
+    particls = {},
+    timer = 10,
+    timerTick = 10,
+}
+
+function BloodyEffect:new(target)
+    if ( target~= nil) then 
+        local bloodParticl = {
+            enemy = target,
+            timer = self.timer,
+            timerTick = self.timerTick,
+            parts = {},
         }
-    table.insert(bloodEffects,bloodEff)
+        table.insert(self.particls,bloodParticl)
     end
 end
 
-function bloodEffect(dt)
-    for i = #bloodEffects,1, -1 do
-        if ( bloodEffects[i].timer > 0 and  bloodEffects[i].en ~=nil ) then 
-            if ( bloodEffects[i].timerTick == 10 and bloodEffects[i].en.health >0) then 
-                bloodPartSpawn(bloodEffects[i].en,7)
-                bloodEffects[i].en.health = bloodEffects[i].en.health - Player.damage*Player.Skills.Damage.value*dt*Player.Skills.SpecialAtack.Bloody.value/2 -- damage
-                bloodEffects[i].en.ax = bloodEffects[i].en.ax*(1-Player.Skills.SpecialAtack.Bloody.value)
-                bloodEffects[i].en.ay = bloodEffects[i].en.ay*(1-Player.Skills.SpecialAtack.Bloody.value)
+function BloodyEffect:update(dt)
+    for i = #self.particls,1, -1 do
+        if ( self.particls[i].timer > 0 and self.particls[i].enemy.health and self.particls[i].enemy.health>0 ) then 
+            if ( self.particls[i].timerTick == 10 and self.particls[i].enemy.health >0) then 
+                self.particls[i].timerTick = self.particls[i].timerTick - 0.001
+                Player.Skills.SpecialAtack.Bloody:debaff(self.particls[i].enemy)
             end
-            bloodEffects[i].timerTick = bloodEffects[i].timerTick - 200*dt
-            bloodEffects[i].timer =bloodEffects[i].timer - 5 * dt
-            if ( bloodEffects[i].timerTick < 0 ) then 
-                bloodEffects[i].timerTick = 10
-            end
+            self:newPart(self.particls[i],1)
+            self:timerUpdate(self.particls[i],dt)
         else
-            table.remove(bloodEffects,i)
+            table.remove(self.particls,i)
         end
     end
+end
+
+function BloodyEffect:timerUpdate(particl,dt)
+    if ( particl.timerTick < 10) then 
+        particl.timerTick = particl.timerTick - 5*dt
+    end
+    particl.timer =particl.timer - 2 * dt
+    if ( particl.timerTick < 0 ) then 
+        particl.timerTick = 10
+    end
+end
+
+function BloodyEffect:draw(dt)
     love.graphics.setColor(0.8,0,0,1) 
-    for i = #bloodPart,1, -1 do
-        if ( bloodPart[i] and  bloodPart[i].x~=nil) then 
-            bloodPart[i].x= bloodPart[i].x+bloodPart[i].ax*dt*k
-            bloodPart[i].y= bloodPart[i].y+bloodPart[i].ay*dt*k2
-            if ( bloodPart[i].ax > 0 ) then
-                bloodPart[i].ax  = bloodPart[i].ax -70*dt*k
-            else
-                bloodPart[i].ax  = bloodPart[i].ax + 70*dt*k
-            end
-            if ( bloodPart[i].ay > 0 ) then
-                bloodPart[i].ay  = bloodPart[i].ay -70*dt*k2
-            else
-                bloodPart[i].ay  = bloodPart[i].ay + 70*dt*k2
-            end
-            love.graphics.rectangle("fill",bloodPart[i].x,bloodPart[i].y,bloodPart[i].scale*5*k,bloodPart[i].scale*5*k2,4)
-            if ( (bloodPart[i].ay<3*k2 and  bloodPart[i].ay>-3*k2) or (bloodPart[i].ax<3*k and  bloodPart[i].ax>-3*k)) then
-                table.remove(bloodPart,i)
+    for i = #self.particls,1, -1 do
+        if (self.particls[i] and self.particls[i].enemy.health and self.particls[i].enemy.health>0) then 
+            for j= #self.particls[i].parts,1,-1 do
+                self.particls[i].parts[j].x= self.particls[i].parts[j].x+self.particls[i].parts[j].ax*dt*k
+                self.particls[i].parts[j].y= self.particls[i].parts[j].y+self.particls[i].parts[j].ay*dt*k2
+                if ( self.particls[i].parts[j].ax > 0 ) then
+                    self.particls[i].parts[j].ax  =self.particls[i].parts[j].ax -70*dt*k
+                else
+                    self.particls[i].parts[j].ax  = self.particls[i].parts[j].ax + 70*dt*k
+                end
+                if ( self.particls[i].parts[j].ay > 0 ) then
+                    self.particls[i].parts[j].ay  = self.particls[i].parts[j].ay -70*dt*k2
+                else
+                    self.particls[i].parts[j].ay  = self.particls[i].parts[j].ay + 70*dt*k2
+                end
+             
+                love.graphics.rectangle("fill",self.particls[i].parts[j].x,self.particls[i].parts[j].y,self.particls[i].parts[j].scale*5*k,self.particls[i].parts[j].scale*5*k2,4)
+                
+                if ( (math.abs(self.particls[i].parts[j].ay)<3*k2) or (math.abs(self.particls[i].parts[j].ax)<3*k)) then
+                    table.remove(self.particls[i].parts,j)
+                end
             end
         else
-            table.remove(bloodPart,i)
+            table.remove(self.particls,i)
         end
     end
 end
 
-
-function bloodPartSpawn(self,kol)
-    for kek =1, kol do
-        local e = {
-        x  = self.x, 
-        y =  self.y,  
-        ax  =math.random(-1.72*k*30,1.73*k*30), 
-        ay = math.random(-1.73*k*30,1.73*k*30), 
-        scale =math.random()
+function BloodyEffect:newPart(particl,amount)
+    for n=1, amount do
+        local part = {
+            x  = particl.enemy.x, 
+            y =  particl.enemy.y,  
+            ax  =math.random(-1.72*k*30,1.73*k*30), 
+            ay = math.random(-1.73*k*30,1.73*k*30), 
+            scale =math.random()
         }
-        table.insert(bloodPart,e)
+        table.insert(particl.parts,part)
     end
 end
 
@@ -452,40 +470,45 @@ function VampirEffect:traceDraw(particl,dt)
     end
 end;
 
-function newGreenPlayerEffect()
-   
-      local greenEff = {
-          x =math.random(-20*k,20*k2)*1.5, 
-          y =math.random(-20*k,20*k2)*1.5,  
-          scale = math.random()*7, 
-          timer = 10,
-      }
-      table.insert(greenPlayerEffect,greenEff)
-    
+HealEffect = {
+    particls = {},
+}
+
+function HealEffect:new()
+    local healParticl = {
+        x =math.random(-20*k,20*k2)*1.5, 
+        y =math.random(-20*k,20*k2)*1.5,  
+        scale = math.random()*7, 
+        timer = 10,
+    }
+    table.insert(self.particls,healParticl)
 end
 
-function greenPlayerEffectDraw(dt)
+function HealEffect:update(dt)
+    for i = #self.particls,1,-1 do
+        if ( self.particls[i].timer > 0 ) then
+            self.particls[i].timer =  self.particls[i].timer -30*dt
+            self.particls[i].scale = self.particls[i].scale  +10*dt
+        else
+            self.particls[i].scale = self.particls[i].scale  -30*dt
+            if ( self.particls[i].scale < 0 ) then 
+                table.remove(self.particls,i)
+            end
+        end
+    end
+end
+
+function HealEffect:draw()
     love.graphics.setColor(0,1,0.67,1)
     love.graphics.setLineWidth(1.1*k)
               
-    for i = #greenPlayerEffect,1,-1 do
-        if ( greenPlayerEffect[i].timer > 0 ) then
-            greenPlayerEffect[i].timer =  greenPlayerEffect[i].timer -30*dt
-           
-            greenPlayerEffect[i].scale = greenPlayerEffect[i].scale  +10*dt
-             
-            love.graphics.line(Player.x+ greenPlayerEffect[i].x,Player.y +  greenPlayerEffect[i].y-0.5*k*greenPlayerEffect[i].scale,Player.x+ greenPlayerEffect[i].x,Player.y +  greenPlayerEffect[i].y+0.5*k*greenPlayerEffect[i].scale)
-          
-            love.graphics.line(Player.x+ greenPlayerEffect[i].x-0.5*k*greenPlayerEffect[i].scale,Player.y +  greenPlayerEffect[i].y,Player.x+ greenPlayerEffect[i].x+0.5*k*greenPlayerEffect[i].scale,Player.y +  greenPlayerEffect[i].y)
+    for i = #self.particls,1,-1 do
+        if ( self.particls[i].timer > 0 ) then
+            love.graphics.line(Player.x+ self.particls[i].x,Player.y +  self.particls[i].y-0.5*k*self.particls[i].scale,Player.x+ self.particls[i].x,Player.y +  self.particls[i].y+0.5*k*self.particls[i].scale)
+            love.graphics.line(Player.x+ self.particls[i].x-0.5*k*self.particls[i].scale,Player.y +  self.particls[i].y,Player.x+ self.particls[i].x+0.5*k*self.particls[i].scale,Player.y +  self.particls[i].y)
         else
-            greenPlayerEffect[i].scale = greenPlayerEffect[i].scale  -30*dt
-            if ( greenPlayerEffect[i].scale < 0 ) then 
-                table.remove(greenPlayerEffect,i)
-            end
-            if (  greenPlayerEffect[i]) then 
-                love.graphics.line(Player.x+ greenPlayerEffect[i].x,Player.y +  greenPlayerEffect[i].y-0.5*k*greenPlayerEffect[i].scale,Player.x+ greenPlayerEffect[i].x,Player.y +  greenPlayerEffect[i].y+0.5*k*greenPlayerEffect[i].scale)
-                love.graphics.line(Player.x+ greenPlayerEffect[i].x-0.5*k*greenPlayerEffect[i].scale,Player.y +  greenPlayerEffect[i].y,Player.x+ greenPlayerEffect[i].x+0.5*k*greenPlayerEffect[i].scale,Player.y +  greenPlayerEffect[i].y)
-            end
+            love.graphics.line(Player.x+ self.particls[i].x,Player.y +  self.particls[i].y-0.5*k*self.particls[i].scale,Player.x+ self.particls[i].x,Player.y +  self.particls[i].y+0.5*k*self.particls[i].scale)
+            love.graphics.line(Player.x+ self.particls[i].x-0.5*k*self.particls[i].scale,Player.y +  self.particls[i].y,Player.x+ self.particls[i].x+0.5*k*self.particls[i].scale,Player.y +  self.particls[i].y)
         end
     end
 end
@@ -538,47 +561,55 @@ function tradeEffectDraw(dt)
     end
 end
 
-function newPlayerGetDamageEffect(x,y,kol)
-    local angleEnPl = math.atan2(Player.x-x,Player.y-y)+math.pi 
+GetDamageEffect = {
+    particls = {},
+}
+
+function GetDamageEffect:new(x,y,kol)
+    local angleEnPl = math.atan2(Player.x-x,Player.y-y)-math.pi
     for kek =0, kol do
-        local e = {
-        color1 =Player.Color.colorR,
-        color2= Player.Color.colorG,
-        color3 =Player.Color.colorB,
-        x = Player.x+(Player.scaleBody-5)*k*math.sin(angleEnPl), 
-        y = Player.y+(Player.scaleBody-5)*k*math.cos(angleEnPl), 
-        ax  =60*k*math.sin(angleEnPl+math.random()*1.6), 
-        ay = 60*k*math.cos(angleEnPl+math.random()*1.6), 
-        scale =math.random()*1.5,
-        timer = 10,
+        local getDamageParticl = {
+            colorR =Player.Color.colorR,
+            colorG= Player.Color.colorG,
+            colorB =Player.Color.colorB,
+            x = Player.x+(Player.scaleBody-5)*k*math.sin(angleEnPl), 
+            y = Player.y+(Player.scaleBody-5)*k*math.cos(angleEnPl), 
+            ax  =60*k*math.sin(angleEnPl+math.random()*1.6), 
+            ay = 60*k*math.cos(angleEnPl+math.random()*1.6), 
+            scale =math.random()*1.5,
+            timer = 10,
         }
-        table.insert(playerGerDamageEffect,e)
+        table.insert(self.particls,getDamageParticl)
     end
 end
 
-function playerGetDamageEffect(dt)
-    for i =#playerGerDamageEffect, 1,-1 do
-        if( playerGerDamageEffect[i]) then
-            if ( playerGerDamageEffect[i].timer>0) then 
-                playerGerDamageEffect[i].timer = playerGerDamageEffect[i].timer - 20*dt
-                playerGerDamageEffect[i].x= playerGerDamageEffect[i].x+playerGerDamageEffect[i].ax*dt*k
-                playerGerDamageEffect[i].y= playerGerDamageEffect[i].y+playerGerDamageEffect[i].ay*dt*k2
-                if ( playerGerDamageEffect[i].ax > 0 ) then
-                    playerGerDamageEffect[i].ax  = playerGerDamageEffect[i].ax -70*dt*k
-                else
-                    playerGerDamageEffect[i].ax  = playerGerDamageEffect[i].ax + 70*dt*k
-                end
-                if ( playerGerDamageEffect[i].ay > 0 ) then
-                    playerGerDamageEffect[i].ay  = playerGerDamageEffect[i].ay -70*dt*k2
-                else
-                    playerGerDamageEffect[i].ay  = playerGerDamageEffect[i].ay + 70*dt*k2
-                end
-                love.graphics.setColor(playerGerDamageEffect[i].color1,playerGerDamageEffect[i].color2,playerGerDamageEffect[i].color3,playerGerDamageEffect[i].timer/6)
-                love.graphics.rectangle("fill",playerGerDamageEffect[i].x,playerGerDamageEffect[i].y,playerGerDamageEffect[i].scale*3*k,playerGerDamageEffect[i].scale*3*k2,4*k)
+function GetDamageEffect:update(dt)
+    for i=#self.particls,1,-1 do 
+        if ( self.particls[i].timer>0) then 
+            self.particls[i].timer = self.particls[i].timer - 20*dt
+            self.particls[i].x= self.particls[i].x+self.particls[i].ax*dt*k
+            self.particls[i].y= self.particls[i].y+self.particls[i].ay*dt*k2
+            
+            if ( self.particls[i].ax > 0 ) then
+                self.particls[i].ax  = self.particls[i].ax -70*dt*k
             else
-                table.remove(playerGerDamageEffect,i)
+                self.particls[i].ax  = self.particls[i].ax + 70*dt*k
             end
+            if ( self.particls[i].ay > 0 ) then
+                self.particls[i].ay  = self.particls[i].ay -70*dt*k2
+            else
+                self.particls[i].ay  = self.particls[i].ay + 70*dt*k2
+            end
+        else
+            table.remove(self.particls,i)
         end
+    end
+end
+
+function GetDamageEffect:draw(dt)
+    for i =#self.particls, 1,-1 do
+        love.graphics.setColor(self.particls[i].colorR,self.particls[i].colorG,self.particls[i].colorB,self.particls[i].timer/6)
+        love.graphics.rectangle("fill",self.particls[i].x,self.particls[i].y,self.particls[i].scale*3*k,self.particls[i].scale*3*k2,4*k)
     end  
 end
 

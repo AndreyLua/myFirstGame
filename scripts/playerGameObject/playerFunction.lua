@@ -27,7 +27,7 @@ Player = {
     ay = 0,
     mass = 200,
     radiusCollect = 100,
-    damage = 70,
+    damage =1,-- 70,
     criticalDamage = 2,
     criticalChance = 0.1,
     flagInv = true,
@@ -425,7 +425,7 @@ function Player:takeDamage(dmg,tip,atacker)
         boostDop.shakeK = 20
     else
         if ( tip=='m') then
-            newPlayerGetDamageEffect(self.x,self.y,7)
+            GetDamageEffect:new(atacker.x,atacker.y,7)
             self.Hp.value = self.Hp.value - dmg*(1-self.Skills.MeleeDefense.value)
             if (self.Skills.SpikeArmor.spikeFlag == true) then 
                 newDeffenseEffect(atacker)
@@ -435,7 +435,7 @@ function Player:takeDamage(dmg,tip,atacker)
             self.Hp.value = self.Hp.value - dmg
         end
          if ( tip=='r') then
-            newPlayerGetDamageEffect(self.x,self.y,7)
+            GetDamageEffect:new(atacker.x,atacker.y,7)
             self.Hp.value = self.Hp.value - dmg*(1-self.Skills.RangeDefense.value)
             if (self.Skills.SpikeArmor.spikeFlag == true) then 
                 newDeffenseEffect(atacker)
@@ -450,7 +450,7 @@ end
 
 function Player:heal(value)
     for i =1,math.random(value*10*3,value*10*5) do 
-        newGreenPlayerEffect()
+        HealEffect:new()
     end
     self.Hp.value=self.Hp.value+self.Hp.maxValue*value
 end
