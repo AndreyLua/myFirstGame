@@ -37,21 +37,10 @@ loadObjImg()
 function game:init()
 Wave:refreshNotionParameters()
 Player:refreshParameters()
-exp =  {}
   
-tradeEffects = {} 
-deffenseEffects = {} 
 
 
 
-boostDop = {
-    long = 0,
-    angle = 0 ,
-    recovery = 10,
-    recoveryTimer = 10,
-    shake = 1,
-    shakeK = 1,
-}
 
 playerLiRan = {} 
 enBoomAnimat = {}
@@ -107,9 +96,10 @@ if (buttonAdd:isTapped()) then
 end
  --en = {en[1]}
 --Player.flagInv =true
-
+EnergyArmorEffect:update(dt)
 explosionEffect:update(dt)
 DamageVisualizator:update(dt)
+SpikeArmorEffect:update(dt)
 VampirEffect:update(dt)
 WaveEffect:update(dt)
 GetDamageEffect:update(dt)
@@ -120,7 +110,7 @@ objRegulS = {}
 enRegulS = {}
 
 --Player.Energy.value = 1000
-Player.Hp.value = 1000 
+--Player.Hp.value = 1000 
 mouse.x,mouse.y=love.mouse.getPosition()
 mouse.x = mouse.x
 mouse.y = mouse.y
@@ -211,7 +201,6 @@ for i = #resource, 1, -1 do
         end
     end
 end
-playerBoostDop(dt) -- skill
 Wave:spawn()
 Player:move(dt)
 Player:collision(dt)
@@ -313,20 +302,19 @@ function  game:draw()
     love.graphics.push()
         love.graphics.translate(-Player.Camera.x+40*k/2+screenWidth/2,-Player.Camera.y+40*k2/2+screenHeight/2)
         Player:drawUI()
+        EnergyArmorEffect:draw() 
         love.graphics.setColor(1,1,1,1)
         playerLiDraw(dt)
         love.graphics.draw(boomBatch)
         resourceAfterDie(dt)
         ----------
-        deffenseEffect(dt)
+        SpikeArmorEffect:draw()
         HealEffect:draw()
         TradeEffect:draw(dt)
         GetDamageEffect:draw(dt)
         DamageVisualizator:draw()
         -----------
     love.graphics.pop()
-
-
     love.graphics.setColor(1,1,1,1)
     explosionEffect:draw()
    

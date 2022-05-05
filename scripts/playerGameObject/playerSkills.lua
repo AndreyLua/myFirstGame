@@ -127,75 +127,13 @@ function Player.Skills.SpecialAtack.Electric:atack(target)
     target.health  =  target.health - Player.damage*Player.Skills.Damage.value*Player.Skills.SpecialAtack.Electric.value 
 end
 
-function playerBoostDop(dt)
-    if ( Player.Skills.EnergyArmor.dopEnFlag == true) then 
-        angleBoostDop(dt,Player.Controller.angle)
-        if ( boostDop.long/720*100 > 100) then
-            boostDop.long = 720
-        end
-        if (boostDop.recovery == boostDop.recoveryTimer) then 
-            boostDop.long = boostDop.long + Player.Energy.regen/1.5 *dt*k
-            boostDop.shakeK = 0
-        end
-        if ( boostDop.long <= 0 ) then
-            boostDop.long =0
-        end
-        if  (boostDop.long>720) then
-            boostDop.long = 720
-        end
-        boostDop.shake = math.random()*math.random(-1,1)*boostDop.shakeK
-        if ( boostDop.shakeK > 1 ) then 
-            boostDop.shakeK  = boostDop.shakeK - 10 *dt
-        end
-        
-        if ( boostDop.recovery < boostDop.recoveryTimer) then 
-            boostDop.recovery =boostDop.recovery - 3*dt
-            if ( boostDop.recovery < 0 )then 
-                boostDop.recovery = boostDop.recoveryTimer
-            end
-        end
-    else
-        boostDop.long = 0 
-    end
+function Player.Skills.SpikeArmor:atack(target)
+    target.timer = target.invTimer/2
+    target.health = target.health -  target.damage*Player.Skills.SpikeArmor.value
 end
 
-
-function angleBoostDop (dt,angle) 
-    if ( boostDop.angle == 0) then
-        boostDop.angle=0.00000001
-    end
-    if ( boostDop.angle < -math.pi) then
-        boostDop.angle=math.pi
-    end
-    if ( boostDop.angle > math.pi) then
-        boostDop.angle=-math.pi
-    end
-    if ( angle == 0) then
-        angle=0.00000001
-    end
-    if ((angle -  boostDop.angle > 2.1*dt) or (angle -  boostDop.angle) <  -2.1*dt ) then
-        if (angle/math.abs(angle)==boostDop.angle/math.abs(boostDop.angle))then
-            if ( angle>boostDop.angle) then
-                boostDop.angle = boostDop.angle+2*dt
-            else 
-                boostDop.angle = boostDop.angle-2*dt
-            end
-        else
-            if (math.abs(angle)+math.abs(boostDop.angle)> 2*math.pi - math.abs(angle)-math.abs(boostDop.angle)) then
-                if (boostDop.angle>0) then 
-                    boostDop.angle = boostDop.angle+2*dt
-                else
-                    boostDop.angle = boostDop.angle-2*dt
-                end
-            else 
-                if (boostDop.angle>0) then 
-                    boostDop.angle = boostDop.angle-2*dt
-                else
-                    boostDop.angle = boostDop.angle+2*dt
-                end
-            end
-        end
-    end
+function Player.Skills.Trade:regen(dt)
+    Player.Hp.value = Player.Hp.value +10*dt
 end
 
 return playerSkills

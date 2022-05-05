@@ -418,17 +418,17 @@ function Player:takeDamage(dmg,tip,atacker)
     self.flagInv = false
     AddSound(playerHurtSounds,0.3)
     
-    boostDop.recovery =boostDop.recoveryTimer - 0.0000001
+    EnergyArmorEffect.recovery =EnergyArmorEffect.recoveryTimer - 0.0000001
     
-    if (boostDop.long>0) then 
-        boostDop.long = boostDop.long - (dmg-(dmg*self.Skills.EnergyArmor.value))*4
-        boostDop.shakeK = 20
+    if (EnergyArmorEffect.long>0) then 
+        EnergyArmorEffect.long = EnergyArmorEffect.long - (dmg-(dmg*self.Skills.EnergyArmor.value))*4
+        EnergyArmorEffect.shakeK = 20
     else
         if ( tip=='m') then
             GetDamageEffect:new(atacker.x,atacker.y,7)
             self.Hp.value = self.Hp.value - dmg*(1-self.Skills.MeleeDefense.value)
-            if (self.Skills.SpikeArmor.spikeFlag == true) then 
-                newDeffenseEffect(atacker)
+            if (self.Skills.SpikeArmor.isOpened == true) then 
+                SpikeArmorEffect:new(atacker)
             end
         end
         if ( tip=='e') then
@@ -437,8 +437,8 @@ function Player:takeDamage(dmg,tip,atacker)
          if ( tip=='r') then
             GetDamageEffect:new(atacker.x,atacker.y,7)
             self.Hp.value = self.Hp.value - dmg*(1-self.Skills.RangeDefense.value)
-            if (self.Skills.SpikeArmor.spikeFlag == true) then 
-                newDeffenseEffect(atacker)
+            if (self.Skills.SpikeArmor.isOpened == true) then 
+                SpikeArmorEffect:new(atacker)
             end
         end
     end
@@ -694,8 +694,8 @@ function Player.Energy:update(dt)
     if  (self.value>self.maxValue) then
         self.value = self.maxValue
         if (Player.Skills.Trade.isOpened == true and Player.Hp.value<Player.Hp.maxValue and Player.flagInv == true) then 
-            newTradeEffect()
-            Player.Hp.value = Player.Hp.value +10*dt
+            TradeEffect:new()
+            Player.Skills.Trade:regen(dt)
         end --skill
     end
     ----------------------------------
@@ -728,29 +728,7 @@ function Player:drawUI()
     love.graphics.setColor(0,0.643,0.502,1)
     love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,(-self.Energy.value/self.Energy.maxValue*720/11)*k)     
    
-    if ( self.Skills.EnergyArmor.isOpened == true) then 
-        love.graphics.setLineWidth(2*k)
-        love.graphics.setColor(0,1,1,boostDop.long/720)
-        local kek1 =  love.math.newBezierCurve(self.x-(self.scaleBody/2)*k,self.y-(self.scaleBody+2)*k, self.x,self.y-(self.scaleBody+10)*k,self.x+(self.scaleBody/2)*k,self.y-(self.scaleBody+2)*k) 
-        kek1:rotate(-boostDop.angle-math.pi/2,self.x,self.y)
-        kek1:scale(boostDop.long/720,self.x,self.y)
-        kek1:translate((1-boostDop.long/720)*40*k*-1*math.cos(boostDop.angle),(1-boostDop.long/720)*40*k*math.sin(boostDop.angle))
-        love.graphics.line(kek1:render())
-        local colorRandom =1 -- math.random()/2*math.random(-1,1)
-        --boostDop.shake = 0
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/7)
-        love.graphics.circle('fill',self.x,self.y,(self.scaleBody+6)*k)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/2)
-        
-        love.graphics.circle('line',self.x,self.y,(self.scaleBody+6)*k+boostDop.shake*k)
-        
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/4)
-        
-        love.graphics.circle('line',self.x,self.y,(self.scaleBody+6)*k-2*k+boostDop.shake*k)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,boostDop.long/720/6)
-        
-        love.graphics.circle('line',self.x,self.y,(self.scaleBody+6)*k-4*k+boostDop.shake*k)
-    end
+    EnergyArmorEffect:draw() 
   
     love.graphics.setColor(1,1,1,1)
 end

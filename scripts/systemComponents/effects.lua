@@ -331,34 +331,29 @@ function SpikeArmorEffect:new(target)
 end
 
 function SpikeArmorEffect:update(dt) 
-    for i = #deffenseEffects,1, -1 do
-        if ( deffenseEffects[i] and deffenseEffects[i].en ~= nil and deffenseEffects[i].en.health>0 ) then 
-
-            local angle = math.atan2( deffenseEffects[i].en.x -  deffenseEffects[i].x, deffenseEffects[i].en.y -  deffenseEffects[i].y)
-            
-            
-        
-             
-            deffenseEffects[i].x = deffenseEffects[i].x +deffenseEffects[i].speed*math.sin(angle)*dt 
-            deffenseEffects[i].y = deffenseEffects[i].y +deffenseEffects[i].speed*math.cos(angle)*dt 
-            if ( math.abs(deffenseEffects[i].en.x -  deffenseEffects[i].x) < 5*k and  math.abs(deffenseEffects[i].en.y -  deffenseEffects[i].y) < 5*k) then
-                deffenseEffects[i].en.timer = deffenseEffects[i].en.invTimer/2
-                deffenseEffects[i].en.health = deffenseEffects[i].en.health -  deffenseEffects[i].en.damage*Player.Skills.SpikeArmor.spike--skill
-                table.remove(deffenseEffects,i)  
+    for i = #self.particls,1, -1 do
+        if ( self.particls[i] and self.particls[i].enemy ~= nil and self.particls[i].enemy.health>0 ) then 
+            local angle = math.atan2( self.particls[i].enemy.x -  self.particls[i].x, self.particls[i].enemy.y -  self.particls[i].y)
+            self.particls[i].x = self.particls[i].x +self.particls[i].speed*math.sin(angle)*dt 
+            self.particls[i].y = self.particls[i].y +self.particls[i].speed*math.cos(angle)*dt 
+            if ( math.abs(self.particls[i].enemy.x -  self.particls[i].x) < 5*k and  math.abs(self.particls[i].enemy.y -  self.particls[i].y) < 5*k) then
+                Player.Skills.SpikeArmor:atack(self.particls[i].enemy)
+                table.remove(self.particls,i)  
             end
         else
-            table.remove(deffenseEffects,i)
+            table.remove(self.particls,i)
         end
     end
 end
 ----------------------------------------!!!!!!!!!!!!!!!!!!!!!!
 function SpikeArmorEffect:draw() 
-    local angle = math.atan2( deffenseEffects[i].en.x -  deffenseEffects[i].x, deffenseEffects[i].en.y -  deffenseEffects[i].y)
-    love.graphics.setColor(0.27,0.80,0.63,1)
-    love.graphics.circle('fill',deffenseEffects[i].x,deffenseEffects[i].y,3*k)
-    love.graphics.circle('fill',deffenseEffects[i].x-deffenseEffects[i].speed*math.sin(angle)*0.04*math.random() *2,deffenseEffects[i].y-deffenseEffects[i].speed*math.cos(angle)*0.04*math.random()*2,1*k)
-    love.graphics.circle('fill',deffenseEffects[i].x-deffenseEffects[i].speed*math.sin(angle)*0.02*math.random()*2 ,deffenseEffects[i].y-deffenseEffects[i].speed*math.cos(angle)*0.02*math.random()*2,2*k)
-             
+    for i = #self.particls,1, -1 do
+        local angle = math.atan2( self.particls[i].enemy.x -  self.particls[i].x, self.particls[i].enemy.y -  self.particls[i].y)
+        love.graphics.setColor(0.27,0.80,0.63,1)
+        love.graphics.circle('fill',self.particls[i].x,self.particls[i].y,3*k)
+        love.graphics.circle('fill',self.particls[i].x-self.particls[i].speed*math.sin(angle)*0.04*math.random() *2,self.particls[i].y-self.particls[i].speed*math.cos(angle)*0.04*math.random()*2,1*k)
+        love.graphics.circle('fill',self.particls[i].x-self.particls[i].speed*math.sin(angle)*0.02*math.random()*2 ,self.particls[i].y-self.particls[i].speed*math.cos(angle)*0.02*math.random()*2,2*k)
+    end
 end
 
 
@@ -603,6 +598,114 @@ function GetDamageEffect:draw(dt)
         love.graphics.rectangle("fill",self.particls[i].x,self.particls[i].y,self.particls[i].scale*3*k,self.particls[i].scale*3*k2,4*k)
     end  
 end
+
+EnergyArmorEffect = {
+    long = 0,
+    angle = 0 ,
+    regen = 100,
+    recovery = 10,
+    recoveryTimer = 10,
+    shake = 1,
+    shakeK = 1,
+}
+
+function EnergyArmorEffect:update(dt)
+    if ( Player.Skills.EnergyArmor.isOpened == true) then 
+        self:angleUpdate(dt,Player.Controller.angle)
+        if ( self.long/720*100 > 100) then
+            self.long = 720
+        end
+        if (self.recovery == self.recoveryTimer) then 
+            self.long = self.long + self.regen*dt
+            self.shakeK = 0
+        end
+        if ( self.long <= 0 ) then
+            self.long =0
+        end
+        if  (self.long>720) then
+            self.long = 720
+        end
+        self.shake = math.random()*math.random(-1,1)*self.shakeK
+        if ( self.shakeK > 1 ) then 
+            self.shakeK  = self.shakeK - 10 *dt
+        end
+        
+        if ( self.recovery < self.recoveryTimer) then 
+            self.recovery =self.recovery - 3*dt
+            if ( self.recovery < 0 )then 
+                self.recovery = self.recoveryTimer
+            end
+        end
+    else
+        self.long = 0 
+    end
+ --------------!!!!!!
+end
+
+
+function EnergyArmorEffect:angleUpdate(dt,angle) 
+    if ( self.angle == 0) then
+        self.angle=0.00000001
+    end
+    if ( self.angle < -math.pi) then
+        self.angle=math.pi
+    end
+    if ( self.angle > math.pi) then
+        self.angle=-math.pi
+    end
+    if ( angle == 0) then
+        angle=0.00000001
+    end
+    if ((angle -  self.angle > 2.1*dt) or (angle -  self.angle) <  -2.1*dt ) then
+        if (angle/math.abs(angle)==self.angle/math.abs(self.angle))then
+            if ( angle>self.angle) then
+                self.angle = self.angle+2*dt
+            else 
+                self.angle = self.angle-2*dt
+            end
+        else
+            if (math.abs(angle)+math.abs(self.angle)> 2*math.pi - math.abs(angle)-math.abs(self.angle)) then
+                if (self.angle>0) then 
+                    self.angle = self.angle+2*dt
+                else
+                    self.angle = self.angle-2*dt
+                end
+            else 
+                if (self.angle>0) then 
+                    self.angle = self.angle-2*dt
+                else
+                    self.angle = self.angle+2*dt
+                end
+            end
+        end
+    end
+end
+
+function EnergyArmorEffect:draw() 
+    if ( Player.Skills.EnergyArmor.isOpened == true) then 
+        love.graphics.setLineWidth(2*k)
+        love.graphics.setColor(0,1,1,self.long/720)
+        local curve =  love.math.newBezierCurve(Player.x-(Player.scaleBody/2)*k,Player.y-(Player.scaleBody+2)*k, Player.x,Player.y-(Player.scaleBody+10)*k,Player.x+(Player.scaleBody/2)*k,Player.y-(Player.scaleBody+2)*k) 
+        curve:rotate(-self.angle-math.pi/2,Player.x,Player.y)
+        curve:scale(self.long/720,Player.x,Player.y)
+        curve:translate((1-self.long/720)*40*k*-1*math.cos(self.angle),(1-self.long/720)*40*k*math.sin(self.angle))
+        love.graphics.line(curve:render())
+        local colorRandom =1 -- math.random()/2*math.random(-1,1)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.long/720/7)
+        love.graphics.circle('fill',Player.x,Player.y,(Player.scaleBody+6)*k)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.long/720/2)
+        
+        love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k+self.shake*k)
+        
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.long/720/4)
+        
+        love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-2*k+self.shake*k)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.long/720/6)
+        
+        love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-4*k+self.shake*k)
+    end
+end
+
 
 function gradient(dt)
     if (gradientI == 1 ) then
