@@ -600,11 +600,12 @@ function GetDamageEffect:draw(dt)
 end
 
 EnergyArmorEffect = {
-    long = 0,
-    angle = 0 ,
+    value = 0,
+    maxValue = 400,
     regen = 100,
     recovery = 10,
     recoveryTimer = 10,
+    angle = 0,
     shake = 1,
     shakeK = 1,
 }
@@ -612,18 +613,15 @@ EnergyArmorEffect = {
 function EnergyArmorEffect:update(dt)
     if ( Player.Skills.EnergyArmor.isOpened == true) then 
         self:angleUpdate(dt,Player.Controller.angle)
-        if ( self.long/720*100 > 100) then
-            self.long = 720
+        if ( self.value>self.maxValue ) then
+            self.value = self.maxValue
         end
         if (self.recovery == self.recoveryTimer) then 
-            self.long = self.long + self.regen*dt
+            self.value = self.value + self.regen*dt
             self.shakeK = 0
         end
-        if ( self.long <= 0 ) then
-            self.long =0
-        end
-        if  (self.long>720) then
-            self.long = 720
+        if ( self.value <= 0 ) then
+            self.value =0
         end
         self.shake = math.random()*math.random(-1,1)*self.shakeK
         if ( self.shakeK > 1 ) then 
@@ -637,9 +635,8 @@ function EnergyArmorEffect:update(dt)
             end
         end
     else
-        self.long = 0 
+        self.value = 0 
     end
- --------------!!!!!!
 end
 
 
@@ -684,23 +681,23 @@ end
 function EnergyArmorEffect:draw() 
     if ( Player.Skills.EnergyArmor.isOpened == true) then 
         love.graphics.setLineWidth(2*k)
-        love.graphics.setColor(0,1,1,self.long/720)
+        love.graphics.setColor(0,1,1,self.value/self.maxValue)
         local curve =  love.math.newBezierCurve(Player.x-(Player.scaleBody/2)*k,Player.y-(Player.scaleBody+2)*k, Player.x,Player.y-(Player.scaleBody+10)*k,Player.x+(Player.scaleBody/2)*k,Player.y-(Player.scaleBody+2)*k) 
         curve:rotate(-self.angle-math.pi/2,Player.x,Player.y)
-        curve:scale(self.long/720,Player.x,Player.y)
-        curve:translate((1-self.long/720)*40*k*-1*math.cos(self.angle),(1-self.long/720)*40*k*math.sin(self.angle))
+        curve:scale(self.value/self.maxValue,Player.x,Player.y)
+        curve:translate((1-self.value/self.maxValue)*40*k*-1*math.cos(self.angle),(1-self.value/self.maxValue)*40*k*math.sin(self.angle))
         love.graphics.line(curve:render())
         local colorRandom =1 -- math.random()/2*math.random(-1,1)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.long/720/7)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/7)
         love.graphics.circle('fill',Player.x,Player.y,(Player.scaleBody+6)*k)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.long/720/2)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/2)
         
         love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k+self.shake*k)
         
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.long/720/4)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/4)
         
         love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-2*k+self.shake*k)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.long/720/6)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/6)
         
         love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-4*k+self.shake*k)
     end

@@ -125,6 +125,60 @@ function NeedResourcesText:print(x,y,scale,dt)
     end
 end
 
+function playerDrawCharacter(x,y,tip,light)
+    if (light == nil) then 
+        light = 1
+    else
+        light = light+0.4
+    end
+    local xDraw =x
+    local yDraw =y
+    if ( tablePlayerTipOpened[tip] ) then 
+        playerBatch:setColor(1,1,1,light)
+    else
+        playerBatch:setColor(0.2,0.2,0.2,light)
+    end
+    local clow1X =xDraw +playerTipDrawParametrs[tip].clowX*k2*math.sin(-math.pi/2+playerTipDrawParametrs[tip].clowR)*7/3
+    local clow1Y =yDraw +playerTipDrawParametrs[tip].clowX*k2*math.cos(-math.pi/2+playerTipDrawParametrs[tip].clowR)*7/3
+    local clow2X =xDraw +playerTipDrawParametrs[tip].clowX*k2*math.sin(-math.pi/2-playerTipDrawParametrs[tip].clowR)*7/3
+    local clow2Y =yDraw+playerTipDrawParametrs[tip].clowX*k2*math.cos(-math.pi/2-playerTipDrawParametrs[tip].clowR)*7/3
+    playerBatch:add(playerQuads[tip].clow1,clow1X,clow1Y,math.pi/2+math.pi+Player.Clows.angle,k/3*light,k2/3*light,playerTipDrawParametrs[tip].clowW1, playerTipDrawParametrs[tip].clowH)
+    playerBatch:add(playerQuads[tip].clow2,clow2X,clow2Y,math.pi/2+math.pi-Player.Clows.angle,k/3*light,k2/3*light,playerTipDrawParametrs[tip].clowW2, playerTipDrawParametrs[tip].clowH)
+    playerSledDrawCharacter(xDraw,yDraw,tip,light)
+    playerBatch:add(playerQuads[tip].body,xDraw,yDraw,math.pi/2+math.pi,k/3*light,k2/3*light,playerTipDrawParametrs[tip].bodyW/2, playerTipDrawParametrs[tip].bodyH/2)
+    
+    if ( tablePlayerTipOpened[tip] ) then 
+        playerBatch:setColor(1,1,1,light)
+    else
+        playerBatch:setColor(0.2,0.2,0.2,light)
+    end
+    playerBatch:add(playerQuads[tip].wings,xDraw,yDraw,math.pi/2+math.pi,k/3*light,k2/3*light,playerTipDrawParametrs[tip].wingsW/2, playerTipDrawParametrs[tip].wingsH/2-playerTipDrawParametrs[tip].wingsX)
+     
+    if ( tablePlayerTipOpened[tip] ) then 
+        playerBatch:setColor(1,1,1,light)
+    else
+        playerBatch:setColor(0.2,0.2,0.2,light)
+    end
+    playerBatch:add(playerQuads[tip].cristal,xDraw,yDraw,math.pi/2+math.pi,k/3*light,k2/3*light,playerTipDrawParametrs[tip].cristalW/2,  playerTipDrawParametrs[tip].cristalH/2-playerTipDrawParametrs[tip].cristalX)
+    
+end
+
+function playerSledDrawCharacter(x,y,tip,light)
+    if (light == nil) then 
+        light = 1
+    end
+    for i = 1,10 do
+        local radius =0.2*i*light
+        if ( tablePlayerTipOpened[tip] ) then 
+             playerBatch:setColor( 0.1*i, 0.1*i, 0.1*i,light)
+        else
+            playerBatch:setColor(0.2,0.2,0.2,light)
+        end
+        playerBatch:add(playerQuads[tip].tail,x+16*(10-i)*k,y,math.pi/2,k/3*radius*light,k2/3*radius*light,playerTipDrawParametrs[tip].tailW/2,playerTipDrawParametrs[tip].tailH/2)
+    end
+end
+
+
 
 function butChange(x,y,xPoint,maxPointX)
     UIBatch:setColor(1,1,1,1)    

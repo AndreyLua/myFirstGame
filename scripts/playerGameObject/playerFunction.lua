@@ -1,11 +1,10 @@
 local playerFunction = {} 
 
---local playerSkills = require "scripts/playerGameObject/playerSkills" 
 local die = require "scripts/gameStates/gameLoop/die" 
 local saveFunction = require "scripts/systemComponents/saveFunction" 
 local loadGame = require "scripts/systemComponents/loadGame" 
-loadPlayerImg()
-
+LoadPlayerImg()
+LoadSkillsImg()
 local Skill = Class{
     lvl = 1, 
     perUpgrade = 0.2,
@@ -17,6 +16,11 @@ local Skill = Class{
  
 Player = {
     tip =1 , 
+    tipStaticParametrs ={
+        {healthRatio = 1,energyRatio = 1,critChanceRatio = 1},
+        {healthRatio = 1,energyRatio = 1.5,critChanceRatio = 1.5},
+        {healthRatio = 1.7,energyRatio = 1.2,critChanceRatio = 1},
+    },
     x = borderWidth/2+40*k/2, 
     y = borderHeight/2+40*k2/2,  
     scaleBody = 35,
@@ -27,7 +31,7 @@ Player = {
     ay = 0,
     mass = 200,
     radiusCollect = 100,
-    damage =1,-- 70,
+    damage = 70,
     criticalDamage = 2,
     criticalChance = 0.1,
     flagInv = true,
@@ -40,9 +44,9 @@ Player = {
     maxLvlSkills = 10,
     
     Energy = {
-        value = 1000,
-        maxValue = 1000,
-        lengthBar = 1000,
+        value = 250,
+        maxValue = 250,
+        lengthBar = 250,
         flag = true,
         regen = 0.1,--%
         wasteBoost = 150,
@@ -50,9 +54,9 @@ Player = {
         wasteSpecialAtack = 70,
     },
     Hp = {
-        value = 1000, 
-        maxValue = 1000,
-        lengthBar = 1000,
+        value = 250, 
+        maxValue = 250,
+        lengthBar = 250,
     },
     Color = {
         colorR = 0.5,
@@ -163,7 +167,7 @@ Player = {
                 },
                 value = 0.2,
                 rare ="rare",
-                isUsed = true,  
+                isUsed = false,  
             },
             Bloody = Class{__includes =Skill,
                 Interface = {
@@ -365,26 +369,26 @@ end
 function Player:draw(dt)
     local xDraw = screenWidth/2+20*k+(self.x-self.Camera.x)
     local yDraw = screenHeight/2+20*k2+(self.y-self.Camera.y)  
-    local clow1X =xDraw +playerDrawPar[self.tip].clowX*k2*math.sin(self.angleBody+playerDrawPar[self.tip].clowR)
-    local clow1Y =yDraw +playerDrawPar[self.tip].clowX*k2*math.cos(self.angleBody+playerDrawPar[self.tip].clowR)
-    local clow2X =xDraw +playerDrawPar[self.tip].clowX*k2*math.sin(self.angleBody-playerDrawPar[self.tip].clowR)
-    local clow2Y =yDraw+playerDrawPar[self.tip].clowX*k2*math.cos(self.angleBody-playerDrawPar[self.tip].clowR)
+    local clow1X =xDraw +playerTipDrawParametrs[Player.tip].clowX*k2*math.sin(self.angleBody+playerTipDrawParametrs[Player.tip].clowR)
+    local clow1Y =yDraw +playerTipDrawParametrs[Player.tip].clowX*k2*math.cos(self.angleBody+playerTipDrawParametrs[Player.tip].clowR)
+    local clow2X =xDraw +playerTipDrawParametrs[Player.tip].clowX*k2*math.sin(self.angleBody-playerTipDrawParametrs[Player.tip].clowR)
+    local clow2Y =yDraw+playerTipDrawParametrs[Player.tip].clowX*k2*math.cos(self.angleBody-playerTipDrawParametrs[Player.tip].clowR)
     
     self:sledDraw(screenWidth/2+20*k,screenHeight/2+20*k2,dt)
     
-    playerBatch:add(playerQuads[self.tip].body,xDraw,yDraw,-self.angleBody+math.pi,k/7,k2/7, playerDrawPar[self.tip].bodyW/2, playerDrawPar[self.tip].bodyH/2)
+    playerBatch:add(playerQuads[Player.tip].body,xDraw,yDraw,-self.angleBody+math.pi,k/7,k2/7, playerTipDrawParametrs[Player.tip].bodyW/2, playerTipDrawParametrs[Player.tip].bodyH/2)
     playerBatch:setColor( 1, 1,1,0.8 )
-      playerBatch:add(playerQuads[self.tip].wings,xDraw,yDraw,-self.angleBody+math.pi,k/7,k2/7,playerDrawPar[self.tip].wingsW/2, playerDrawPar[self.tip].wingsH/2-playerDrawPar[self.tip].wingsX)
+      playerBatch:add(playerQuads[Player.tip].wings,xDraw,yDraw,-self.angleBody+math.pi,k/7,k2/7,playerTipDrawParametrs[Player.tip].wingsW/2, playerTipDrawParametrs[Player.tip].wingsH/2-playerTipDrawParametrs[Player.tip].wingsX)
       local r ,g ,b = gradient(dt)
     playerBatch:setColor(r,g,b)
-      playerBatch:add(playerQuads[self.tip].cristal,xDraw,yDraw,-self.angleBody+math.pi,k/7,k2/7,playerDrawPar[self.tip].cristalW/2, playerDrawPar[self.tip].cristalH/2-playerDrawPar[self.tip].cristalX)
+      playerBatch:add(playerQuads[Player.tip].cristal,xDraw,yDraw,-self.angleBody+math.pi,k/7,k2/7,playerTipDrawParametrs[Player.tip].cristalW/2, playerTipDrawParametrs[Player.tip].cristalH/2-playerTipDrawParametrs[Player.tip].cristalX)
       
     playerBatch:setColor(1,1,1,1)
     if (self.Skills.SpecialAtack.Bloody.isUsed == true ) then
         playerBatch:setColor(1,0.7,0.7,1)  
     end
-      playerBatch:add(playerQuads[self.tip].clow1,clow1X,clow1Y,-self.angleBody+math.pi+self.Clows.angle,k/7*self.Clows.L.scale,k2/7*self.Clows.L.scale,playerDrawPar[self.tip].clowW1, playerDrawPar[self.tip].clowH)
-      playerBatch:add(playerQuads[self.tip].clow2,clow2X,clow2Y,-self.angleBody+math.pi-self.Clows.angle,k/7*self.Clows.R.scale,k2/7*self.Clows.R.scale,playerDrawPar[self.tip].clowW2, playerDrawPar[self.tip].clowH)
+      playerBatch:add(playerQuads[Player.tip].clow1,clow1X,clow1Y,-self.angleBody+math.pi+self.Clows.angle,k/7*self.Clows.L.scale,k2/7*self.Clows.L.scale,playerTipDrawParametrs[Player.tip].clowW1, playerTipDrawParametrs[Player.tip].clowH)
+      playerBatch:add(playerQuads[Player.tip].clow2,clow2X,clow2Y,-self.angleBody+math.pi-self.Clows.angle,k/7*self.Clows.R.scale,k2/7*self.Clows.R.scale,playerTipDrawParametrs[Player.tip].clowW2, playerTipDrawParametrs[Player.tip].clowH)
 end
 
 function Player:sledDraw(x,y,dt)
@@ -407,7 +411,7 @@ function Player:sledDraw(x,y,dt)
         sled.x = sled.x+3.302*sled.ax
         sled.y = sled.y+3.302*sled.ay
         playerBatch:setColor( 0.1*i, 0.1*i, 0.1*i )
-        playerBatch:add(playerQuads[self.tip].tail,sled.x+(self.x-self.Camera.x),sled.y+(self.y-self.Camera.y),sled.angle,k/7*radius,k2/7*radius,playerDrawPar[self.tip].tailW/2,playerDrawPar[self.tip].tailH/2)
+        playerBatch:add(playerQuads[Player.tip].tail,sled.x+(self.x-self.Camera.x),sled.y+(self.y-self.Camera.y),sled.angle,k/7*radius,k2/7*radius,playerTipDrawParametrs[Player.tip].tailW/2,playerTipDrawParametrs[Player.tip].tailH/2)
     end
     if ( #playerSledi>10) then
         table.remove(playerSledi,1)
@@ -417,31 +421,25 @@ end
 function Player:takeDamage(dmg,tip,atacker)
     self.flagInv = false
     AddSound(playerHurtSounds,0.3)
-    
-    EnergyArmorEffect.recovery =EnergyArmorEffect.recoveryTimer - 0.0000001
-    
-    if (EnergyArmorEffect.long>0) then 
-        EnergyArmorEffect.long = EnergyArmorEffect.long - (dmg-(dmg*self.Skills.EnergyArmor.value))*4
-        EnergyArmorEffect.shakeK = 20
-    else
-        if ( tip=='m') then
-            GetDamageEffect:new(atacker.x,atacker.y,7)
-            self.Hp.value = self.Hp.value - dmg*(1-self.Skills.MeleeDefense.value)
-            if (self.Skills.SpikeArmor.isOpened == true) then 
-                SpikeArmorEffect:new(atacker)
-            end
-        end
-        if ( tip=='e') then
-            self.Hp.value = self.Hp.value - dmg
-        end
-         if ( tip=='r') then
-            GetDamageEffect:new(atacker.x,atacker.y,7)
-            self.Hp.value = self.Hp.value - dmg*(1-self.Skills.RangeDefense.value)
-            if (self.Skills.SpikeArmor.isOpened == true) then 
-                SpikeArmorEffect:new(atacker)
-            end
+    dmg = self.Skills.EnergyArmor:getAtack(dmg)
+    if ( tip=='m') then
+        GetDamageEffect:new(atacker.x,atacker.y,7)
+        self.Hp.value = self.Hp.value - dmg*(1-self.Skills.MeleeDefense.value)
+        if (self.Skills.SpikeArmor.isOpened == true) then 
+            SpikeArmorEffect:new(atacker)
         end
     end
+    if ( tip=='e') then
+        self.Hp.value = self.Hp.value - dmg
+    end
+      if ( tip=='r') then
+        GetDamageEffect:new(atacker.x,atacker.y,7)
+        self.Hp.value = self.Hp.value - dmg*(1-self.Skills.RangeDefense.value)
+        if (self.Skills.SpikeArmor.isOpened == true) then 
+            SpikeArmorEffect:new(atacker)
+        end
+    end
+   
     if ( self.Hp.value<=0) then 
         makeSave()
         gamestate.switch(die)
@@ -452,17 +450,17 @@ function Player:heal(value)
     for i =1,math.random(value*10*3,value*10*5) do 
         HealEffect:new()
     end
-    self.Hp.value=self.Hp.value+self.Hp.maxValue*value
+    self.Hp.value=self.Hp.value+self.Hp.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio*value
 end
 
 function Player:rechargeEnergy(value)
-    self.Energy.value=self.Energy.value+value
+    self.Energy.value=self.Energy.value+self.Energy.maxValue*Player.tipStaticParametrs[Player.tip].energyRatio*value
 end
 
 function Player:atack(target,dt)
     local atackDamage = self.damage*self.Skills.Damage.value
     local isCrit = false
-    if ( math.random()<self.criticalChance) then
+    if ( math.random()<self.criticalChance*Player.tipStaticParametrs[Player.tip].critChanceRatio) then
         isCrit = true
         atackDamage = atackDamage*self.criticalDamage
     end
@@ -609,10 +607,10 @@ function Player.Clows:update(dt)
 end
 
 function Player.Clows:scale()
-    local clow1X =Player.x +playerDrawPar[Player.tip].clowX*k2*math.sin(Player.angleBody+playerDrawPar[Player.tip].clowR)
-    local clow1Y =Player.y +playerDrawPar[Player.tip].clowX*k2*math.cos(Player.angleBody+playerDrawPar[Player.tip].clowR)
-    local clow2X =Player.x +playerDrawPar[Player.tip].clowX*k2*math.sin(Player.angleBody-playerDrawPar[Player.tip].clowR)
-    local clow2Y =Player.y+playerDrawPar[Player.tip].clowX*k2*math.cos(Player.angleBody-playerDrawPar[Player.tip].clowR)
+    local clow1X =Player.x +playerTipDrawParametrs[Player.tip].clowX*k2*math.sin(Player.angleBody+playerTipDrawParametrs[Player.tip].clowR)
+    local clow1Y =Player.y +playerTipDrawParametrs[Player.tip].clowX*k2*math.cos(Player.angleBody+playerTipDrawParametrs[Player.tip].clowR)
+    local clow2X =Player.x +playerTipDrawParametrs[Player.tip].clowX*k2*math.sin(Player.angleBody-playerTipDrawParametrs[Player.tip].clowR)
+    local clow2Y =Player.y+playerTipDrawParametrs[Player.tip].clowX*k2*math.cos(Player.angleBody-playerTipDrawParametrs[Player.tip].clowR)
     
     if ((math.pow(clow1X-Player.x,2) + math.pow(clow1Y-Player.y,2))> (math.pow(clow2X-Player.x,2) + math.pow(clow2Y-Player.y,2))) then 
         self.L.scale = 1.2
@@ -648,30 +646,34 @@ function Player:border()
 end
 
 function Player.Hp:update(dt)
-    if ( self.value>self.maxValue) then
-        self.value = self.maxValue
-        self.lengthBar = self.maxValue 
+    if ( self.value>self.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio) then
+        self.value = self.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio
+        self.lengthBar = self.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio
     end
     
     if (self.lengthBar<self.value) then
         self.lengthBar= self.value
     end
     if (self.lengthBar>self.value ) then
-        self.lengthBar = self.lengthBar-self.maxValue/100*10*dt
+        self.lengthBar = self.lengthBar-self.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio/100*10*dt
     end
 end
 
 function Player.Energy:update(dt)
-    if ( self.value > self.maxValue) then
-        self.value = self.maxValue
-        self.lengthBar = self.maxValue
+    if ( self.value > self.maxValue*Player.tipStaticParametrs[Player.tip].energyRatio) then
+        self.value = self.maxValue*Player.tipStaticParametrs[Player.tip].energyRatio
+        self.lengthBar = self.maxValue*Player.tipStaticParametrs[Player.tip].energyRatio
+        if (Player.Skills.Trade.isOpened == true and Player.Hp.value<Player.Hp.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio and Player.flagInv == true) then 
+            TradeEffect:new()
+            Player.Skills.Trade:regen(dt)
+        end
     end
     
     if ( self.lengthBar>self.value) then
         self.lengthBar = self.lengthBar-self.maxValue/100*8*dt
     end
  
-    if ( self.value > self.maxValue/100*15) then
+    if ( self.value > self.maxValue*Player.tipStaticParametrs[Player.tip].energyRatio/100*15) then
         self.flag = true
     end
     if ( self.value <= 0  ) then
@@ -689,16 +691,6 @@ function Player.Energy:update(dt)
     if ( self.lengthBar<self.value) then
         self.lengthBar = self.value
     end
-    
-    ---------------------------------
-    if  (self.value>self.maxValue) then
-        self.value = self.maxValue
-        if (Player.Skills.Trade.isOpened == true and Player.Hp.value<Player.Hp.maxValue and Player.flagInv == true) then 
-            TradeEffect:new()
-            Player.Skills.Trade:regen(dt)
-        end --skill
-    end
-    ----------------------------------
 end
 
 function Player:invisible(dt)
@@ -717,16 +709,16 @@ function Player:drawUI()
     love.graphics.setColor(0.02,0.3,0.02,1)
     love.graphics.rectangle("fill",self.x-(self.scaleBody+17)*k,self.y+720/11*k/2,4*k2,-720/11*k)
     love.graphics.setColor(0.19,1,0.19,1)
-    love.graphics.rectangle("fill",self.x-(self.scaleBody+17)*k,self.y+720/11*k/2,4*k2,(-self.Hp.lengthBar/self.Hp.maxValue*720/11)*k)
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+17)*k,self.y+720/11*k/2,4*k2,(-self.Hp.lengthBar/self.Hp.maxValue/Player.tipStaticParametrs[Player.tip].healthRatio*720/11)*k)
     love.graphics.setColor(0.02,0.6,0.02,1)
-    love.graphics.rectangle("fill",self.x-(self.scaleBody+17)*k,self.y+720/11*k/2,4*k2,(-self.Hp.value/self.Hp.maxValue*720/11)*k)
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+17)*k,self.y+720/11*k/2,4*k2,(-self.Hp.value/self.Hp.maxValue/Player.tipStaticParametrs[Player.tip].healthRatio*720/11)*k)
 
     love.graphics.setColor(0,0.32,0.225,1)
     love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,-720/11*k)
     love.graphics.setColor(0.15,1,0.9,1)
-    love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,(-self.Energy.lengthBar/self.Energy.maxValue*720/11)*k)
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,(-self.Energy.lengthBar/self.Energy.maxValue/Player.tipStaticParametrs[Player.tip].energyRatio*720/11)*k)
     love.graphics.setColor(0,0.643,0.502,1)
-    love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,(-self.Energy.value/self.Energy.maxValue*720/11)*k)     
+    love.graphics.rectangle("fill",self.x-(self.scaleBody+11)*k,self.y+720/11*k/2,3*k2,(-self.Energy.value/self.Energy.maxValue/Player.tipStaticParametrs[Player.tip].energyRatio*720/11)*k)     
    
     EnergyArmorEffect:draw() 
   

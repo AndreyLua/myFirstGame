@@ -1,15 +1,8 @@
 local loadGame = {}
 
-function loadPlayerParametrsAndImg()
-    loadPlayerParametrs()
-    loadPlayerImg()
-end
-
-function loadPlayerParametrs()
-    playerTip = 1 
-    playerTipParametrs = {true,false,false}
-  
-    playerDrawPar = {
+function LoadPlayerParametrs()
+    tablePlayerTipOpened = {true,false,false}
+    playerTipDrawParametrs = {
         {
           bodyW  = 464, 
           bodyH  = 384, 
@@ -62,25 +55,9 @@ function loadPlayerParametrs()
           cristalX = 55,
         }, 
     }
-    skillCostUpgrade = {
-        200,-- common1 hp
-        200,-- common2 en
-        400,-- common3 meleeDef
-        400,-- common4 rangeDef
-        500,-- common5 damage
-        400,-- common6 speed
-        250,-- common7 collectRange
-        400,-- rare8 waveAtack
-        400,-- rare9 bloodAtack
-        400,-- rare10 electricAtack 
-        600,-- rare11 spikeArmor
-        600,-- legend12 dopEn
-        600,-- legend13 trade
-        700,-- legend14 vampir
-    }  
 end
 
-function loadPlayerImg()
+function LoadPlayerImg()
     playerQuads = {
         {
             body = love.graphics.newQuad(0,  0,  464, 384, playerSet:getDimensions()),
@@ -107,6 +84,9 @@ function loadPlayerImg()
             wings = love.graphics.newQuad(481,  959,  480, 264,playerSet:getDimensions()),
         }
     }
+end
+
+function LoadSkillsImg()
     skillQuads = {
         hp = love.graphics.newQuad(0,  0,  320, 320, skillSet:getDimensions()),
         energy = love.graphics.newQuad(320,  0,  320, 320, skillSet:getDimensions()),  
@@ -150,7 +130,7 @@ function loadPlayerImg()
 end
 
 
-function loadEnImg()
+function LoadEnImg()
     enQuads = {
         bulletShooter = love.graphics.newQuad(1136,  815,  50,50, enSet:getDimensions()),
         bulletInvader = love.graphics.newQuad(1056,  907,  130,130, enSet:getDimensions()),
@@ -196,7 +176,7 @@ function loadEnImg()
     boomQuads[10] = love.graphics.newQuad(320,  640,  320, 320, enBoomAnSet:getDimensions())
 end
 
-function loadObjImg()
+function LoadObjImg()
     meteorSetW,meteorSetH =  meteorSet:getDimensions()
     tableMeteorsPar ={
         {

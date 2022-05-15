@@ -11,8 +11,7 @@ end;
 function ResourceEnergy:collWithPlayer(i)
     if (self.timer == self.invTimer and  checkCollision(Player.x-20*k,Player.y-20*k2, 40*k, 40*k2,self.x,self.y,1*k,1*k2)) then
         AddSound(pickUp,0.1)
-        Player:rechargeEnergy(50)
-        
+        Player:rechargeEnergy(0.1)
         resourceRemove(i)
     end
 end;

@@ -5,21 +5,27 @@ Reward = {
     flagMenu = false ,
     money  = 0,
     skill  = nil,
+    newSet = nil,
     slotScale = 0,  
 }
 
 function Reward:give(table)
     score = score + Reward.money
-    if ( Reward.skill ~= nil) then 
-        if (Reward.skill.isOpened) then 
-            Reward.skill.lvl = Reward.skill.lvl + 1
-        else
-            Reward.skill.isOpened = true
-            Reward.skill.number = #table+1
+    if ( Reward.newSet ~= nil) then 
+        tablePlayerTipOpened[Reward.newSet] = true
+    else
+        if ( Reward.skill ~= nil) then 
+            if (Reward.skill.isOpened) then 
+                Reward.skill.lvl = Reward.skill.lvl + 1
+            else
+                Reward.skill.isOpened = true
+                Reward.skill.number = #table+1
+            end
         end
     end
     Reward.money = 0 
     Reward.skill = nil
+    Reward.newSet = nil
 end
 
 function Reward:updateSlotScale(dt)
@@ -32,10 +38,15 @@ function Reward:updateSlotScale(dt)
 end
 
 function Reward:draw()
-    if (self.skill == 0) then 
-        rewardSlot(nil,screenWidth/2,screenHeight/2,self.slotScale,self.money)
+    if ( self.newSet~=nil) then 
+        playerDrawCharacter(screenWidth/2,screenHeight/2,self.newSet,self.slotScale)
+        love.graphics.draw(playerBatch)
     else
-        rewardSlot(self.skill,screenWidth/2,screenHeight/2,self.slotScale,self.money)
+        if (self.skill == 0) then 
+            rewardSlot(nil,screenWidth/2,screenHeight/2,self.slotScale,self.money)
+        else
+            rewardSlot(self.skill,screenWidth/2,screenHeight/2,self.slotScale,self.money)
+        end
     end
 end
 
@@ -53,12 +64,23 @@ function Reward:get(count)
 end
 
 function Reward:getBig(count)
-    if ( math.random(1,100) > 80) then 
-        local playerLegendSkills = {}
-        Player.Skills:raritySkills(playerLegendSkills,"legend")
-        self.skill  = playerLegendSkills[math.random(1,#playerLegendSkills)]
+    local listPlayerNotUnlockSet = {}
+    for i=1,#tablePlayerTipOpened do
+        if ( tablePlayerTipOpened[i]==false) then 
+            table.insert(listPlayerNotUnlockSet,i)
+        end
+    end
+    if ( math.random(1,100) > 0 and #listPlayerNotUnlockSet >0) then 
+        Reward.newSet = listPlayerNotUnlockSet[math.random(1,#listPlayerNotUnlockSet)]
+        tablePlayerTipOpened[Reward.newSet] = true
     else
-        self:getNormal(count)
+        if ( math.random(1,100) > 80) then 
+            local playerLegendSkills = {}
+            Player.Skills:raritySkills(playerLegendSkills,"legend")
+            self.skill  = playerLegendSkills[math.random(1,#playerLegendSkills)]
+        else
+            self:getNormal(count)
+        end
     end
 end
 

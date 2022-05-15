@@ -13,13 +13,12 @@ SoundsVolume = 1
 Sensitivity = 1
 controllerChoose = 1
 
----------------------------------------------------
+
 ------------------EFFECTS -------------------------
 effect1 = moonshine(moonshine.effects.pixelate)
 effect1.pixelate.size =2
--- fog типо туман
---effect2 = moonshine(moonshine.effects.fog)
 ---------------------------------------------------
+
 ------------------SOUNDS---------------------------
 soundEffects = {} 
 bgMusicI = 1
@@ -131,14 +130,9 @@ effects = require "scripts/systemComponents/effects"
 UI= require "scripts/systemComponents/UI"
 game = require "scripts/gameStates/gameLoop/game"
 
-----------------------------------
-
-----------------------------------
 
 -------------MASIIIIIIV-----------
-exp =  {}
-mouse = 
-{
+mouse = {
   x=0,
   y=0
 }

@@ -29,22 +29,19 @@ local objFunction = require "scripts/meteoritesGameObject/objFunction"
 local waveSystem = require "scripts/waveSystem" 
 menu = require "scripts/gameStates/menu" 
 local loadGame = require "scripts/systemComponents/loadGame"
-
-loadPlayerParametrsAndImg()
-loadEnImg()
-loadObjImg()
+LoadPlayerImg()
+LoadSkillsImg()
+LoadPlayerParametrs()
+LoadEnImg()
+LoadObjImg()
 
 function game:init()
+  
 Wave:refreshNotionParameters()
 Player:refreshParameters()
   
 
-
-
-
-playerLiRan = {} 
 enBoomAnimat = {}
-
 resourcesReceiveText = {}
 
 en = {}
@@ -53,10 +50,11 @@ resource = {}
 objRegulS  = {}
 enRegulS  = {}
 enAfterDieTex = {} 
-resTraces = {}
+
 bulletRegulS  = {}
 waveRegulS = {}
 enemyBullets = {} 
+
 playerSledi = {} 
 
 masli= {} 
@@ -111,9 +109,7 @@ enRegulS = {}
 
 --Player.Energy.value = 1000
 --Player.Hp.value = 1000 
-mouse.x,mouse.y=love.mouse.getPosition()
-mouse.x = mouse.x
-mouse.y = mouse.y
+
 Wave:update(dt)
 
 --------------------
@@ -201,6 +197,7 @@ for i = #resource, 1, -1 do
         end
     end
 end
+
 Wave:spawn()
 Player:move(dt)
 Player:collision(dt)
@@ -209,6 +206,7 @@ Player:debaff(dt)
 bulletsUpdate(dt)
 self:movement(dt)
 Player:border()
+
 end
 
 function game:keypressed(key1,key, code)
@@ -251,7 +249,7 @@ function  game:draw()
     love.graphics.clear()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon1,0,0,0,k,k2)
-       love.graphics.setColor(1,1,1,1)
+    love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fon2,(-Player.x+40*k/2+screenWidth/2)/20,(-Player.y+40*k2/2+screenHeight/2)/40,0,k,k2)
     love.graphics.draw(fon3,(-Player.x+40*k/2+screenWidth/2)/7,(-Player.y+40*k2/2+screenHeight/2)/10,0,k,k2)
     if (Player.flagInv == false ) then
@@ -260,7 +258,6 @@ function  game:draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.push()
         love.graphics.translate(-Player.Camera.x+40*k/2+screenWidth/2,-Player.Camera.y+40*k2/2+screenHeight/2)
-        
         VampirEffect:draw(dt)
         WaveEffect:draw()
         BloodyEffect:draw(dt)
@@ -296,7 +293,6 @@ function  game:draw()
     end 
     love.graphics.draw(playerBatch)
     playerBatch:clear()
-    -- playerDrawCristal()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(enBatchDop)
     love.graphics.push()

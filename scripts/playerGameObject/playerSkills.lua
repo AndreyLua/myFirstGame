@@ -132,6 +132,17 @@ function Player.Skills.SpikeArmor:atack(target)
     target.health = target.health -  target.damage*Player.Skills.SpikeArmor.value
 end
 
+function Player.Skills.EnergyArmor:getAtack(dmg)
+    EnergyArmorEffect.recovery =EnergyArmorEffect.recoveryTimer - 0.0000001
+    if (EnergyArmorEffect.value>0) then 
+        EnergyArmorEffect.value = EnergyArmorEffect.value - (dmg-(dmg*self.value))*4
+        EnergyArmorEffect.shakeK = 20
+        return 0 
+    else
+        return dmg
+    end
+end
+
 function Player.Skills.Trade:regen(dt)
     Player.Hp.value = Player.Hp.value +10*dt
 end
