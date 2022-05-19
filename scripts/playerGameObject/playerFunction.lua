@@ -12,6 +12,10 @@ local Skill = Class{
     number = 2000,
     rare ="common",
     isOpened = true,
+    upgrade =  function(self)
+        self.lvl = self.lvl+1
+        self.value = self.value+self.value*self.perUpgrade
+    end;
 }
  
 Player = {
@@ -33,7 +37,7 @@ Player = {
     radiusCollect = 100,
     damage = 70,
     criticalDamage = 2,
-    criticalChance = 0.1,
+    criticalChance = 0.07,
     flagInv = true,
     inv = 2,
     invTimer = 2,
@@ -97,6 +101,11 @@ Player = {
             },
             number = 1,
             isOpened = true,
+            upgrade =  function(self)
+                self.lvl = self.lvl+1
+                self.value = self.value+self.value*self.perUpgrade
+                Player.Hp.maxValue = Player.Skills.Hp.value
+            end;
         },
         Energy = Class{__includes =Skill,
             Interface = {
@@ -107,6 +116,12 @@ Player = {
             },
             number =2,
             isOpened = true,
+            
+            upgrade =  function(self)
+                self.lvl = self.lvl+1
+                self.value = self.value+self.value*self.perUpgrade
+                Player.Energy.maxValue = Player.Skills.Energy.value
+            end;
         },
         MeleeDefense = Class{__includes =Skill, 
             Interface = {
@@ -137,6 +152,13 @@ Player = {
             },
             number = 5,
             value = 1,
+            perUpgradeCrit = 0.17,
+            
+            upgrade =  function(self)
+                self.lvl = self.lvl+1
+                self.value = self.value+self.value*self.perUpgrade
+                Player.criticalChance = Player.criticalChance+Player.criticalChance*self.perUpgradeCrit
+            end;
         },
         Speed = Class{__includes =Skill, 
             Interface = {
@@ -145,6 +167,7 @@ Player = {
                 text = 'Speed increase',
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            perUpgrade = 0.04,
             number = 6,
             value = 1,
         },
@@ -155,6 +178,7 @@ Player = {
                 image =skillQuads.collectRange,
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            perUpgrade = 0.08,
             value =1,
         },
         SpecialAtack = {

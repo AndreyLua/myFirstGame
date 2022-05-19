@@ -70,7 +70,7 @@ function Reward:getBig(count)
             table.insert(listPlayerNotUnlockSet,i)
         end
     end
-    if ( math.random(1,100) > 0 and #listPlayerNotUnlockSet >0) then 
+    if ( math.random(1,100) > 95 and #listPlayerNotUnlockSet >0) then 
         Reward.newSet = listPlayerNotUnlockSet[math.random(1,#listPlayerNotUnlockSet)]
         tablePlayerTipOpened[Reward.newSet] = true
     else

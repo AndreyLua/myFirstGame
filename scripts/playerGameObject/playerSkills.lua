@@ -49,10 +49,9 @@ function Player.Skills:raritySkills(tableSkills,rare)
 end
 
 function Player.Skills:upgrade(playerSkill)
-    playerSkill.lvl = playerSkill.lvl+1
-    playerSkill.value = playerSkill.value+playerSkill.value*playerSkill.perUpgrade
-    Player.Energy.maxValue = Player.Skills.Energy.value
-    Player.Hp.maxValue = Player.Skills.Hp.value
+    playerSkill:upgrade()
+    print( Player.criticalChance) 
+    
 end
 
 function playerLiDraw(dt)
