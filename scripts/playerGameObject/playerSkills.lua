@@ -50,8 +50,6 @@ end
 
 function Player.Skills:upgrade(playerSkill)
     playerSkill:upgrade()
-    print( Player.criticalChance) 
-    
 end
 
 function playerLiDraw(dt)
@@ -110,7 +108,7 @@ end
 function Player.Skills.SpecialAtack.Bloody:debaff(target)
     target.ax = target.ax*(1-Player.Skills.SpecialAtack.Bloody.value)
     target.ay = target.ay*(1-Player.Skills.SpecialAtack.Bloody.value)
-    target.health = target.health -Player.Skills.SpecialAtack.Bloody.value
+    target.health = target.health -Player.damage*Player.Skills.Damage.value*Player.Skills.SpecialAtack.Bloody.value
     target.timer = target.invTimer / 2
 end
 function Player.Skills.SpecialAtack.Vampir:atack(target)

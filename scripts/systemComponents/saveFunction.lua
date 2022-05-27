@@ -1,7 +1,5 @@
 local saveFunction = {}
 
---local convert = require "scripts/gameStates/menuSections/convert"
-
 function loadSave()
     if love.filesystem.getInfo('save.lua') then
         local TableSave = love.filesystem.read('save.lua')

@@ -170,8 +170,7 @@ WaveEffect = {
     numberCopies  =3,
 }
 function WaveEffect:new(x,y)
-    local waveParticl =
-    {
+    local waveParticl = {
       x =x ,
       y =y, 
       r = 1*k,
@@ -179,9 +178,8 @@ function WaveEffect:new(x,y)
       count =self.numberCopies,
     }
     table.insert(self.particls,waveParticl)
-    for i = 1, math.random(1,3) do
-        waveParticl =
-        {
+    for i = 1, math.ceil(Player.Skills.SpecialAtack.Wave.count)+math.random(-1,1) do
+        waveParticl = {
           x =x+math.random(-50,50)*k ,
           y =y+math.random(-50,50)*k , 
           r = 0.1*k,

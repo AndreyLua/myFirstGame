@@ -189,9 +189,18 @@ Player = {
                     image =skillQuads.waveAtack,
                     slotRarityImage = UIQuads.tableSkillRare,
                 },
-                value = 0.2,
+                count = 2,
+                perUpgradeCount = 0.1,
+                value = 0.3,
+                perUpgrade = 0.26,
                 rare ="rare",
-                isUsed = false,  
+                isUsed = false,
+                
+                upgrade =  function(self)
+                    self.lvl = self.lvl+1
+                    self.value = self.value+self.value*self.perUpgrade
+                    self.count = self.count+self.count*self.perUpgradeCount
+                end;
             },
             Bloody = Class{__includes =Skill,
                 Interface = {
@@ -200,9 +209,18 @@ Player = {
                     image =skillQuads.bloodAtack,
                     slotRarityImage = UIQuads.tableSkillRare,
                 },
-                value = 0.2,
+                value = 0.1,
+                perUpgrade = 0.1,
+                slowingDown = 0.15,
+                perUpgradeSlowingDown = 0.15,
                 rare ="rare",
-                isUsed = false,  
+                isUsed = false,
+                
+                upgrade =  function(self)
+                    self.lvl = self.lvl+1
+                    self.value = self.value+self.value*self.perUpgrade
+                    self.slowingDown = self.slowingDown+self.slowingDown*self.perUpgradeSlowingDown
+                end;
             },
             Electric = Class{__includes =Skill,
                 Interface = {
@@ -211,7 +229,8 @@ Player = {
                     image =skillQuads.sealAtack,
                     slotRarityImage = UIQuads.tableSkillRare,
                 },
-                value = 0.2,
+                value = 1.1,
+                perUpgrade = 0.12,
                 rare ="rare",
                 isUsed = false,  
             },
@@ -245,6 +264,7 @@ Player = {
                 slotRarityImage = UIQuads.tableSkillLegend,
             },
             rare ="legend",
+            isOpened = false,
             value = 0.1, -- legend12
         },
         Trade = Class{__includes =Skill,

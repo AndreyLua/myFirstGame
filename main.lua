@@ -1,4 +1,3 @@
-------------------LIBS ----------------------------
 binser = require "libs/binser/binser"
 gamestate = require "libs/gamestate" 
 Timer = require 'libs/hump.timer' 
@@ -13,10 +12,9 @@ SoundsVolume = 1
 Sensitivity = 1
 controllerChoose = 1
 
-
 ------------------EFFECTS -------------------------
 effect1 = moonshine(moonshine.effects.pixelate)
-effect1.pixelate.size =2
+effect1.pixelate.size = 2
 ---------------------------------------------------
 
 ------------------SOUNDS---------------------------
@@ -108,6 +106,7 @@ UIQuads = {
     butChange = love.graphics.newQuad(0,  1210, 1340, 146, UISet:getDimensions()), 
     butPoint = love.graphics.newQuad(1017,  751, 120, 200, UISet:getDimensions()), 
 }
+
 resQuads = {
     boost =   love.graphics.newQuad(0,0,130,210, resSet:getDimensions()),
     hp =   love.graphics.newQuad(131,0,210,210, resSet:getDimensions()),
@@ -136,8 +135,8 @@ mouse = {
   x=0,
   y=0
 }
--------------CONST AND FLAGS------
 
+-------------CONST AND FLAGS------
 gradientR = 1
 gradientG = 0 
 gradientB = 0 
