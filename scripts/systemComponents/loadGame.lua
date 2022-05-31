@@ -1,7 +1,7 @@
 local loadGame = {}
 
 function LoadPlayerParametrs()
-    tablePlayerTipOpened = {true,true,true}
+    tablePlayerTipOpened = {true,false,false}
     playerTipDrawParametrs = {
         {
           bodyW  = 464, 

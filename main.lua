@@ -7,10 +7,13 @@ moonshine = require 'moonshine'
 
 save = {}
 
+version = 1.0
 MusicVolume = 1
 SoundsVolume = 1
 Sensitivity = 1
 controllerChoose = 1
+
+scoreForParticle =15
 
 ------------------EFFECTS -------------------------
 effect1 = moonshine(moonshine.effects.pixelate)
@@ -141,7 +144,6 @@ gradientR = 1
 gradientG = 0 
 gradientB = 0 
 gradientI = 1
-scoreForParticle =15
 
 canvasToEffect= love.graphics.newCanvas(screenWidth ,screenHeight)
 -----------------------------------
