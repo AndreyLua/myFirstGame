@@ -4,6 +4,17 @@ function loadSave()
     if love.filesystem.getInfo('save.lua') then
         local TableSave = love.filesystem.read('save.lua')
         TableSave =unpack(binser.deserialize(TableSave))
+         save = {version,score,Wave.number,ParticlData,SettingsData,PlayerData}
+        
+        if ( TableSave[2]) then 
+            score =TableSave[2]
+        end
+        if ( TableSave[3]) then 
+            Wave.number = TableSave[3]
+        end
+        if ( TableSave[4]) then 
+            loadParticle(TableSave[4])
+        end
         if  (TableSave[5]) then 
             local playerSettings = TableSave[5]
             if ( playerSettings[1]) then 
@@ -19,20 +30,9 @@ function loadSave()
                 controllerChoose = playerSettings[4] 
             end
         end
-        if ( TableSave[2]) then 
-            score =TableSave[2]
+        if ( TableSave[6]) then 
+            loadPlayerSkills(TableSave[6])
         end
-        if ( TableSave[3]) then 
-            Wave.number = TableSave[3]
-        end
-        
-        if ( TableSave[4]) then 
-            loadPlayerSkills(TableSave[4])
-        end
-        if ( TableSave[5]) then 
-            loadParticle(TableSave[5])
-        end
-        
     end
 end
 
@@ -40,10 +40,8 @@ function makeSave()
     local SettingsData = {MusicVolume, SoundsVolume, Sensitivity, controllerChoose}
     local ParticlData = saveFunction:saveParticle() 
     local PlayerSkillsData = saveFunction:savePlayerSkills()
-    
-    local PlayerData ={Player.tip,tablePlayerTipOpened,PlayerSkillsData}
-
-    save = {version,score,Wave.number,ParticlData,SettingsData,PlayerData}
+    --local PlayerData ={Player.tip,tablePlayerTipOpened,PlayerSkillsData}
+    save = {version,score,Wave.number,ParticlData,SettingsData,PlayerSkillsData}--PlayerData}
     
     love.filesystem.write('save.lua',  binser.serialize(save))
 end
@@ -56,7 +54,7 @@ function saveFunction:savePlayerSkills()
     for i=1,#playerSkills do
         local savePlayerSkill = {
             lvl = playerSkills[i].lvl,
-            numb = playerSkills[i].numb,
+            numb = playerSkills[i].number,
             isUsed = playerSkills[i].isUsed,
         }
         table.insert(saveSkills,savePlayerSkill)
@@ -83,7 +81,7 @@ end
 function loadParticle(particlSaveMas)
     Particle.list = {}
     for i =1, #particlSaveMas do
-        local Color1,Color2,Color3  = particlColor() 
+        local Color1,Color2,Color3  = Particle:color()
         local particl = {
             side = particlSaveMas[i].side, 
             ran = particlSaveMas[i].ran,
@@ -104,10 +102,9 @@ function loadParticle(particlSaveMas)
 end
 
 function loadPlayerSkills(saveSkills)
-    local linksPlayerSkills=getPlayerSkillLinks()
+    local linksPlayerSkills=saveFunction:getPlayerSkillLinks()
     for i =1, #saveSkills do
-        for j=1,#saveSkills[i].lvl do 
-            linksPlayerSkills[saveSkills[i].numb].lvl = saveSkills[i].lvl
+        for j=1,saveSkills[i].lvl-1 do 
             linksPlayerSkills[saveSkills[i].numb]:upgrade()   
         end
         linksPlayerSkills[saveSkills[i].numb].isUsed = saveSkills[i].isUsed
@@ -129,4 +126,5 @@ function saveFunction:getPlayerSkillLinks()
     end
     return links
 end
+
 return saveFunction

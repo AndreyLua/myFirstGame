@@ -59,8 +59,9 @@ playerSledi = {}
 
 masli= {} 
 
---loadSave()
+
 --lvlParametrs()
+Player:refreshParameters()
 end
 
 function gamestate.focus(v)

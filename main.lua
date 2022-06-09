@@ -159,5 +159,6 @@ function love.load()
     font:setFilter("nearest")
     love.graphics.setFont(font)  
     gamestate.registerEvents()
+    loadSave()
     gamestate.switch(game)
 end

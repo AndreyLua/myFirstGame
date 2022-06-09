@@ -1,11 +1,14 @@
 local playerSkillsInterface = {}
 
 function Player.Skills.Hp.Interface:print(x,y,scale)
-    love.graphics.print("HP "..tostring(math.ceil(100/(1-Player.Skills.Hp.value))).."%",x,y,-3.14/2,scale*k,scale*k)
+    startHp = 250
+    love.graphics.print("HP "..tostring(math.ceil(Player.Skills.Hp.value/startHp*100)).."%",x,y,-3.14/2,scale*k,scale*k)
 end
 
 function Player.Skills.Energy.Interface:print(x,y,scale)
-    love.graphics.print("EN "..tostring(math.ceil(100/(1-Player.Skills.Energy.value))).."%",x,y,-3.14/2,scale*k,scale*k)
+    startEn = 250
+    love.graphics.print("EN "..tostring(math.ceil(Player.Skills.Energy.value/startEn*100)).."%",x,y,-3.14/2,scale*k,scale*k)
+    !
 end
 
 function Player.Skills.MeleeDefense.Interface:print(x,y,scale)
