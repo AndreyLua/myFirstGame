@@ -31,7 +31,9 @@ function loadSave()
             end
         end
         if ( TableSave[6]) then 
-            loadPlayerSkills(TableSave[6])
+            Player.tip = TableSave[6][1]
+            tablePlayerTipOpened = TableSave[6][2]
+            loadPlayerSkills(TableSave[6][3])
         end
     end
 end
@@ -40,8 +42,8 @@ function makeSave()
     local SettingsData = {MusicVolume, SoundsVolume, Sensitivity, controllerChoose}
     local ParticlData = saveFunction:saveParticle() 
     local PlayerSkillsData = saveFunction:savePlayerSkills()
-    --local PlayerData ={Player.tip,tablePlayerTipOpened,PlayerSkillsData}
-    save = {version,score,Wave.number,ParticlData,SettingsData,PlayerSkillsData}--PlayerData}
+    local PlayerData ={Player.tip,tablePlayerTipOpened,PlayerSkillsData}
+    save = {version,score,Wave.number,ParticlData,SettingsData,PlayerData}
     
     love.filesystem.write('save.lua',  binser.serialize(save))
 end

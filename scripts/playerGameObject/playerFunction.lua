@@ -130,6 +130,8 @@ Player = {
                 image =skillQuads.meleeDef,
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            value = 0.05,
+            perUpgrade = 0.23,
             number = 3,
             isOpened = true,
         },
@@ -140,6 +142,8 @@ Player = {
                 image =skillQuads.rangeDef,
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            value = 0.05,
+            perUpgrade = 0.23,
             number = 4,
             isOpened = true,
         },
@@ -167,7 +171,7 @@ Player = {
                 text = 'Speed increase',
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
-            perUpgrade = 0.04,
+            perUpgrade = 0.035,
             number = 6,
             value = 1,
         },
@@ -293,7 +297,7 @@ Player.Skills.Energy.value = Player.Energy.maxValue
 function Player:refreshParameters()
     self.x = borderWidth/2+40*k/2 
     self.y = borderHeight/2+40*k2/2
-    
+
     self.Camera.x = borderWidth/2+40*k/2 
     self.Camera.y = borderHeight/2+40*k2/2
       
@@ -305,12 +309,12 @@ function Player:refreshParameters()
     self.flagInv = true
     self.debaffStrenght =0.2
     
-    self.Hp.value = self.Hp.maxValue
-    self.Hp.lengthBar = self.Hp.maxValue
+    self.Hp.value = self.Hp.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio
+    self.Hp.lengthBar = self.Hp.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio
 
-    self.Energy.value = self.Energy.maxValue
-    self.Energy.lengthBar = self.Energy.maxValue
-    
+    self.Energy.value = self.Energy.maxValue*Player.tipStaticParametrs[Player.tip].energyRatio
+    self.Energy.lengthBar = self.Energy.maxValue*Player.tipStaticParametrs[Player.tip].energyRatio
+  
     self.Clows.angle = 0
     self.Clows.flag = 0
     self.Clows.R.timer = 10

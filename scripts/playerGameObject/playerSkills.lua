@@ -52,6 +52,17 @@ function Player.Skills:upgrade(playerSkill)
     playerSkill:upgrade()
 end
 
+function Player.Skills:getStartValue(playerSkill)
+    perUpgradeComponent = 1
+    if ( playerSkill.lvl>1 ) then
+        perUpgradeComponent =(1+playerSkill.perUpgrade)
+    end
+    for i=1, playerSkill.lvl-2 do
+        perUpgradeComponent =perUpgradeComponent+perUpgradeComponent*playerSkill.perUpgrade
+    end
+    return playerSkill.value/perUpgradeComponent
+end
+
 function playerLiDraw(dt)
     if (Player.Skills.SpecialAtack.Electric.isUsed) then 
         for i=#masli,1,-1 do
