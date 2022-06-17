@@ -4,36 +4,36 @@ function loadSave()
     if love.filesystem.getInfo('save.lua') then
         local TableSave = love.filesystem.read('save.lua')
         TableSave =unpack(binser.deserialize(TableSave))
-         save = {version,score,Wave.number,ParticlData,SettingsData,PlayerData}
-        
-        if ( TableSave[2]) then 
-            score =TableSave[2]
-        end
-        if ( TableSave[3]) then 
-            Wave.number = TableSave[3]
-        end
-        if ( TableSave[4]) then 
-            loadParticle(TableSave[4])
-        end
-        if  (TableSave[5]) then 
-            local playerSettings = TableSave[5]
-            if ( playerSettings[1]) then 
-                MusicVolume = playerSettings[1]
+        if (TableSave) then 
+            if ( TableSave[2]) then 
+                score =TableSave[2]
             end
-            if ( playerSettings[2]) then 
-                SoundsVolume = playerSettings[2]
+            if ( TableSave[3]) then 
+                Wave.number = TableSave[3]
             end
-            if ( playerSettings[3]) then 
-                Sensitivity = playerSettings[3] 
+            if ( TableSave[4]) then 
+                loadParticle(TableSave[4])
             end
-            if ( playerSettings[4]) then 
-                controllerChoose = playerSettings[4] 
+            if  (TableSave[5]) then 
+                local playerSettings = TableSave[5]
+                if ( playerSettings[1]) then 
+                    MusicVolume = playerSettings[1]
+                end
+                if ( playerSettings[2]) then 
+                    SoundsVolume = playerSettings[2]
+                end
+                if ( playerSettings[3]) then 
+                    Sensitivity = playerSettings[3] 
+                end
+                if ( playerSettings[4]) then 
+                    controllerChoose = playerSettings[4] 
+                end
             end
-        end
-        if ( TableSave[6]) then 
-            Player.tip = TableSave[6][1]
-            tablePlayerTipOpened = TableSave[6][2]
-            loadPlayerSkills(TableSave[6][3])
+            if ( TableSave[6]) then 
+                Player.tip = TableSave[6][1]
+                tablePlayerTipOpened = TableSave[6][2]
+                loadPlayerSkills(TableSave[6][3])
+            end
         end
     end
 end

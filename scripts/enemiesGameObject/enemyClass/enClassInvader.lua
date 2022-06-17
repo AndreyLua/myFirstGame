@@ -16,7 +16,7 @@ enemyInvaderTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    300,  -- damage
+    50,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  

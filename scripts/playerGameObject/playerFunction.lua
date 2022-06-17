@@ -196,9 +196,9 @@ Player = {
                 },
                 number = 8,
                 count = 2,
-                perUpgradeCount = 0.1,
+                perUpgradeCount = 0.08,
                 value = 0.3,
-                perUpgrade = 0.26,
+                perUpgrade = 0.15,
                 rare ="rare",
                 isUsed = false,
                 
@@ -249,10 +249,19 @@ Player = {
                     image =skillQuads.vampir,
                     slotRarityImage = UIQuads.tableSkillLegend,
                 },
+                count = 3,
                 number = 11,
-                value = 0.03,
+                value = 0.1,
                 rare ="legend",
-                isUsed = false,   
+                isUsed = false, 
+                perUpgrade = 0.2,
+                perUpgradeCount = 0.08,
+                
+                upgrade =  function(self)
+                    self.lvl = self.lvl+1
+                    self.value = self.value+self.value*self.perUpgrade
+                    self.count = self.count+self.count*self.perUpgradeCount
+                end;
             },
         },
         SpikeArmor = Class{__includes =Skill,
@@ -262,6 +271,8 @@ Player = {
                 image =skillQuads.spikeArmor,
                 slotRarityImage = UIQuads.tableSkillRare,
             },
+            value = 0.1,
+            perUpgrade = 0.2,
             number = 12,
             rare ="rare",
             value = 0, -- rare11
@@ -275,7 +286,8 @@ Player = {
             },
             number = 12,
             rare ="legend",
-            isOpened = false,
+            isOpened = true,
+            perUpgrade = 0.24,
             value = 0.1, -- legend12
         },
         Trade = Class{__includes =Skill,
@@ -488,7 +500,7 @@ function Player:takeDamage(dmg,tip,atacker)
     if ( tip=='e') then
         self.Hp.value = self.Hp.value - dmg
     end
-      if ( tip=='r') then
+    if ( tip=='r') then
         GetDamageEffect:new(atacker.x,atacker.y,7)
         self.Hp.value = self.Hp.value - dmg*(1-self.Skills.RangeDefense.value)
         if (self.Skills.SpikeArmor.isOpened == true) then 

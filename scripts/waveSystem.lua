@@ -41,7 +41,7 @@ function Wave:spawnObj()
             for i=1,math.random(1,2) do
                 local Geo  =math.random(1,4)
                 allSpawn(obj,Geo)
-                if ( #obj >50) then
+                if ( #obj >30) then
                     if ( math.random(1,100) >50) then
                         allSpawn(en,Geo,6)
                     end

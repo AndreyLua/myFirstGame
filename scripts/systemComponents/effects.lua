@@ -1,5 +1,6 @@
 local effects = {}
 
+
 explosionEffect = {
     particles = {}
 }
@@ -360,7 +361,7 @@ VampirEffect = {
 }
 
 function VampirEffect:new(target)
-    for i =1, math.random(3,5) do
+    for i =1, math.ceil(Player.Skills.SpecialAtack.Vampir.count) do
         local vampirParticl = {
             timer = 10-0.00001, 
             invTimer = 10, 
@@ -599,8 +600,8 @@ end
 
 EnergyArmorEffect = {
     value = 0,
-    maxValue = 400,
-    regen = 100,
+    maxValue = Player.Skills.EnergyArmor.value*Player.Hp.maxValue,
+    regen = Player.Skills.EnergyArmor.value*Player.Hp.maxValue/10,
     recovery = 10,
     recoveryTimer = 10,
     angle = 0,
@@ -679,25 +680,25 @@ end
 function EnergyArmorEffect:draw() 
     if ( Player.Skills.EnergyArmor.isOpened == true) then 
         love.graphics.setLineWidth(2*k)
-        love.graphics.setColor(0,1,1,self.value/self.maxValue)
+        love.graphics.setColor(0,1,1,self.value/self.maxValue/4)
         local curve =  love.math.newBezierCurve(Player.x-(Player.scaleBody/2)*k,Player.y-(Player.scaleBody+2)*k, Player.x,Player.y-(Player.scaleBody+10)*k,Player.x+(Player.scaleBody/2)*k,Player.y-(Player.scaleBody+2)*k) 
         curve:rotate(-self.angle-math.pi/2,Player.x,Player.y)
         curve:scale(self.value/self.maxValue,Player.x,Player.y)
         curve:translate((1-self.value/self.maxValue)*40*k*-1*math.cos(self.angle),(1-self.value/self.maxValue)*40*k*math.sin(self.angle))
         love.graphics.line(curve:render())
-        local colorRandom =1 -- math.random()/2*math.random(-1,1)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/7)
-        love.graphics.circle('fill',Player.x,Player.y,(Player.scaleBody+6)*k)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/2)
+        local colorRandom =1
         
-        love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k+self.shake*k)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/28)
+          love.graphics.circle('fill',Player.x,Player.y,(Player.scaleBody+6)*k)
         
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/4)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/8)
+          love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k+self.shake*k)
         
-        love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-2*k+self.shake*k)
-        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/6)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/16)
+          love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-2*k+self.shake*k)
         
-        love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-4*k+self.shake*k)
+        love.graphics.setColor(0,0.8+colorRandom,1+colorRandom,self.value/self.maxValue/24)
+          love.graphics.circle('line',Player.x,Player.y,(Player.scaleBody+6)*k-4*k+self.shake*k)
     end
 end
 

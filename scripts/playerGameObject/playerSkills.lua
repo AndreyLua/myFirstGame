@@ -50,6 +50,8 @@ end
 
 function Player.Skills:upgrade(playerSkill)
     playerSkill:upgrade()
+     print(playerSkill.value)
+    print(playerSkill.count)
 end
 
 function Player.Skills:getStartValue(playerSkill)
@@ -127,7 +129,7 @@ function Player.Skills.SpecialAtack.Vampir:atack(target)
 end
 
 function Player.Skills.SpecialAtack.Vampir:getHeal()
-    Player:heal(Player.Skills.SpecialAtack.Vampir.value) 
+    Player:heal(Player.Skills.SpecialAtack.Vampir.value/Player.Skills.SpecialAtack.Vampir.count) 
 end
 
 function Player.Skills.SpecialAtack.Electric:atack(target)
