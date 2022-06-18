@@ -599,9 +599,10 @@ function GetDamageEffect:draw(dt)
 end
 
 EnergyArmorEffect = {
+    flagStartParametrs = false,
     value = 0,
-    maxValue = Player.Skills.EnergyArmor.value*Player.Hp.maxValue,
-    regen = Player.Skills.EnergyArmor.value*Player.Hp.maxValue/10,
+    maxValue = 100,
+    regen = 1,
     recovery = 10,
     recoveryTimer = 10,
     angle = 0,
@@ -609,8 +610,13 @@ EnergyArmorEffect = {
     shakeK = 1,
 }
 
+
 function EnergyArmorEffect:update(dt)
     if ( Player.Skills.EnergyArmor.isOpened == true) then 
+        if ( EnergyArmorEffect.flagStartParametrs == false) then
+            Player.Skills.EnergyArmor:startParametrs(EnergyArmorEffect)
+            EnergyArmorEffect.flagStartParametrs = true
+        end
         self:angleUpdate(dt,Player.Controller.angle)
         if ( self.value>self.maxValue ) then
             self.value = self.maxValue

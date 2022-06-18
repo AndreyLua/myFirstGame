@@ -18,14 +18,14 @@ enemyMeleeTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    80,  -- damage
+    50,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    3, --health
-    3, --healthM
+    200, --health
+    200, --healthM
     {}, -- traces
     0, --climbFlag
     100, -- climbAtack

@@ -22,8 +22,8 @@ enemyBombTable = {
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    2, --health
-    2, --healthM
+    200, --health
+    200, --healthM
     {}, -- traces
     0,--flagBomb
     0,--prepar

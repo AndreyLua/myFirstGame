@@ -50,8 +50,8 @@ end
 
 function Player.Skills:upgrade(playerSkill)
     playerSkill:upgrade()
-     print(playerSkill.value)
-    print(playerSkill.count)
+   --  print(playerSkill.value)
+  --  print(playerSkill.count)
 end
 
 function Player.Skills:getStartValue(playerSkill)
@@ -153,8 +153,13 @@ function Player.Skills.EnergyArmor:getAtack(dmg)
     end
 end
 
+function Player.Skills.EnergyArmor:startParametrs(energyArmorEffect)
+    energyArmorEffect.maxValue = self.value*Player.Hp.maxValue
+    energyArmorEffect.regen =self.value*Player.Hp.maxValue/10 
+end
+
 function Player.Skills.Trade:regen(dt)
-    Player.Hp.value = Player.Hp.value +10*dt
+    Player.Hp.value = Player.Hp.value +self.value*Player.Hp.maxValue*dt
 end
 
 return playerSkills

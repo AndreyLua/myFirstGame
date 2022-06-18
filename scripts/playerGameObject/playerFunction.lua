@@ -299,7 +299,8 @@ Player = {
             },
             number = 13,
             rare ="legend",
-            value = 0.1, -- legend13
+            value = 0.01, -- legend13
+            perUpgrade = 0.15,
         },
     },
 }

@@ -22,8 +22,8 @@ enemyShooterTable = {
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    2, --health
-    2, --healthM
+    150, --health
+    150, --healthM
     {}, -- traces
     0,-- angleWing
     0,-- angleWingFlag

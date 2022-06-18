@@ -24,8 +24,8 @@ enemyHammerTable = {
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    3, --health
-    3, --healthM
+    300, --health
+    300, --healthM
     {}, -- traces
     4,--cost
 }

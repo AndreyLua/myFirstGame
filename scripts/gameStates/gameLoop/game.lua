@@ -109,7 +109,7 @@ objRegulS = {}
 enRegulS = {}
 
 Player.Energy.value = 1000
-Player.Hp.value = 1000 
+--Player.Hp.value = 1000 
 
 Wave:update(dt)
 
