@@ -9,10 +9,11 @@ local Skill = Class{
     lvl = 1, 
     perUpgrade = 0.2,
     value = 0,
-    number = 2000,
+    number = 10000,
     rare ="common",
-    isOpened = true,
+    isOpened = false,
     upgrade =  function(self)
+        self.Interface.cost = self.Interface.cost + math.floor(self.Interface.cost*self.Interface.costIncrease)
         self.lvl = self.lvl+1
         self.value = self.value+self.value*self.perUpgrade
     end;
@@ -53,8 +54,8 @@ Player = {
         lengthBar = 250,
         flag = true,
         regen = 0.1,--%
-        wasteBoost = 150,
-        wasteAtack = 30,
+        wasteBoost = 130,
+        wasteAtack = 10,
         wasteSpecialAtack = 70,
     },
     Hp = {
@@ -94,7 +95,8 @@ Player = {
     Skills = {
         Hp =Class{__includes =Skill, 
             Interface = {
-                cost = 100,
+                cost = 1500,
+                costIncrease = 0.35,
                 text = 'Increasing the amount of health',
                 image = skillQuads.hp,
                 slotRarityImage = UIQuads.tableSkillNormal,
@@ -102,6 +104,7 @@ Player = {
             number = 1,
             isOpened = true,
             upgrade =  function(self)
+                self.Interface.cost = self.Interface.cost + math.floor(self.Interface.cost*self.Interface.costIncrease)
                 self.lvl = self.lvl+1
                 self.value = self.value+self.value*self.perUpgrade
                 Player.Hp.maxValue = Player.Skills.Hp.value
@@ -109,7 +112,8 @@ Player = {
         },
         Energy = Class{__includes =Skill,
             Interface = {
-                cost = 100,
+                cost = 1700,
+                costIncrease = 0.35,
                 text = 'Increasing the amount of energy',
                 image = skillQuads.energy,
                 slotRarityImage = UIQuads.tableSkillNormal,
@@ -118,6 +122,7 @@ Player = {
             isOpened = true,
             
             upgrade =  function(self)
+                self.Interface.cost = self.Interface.cost + math.floor(self.Interface.cost*self.Interface.costIncrease)
                 self.lvl = self.lvl+1
                 self.value = self.value+self.value*self.perUpgrade
                 Player.Energy.maxValue = Player.Skills.Energy.value
@@ -125,19 +130,21 @@ Player = {
         },
         MeleeDefense = Class{__includes =Skill, 
             Interface = {
-                cost = 100,
+                cost = 2000,
+                costIncrease = 0.35,
                 text = 'Increased resistance to melee attacks',
                 image =skillQuads.meleeDef,
                 slotRarityImage = UIQuads.tableSkillNormal,
             },
+            
             value = 0.05,
             perUpgrade = 0.23,
             number = 3,
-            isOpened = true,
         },
         RangeDefense = Class{__includes =Skill, 
             Interface = {
-                cost = 100,
+                cost = 2000,
+                costIncrease = 0.35,
                 text = 'Increased resistance to range attacks',
                 image =skillQuads.rangeDef,
                 slotRarityImage = UIQuads.tableSkillNormal,
@@ -145,11 +152,11 @@ Player = {
             value = 0.05,
             perUpgrade = 0.23,
             number = 4,
-            isOpened = true,
         },
         Damage = Class{__includes =Skill, 
             Interface = {
-                cost = 100,
+                cost = 2500,
+                costIncrease = 0.35,
                 image =skillQuads.atack,
                 text = 'Increased attack power',
                 slotRarityImage = UIQuads.tableSkillNormal,
@@ -157,8 +164,9 @@ Player = {
             number = 5,
             value = 1,
             perUpgradeCrit = 0.17,
-            
+            isOpened = true,
             upgrade =  function(self)
+                self.Interface.cost = self.Interface.cost + math.floor(self.Interface.cost*self.Interface.costIncrease)
                 self.lvl = self.lvl+1
                 self.value = self.value+self.value*self.perUpgrade
                 Player.criticalChance = Player.criticalChance+Player.criticalChance*self.perUpgradeCrit
@@ -166,7 +174,8 @@ Player = {
         },
         Speed = Class{__includes =Skill, 
             Interface = {
-                cost = 100,
+                cost = 2000,
+                costIncrease = 0.35,
                 image =skillQuads.speed,
                 text = 'Speed increase',
                 slotRarityImage = UIQuads.tableSkillNormal,
@@ -177,7 +186,8 @@ Player = {
         },
         Collect = Class{__includes =Skill, 
             Interface = {
-                cost = 100,
+                cost = 1000,
+                costIncrease = 0.35,
                 text = 'Increasing the resource collection radius',
                 image =skillQuads.collectRange,
                 slotRarityImage = UIQuads.tableSkillNormal,
@@ -189,7 +199,8 @@ Player = {
         SpecialAtack = {
             Wave = Class{__includes =Skill, 
                 Interface = {
-                    cost = 100,
+                    cost = 2000,
+                    costIncrease = 0.35,
                     text = 'Wave attack modifier (expends energy)',
                     image =skillQuads.waveAtack,
                     slotRarityImage = UIQuads.tableSkillRare,
@@ -203,6 +214,7 @@ Player = {
                 isUsed = false,
                 
                 upgrade =  function(self)
+                    self.Interface.cost = self.Interface.cost + math.floor(self.Interface.cost*self.Interface.costIncrease) 
                     self.lvl = self.lvl+1
                     self.value = self.value+self.value*self.perUpgrade
                     self.count = self.count+self.count*self.perUpgradeCount
@@ -210,7 +222,8 @@ Player = {
             },
             Bloody = Class{__includes =Skill,
                 Interface = {
-                    cost = 100,
+                    cost = 2000,
+                    costIncrease = 0.35,
                     text = 'Bloody attack modifier (expends energy)',
                     image =skillQuads.bloodAtack,
                     slotRarityImage = UIQuads.tableSkillRare,
@@ -224,6 +237,7 @@ Player = {
                 isUsed = false,
                 
                 upgrade =  function(self)
+                    self.Interface.cost = self.Interface.cost + math.floor(self.Interface.cost*self.Interface.costIncrease)
                     self.lvl = self.lvl+1
                     self.value = self.value+self.value*self.perUpgrade
                     self.slowingDown = self.slowingDown+self.slowingDown*self.perUpgradeSlowingDown
@@ -231,7 +245,8 @@ Player = {
             },
             Electric = Class{__includes =Skill,
                 Interface = {
-                    cost = 100,
+                    cost = 2000,
+                    costIncrease = 0.35,
                     text = 'Electric attack modifier (expends energy)',
                     image =skillQuads.sealAtack,
                     slotRarityImage = UIQuads.tableSkillRare,
@@ -244,7 +259,8 @@ Player = {
             },
             Vampir = Class{__includes =Skill,
                 Interface = {
-                    cost = 100,
+                    cost = 3000,
+                    costIncrease = 0.35,
                     text = 'Steals part of the life of enemies',
                     image =skillQuads.vampir,
                     slotRarityImage = UIQuads.tableSkillLegend,
@@ -258,6 +274,7 @@ Player = {
                 perUpgradeCount = 0.08,
                 
                 upgrade =  function(self)
+                    self.Interface.cost = self.Interface.cost + math.floor(self.Interface.cost*self.Interface.costIncrease)
                     self.lvl = self.lvl+1
                     self.value = self.value+self.value*self.perUpgrade
                     self.count = self.count+self.count*self.perUpgradeCount
@@ -266,7 +283,8 @@ Player = {
         },
         SpikeArmor = Class{__includes =Skill,
             Interface = {
-                cost = 100,
+                cost = 3000,
+                costIncrease = 0.35,
                 text = 'The armor returns the damage received',
                 image =skillQuads.spikeArmor,
                 slotRarityImage = UIQuads.tableSkillRare,
@@ -279,20 +297,21 @@ Player = {
         },
         EnergyArmor = Class{__includes =Skill,
             Interface = {
-                cost = 100,
+                cost = 3000,
+                costIncrease = 0.35,
                 text = 'Increase the energy reserve for defense',
                 image =skillQuads.dopEnergy,
                 slotRarityImage = UIQuads.tableSkillLegend,
             },
             number = 12,
             rare ="legend",
-            isOpened = true,
             perUpgrade = 0.24,
             value = 0.1, -- legend12
         },
         Trade = Class{__includes =Skill,
             Interface = {
-                cost = 100,
+                cost = 3000,
+                costIncrease = 0.35,
                 text = 'Exchanges energy for health',
                 image =skillQuads.swapHpAndEn,
                 slotRarityImage = UIQuads.tableSkillLegend,
@@ -436,6 +455,7 @@ function Player.Camera:update(dt)
 end 
   
 function Player:draw(dt)
+    self.Controller:draw() 
     local xDraw = screenWidth/2+20*k+(self.x-self.Camera.x)
     local yDraw = screenHeight/2+20*k2+(self.y-self.Camera.y)  
     local clow1X =xDraw +playerTipDrawParametrs[Player.tip].clowX*k2*math.sin(self.angleBody+playerTipDrawParametrs[Player.tip].clowR)
@@ -462,9 +482,7 @@ end
 
 function Player:sledDraw(x,y,dt)
     --self.body:draw('line')
-    love.graphics.circle('line',self.Controller.x0,self.Controller.y0,13*k)
-    love.graphics.circle('line',mouse.x,mouse.y,5*k)
-    love.graphics.circle('line',mouse.x,mouse.y,5*k)
+    
     local playerSled = {
         angle = -self.angleBody+math.pi,
         ax =-2*k*math.sin(self.angleBody) ,
@@ -773,7 +791,15 @@ function Player:invisible(dt)
         end
     end
 end
-        
+  
+function Player.Controller:draw()
+    love.graphics.setColor(1,1,1,0.4)
+    love.graphics.circle('line',self.x0,self.y0,13*k)
+    love.graphics.circle('line',mouse.x,mouse.y,5*k)
+    love.graphics.circle('line',mouse.x,mouse.y,5*k)
+    love.graphics.setColor(1,1,1,1)
+end
+  
 function Player:drawUI()
     love.graphics.setColor(0.02,0.3,0.02,1)
     love.graphics.rectangle("fill",self.x-(self.scaleBody+17)*k,self.y+720/11*k/2,4*k2,-720/11*k)

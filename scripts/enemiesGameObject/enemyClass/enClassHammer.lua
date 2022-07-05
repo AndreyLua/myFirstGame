@@ -18,14 +18,14 @@ enemyHammerTable = {
     0, -- angleMouth 
     0, -- angleBody
     0, -- angleMouthFlag
-    80,  -- damage
+    60,  -- damage
     false, -- f
     -100*k, --  x  
     -100*k2, -- y  
     0,  -- ax 
     0,  -- ay
-    300, --health
-    300, --healthM
+    120, --health
+    120, --healthM
     {}, -- traces
     4,--cost
 }

@@ -220,8 +220,11 @@ function bodyButtonScale(x,y,flag,scale)
     end
 end
 
-function bodyTextPanel(x,y)
-    UIBatch:add(UIQuads.textPanel,x,y,-math.pi/2,k/3,k2/3,500,160)
+function bodyTextPanel(x,y,scale)
+    if (scale == nil) then
+        scale = 1/3
+    end
+    UIBatch:add(UIQuads.textPanel,x,y,-math.pi/2,k*scale,k2*scale,500,160)
 end
 
 function bodyButtonDirect(x,y,flag,direct,angle,scale)

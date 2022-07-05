@@ -19,7 +19,7 @@ function Reward:give(table)
                 Reward.skill.lvl = Reward.skill.lvl + 1
             else
                 Reward.skill.isOpened = true
-                Reward.skill.number = #table+1
+                --Reward.skill.number = #table+1 --- you can change this fragment to any sort skills
             end
         end
     end
@@ -85,7 +85,7 @@ function Reward:getBig(count)
 end
 
 function Reward:getNormal(count)
-    if ( math.random(1,100) > 70) then 
+    if ( math.random(1,100) > 60) then 
         local playerRareSkills = {}
         Player.Skills:raritySkills(playerRareSkills,"rare")
         self.skill  = playerRareSkills[math.random(1,#playerRareSkills)]
@@ -96,7 +96,7 @@ end
 
 
 function Reward:getSmall(count)
-    if ( math.random(1,100) >70) then 
+    if ( math.random(1,100) >50) then 
         local playerCommonSkills = {}
         Player.Skills:raritySkills(playerCommonSkills,"common")
         self.skill  = playerCommonSkills[math.random(1,#playerCommonSkills)]

@@ -248,8 +248,8 @@ function objMove(i,dt)
         else
         -----------------------------------------------   
             obj[i].ot =false
-            obj[i].x= obj[i].x+obj[i].ax*dt
-            obj[i].y= obj[i].y+obj[i].ay*dt
+            obj[i].x= obj[i].x+obj[i].ax*dt*3
+            obj[i].y= obj[i].y+obj[i].ay*dt*3
         -----------------------------------------------  
       end
       if ( obj[i].ax > 200*k) then 

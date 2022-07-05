@@ -13,7 +13,7 @@ SoundsVolume = 1
 Sensitivity = 1
 controllerChoose = 1
 
-scoreForParticle =15
+scoreForParticle =45
 
 ------------------EFFECTS -------------------------
 effect1 = moonshine(moonshine.effects.pixelate)
@@ -149,6 +149,12 @@ canvasToEffect= love.graphics.newCanvas(screenWidth ,screenHeight)
 -----------------------------------
 
 function love.load()
+   
+	--if love.system.getOS() == "Android" then
+	
+	--end
+
+
     if arg[#arg] == "-debug" then 
         require("mobdebug").start() 
     end

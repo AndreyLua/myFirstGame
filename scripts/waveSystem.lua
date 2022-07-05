@@ -7,10 +7,10 @@ Wave = {
     notionX = -250*k,
     notionY = 0,
     notionState = 0,
-    number =1,
+    number =10,
     countKilledEnemies = 50,
     goalKillEnemies = 50,
-    lvl = 1,
+    lvl = 5,
     lvlMax =5,
 }
 
@@ -54,7 +54,7 @@ end
 
 function Wave:spawnEnemies()
     if (#en < 50) then
-        Wave.timerSpawnEn:every(math.random(6,8)/(1+self.number/10), function()
+        Wave.timerSpawnEn:every(math.random(13,17)/(1+self.number/10), function()
             local Geo  =math.random(1,4)
             local Tip =math.random(1,self.lvl)
             allSpawn(en,Geo,Tip)

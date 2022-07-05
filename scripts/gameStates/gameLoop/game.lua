@@ -6,7 +6,7 @@ function buttonAdd:draw()
 end
 
 
-score = 999999
+score = 20000
 borderWidth =screenWidth/2
 borderHeight = screenHeight/2
 numberCleaner = 0 
@@ -29,6 +29,7 @@ local objFunction = require "scripts/meteoritesGameObject/objFunction"
 local waveSystem = require "scripts/waveSystem" 
 menu = require "scripts/gameStates/menu" 
 local loadGame = require "scripts/systemComponents/loadGame"
+local studySystem = require "scripts/studySystem"
 LoadPlayerImg()
 LoadSkillsImg()
 LoadPlayerParametrs()
@@ -36,6 +37,10 @@ LoadEnImg()
 LoadObjImg()
 
 function game:init()
+  
+if (StudySystem.isEnabled) then 
+    StudySystem:load()
+end
   
 Wave:refreshNotionParameters()
 Player:refreshParameters()
@@ -60,7 +65,6 @@ playerSledi = {}
 masli= {} 
 
 
---lvlParametrs()
 Player:refreshParameters()
 end
 
@@ -88,12 +92,12 @@ function love.keypressed(key, code)
 end
 
 function game:update(dt)
-
 if (buttonAdd:isTapped()) then 
     AddSound(uiClick,0.3)
     gamestate.switch(menu)
 end
- --en = {en[1]}
+ --en = {}
+ --obj = {}
 --Player.flagInv =true
 EnergyArmorEffect:update(dt)
 explosionEffect:update(dt)
@@ -108,11 +112,13 @@ BloodyEffect:update(dt)
 objRegulS = {}
 enRegulS = {}
 
-Player.Energy.value = 1000
+--Player.Energy.value = 1000
 --Player.Hp.value = 1000 
-
-Wave:update(dt)
-
+if not(StudySystem.isEnabled) then 
+    Wave:update(dt)
+else
+    StudySystem:update(dt)
+end
 --------------------
 Player.Camera:update(dt)
 Player:control()
@@ -314,7 +320,10 @@ function  game:draw()
     love.graphics.pop()
     love.graphics.setColor(1,1,1,1)
     explosionEffect:draw()
-   
+    
+    if (StudySystem.isEnabled) then
+        StudySystem:update(dt)
+    end
     
     local fontWidth = font:getWidth(tostring(score))
     love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
@@ -325,7 +334,7 @@ function  game:draw()
     
     love.graphics.draw(UIBatch)
     Wave:progressBarDraw()
-   
+    StudySystem:draw()
     love.graphics.setCanvas()
     love.graphics.setColor(1,1,1,1)
     if (Player.flagInv == false ) then
@@ -336,19 +345,16 @@ function  game:draw()
         love.graphics.draw(canvasToEffect,0,0,0,sx,sy)
     end
     
-    local stat  =  love.graphics.getStats()
-    love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
-    love.graphics.print("EN: "..tostring(#en), 100, 40,0,k/2,k2/2)
-    love.graphics.print("Stat  "..tostring(stat.drawcalls), 100, 70,0,k/2,k2/2)
-    love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
-    love.graphics.print("Resource: "..tostring(#resource), 100, 150,0,k/2,k2/2)
+   -- local stat  =  love.graphics.getStats()
+   -- love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
+   -- love.graphics.print("EN: "..tostring(#en), 100, 40,0,k/2,k2/2)
+   -- love.graphics.print("Stat  "..tostring(stat.drawcalls), 100, 70,0,k/2,k2/2)
+   -- love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
+   -- love.graphics.print("Resource: "..tostring(#resource), 100, 150,0,k/2,k2/2)
     
     vect = {}
 end
                
-
-
-
 function enGeo(Geo)
     if (Geo==1) then
         return -borderWidth-200*k,math.random(-borderHeight,borderHeight*2)
