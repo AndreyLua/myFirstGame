@@ -298,6 +298,7 @@ function  game:draw()
     if ( Player.a == 1 ) then 
         love.graphics.setColor(0.9,0.7,0.9,1)
     end 
+    StudySystem:drawUnderPlayer()
     love.graphics.draw(playerBatch)
     playerBatch:clear()
     love.graphics.setColor(1,1,1,1)

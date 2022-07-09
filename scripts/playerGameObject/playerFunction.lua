@@ -732,6 +732,20 @@ function Player:border()
     end 
 end
 
+function Player:studyBorder(panelScale)
+    if ( self.x > borderWidth*2-self.scaleBody*k) then
+        self.x = borderWidth*2 -self.scaleBody*k
+    end 
+    if ( self.x < -borderWidth+self.scaleBody*k+panelScale) then
+        self.x = -borderWidth +self.scaleBody*k+panelScale
+    end 
+    if ( self.y < -borderHeight+self.scaleBody*k2) then
+        self.y = -borderHeight +self.scaleBody*k2
+    end 
+    if ( self.y > borderHeight*2- self.scaleBody*k2) then
+        self.y = borderHeight*2 -self.scaleBody*k2
+    end 
+end
 function Player.Hp:update(dt)
     if ( self.value>self.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio) then
         self.value = self.maxValue*Player.tipStaticParametrs[Player.tip].healthRatio

@@ -108,6 +108,7 @@ UIQuads = {
     textPanel = love.graphics.newQuad(0,  889, 1000, 320, UISet:getDimensions()), 
     butChange = love.graphics.newQuad(0,  1210, 1340, 146, UISet:getDimensions()), 
     butPoint = love.graphics.newQuad(1017,  751, 120, 200, UISet:getDimensions()), 
+    arrow = love.graphics.newQuad(0,  1357, 752, 384, UISet:getDimensions()), 
 }
 
 resQuads = {
@@ -165,6 +166,6 @@ function love.load()
     font:setFilter("nearest")
     love.graphics.setFont(font)  
     gamestate.registerEvents()
-    loadSave()
+  --  loadSave()
     gamestate.switch(game)
 end

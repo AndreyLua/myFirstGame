@@ -1,19 +1,18 @@
 local studySystem = {}
 
-local Text = {
-    string ="",
-    outputText ="",
-    maxLineLength = 13,
-    lineLength =0,
-    lengthIndex = 0,
+local ArrowToTarget = {
+  
+  
 }
+local studyUIBatch = love.graphics.newSpriteBatch(UISet)
 
-
-local Move = {}
+local Move = {
+    text= "Use the joystick to move the player to the marked points",
+    Point = {},
+}
 local Atack = {}
 local Resource = {}
 local BuyUpgrades = {}
-local text1 = "5111 23123 131 2313125"
 
 StudySystem = {
     isEnabled = true,
@@ -21,56 +20,73 @@ StudySystem = {
     States ={},
 }
 
+
+
 function StudySystem:load()
-    Text:setText(text1)
-    Text:setLineSize(15)
+    Text:setText(Move.text)
+    Text:setLineSize(20)
+    Move.Point:spawn(500*k,200*k)
 end
 
 function StudySystem:update(dt)
     bodyTextPanel(130*k,screenHeight/2,1/2.3)
     Text:update(dt) 
+    Player:studyBorder(160*1/2.3*k+130*k)
+    
+    Move:update()
 end
 
 function StudySystem:draw()
     UIBatch:clear()
-    Text:print(150,screenHeight/2,0.6)
+    Text:print(90*k,screenHeight/2,0.6)
+    Move:draw()
 end
 
-function Text:setText(text)
-    self.string =text
-    self.outputText =""
-    self.maxLineLength = 13
-    self.lineLength =0
-    self.lengthIndex = 0
+
+function StudySystem:drawUnderPlayer()
+    love.graphics.draw(studyUIBatch)
 end
 
-function Text:setLineSize(size)
-    self.maxLineLength = size
+function Move:update()
+    studyUIBatch:clear()
+    Move.Point:collsionWithPlayer()
+    ArrowToTarget:draw(self.Point[1])
 end
-function Text:update(dt) 
-    if (self.lengthIndex<=#self.string) then 
-        self.lengthIndex = self.lengthIndex+1
-        self.lineLength = self.lineLength+1
-        local textLine ="" 
-        if (self.outputText:sub(#self.outputText,#self.outputText)=="_") then
-            self.outputText = self.outputText:sub(0,#self.outputText-1)
-        end
-        textLine = self.string:sub(self.lengthIndex,self.lengthIndex)
-        if ( self.lineLength>13 and self.string:sub(self.lengthIndex,self.lengthIndex) == " ") then
-            self.lineLength = 0 
-            textLine =textLine.."\n"
-        end
-        self.outputText = self.outputText..textLine.."_"
+
+function Move:draw()
+    love.graphics.push()
+        love.graphics.translate(-Player.Camera.x+40*k/2+screenWidth/2,-Player.Camera.y+40*k2/2+screenHeight/2)
+        Move.Point:draw()  
+    love.graphics.pop()
+end
+
+function Move.Point:spawn(x,y)
+    local newPoint = {
+        x = x,
+        y = y,
+    }
+    table.insert(self,newPoint)
+end
+
+function Move.Point:draw()
+    for i=1, #self do
+        love.graphics.circle('fill',Move.Point[i].x,Move.Point[i].y,10*k)
     end
 end
 
-function Text:print(x,y,scale)
-    love.graphics.setColor(1,1,1,1)
-    love.graphics.print(self.outputText,x,y,-3.14/2,scale*k,scale*k)
+function Move.Point:collsionWithPlayer()
+    for i=#self, 1,-1 do
+        if ( (math.pow((Player.x - Move.Point[i].x),2)+math.pow((Player.y - Move.Point[i].y),2))<4000*k) then
+            table.remove(Move.Point,i)
+        end  
+    end
 end
 
-
-function Move:update()
+function ArrowToTarget:draw(target)
+    if ( target) then 
+        local angleToTarget = math.atan2(Player.x-target.x, Player.y - target.y)
+        studyUIBatch:add(UIQuads.arrow,Player.x-Player.Camera.x+40*k/2+screenWidth/2,Player.y-Player.Camera.y+40*k2/2+screenHeight/2,-angleToTarget-math.pi/2,k/10,k2/10,-300,384/2)
+    end
 end
 
 return studySystem
