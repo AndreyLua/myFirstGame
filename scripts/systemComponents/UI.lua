@@ -163,7 +163,7 @@ end
 
 function Text:print(x,y,scale)
     love.graphics.setColor(1,1,1,1)
-    love.graphics.print(self.outputText,x,y+font:getWidth(tostring(self.outputText))/2,-3.14/2,scale*k,scale*k)
+    love.graphics.print(self.outputText,x,y+font:getWidth(tostring(self.outputText))/2*k*scale,-3.14/2,scale*k,scale*k)
 end
 
 

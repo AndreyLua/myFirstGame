@@ -108,7 +108,8 @@ UIQuads = {
     textPanel = love.graphics.newQuad(0,  889, 1000, 320, UISet:getDimensions()), 
     butChange = love.graphics.newQuad(0,  1210, 1340, 146, UISet:getDimensions()), 
     butPoint = love.graphics.newQuad(1017,  751, 120, 200, UISet:getDimensions()), 
-    arrow = love.graphics.newQuad(0,  1357, 752, 384, UISet:getDimensions()), 
+    arrow = love.graphics.newQuad(1417,  0, 256, 384, UISet:getDimensions()), 
+    point = love.graphics.newQuad(0,  1357, 256, 256, UISet:getDimensions()), 
 }
 
 resQuads = {
@@ -124,6 +125,7 @@ screenHeight = love.graphics.getHeight()
 --k  = screenWidth/1920*2.5
 k2 = screenHeight/1080*2.5
 k = k2 
+fontSize = 60
 
 --------------STATES--------------
 system = require "scripts/systemComponents/system" 
@@ -139,7 +141,8 @@ mouse = {
   x=0,
   y=0
 }
-
+en = {}
+obj = {}
 -------------CONST AND FLAGS------
 gradientR = 1
 gradientG = 0 
@@ -162,7 +165,7 @@ function love.load()
     io.stdout:setvbuf("no") 
     math.randomseed(os.time()) 
     love.window.setFullscreen(true,"desktop")
-    font = love.graphics.newFont("fonts/1.ttf",60)
+    font = love.graphics.newFont("fonts/1.ttf",fontSize)
     font:setFilter("nearest")
     love.graphics.setFont(font)  
     gamestate.registerEvents()

@@ -40,7 +40,7 @@ function Wave:spawnObj()
         Wave.timerSpawnObj:every(6, function()
             for i=1,math.random(1,2) do
                 local Geo  =math.random(1,4)
-                allSpawn(obj,Geo)
+                allSpawn(obj,Geo,math.random(1,5))
                 if ( #obj >30) then
                     if ( math.random(1,100) >50) then
                         allSpawn(en,Geo,6)
@@ -59,7 +59,7 @@ function Wave:spawnEnemies()
             local Tip =math.random(1,self.lvl)
             allSpawn(en,Geo,Tip)
             if (math.random(1,100) > 90 and self.number>=8 ) then   
-               -- self.wavesSpawnGroup(math.random(1,4))
+             --   self.wavesSpawnGroup(math.random(1,4))
             end
             Wave.timerSpawnEn:clear() 
         end)

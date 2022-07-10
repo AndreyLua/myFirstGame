@@ -36,12 +36,7 @@ LoadPlayerParametrs()
 LoadEnImg()
 LoadObjImg()
 
-function game:init()
-  
-if (StudySystem.isEnabled) then 
-    StudySystem:load()
-end
-  
+function game:init()  
 Wave:refreshNotionParameters()
 Player:refreshParameters()
   
@@ -64,7 +59,9 @@ playerSledi = {}
 
 masli= {} 
 
-
+if (StudySystem.isEnabled) then 
+    StudySystem:load()
+end
 Player:refreshParameters()
 end
 
@@ -229,7 +226,7 @@ end
 function game:movement(dt)
     if love.keyboard.isDown('e') then
         local Geo  =math.random(1,4)
-        allSpawn(obj,Geo)
+        allSpawn(obj,Geo,math.random(1,5))
         obj[#obj].f = true
         obj[#obj].x = mouse.x
         obj[#obj].y = mouse.y
@@ -298,7 +295,6 @@ function  game:draw()
     if ( Player.a == 1 ) then 
         love.graphics.setColor(0.9,0.7,0.9,1)
     end 
-    StudySystem:drawUnderPlayer()
     love.graphics.draw(playerBatch)
     playerBatch:clear()
     love.graphics.setColor(1,1,1,1)
@@ -321,15 +317,16 @@ function  game:draw()
     love.graphics.pop()
     love.graphics.setColor(1,1,1,1)
     explosionEffect:draw()
-    
+    love.graphics.setColor(1,1,1,1)
     if (StudySystem.isEnabled) then
         StudySystem:update(dt)
     end
     
     local fontWidth = font:getWidth(tostring(score))
     love.graphics.print(score,50*k/12, screenHeight/2+fontWidth/2*k2/2,-math.pi/2,k/2,k2/2)
-    
-    Wave:notionDraw(dt)
+    if not(StudySystem.isEnabled) then 
+        Wave:notionDraw(dt)
+    end
     sc(0,screenHeight/2)
     buttonAdd:draw()
     
@@ -350,7 +347,7 @@ function  game:draw()
    -- love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
    -- love.graphics.print("EN: "..tostring(#en), 100, 40,0,k/2,k2/2)
    -- love.graphics.print("Stat  "..tostring(stat.drawcalls), 100, 70,0,k/2,k2/2)
-   -- love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
+    love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
    -- love.graphics.print("Resource: "..tostring(#resource), 100, 150,0,k/2,k2/2)
     
     vect = {}
@@ -388,7 +385,7 @@ end
 function allSpawn(mas,Geo,Tip)
     if ( mas == obj) then
         local colorRGB = 0.2
-        local Body =math.random(1,5)
+        local Body =Tip
         local colorDop1,colorDop2,colorDop3,scale,collScale= objColorAndScale(Body)
         local x,y,ax,ay,ra = objGeo(Geo)
         local health = 1
@@ -417,7 +414,7 @@ function allSpawn(mas,Geo,Tip)
             health = health
             }
         e.body:moveTo(e.x, e.y)
-        table.insert(mas,e)
+        table.insert(obj,e)
     end
 ------------------------------------------------------------------------  
 ------------------------------------------------------------------------  
