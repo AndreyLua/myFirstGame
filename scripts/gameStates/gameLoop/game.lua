@@ -347,7 +347,7 @@ function  game:draw()
    -- love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
    -- love.graphics.print("EN: "..tostring(#en), 100, 40,0,k/2,k2/2)
    -- love.graphics.print("Stat  "..tostring(stat.drawcalls), 100, 70,0,k/2,k2/2)
-    love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
+   -- love.graphics.print("OBJ: "..tostring(#obj), 100, 110,0,k/2,k2/2)
    -- love.graphics.print("Resource: "..tostring(#resource), 100, 150,0,k/2,k2/2)
     
     vect = {}
@@ -368,17 +368,50 @@ function enGeo(Geo)
     end
 end
 function objGeo(Geo)
+    local distanceWidth = borderWidth/4
+    local distanceHeight = borderHeight/4
+    local speedMoveObj = 100
+    local speedRotateObj = math.random()*math.random(-1,1)
+    
     if (Geo==1) then
-        return -borderWidth-200*k,math.random(-borderHeight,borderHeight*2),math.random(18*k,30*k),math.random(-30*k,30*k), math.random()*math.random(-1,1)
+        local x = -borderWidth-200*k
+        local y = math.random(-borderHeight,borderHeight*2)
+        local movePointX =math.random(-borderWidth+distanceWidth,borderWidth/2-distanceWidth)
+        local movePointY =math.random(-borderHeight+distanceHeight,borderHeight*2-distanceHeight)
+        local angleToPoint = math.atan2(movePointX-x,movePointY-y) 
+        local speedX = math.sin(angleToPoint)
+        local speedY = math.cos(angleToPoint)
+        return  x, y,speedX*speedMoveObj,speedY*speedMoveObj, speedRotateObj
     end
     if (Geo==2) then
-        return  math.random(-borderWidth,borderWidth*2),-borderHeight-200*k2,math.random(-30*k,30*k),math.random(18*k,30*k),math.random()*math.random(-1,1)
+        local x = math.random(-borderWidth,borderWidth*2)
+        local y = -borderHeight-200*k2
+        local movePointX =math.random(-borderWidth+distanceWidth*2,borderWidth*2-distanceWidth*2)
+        local movePointY =math.random(-borderHeight+distanceHeight,borderHeight*2-distanceHeight)
+        local angleToPoint = math.atan2(movePointX-x,movePointY-y) 
+        local speedX = math.sin(angleToPoint)
+        local speedY = math.cos(angleToPoint)
+        return  x, y,speedX*speedMoveObj,speedY*speedMoveObj, speedRotateObj
     end
     if (Geo==3) then
-        return   math.random(-borderWidth,borderWidth*2),borderHeight*2+200*k2,math.random(-30*k,30*k),math.random(-30*k2,-18*k2),math.random()*math.random(-1,1)
+        local x = math.random(-borderWidth,borderWidth*2)
+        local y = borderHeight*2+200*k2
+        local movePointX =math.random(-borderWidth+distanceWidth*2,borderWidth*2-distanceWidth*2)
+        local movePointY =math.random(-borderHeight+distanceHeight,borderHeight*2-distanceHeight)
+        local angleToPoint = math.atan2(movePointX-x,movePointY-y) 
+        local speedX = math.sin(angleToPoint)
+        local speedY = math.cos(angleToPoint)
+        return  x, y,speedX*speedMoveObj,speedY*speedMoveObj, speedRotateObj
     end
     if (Geo==4) then
-        return  borderWidth*2+200*k, math.random(-borderHeight,borderHeight*2),math.random(-30*k,-18*k),math.random(-30*k,30*k), math.random()*math.random(-1,1)
+        local x = borderWidth*2+200*k
+        local y = math.random(-borderHeight,borderHeight*2)
+        local movePointX =math.random(borderWidth/2+distanceWidth,borderWidth*2-distanceWidth)
+        local movePointY =math.random(-borderHeight+distanceHeight,borderHeight*2-distanceHeight)
+        local angleToPoint = math.atan2(movePointX-x,movePointY-y) 
+        local speedX = math.sin(angleToPoint)
+        local speedY = math.cos(angleToPoint)
+        return  x, y,speedX*speedMoveObj,speedY*speedMoveObj, speedRotateObj
     end
 end
 
@@ -547,21 +580,16 @@ function allDraw(dt)
     end
 end
 function allBorder(i,mas)
-    if (mas[i].collScale~=nil) then 
+    local kost = false
         if (mas[i].x< borderWidth*2-mas[i].collScale*k/2 and  mas[i].x> -borderWidth +mas[i].collScale*k/2 and  mas[i].y> -borderHeight+mas[i].collScale*k2/2 and  mas[i].y<borderHeight*2-mas[i].collScale*k2/2) then
             mas[i].f = true
         end
-    else
-        if (mas[i].x > borderWidth*2+500*k or mas[i].x < -borderWidth-500*k or mas[i].y < -borderHeight-500*k or  mas[i].y > borderHeight*2+500*k ) then
-            table.remove(mas,i)
-        end
-    end
     if ( mas == obj and mas[i].pok > 0 ) then 
         if ( mas[i].x > borderWidth*2 or mas[i].x < -borderWidth or mas[i].y < -borderHeight or  mas[i].y > borderHeight*2 ) then
+            kost = true
             table.remove(mas,i)
         end 
     end 
-    
     if ( mas[i] and mas[i].f == true and mas[i].collScale~=nil) then
         if ( mas[i].x > borderWidth*2-mas[i].collScale*k/2) then 
             mas[i].ax = -mas[i].ax
@@ -580,6 +608,12 @@ function allBorder(i,mas)
             mas[i].y = borderHeight*2 - 0.1*k2-mas[i].collScale*k2/2
         end
         if ( mas[i].x > borderWidth*2 or mas[i].x < -borderWidth or mas[i].y < -borderHeight or  mas[i].y > borderHeight*2 ) then
+            table.remove(mas,i)
+            kost = true
+        end
+    end
+    if (mas[i]~=nil) then 
+        if (kost == false and i and mas and mas[i]~=nil and mas[i].x and  mas[i].x > borderWidth*2+500*k or mas[i].x < -borderWidth-500*k or mas[i].y < -borderHeight-500*k or  mas[i].y > borderHeight*2+500*k ) then
             table.remove(mas,i)
         end
     end

@@ -13,12 +13,17 @@ local Atack = {
 }
 local Resource = {
     text= "You can destroy meteorites without using an attack to get energy, health and resources.",
+    Target={
+        value = nil
+    },
 }
-local BuyUpgrades = {}
+local BuyUpgrades = {
+    text = "Asa",
+}
 
 StudySystem = {
     isEnabled = true,
-    number = 2,
+    number = 0,
     States ={},
 }
 table.insert(StudySystem.States,Move)
@@ -27,7 +32,6 @@ table.insert(StudySystem.States,Resource)
 
 function StudySystem:load()
     self.number = self.number+1
-    print(self.number)
     Text:setText(self.States[self.number].text)
     Text:setLineSize(25)
     self.States[self.number]:load()
@@ -38,14 +42,24 @@ function StudySystem:update(dt)
     Text:update(dt) 
     Player:studyBorder(160*1/2.3*k+130*k)
     self.States[self.number]:update()
+    StudySystem:movement(dt)
 end
 
 function StudySystem:draw()
-    Text:print(90*k,screenHeight/2,0.6)
+    Text:print(90*k,screenHeight/2,0.55)
     self.States[self.number]:draw()
     love.graphics.draw(studyUIBatch)
 end
 
+function StudySystem:movement(dt)
+    if love.keyboard.isDown('x') then
+        allSpawn(obj,3,2)
+    end
+    if love.keyboard.isDown('z') then
+        obj = {}
+    end
+end
+      
 function Move:load()
     Move.Points:spawn(screenWidth/2,screenHeight/10)
     Move.Points:spawn(screenWidth/1.2,screenHeight/1.5)
@@ -80,27 +94,46 @@ function Atack:draw()
 end
 
 function Resource:load()
-     allSpawn(obj,2,2)
-     allSpawn(obj,1,1)
-       allSpawn(obj,2,2)
-     allSpawn(obj,1,1)
-       allSpawn(obj,2,2)
-     allSpawn(obj,1,1)
-       allSpawn(obj,2,2)
-     allSpawn(obj,1,1)
-       allSpawn(obj,2,2)
-     allSpawn(obj,1,1)
-       allSpawn(obj,2,2)
-     allSpawn(obj,1,1)
-     
+    allSpawn(obj,4,2)
+    allSpawn(obj,4,1)
+    self.Target:set(obj[#obj])
 end
 
 function Resource:update()
     studyUIBatch:clear()
-   
+    ArrowToTarget:draw(self.Target.value)
+    self.Target:draw()
+    for i =1,#obj do
+        if (obj[i].f) then 
+            Resource:objStudyBorder(i,160*1/2.3*k+130*k)
+        end
+    end
+    if (self.Target.value and self.Target.value.health<0) then 
+        self.Target:set(obj[#obj])
+    end
+    if (#obj<1) then 
+        StudySystem:load()
+    end
 end
 
 function Resource:draw()
+end
+
+function Resource.Target:set(target)
+    self.value = target
+end
+
+function Resource.Target:draw()
+    if ( self.value) then
+        studyUIBatch:add(UIQuads.point,self.value.x-Player.Camera.x+40*k/2+screenWidth/2,self.value.y-Player.Camera.y+40*k2/2+screenHeight/2,0,k/14,k2/14,256/2, 256/2)
+    end
+end
+
+function Resource:objStudyBorder(i,panelScale)
+    if ( obj[i].x <  -borderWidth+obj[i].collScale*k/2+panelScale) then 
+        obj[i].ax = -obj[i].ax
+        obj[i].x = -borderWidth + 0.1*k+obj[i].collScale*k/2+panelScale
+    end
 end
 
 function Move.Points:spawn(x,y)
@@ -116,6 +149,7 @@ function Move.Points:draw()
          studyUIBatch:add(UIQuads.point,Move.Points[i].x-Player.Camera.x+40*k/2+screenWidth/2,Move.Points[i].y-Player.Camera.y+40*k2/2+screenHeight/2,0,k/10,k2/10,256/2, 256/2)
     end
 end
+
 
 function Move.Points:collsionWithPlayer()
     for i=#self, 1,-1 do
