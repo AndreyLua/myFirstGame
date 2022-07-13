@@ -388,11 +388,11 @@ function add()
   local y = 0 
   if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and love.mouse.isDown(1))  then
       UIBatch:setColor(1,1,1,0.6)
-      UIBatch:add(UIQuads.add,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
+      UIBatch:add(UIQuads.add,x+120/4*k2,y+120/4*k,-math.pi/2,k/4,k2/4,120, 120)
       UIBatch:setColor(1,1,1,1)
   else
       UIBatch:setColor(1,1,1,1)
-      UIBatch:add(UIQuads.add,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
+      UIBatch:add(UIQuads.add,x+120/4*k2,y+120/4*k,-math.pi/2,k/4,k2/4,120, 120)
   end
   love.graphics.setColor(1,1,1,1)
 end
@@ -402,11 +402,11 @@ function exit()
   local y = 0 
   if (mouse.x > 0 and  mouse.x <60*k and mouse.y > 0 and  mouse.y <60 *k2 and love.mouse.isDown(1))  then
       UIBatch:setColor(1,1,1,0.6)
-      UIBatch:add(UIQuads.ex,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
+      UIBatch:add(UIQuads.ex,x+120/4*k2,y+120/4*k,-math.pi/2,k/4,k2/4,120, 120)
       UIBatch:setColor(1,1,1,1)
   else
       UIBatch:setColor(1,1,1,1)
-      UIBatch:add(UIQuads.ex,x+120/4*k2,y+125/4*k,-math.pi/2,k/4,k2/4,120, 125)
+      UIBatch:add(UIQuads.ex,x+120/4*k2,y+120/4*k,-math.pi/2,k/4,k2/4,120, 120)
   end
   love.graphics.setColor(1,1,1,1)
 end

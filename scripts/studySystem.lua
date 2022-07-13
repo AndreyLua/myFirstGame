@@ -12,23 +12,30 @@ local Atack = {
     text= "Use the second finger for an extra touch to attack. Watch the energy",
 }
 local Resource = {
-    text= "You can destroy meteorites without using an attack to get energy, health and resources.",
+    text= "You can destroy meteorites without using an attack to get energy, health and resources",
     Target={
         value = nil
     },
 }
 local BuyUpgrades = {
-    text = "Asa",
+    text = "You can spend resources to upgrade abilities or create new ones. Tap to menu button",
+    LightButton ={
+        flag = 0,
+        value =0.1,
+        width = 60*k,
+        height = 60*k,
+    },
 }
 
 StudySystem = {
     isEnabled = true,
-    number = 0,
+    number = 3,
     States ={},
 }
 table.insert(StudySystem.States,Move)
 table.insert(StudySystem.States,Atack)
 table.insert(StudySystem.States,Resource)
+table.insert(StudySystem.States,BuyUpgrades)
 
 function StudySystem:load()
     self.number = self.number+1
@@ -38,10 +45,11 @@ function StudySystem:load()
 end
 
 function StudySystem:update(dt)
+    studyUIBatch:clear()
     bodyTextPanel(130*k,screenHeight/2,1/2.3)
     Text:update(dt) 
     Player:studyBorder(160*1/2.3*k+130*k)
-    self.States[self.number]:update()
+    self.States[self.number]:update(dt)
     StudySystem:movement(dt)
 end
 
@@ -65,8 +73,7 @@ function Move:load()
     Move.Points:spawn(screenWidth/1.2,screenHeight/1.5)
 end
 
-function Move:update()
-    studyUIBatch:clear()
+function Move:update(dt)
     Move.Points:collsionWithPlayer()
     ArrowToTarget:draw(self.Points[1])
     Move.Points:draw()
@@ -83,8 +90,7 @@ function Atack:load()
     en[#en].damage = 0 
 end
 
-function Atack:update()
-    studyUIBatch:clear()
+function Atack:update(dt)
     if (#en<1) then
         StudySystem:load()
     end
@@ -99,8 +105,7 @@ function Resource:load()
     self.Target:set(obj[#obj])
 end
 
-function Resource:update()
-    studyUIBatch:clear()
+function Resource:update(dt)
     ArrowToTarget:draw(self.Target.value)
     self.Target:draw()
     for i =1,#obj do
@@ -133,6 +138,34 @@ function Resource:objStudyBorder(i,panelScale)
     if ( obj[i].x <  -borderWidth+obj[i].collScale*k/2+panelScale) then 
         obj[i].ax = -obj[i].ax
         obj[i].x = -borderWidth + 0.1*k+obj[i].collScale*k/2+panelScale
+    end
+end
+
+function BuyUpgrades:load()
+ 
+end
+
+function BuyUpgrades:update(dt)
+    BuyUpgrades.LightButton:upgrade(dt)
+end
+
+function BuyUpgrades:draw()
+    love.graphics.setColor(1,1,1,self.LightButton.value)
+    love.graphics.rectangle("fill",0,0,self.LightButton.width,self.LightButton.width,10)
+    love.graphics.setColor(1,1,1,1)
+end
+
+function BuyUpgrades.LightButton:upgrade(dt)
+    if ( self.flag == 1) then 
+        self.value = self.value - 0.4*dt 
+        if (self.value < 0.1) then 
+            self.flag =0
+        end
+    else
+        self.value = self.value + 0.4*dt 
+        if (self.value > 0.5) then 
+            self.flag =1
+        end
     end
 end
 
