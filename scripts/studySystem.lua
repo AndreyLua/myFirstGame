@@ -4,6 +4,7 @@ local ArrowToTarget = {
 }
 local studyUIBatch = love.graphics.newSpriteBatch(UISet)
 
+
 local Move = {
     text= "Use the joystick to move the player to the marked points",
     Points = {},
@@ -19,12 +20,7 @@ local Resource = {
 }
 local BuyUpgrades = {
     text = "You can spend resources to upgrade abilities or create new ones. Tap to menu button",
-    LightButton ={
-        flag = 0,
-        value =0.1,
-        width = 60*k,
-        height = 60*k,
-    },
+    state = 0,
 }
 
 StudySystem = {
@@ -35,7 +31,8 @@ StudySystem = {
 table.insert(StudySystem.States,Move)
 table.insert(StudySystem.States,Atack)
 table.insert(StudySystem.States,Resource)
-table.insert(StudySystem.States,BuyUpgrades)
+table.insert(StudySystem.States,BuyUpgrades)--ONLY LAST MAY BE
+
 
 function StudySystem:load()
     self.number = self.number+1
@@ -54,7 +51,9 @@ function StudySystem:update(dt)
 end
 
 function StudySystem:draw()
-    Text:print(90*k,screenHeight/2,0.55)
+    if not(self.States[self.number].state>0) then
+        Text:print(90*k,screenHeight/2,0.55)
+    end
     self.States[self.number]:draw()
     love.graphics.draw(studyUIBatch)
 end
@@ -142,31 +141,27 @@ function Resource:objStudyBorder(i,panelScale)
 end
 
 function BuyUpgrades:load()
- 
+    LightButtonZone = LightZone(0,0,60*k,60*k)
 end
 
+function BuyUpgrades:nextState(x,y,width,height)
+    self.state = self.state+1
+  --  if ( self.state ==1) then 
+        LightButtonZone = LightZone(x,y,width,height) -- SKillsButton
+  --  end
+    
+end
+
+ --if (StudySystem.isEnabled) then
+ --       StudySystem.States[#StudySystem.States]:nextState()
+  --    end
+      
 function BuyUpgrades:update(dt)
-    BuyUpgrades.LightButton:upgrade(dt)
+    LightButtonZone:update(dt)
 end
 
 function BuyUpgrades:draw()
-    love.graphics.setColor(1,1,1,self.LightButton.value)
-    love.graphics.rectangle("fill",0,0,self.LightButton.width,self.LightButton.width,10)
-    love.graphics.setColor(1,1,1,1)
-end
-
-function BuyUpgrades.LightButton:upgrade(dt)
-    if ( self.flag == 1) then 
-        self.value = self.value - 0.4*dt 
-        if (self.value < 0.1) then 
-            self.flag =0
-        end
-    else
-        self.value = self.value + 0.4*dt 
-        if (self.value > 0.5) then 
-            self.flag =1
-        end
-    end
+    LightButtonZone:draw()
 end
 
 function Move.Points:spawn(x,y)

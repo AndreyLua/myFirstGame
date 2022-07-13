@@ -1,5 +1,6 @@
 local menu = {}
 
+local studySystem = require "scripts/studySystem"
 local UI= require "scripts/systemComponents/UI"
 local skills = require "scripts/gameStates/menuSections/skills" 
 local convert = require "scripts/gameStates/menuSections/convert/main"
@@ -78,32 +79,43 @@ function buttonNo:draw()
     rejectBut(buttonNo.x,buttonNo.y,buttonNoScale,buttonNo.isTappedFlag) 
 end
 
+function menu:init()
+    if (StudySystem.isEnabled) then
+        StudySystem.States[#StudySystem.States]:nextState(buttonSkillsX-buttonSkillsWidth/2,buttonSkillsY-buttonSkillsHeight/2,buttonSkillsWidth,buttonSkillsHeight)
+    end
+end
+
 function menu:update(dt)
-    if (buttonAdd:isTapped()) then 
-        AddSound(uiClick,0.3)
-        exp =  {}
-        gamestate.switch(game)
+    StudySystem:update(dt)
+    if not(StudySystem.isEnabled) then
+        if (buttonAdd:isTapped()) then 
+            AddSound(uiClick,0.3)
+            exp =  {}
+            gamestate.switch(game)
+        end
     end
     if ( exitFlag == false) then 
         if (buttonSkills:isTapped()) then 
             AddSound(uiSelect,0.3)
             gamestate.switch(skills)
         end
-        if (buttonConverter:isTapped()) then 
-            AddSound(uiSelect,0.3)
-            gamestate.switch(convert)
-        end
-        if (buttonCharacter:isTapped()) then 
-            AddSound(uiSelect,0.3)
-            gamestate.switch(character)
-        end
-        if (buttonSettings:isTapped()) then 
-            AddSound(uiSelect,0.3)
-            gamestate.switch(settings)
-        end
-        if (buttonExit:isTapped()) then 
-            AddSound(uiSelect,0.3)
-            exitFlag = true 
+        if not(StudySystem.isEnabled) then
+            if (buttonConverter:isTapped()) then 
+                AddSound(uiSelect,0.3)
+                gamestate.switch(convert)
+            end
+            if (buttonCharacter:isTapped()) then 
+                AddSound(uiSelect,0.3)
+                gamestate.switch(character)
+            end
+            if (buttonSettings:isTapped()) then 
+                AddSound(uiSelect,0.3)
+                gamestate.switch(settings)
+            end
+            if (buttonExit:isTapped()) then 
+                AddSound(uiSelect,0.3)
+                exitFlag = true 
+            end
         end
     else
         if (buttonYes:isTapped()) then 
@@ -145,6 +157,7 @@ function menu:draw()
     else
         menu:drawTextButtons()
     end
+    StudySystem:draw()
 end
 
 function menu:drawTextButtons()

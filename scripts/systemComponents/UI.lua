@@ -94,6 +94,39 @@ Slider = Class{
     end;
 } 
 
+LightZone = Class{
+    init = function(self,x,y, width, height)
+        self.x = x
+        self.y = y
+        self.flag = 0
+        self.value =0.1
+        self.width = width
+        self.height = height
+    end;
+    setSize = function(width,height)
+        self.width = width
+        self.height = height
+    end;
+    update = function(self,dt)
+        if ( self.flag == 1) then 
+            self.value = self.value - 0.4*dt 
+            if (self.value < 0.1) then 
+                self.flag =0
+            end
+        else
+            self.value = self.value + 0.4*dt 
+            if (self.value > 0.5) then 
+                self.flag =1
+            end
+        end
+    end;
+    draw = function(self)
+        love.graphics.setColor(1,1,1,self.value)
+          love.graphics.rectangle("fill",self.x,self.y,self.width,self.height,10)
+        love.graphics.setColor(1,1,1,1)
+    end;
+}
+
 NeedResourcesText = {
     timer = -0.1,
     flag = true,
