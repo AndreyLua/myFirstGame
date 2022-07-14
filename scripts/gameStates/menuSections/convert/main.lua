@@ -1,5 +1,6 @@
 local convert = {}
 
+
 local UI = require "scripts/systemComponents/UI"
 local playerSkillsFunction = require "scripts/playerGameObject/playerSkills"
 local particlSystem = require "scripts/gameStates/menuSections/convert/particlSystem"
@@ -63,18 +64,34 @@ function convert:enter()
     playerSkills = {}
     Player.Skills:skillsTable(playerSkills)
     Player.Skills:sortSkillsTable(playerSkills)
+    if (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==6) then
+        StudySystem.States[#StudySystem.States]:nextState(screenWidth/1.7-100*k,screenHeight/2-100*k,200*k,200*k)
+    end
+
 end
 
 function convert:update(dt)
+    UIBatch:clear()
+    if (StudySystem.isEnabled ) then
+        StudySystem:update(dt)
+        if (StudySystem.States[#StudySystem.States].state ==7 and Flask.flaskFill ) then
+            StudySystem.States[#StudySystem.States]:nextState(buttonConvertX-buttonConvertWidth/2,buttonConvertY-buttonConvertHeight/2,buttonConvertWidth,buttonConvertHeight)
+        end
+    end
     explosionEffect:update(dt)
     Particle:update(Flask,dt)
     Reward:updateSlotScale(dt)
     Flask:isFill()
     
     if (buttonAdd:isTapped()) then 
-        explosionEffect:reset()
-        AddSound(uiClick,0.3)
-        gamestate.switch(menu)
+        if (not StudySystem.isEnabled or ( StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==9)  ) then 
+            if (StudySystem.isEnabled) then
+                StudySystem.States[#StudySystem.States]:nextState()
+            end
+            explosionEffect:reset()
+            AddSound(uiClick,0.3)
+            gamestate.switch(menu)
+        end
     end
     
     if (Reward.flagMenu == true and buttonOk:isTapped()) then
@@ -84,10 +101,15 @@ function convert:update(dt)
         playerSkills = {} 
         Player.Skills:skillsTable(playerSkills)
         Player.Skills:sortSkillsTable(playerSkills)
+        if (StudySystem.isEnabled ) then
+            StudySystem.States[#StudySystem.States]:nextState(0,0,60*k,60*k)
+        end
     end
     
     if ( Reward.flagMenu == false and buttonConvert:isTapped() and Particle.flagClear == false) then
-        Flask:convert()
+        if (not StudySystem.isEnabled or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==8  ) ) then
+            Flask:convert()
+        end
     end
 
     if love.mouse.isDown(1)  then
@@ -95,16 +117,18 @@ function convert:update(dt)
         local distanceY = mouse.y -screenHeight/2
         if ( (distanceX*distanceX + distanceY*distanceY < 100*k*100*k) and #Particle.list<140 and Reward.flagMenu == false ) then
             if ( score >=scoreForParticle and Particle.flagClear == false) then
-                score = score - scoreForParticle
-                if ( Particle.delaySound <=0) then
-                    AddSound(uiParticle,0.2)
-                    Particle.delaySound = 1
-                end
-                Particle.delaySound = Particle.delaySound - 15*dt
-                if ( math.random(1,2) == 1 ) then
-                    Particle:spawn(0,math.random(screenHeight/2-90*k2,screenHeight/2-40*k2),1)
-                else
-                    Particle:spawn(0,math.random(screenHeight/2+40*k2,screenHeight/2+90*k2),1)
+                if (not StudySystem.isEnabled  or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==7 and not (Flask.flaskFill))) then
+                    score = score - scoreForParticle
+                    if ( Particle.delaySound <=0) then
+                        AddSound(uiParticle,0.2)
+                        Particle.delaySound = 1
+                    end
+                    Particle.delaySound = Particle.delaySound - 15*dt
+                    if ( math.random(1,2) == 1 ) then
+                        Particle:spawn(0,math.random(screenHeight/2-90*k2,screenHeight/2-40*k2),1)
+                    else
+                        Particle:spawn(0,math.random(screenHeight/2+40*k2,screenHeight/2+90*k2),1)
+                    end
                 end
             else
                 if (NeedResourcesText.timer == nil or  NeedResourcesText.timer < 0) then 
@@ -118,7 +142,6 @@ end
 
 function convert:draw()
     local dt = love.timer.getDelta()
-    UIBatch:clear()
     skillBatch:clear()
     playerBatch:clear()
     love.graphics.setColor(1,1,1,1)
@@ -167,12 +190,15 @@ function convert:draw()
           end
     end
     -----------
-    love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
-    love.graphics.print("particl: "..tostring(#Particle.list), 100, 70,0,k/2,k2/2)
+   -- love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
+   -- love.graphics.print("particl: "..tostring(#Particle.list), 100, 70,0,k/2,k2/2)
     -----------
     explosionEffect:draw()
     
     NeedResourcesText:print(100*k,screenHeight/2,0.6,dt)
+    if (StudySystem.isEnabled ) then
+        StudySystem:draw()
+    end
 end
 
 function Flask:noFillColor(dt)

@@ -194,9 +194,13 @@ function Text:update(dt)
     end
 end
 
-function Text:print(x,y,scale)
+function Text:print(x,y,scale,light)
+    if ( light == nil) then
+        light = 1
+    end
+    love.graphics.setColor(1,1,1,light)
+      love.graphics.print(self.outputText,x,y+font:getWidth(tostring(self.outputText))/2*k*scale,-3.14/2,scale*k,scale*k)
     love.graphics.setColor(1,1,1,1)
-    love.graphics.print(self.outputText,x,y+font:getWidth(tostring(self.outputText))/2*k*scale,-3.14/2,scale*k,scale*k)
 end
 
 
@@ -295,11 +299,16 @@ function bodyButtonScale(x,y,flag,scale)
     end
 end
 
-function bodyTextPanel(x,y,scale)
+function bodyTextPanel(x,y,scale,light)
     if (scale == nil) then
         scale = 1/3
     end
+    if (light == nil) then
+        light = 1 
+    end
+    UIBatch:setColor(1,1,1,light)
     UIBatch:add(UIQuads.textPanel,x,y,-math.pi/2,k*scale,k2*scale,500,160)
+    UIBatch:setColor(1,1,1,1)
 end
 
 function bodyButtonDirect(x,y,flag,direct,angle,scale)

@@ -2,7 +2,7 @@ local skills = {}
 
 local playerSkillsInterface = require "scripts/playerGameObject/playerSkillsInterface" 
 local playerSkillsFunction = require "scripts/playerGameObject/playerSkills" 
-local studySystem = require "scripts/studySystem"
+
 local difButton = (screenWidth-35*k-0.4*1.2*320*k-60*k-0.196*1.2*320*k-320*k/3-0.15*k*240)
 
 local xTextPanel = (35*k)+0.2*difButton*1.12+(160/3*k)
@@ -100,9 +100,9 @@ function skills:enter()
 end
 
 function skills:update(dt)
-    
-    StudySystem:update(dt)
-    
+    if (StudySystem.isEnabled) then 
+        StudySystem:update(dt)
+    end
     local indexR = xR / (math.pi/6)
     if ( xR%(math.pi/6) > math.pi/12) then
         indexR = math.ceil(xR / (math.pi/6))
@@ -117,17 +117,26 @@ function skills:update(dt)
     
     
     if (flagAcceptMenu == true and buttonYes:isTapped()) then
-        AddSound(uiSelect,0.3)
-        if (speedR == 0 and playerSkills[indexR+4] and  playerSkills[indexR+4].Interface.cost <= score and playerSkills[indexR+4].lvl < Player.maxLvlSkills) then
-            score = score - playerSkills[indexR+4].Interface.cost
-            Player.Skills:upgrade(playerSkills[indexR+4])
-        else
-            AddSound(uiError,0.3)
+        if (not(StudySystem.isEnabled) or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==3)) then
+            if (StudySystem.isEnabled) then
+                StudySystem.States[#StudySystem.States]:nextState(buttonNoX-buttonNoSize/2,buttonNoY-buttonNoSize/2,buttonNoSize,buttonNoSize)
+            end
+          
+            AddSound(uiSelect,0.3)
+            if (speedR == 0 and playerSkills[indexR+4] and  playerSkills[indexR+4].Interface.cost <= score and playerSkills[indexR+4].lvl < Player.maxLvlSkills) then
+                score = score - playerSkills[indexR+4].Interface.cost
+                Player.Skills:upgrade(playerSkills[indexR+4])
+            else
+                AddSound(uiError,0.3)
+            end
         end
     end
     
     if (flagAcceptMenu == true and buttonNo:isTapped()) then
-        if not(StudySystem.isEnabled) or  then
+        if (not(StudySystem.isEnabled) or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==4)) then
+            if (StudySystem.isEnabled) then
+                StudySystem.States[#StudySystem.States]:nextState(0,0,60*k,60*k)
+            end
             AddSound(uiClose,0.2)
             flagAcceptMenu = false
             lightKoff = 1
@@ -135,28 +144,32 @@ function skills:update(dt)
     end
     
     if (buttonAdd:isTapped()) then
-        exp = {}
-        AddSound(uiClick,0.3)
-        gamestate.switch(menu)
+        if (not(StudySystem.isEnabled) or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==5)) then
+            exp = {}
+            AddSound(uiClick,0.3)
+            gamestate.switch(menu)
+        end
     end 
     
     if ( flagAcceptMenu == false) then 
         if (buttonUpdate:isTapped()) then
-            if (speedR == 0 and playerSkills[indexR+4] and playerSkills[indexR+4].Interface.cost<= score) then
-                AddSound(uiSelect,0.3)
-                flagAcceptMenu = true
-                
-                if (StudySystem.isEnabled) then
-                    StudySystem.States[#StudySystem.States]:nextState(buttonYesX-buttonYesSize/2,buttonYesY-buttonYesSize/2,buttonYesSize,buttonYesSize)
-                end
-            else
-                AddSound(uiError,0.3)
-                if ( playerSkills[indexR+4]) then 
-                  
-                    if (NeedResourcesText.timer == nil or  NeedResourcesText.timer < 0) then 
-                        NeedResourcesText.timer = 0
+            if (not(StudySystem.isEnabled) or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==2)) then
+                if (speedR == 0 and playerSkills[indexR+4] and playerSkills[indexR+4].Interface.cost<= score) then
+                    AddSound(uiSelect,0.3)
+                    flagAcceptMenu = true
+                    
+                    if (StudySystem.isEnabled) then
+                        StudySystem.States[#StudySystem.States]:nextState(buttonYesX-buttonYesSize/2,buttonYesY-buttonYesSize/2,buttonYesSize,buttonYesSize)
                     end
-                    NeedResourcesText.flag = true
+                else
+                    AddSound(uiError,0.3)
+                    if ( playerSkills[indexR+4]) then 
+                      
+                        if (NeedResourcesText.timer == nil or  NeedResourcesText.timer < 0) then 
+                            NeedResourcesText.timer = 0
+                        end
+                        NeedResourcesText.flag = true
+                    end
                 end
             end
         end
@@ -331,9 +344,10 @@ if ( playerSkills[indexR+4]) then
 end
 
 NeedResourcesText:print(xBigSlot-(0.4*1.2*160*k)-difButton*0.16 ,screenHeight/2,0.4,dt)
-StudySystem:draw()
-
-love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
+if (StudySystem.isEnabled) then 
+    StudySystem:draw()
+end
+--love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 100, 10,0,k/2,k2/2)
 
 indexRSave = indexR
 end

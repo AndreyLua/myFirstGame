@@ -96,7 +96,7 @@ end
 
 
 function Reward:getSmall(count)
-    if ( math.random(1,100) >50) then 
+    if ( math.random(1,100) > 50 or StudySystem.isEnabled) then 
         local playerCommonSkills = {}
         Player.Skills:raritySkills(playerCommonSkills,"common")
         self.skill  = playerCommonSkills[math.random(1,#playerCommonSkills)]

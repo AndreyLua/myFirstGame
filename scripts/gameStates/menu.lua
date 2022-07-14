@@ -1,6 +1,6 @@
 local menu = {}
 
-local studySystem = require "scripts/studySystem"
+
 local UI= require "scripts/systemComponents/UI"
 local skills = require "scripts/gameStates/menuSections/skills" 
 local convert = require "scripts/gameStates/menuSections/convert/main"
@@ -79,31 +79,48 @@ function buttonNo:draw()
     rejectBut(buttonNo.x,buttonNo.y,buttonNoScale,buttonNo.isTappedFlag) 
 end
 
-function menu:init()
-    if (StudySystem.isEnabled) then
-        StudySystem.States[#StudySystem.States]:nextState(buttonSkillsX-buttonSkillsWidth/2,buttonSkillsY-buttonSkillsHeight/2,buttonSkillsWidth,buttonSkillsHeight)
+function menu:enter()
+    if (StudySystem.isEnabled ) then
+        if (StudySystem.States[#StudySystem.States].state ==0) then
+            StudySystem.States[#StudySystem.States]:nextState(buttonSkillsX-buttonSkillsWidth/2,buttonSkillsY-buttonSkillsHeight/2,buttonSkillsWidth,buttonSkillsHeight)
+        end
+        if (StudySystem.States[#StudySystem.States].state ==5) then
+            StudySystem.States[#StudySystem.States]:nextState(buttonConverterX-buttonConverterWidth/2,buttonConverterY-buttonConverterHeight/2,buttonConverterWidth,buttonConverterHeight)
+        end
     end
 end
 
 function menu:update(dt)
-    StudySystem:update(dt)
-    if not(StudySystem.isEnabled) then
+    if (StudySystem.isEnabled ) then
+        StudySystem:update(dt)
+    end
+    if (not(StudySystem.isEnabled) or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==10)) then
         if (buttonAdd:isTapped()) then 
             AddSound(uiClick,0.3)
             exp =  {}
             gamestate.switch(game)
+            if ( StudySystem.isEnabled) then
+                StudySystem.States[#StudySystem.States]:nextState(0,0,0,0)
+            end
         end
     end
     if ( exitFlag == false) then 
         if (buttonSkills:isTapped()) then 
-            AddSound(uiSelect,0.3)
-            gamestate.switch(skills)
+            if (not(StudySystem.isEnabled) or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==1)) then
+                AddSound(uiSelect,0.3)
+                gamestate.switch(skills)
+            end
         end
-        if not(StudySystem.isEnabled) then
-            if (buttonConverter:isTapped()) then 
+        if (buttonConverter:isTapped()) then 
+            if (not(StudySystem.isEnabled) or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state ==6)) then
+            if ( StudySystem.isEnabled) then
+                StudySystem.States[#StudySystem.States]:setConverterText()
+            end
                 AddSound(uiSelect,0.3)
                 gamestate.switch(convert)
             end
+        end
+        if not(StudySystem.isEnabled) then
             if (buttonCharacter:isTapped()) then 
                 AddSound(uiSelect,0.3)
                 gamestate.switch(character)
@@ -157,7 +174,9 @@ function menu:draw()
     else
         menu:drawTextButtons()
     end
-    StudySystem:draw()
+    if (StudySystem.isEnabled ) then
+        StudySystem:draw()
+    end
 end
 
 function menu:drawTextButtons()

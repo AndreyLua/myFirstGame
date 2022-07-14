@@ -1,38 +1,43 @@
 local saveFunction = {}
 
+local studySystem = require "scripts/studySystem"
+
 function loadSave()
     if love.filesystem.getInfo('save.lua') then
         local TableSave = love.filesystem.read('save.lua')
         TableSave =unpack(binser.deserialize(TableSave))
-        if (TableSave) then 
-            if ( TableSave[2]) then 
+        if (TableSave~=nil) then 
+            if ( TableSave[2]~=nil) then 
                 score =TableSave[2]
             end
-            if ( TableSave[3]) then 
+            if ( TableSave[3]~=nil) then 
                 Wave.number = TableSave[3]
             end
-            if ( TableSave[4]) then 
+            if ( TableSave[4]~=nil) then 
                 loadParticle(TableSave[4])
             end
-            if  (TableSave[5]) then 
+            if  (TableSave[5]~=nil) then 
                 local playerSettings = TableSave[5]
-                if ( playerSettings[1]) then 
+                if ( playerSettings[1]~=nil) then 
                     MusicVolume = playerSettings[1]
                 end
-                if ( playerSettings[2]) then 
+                if ( playerSettings[2]~=nil) then 
                     SoundsVolume = playerSettings[2]
                 end
                 if ( playerSettings[3]) then 
                     Sensitivity = playerSettings[3] 
                 end
-                if ( playerSettings[4]) then 
+                if ( playerSettings[4]~=nil) then 
                     controllerChoose = playerSettings[4] 
                 end
             end
-            if ( TableSave[6]) then 
+            if ( TableSave[6]~=nil) then 
                 Player.tip = TableSave[6][1]
                 tablePlayerTipOpened = TableSave[6][2]
                 loadPlayerSkills(TableSave[6][3])
+            end
+            if ( TableSave[7]~=nil) then
+                StudySystem.isEnabled  = TableSave[7]
             end
         end
     end
@@ -43,7 +48,8 @@ function makeSave()
     local ParticlData = saveFunction:saveParticle() 
     local PlayerSkillsData = saveFunction:savePlayerSkills()
     local PlayerData ={Player.tip,tablePlayerTipOpened,PlayerSkillsData}
-    save = {version,score,Wave.number,ParticlData,SettingsData,PlayerData}
+    local StudySystemSave =StudySystem.isEnabled 
+    save = {version,score,Wave.number,ParticlData,SettingsData,PlayerData,StudySystemSave}
     
     love.filesystem.write('save.lua',  binser.serialize(save))
 end

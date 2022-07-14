@@ -20,12 +20,16 @@ local Resource = {
 }
 local BuyUpgrades = {
     text = "You can spend resources to upgrade abilities or create new ones. Tap to menu button",
-    state = 0,
+    textConverter = "Here you can get a new ability. The more you fill the flask, the better the reward",
+    textСonclusion = "Go through the waves, improve, survive as long as possible. GOOD LUCK",
+    state =0,
 }
 
 StudySystem = {
     isEnabled = true,
     number = 3,
+    timer = 100,
+    light = 1,
     States ={},
 }
 table.insert(StudySystem.States,Move)
@@ -43,19 +47,31 @@ end
 
 function StudySystem:update(dt)
     studyUIBatch:clear()
-    bodyTextPanel(130*k,screenHeight/2,1/2.3)
+    bodyTextPanel(130*k,screenHeight/2,1/2.3,self.light)
     Text:update(dt) 
     Player:studyBorder(160*1/2.3*k+130*k)
     self.States[self.number]:update(dt)
     StudySystem:movement(dt)
+    if ( self.States[self.number].state == 12) then
+        self:timerToEnd(self,dt)
+    end
 end
 
 function StudySystem:draw()
-    if not(self.States[self.number].state>0) then
-        Text:print(90*k,screenHeight/2,0.55)
+    if (self.States[self.number].state==0 or (self.States[self.number].state>=7 and self.States[self.number].state<10) or self.States[self.number].state == 12 ) then
+        Text:print(90*k,screenHeight/2,0.55,self.light)
     end
     self.States[self.number]:draw()
     love.graphics.draw(studyUIBatch)
+end
+
+function StudySystem:timerToEnd(self,dt)
+    if ( self.timer >0) then 
+        self.timer = self.timer - 10*dt
+        self.light = self.light -0.09*dt
+    else
+        self.isEnabled = false
+    end
 end
 
 function StudySystem:movement(dt)
@@ -145,23 +161,32 @@ function BuyUpgrades:load()
 end
 
 function BuyUpgrades:nextState(x,y,width,height)
-    self.state = self.state+1
-  --  if ( self.state ==1) then 
-        LightButtonZone = LightZone(x,y,width,height) -- SKillsButton
-  --  end
-    
+    if (x~=nil) then
+        self.state = self.state+1
+        LightButtonZone = LightZone(x,y,width,height) 
+    else
+        self.state = self.state+1
+    end
 end
-
- --if (StudySystem.isEnabled) then
- --       StudySystem.States[#StudySystem.States]:nextState()
-  --    end
-      
+    
 function BuyUpgrades:update(dt)
     LightButtonZone:update(dt)
 end
 
 function BuyUpgrades:draw()
-    LightButtonZone:draw()
+    if (StudySystem.States[#StudySystem.States].state~=12) then
+        LightButtonZone:draw()
+    end
+end
+
+function BuyUpgrades:setConverterText()
+    Text:setText(self.textConverter)
+    Text:setLineSize(25)
+end
+
+function BuyUpgrades:setСonclusionText()
+    Text:setText(self.textСonclusion)
+    Text:setLineSize(25)
 end
 
 function Move.Points:spawn(x,y)

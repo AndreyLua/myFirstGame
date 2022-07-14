@@ -134,7 +134,7 @@ saveFunction = require "scripts/systemComponents/saveFunction"
 effects = require "scripts/systemComponents/effects" 
 UI= require "scripts/systemComponents/UI"
 game = require "scripts/gameStates/gameLoop/game"
-
+studySystem = require "scripts/studySystem"
 
 -------------MASIIIIIIV-----------
 mouse = {
@@ -169,6 +169,6 @@ function love.load()
     font:setFilter("nearest")
     love.graphics.setFont(font)  
     gamestate.registerEvents()
-  --  loadSave()
+    loadSave()
     gamestate.switch(game)
 end

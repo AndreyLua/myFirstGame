@@ -6,7 +6,7 @@ function buttonAdd:draw()
 end
 
 
-score = 20000
+score = 5000-655
 borderWidth =screenWidth/2
 borderHeight = screenHeight/2
 numberCleaner = 0 
@@ -29,7 +29,6 @@ local objFunction = require "scripts/meteoritesGameObject/objFunction"
 local waveSystem = require "scripts/waveSystem" 
 menu = require "scripts/gameStates/menu" 
 local loadGame = require "scripts/systemComponents/loadGame"
-local studySystem = require "scripts/studySystem"
 LoadPlayerImg()
 LoadSkillsImg()
 LoadPlayerParametrs()
@@ -63,6 +62,7 @@ if (StudySystem.isEnabled) then
     StudySystem:load()
 end
 Player:refreshParameters()
+
 end
 
 function gamestate.focus(v)
@@ -74,6 +74,14 @@ end
 function love.update(dt)
     mouse.x,mouse.y=love.mouse.getPosition()
     UpdateBgMusic(dt)
+end
+
+
+function game.enter()
+    if (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state>1) then
+        StudySystem.States[#StudySystem.States]:nextState()
+        StudySystem.States[#StudySystem.States]:setСonclusionText()
+    end
 end
 
 function love.quit()
@@ -90,8 +98,10 @@ end
 
 function game:update(dt)
 if (buttonAdd:isTapped()) then 
-    AddSound(uiClick,0.3)
-    gamestate.switch(menu)
+    if (not StudySystem.isEnabled or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state==0) ) then 
+        AddSound(uiClick,0.3)
+        gamestate.switch(menu)
+    end
 end
  --en = {}
  --obj = {}
@@ -201,8 +211,9 @@ for i = #resource, 1, -1 do
         end
     end
 end
-
-Wave:spawn()
+if not(StudySystem.isEnabled) then 
+    Wave:spawn()
+end
 Player:move(dt)
 Player:collision(dt)
 Player.Energy:update(dt)
@@ -332,7 +343,9 @@ function  game:draw()
     
     love.graphics.draw(UIBatch)
     Wave:progressBarDraw()
-    StudySystem:draw()
+    if ( StudySystem.isEnabled) then 
+        StudySystem:draw()
+    end
     love.graphics.setCanvas()
     love.graphics.setColor(1,1,1,1)
     if (Player.flagInv == false ) then
