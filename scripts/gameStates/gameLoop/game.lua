@@ -66,8 +66,10 @@ Player:refreshParameters()
 end
 
 function gamestate.focus(v)
-    if (not(v) and gamestate.current() == game) then
-        gamestate.switch(menu)
+    if (not StudySystem.isEnabled) then
+        if (not(v) and gamestate.current() == game) then
+            gamestate.switch(menu)
+        end
     end
 end
 
@@ -90,15 +92,15 @@ end
 
 function love.keypressed(key, code)
     if key == "escape" then
-        gamestate.switch(menu)
+  --      gamestate.switch(menu)
     elseif key == "q" then
-        love.event.push('quit')
+   --     love.event.push('quit')
     end
 end
 
 function game:update(dt)
 if (buttonAdd:isTapped()) then 
-    if (not StudySystem.isEnabled or (StudySystem.isEnabled and StudySystem.States[#StudySystem.States].state==0) ) then 
+    if (not StudySystem.isEnabled or (StudySystem.isEnabled and StudySystem.number==4 and  StudySystem.States[#StudySystem.States].state==0) ) then 
         AddSound(uiClick,0.3)
         gamestate.switch(menu)
     end
@@ -236,6 +238,7 @@ end
 
 function game:movement(dt)
     if love.keyboard.isDown('e') then
+      --[[
         local Geo  =math.random(1,4)
         allSpawn(obj,Geo,math.random(1,5))
         obj[#obj].f = true
@@ -244,9 +247,10 @@ function game:movement(dt)
         allSpawn(en,Geo,math.random(6))
         en[#en].x = mouse.x
         en[#en].y = mouse.y
+        ]]--
     end
     if love.keyboard.isDown('y') then
-        table.remove(obj,#obj)
+  --      table.remove(obj,#obj)
     end
 end
 

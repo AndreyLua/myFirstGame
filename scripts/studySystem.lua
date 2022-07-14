@@ -27,7 +27,7 @@ local BuyUpgrades = {
 
 StudySystem = {
     isEnabled = true,
-    number = 3,
+    number =0,
     timer = 100,
     light = 1,
     States ={},
@@ -58,7 +58,7 @@ function StudySystem:update(dt)
 end
 
 function StudySystem:draw()
-    if (self.States[self.number].state==0 or (self.States[self.number].state>=7 and self.States[self.number].state<10) or self.States[self.number].state == 12 ) then
+    if (self.number <4 or(self.States[self.number].state==0 or (self.States[self.number].state>=7 and self.States[self.number].state<10) or self.States[self.number].state == 12 )) then
         Text:print(90*k,screenHeight/2,0.55,self.light)
     end
     self.States[self.number]:draw()
@@ -75,12 +75,14 @@ function StudySystem:timerToEnd(self,dt)
 end
 
 function StudySystem:movement(dt)
+   --[[
     if love.keyboard.isDown('x') then
         allSpawn(obj,3,2)
     end
     if love.keyboard.isDown('z') then
         obj = {}
     end
+    ]]--
 end
       
 function Move:load()
