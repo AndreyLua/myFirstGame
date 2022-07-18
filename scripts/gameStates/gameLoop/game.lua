@@ -229,10 +229,10 @@ end
 function game:keypressed(key1,key, code)
     if key == "escape" then
         if gamestate.current() == self and Player.isAlive then
-            gamestate.switch(pause)
+    --        gamestate.switch(pause)
         end
     elseif key == "q" then
-        love.event.push('quit')
+       -- love.event.push('quit')
     end
 end
 
