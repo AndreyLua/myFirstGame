@@ -401,8 +401,8 @@ function Player:control()
         self.Controller.flag =false
     end
     
-   -- if ((#love.touch.getTouches()>1 and self.Energy.flag == true) or (love.keyboard.isDown('t')  and self.Energy.flag == true ) ) then
-    if ((#love.touch.getTouches()>1 and self.Energy.flag == true) ) then
+    if ((#love.touch.getTouches()>1 and self.Energy.flag == true) or (love.keyboard.isDown('t')  and self.Energy.flag == true ) ) then
+  --  if ((#love.touch.getTouches()>1 and self.Energy.flag == true) ) then
         self.Clows.flag =4 
         self.a = 1
     else

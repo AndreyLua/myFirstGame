@@ -10,7 +10,7 @@ Wave = {
     number =1,
     countKilledEnemies = 50,
     goalKillEnemies = 50,
-    lvl = 5,
+    lvl = 1,
     lvlMax =5,
 }
 
@@ -37,7 +37,7 @@ end
 
 function Wave:spawnObj()
     if (#obj < 200) then
-        Wave.timerSpawnObj:every(6, function()
+        Wave.timerSpawnObj:every(math.random(10,12)/(1+self.number/10), function()
             for i=1,math.random(1,2) do
                 local Geo  =math.random(1,4)
                 allSpawn(obj,Geo,math.random(1,5))
@@ -54,7 +54,7 @@ end
 
 function Wave:spawnEnemies()
     if (#en < 50) then
-        Wave.timerSpawnEn:every(math.random(13,17)/(1+self.number/10), function()
+        Wave.timerSpawnEn:every(math.random(15,17)/(1+self.number/10), function()
             local Geo  =math.random(1,4)
             local Tip =math.random(1,self.lvl)
             allSpawn(en,Geo,Tip)
